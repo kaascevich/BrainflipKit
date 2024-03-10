@@ -14,9 +14,7 @@
 // You should have received a copy of the GNU General Public License along
 // with this package. If not, see https://www.gnu.org/licenses/.
 
-import OSLog
-
-/// Interprets and executed a Brainflip program.
+/// Interprets and executes a Brainflip program.
 ///
 /// # How Brainflip Works
 ///
@@ -24,8 +22,8 @@ import OSLog
 /// eight instructions. However, creating programs in Brainflip can be a
 /// challenge like no other due to this reduced instruction set.
 ///
-/// All Brainflip programs mutate an array of *cells* (`UInt8` instances).
-/// The array is 30,000 cells long. A pointer (not an actual `UnsafePointer`,
+/// All Brainflip programs mutate an array of *cells*. By default, the
+/// array is 30,000 cells long. A pointer (not an actual `UnsafePointer`,
 /// just a `CellArray.Index`) is used to keep track of the cell that is
 /// currently being mutated.
 ///
@@ -36,7 +34,7 @@ import OSLog
 ///     back to 0 if necessary.
 ///
 /// - term ``Instruction/decrement``:
-///     Decrements `currentCellValue` by 1, wrapping back to `Cell.max`
+///     Decrements `currentCellValue` by 1, wrapping back to `CellValue.max`
 ///     if necessary.
 ///
 /// - term ``Instruction/nextCell``:
@@ -45,47 +43,62 @@ import OSLog
 /// - term ``Instruction/prevCell``:
 ///     Moves `cellPointer` back 1 cell.
 ///
-/// - term ``Instruction/loop(_:)``, with ``Instruction/LoopBound/begin``
-///   as the associated value:
-///     Starts a loop.
-///
-/// - term ``Instruction/loop(_:)``, with ``Instruction/LoopBound/end``
-///   as the associated value:
-///     If `currentCellValue` is 0, does nothing. Otherwise, moves
-///     ``Interpreter/State/instructionPointer`` back to the matching
-///     `loop(.begin)` instruction.
+/// - term ``Instruction/loop(_:)``:
+///     If `currentCellValue` is 0, skips the contained instructions.
+///     Otherwise, executes the instructions before repeating the
+///     process.
 ///
 /// - term ``Instruction/output``:
-///     Appends the ASCII equivalent of `currentCellValue` to the
-///     ``Interpreter/State/output`` buffer.
-///     
+///     Appends `currentCellValue` to the ``Interpreter/State/output``
+///     buffer.
+///
 /// - term ``Instruction/input``:
-///     Takes the next character out of the ``Interpreter/State/input``
-///     buffer and stores its ASCII value into `currentCellValue`.
-///     > Precondition: The next character of input is an ASCII
-///     > character.
+///     Takes the next UTF-8 code onit out of the
+///     ``Interpreter/State/input`` buffer and stores it into
+///     `currentCellValue`.
 ///
 /// All characters other than the ones listed above are treated as
 /// comments and ignored.
 ///
+/// # Examples
+///
+/// ```swift
+/// // https://codegolf.stackexchange.com/a/163590/59487
+/// let program = ">>>>>+[-->-[>>+>-----<<]<--<---]>-.>>>+.>>..+++[.>]<<<<.+++.------.<<-.>>>>+."
+/// let interpreter = try Interpreter<UTF8>(program)
+/// let output = try interpreter.run()
+/// print(output) // Hello, World!
+/// ```
+///
 /// # See Also
 /// - ``Instruction``
-/// - ``run(input:)``
-@dynamicMemberLookup public class Interpreter {
+/// - ``run()``
+public class Interpreter<Encoding: Unicode.Encoding> {
    /// The Brainflip program containing a list of instructions
    /// to execute.
    public let program: Program
    
+   /// The configurable options for this interpreter.
+   public let options: Options
+   
    // MARK: - Internal State
    
    /// The interpreter's internal state.
-   private var state: State
+   internal var state: State
    
    /// Represents an interpreter's internal state.
-   public struct State {
+   internal struct State {
       private let program: Program
-      internal init(program: Program) {
+      fileprivate init(
+         program: Program,
+         input: [Encoding.CodeUnit],
+         options: Options
+      ) {
          self.program = program
+         self.input = input
+         
+         self.cells = .init(repeating: 0, count: options.arraySize)
+         self.cellPointer = options.initialPointerLocation
       }
       
       /// The array of cells that all Brainflip programs manipulate.
@@ -94,14 +107,14 @@ import OSLog
       ///
       /// # See Also
       /// - ``Interpreter/State/currentCellValue``
-      public internal(set) var cells: CellArray = .init(repeating: 0, count: 30000)
+      var cells: CellArray
       
       /// Stores the index of the cell currently being used by
       /// the program.
       ///
       /// # See Also
       /// - ``Interpreter/State/currentCellValue``
-      public internal(set) var cellPointer: CellArray.Index = 0
+      var cellPointer: CellArray.Index
       
       /// Stores the index of the current instruction being
       /// executed by the interpreter.
@@ -109,34 +122,27 @@ import OSLog
       /// # See Also
       /// - ``Interpreter/State/currentInstruction``
       /// - ``Interpreter/State/instructionPointerIsValid``
-      public internal(set) var instructionPointer: Program.Index = 0
+      var instructionPointer: Program.Index = 0
       
-      /// Stores the stack, which is used to determine where
-      /// to go when looping.
-      ///
-      /// This stack stores the index of each `loop(.begin)`
-      /// instruction that starts a loop containing the
-      /// current instruction, outermost to innermost.
-      public internal(set) var stack: [Program.Index] = []
-      
-      /// The input buffer.
+      /// The input buffer, stored as an `Array` of UTF-8
+      /// code units.
       ///
       /// Each time an ``Instruction/input`` instruction is
-      /// executed, the ASCII value of the first character in
-      /// this string is stored in the current cell, and that
-      /// character is removed from the string.
+      /// executed, the first Unicode scalar value in this
+      /// array is stored in the current cell, and that
+      /// value is removed from the array.
       ///
-      /// If an `input` instruction is executed
-      /// while this string is empty, the current cell will be
-      /// set to 0 instead.
-      public internal(set) var input: String = ""
+      /// If an `input` instruction is executed while this
+      /// array is empty, the current cell will be set to 0
+      /// instead.
+      var input: [Encoding.CodeUnit]
       
       /// The output buffer.
       ///
       /// Each time an ``Instruction/output`` instruction is
-      /// executed, the character whose ASCII value equals the
-      /// current cell's value is appended to this string.
-      public internal(set) var output: String = ""
+      /// executed, the current cell's value is appended to
+      /// this string as a UTF-8 code unit.
+      var output: [Encoding.CodeUnit] = []
       
       // MARK: Computed State
       
@@ -144,7 +150,7 @@ import OSLog
       ///
       /// # See Also
       /// - ``Interpreter/State/cellPointer``
-      public internal(set) var currentCellValue: Cell {
+      var currentCellValue: CellValue {
          get { cells[cellPointer] }
          set { cells[cellPointer] = newValue }
       }
@@ -154,14 +160,17 @@ import OSLog
       /// # See Also
       /// - ``Interpreter/State/instructionPointer``
       /// - ``Interpreter/State/instructionPointerIsValid``
-      public var currentInstruction: Instruction {
+      var currentInstruction: Instruction {
          program[instructionPointer]
       }
       
-      /// Stores the number of loops the current instruction
-      /// is contained in.
-      public var nestingLevel: Int {
-         stack.count
+      /// Stores the current output string.
+      ///
+      /// Note that this may not always be valid, depending on
+      /// the UTF-8 code units that have been output by the
+      /// program.
+      var outputString: String {
+         String(decoding: output, as: Encoding.self)
       }
       
       // MARK: Error Checking
@@ -173,54 +182,64 @@ import OSLog
       /// # See Also
       /// - ``Interpreter/State/instructionPointer``
       /// - ``Interpreter/State/currentInstruction``
-      public var instructionPointerIsValid: Bool {
+      var instructionPointerIsValid: Bool {
          program.indices.contains(instructionPointer)
       }
    }
    
    /// Resets this interpreter's internal state.
    internal func resetState() {
-      state = State(program: program)
-   }
-   
-   // MARK: - Dynamic Member Lookup
-   
-   /// Accesses the interpreter state at the specified key
-   /// path.
-   ///
-   /// Do not call this subscript directly. It is used by the
-   /// compiler when you access interpreter state using dot
-   /// syntax.
-   public subscript<T>(dynamicMember member: KeyPath<State, T>) -> T {
-      state[keyPath: member]
-   }
-   
-   /// Accesses and/or mutates the interpreter state at the
-   /// specified key path.
-   ///
-   /// Do not call this subscript directly. It is used by the
-   /// compiler when you access or mutate interpreter state
-   /// using dot syntax.
-   internal subscript<T>(dynamicMember member: WritableKeyPath<State, T>) -> T {
-      get { state[keyPath: member] }
-      set { state[keyPath: member] = newValue }
+      state = State(program: program, input: state.input, options: options)
    }
    
    // MARK: - Initializers
    
    /// Creates a new `Interpreter` from a ``Program``.
    ///
-   /// - Parameter program: A `Program` instance.
-   public init(_ program: Program) {
+   /// - Parameters:
+   ///   - program: A `Program` instance.
+   ///   - input: The input to pass to the program. Defaults to
+   ///     an empty string.
+   ///   - options: Configurable options to be used for this
+   ///     interpreter.
+   public init(
+      _ program: Program,
+      input: String = "",
+      options: Options = .init()
+   ) {
       self.program = program
-      self.state = State(program: program)
+      self.options = options
+      
+      var encodedInput: [Encoding.CodeUnit] = []
+      _ = transcode(
+         input.utf8.makeIterator(),
+         from: UTF8.self,
+         to: Encoding.self,
+         stoppingOnError: false
+      ) { encodedInput.append($0) }
+      
+      self.state = State(program: program, input: Array(encodedInput), options: options)
    }
    
-   /// Parses a string into a ``Program`` and creates a
-   /// new ``Interpreter`` from it.
+   /// Parses a string into a ``Program`` and creates a new
+   /// `Interpreter` from it.
    ///
-   /// - Parameter string: A string to parse into a `Program`.
-   public convenience init(_ string: String) {
-      self.init(Program(string))
+   /// - Parameters:
+   ///   - string: A string to parse into a `Program`.
+   ///   - input: The input to pass to the program. Defaults
+   ///     to an empty string.
+   ///
+   /// - Throws: ``Error/invalidProgram`` if `string` is an
+   ///   invalid program, or ``Error/illegalCharactersInInput(_:)``
+   ///   if `input` contains non-ASCII characters.
+   public convenience init(
+      _ string: String,
+      input: String = "",
+      options: Options = .init()
+   ) throws {
+      guard let program = Program(string) else {
+         throw Error.invalidProgram
+      }
+      self.init(program, input: input, options: options)
    }
 }

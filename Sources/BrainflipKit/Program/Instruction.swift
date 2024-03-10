@@ -35,17 +35,8 @@ public enum Instruction: Hashable {
    /// Decrements ``Interpreter/State/cellPointer`` by 1.
    case prevCell
    
-   /// Starts or ends a loop.
-   case loop(LoopBound)
-   
-   /// The beginning or end of a loop.
-   public enum LoopBound {
-      /// Represents the beginning of a loop.
-      case begin
-      
-      /// Represents the ending of a loop.
-      case end
-   }
+   /// Loops over the contained instructions.
+   case loop([Self])
    
    /// Finds the character whose ASCII value equals
    /// ``Interpreter/State/currentCellValue`` and

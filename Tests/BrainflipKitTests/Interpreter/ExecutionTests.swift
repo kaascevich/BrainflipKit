@@ -14,70 +14,56 @@
 // You should have received a copy of the GNU General Public License along
 // with this package. If not, see https://www.gnu.org/licenses/.
 
-import XCTest
+import class XCTest.XCTestCase
 import Nimble
 @testable import BrainflipKit
 
 extension InterpreterTests {
    final class ExecutionTests: XCTestCase {
       func testBasicRun() async throws {
-         // Equivalent to "+>-<". Increments cell 1
-         // and decrements cell 2.
-         let interpreter = Interpreter([.increment, .nextCell, .decrement, .prevCell])
-         try await with(interpreter) {
+         // increments cell 1 and decrements cell 2
+         try await with(try Interpreter<UTF8>("+>-<")) {
             try await $0.run()
             
-            expect($0.instructionPointer) == $0.program.endIndex
+            expect($0.state.instructionPointer) == $0.program.endIndex
             
-            expect($0.cells[0..<2]) == [1, Interpreter.Cell.max]
-            expect($0.cellPointer) == 0
+            expect($0.state.cells[0..<2]) == [1, Interpreter<UTF8>.CellValue.max]
+            expect($0.state.cellPointer) == 0
          }
       }
       
       func testSimpleLoopingRun() async throws {
-         // Equivalent to "+++[>+++<-]". This sets
-         // cell 2 to 9.
-         let interpreter = Interpreter([
-            .increment, .increment, .increment,
-            .loop(.begin),
-            .nextCell, .increment, .increment, .increment,
-            .prevCell, .decrement,
-            .loop(.end)
-         ])
-         try await with(interpreter) {
+         // sets cell 2 to 9
+         try await with(try Interpreter<UTF8>("+++[>+++<-]")) {
             try await $0.run()
-            expect($0.cells[1]) == 9
+            expect($0.state.cells[1]) == 9
          }
       }
       
       func testNestedLoopingRun() async throws {
-         // Equivalent to "+++[>+++[>+++<-]<-]".
-         // This sets cell 3 to 27.
-         let interpreter = Interpreter([
-            .increment, .increment, .increment,
-            .loop(.begin),
-            .nextCell, .increment, .increment, .increment,
-            .loop(.begin),
-            .nextCell, .increment, .increment, .increment,
-            .prevCell, .decrement,
-            .loop(.end),
-            .prevCell, .decrement,
-            .loop(.end)
-         ])
-         try await with(interpreter) {
+         // sets cell 3 to 27
+         try await with(try Interpreter<UTF8>("+++[>+++[>+++<-]<-]")) {
             try await $0.run()
-            expect($0.cells[2]) == 27
+            expect($0.state.cells[2]) == 27
          }
       }
       
       func testRunWithInput() async throws {
-         // Equivalent to ",..,.". Outputs the first input
-         // character twice, then the second character
-         // once.
-         let interpreter = Interpreter([.input, .output, .output, .input, .output])
-         try await with(interpreter) {
-            let output = try await $0.run(input: "hello")
+         // outputs the first input character twice, then the
+         // second character once
+         try await with(try Interpreter<UTF8>(",..,.", input: "hello")) {
+            let output = try await $0.run()
             expect(output) == "hhe"
+         }
+      }
+      
+      func testHelloWorld() async throws {
+         // outputs the first input character twice, then the
+         // second character once
+         let program = ">>>>>+[-->-[>>+>-----<<]<--<---]>-.>>>+.>>..+++[.>]<<<<.+++.------.<<-.>>>>+."
+         try await with(try Interpreter<UTF8>(program)) {
+            let output = try await $0.run()
+            expect(output) == "Hello, World!"
          }
       }
    }

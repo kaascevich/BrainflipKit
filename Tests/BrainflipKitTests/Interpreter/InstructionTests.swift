@@ -14,82 +14,72 @@
 // You should have received a copy of the GNU General Public License along
 // with this package. If not, see https://www.gnu.org/licenses/.
 
-import XCTest
+import class XCTest.XCTestCase
 import Nimble
 @testable import BrainflipKit
 
 extension InterpreterTests {
    final class InstructionTests: XCTestCase {
-      // MARK: - State
-      
-      var interpreter = Interpreter([])
-      
-      // MARK: - Setup
-      override func setUp() async throws {
-         interpreter = .init([])
-      }
-      
       // MARK: - Tests
       
       func testIncrement() throws {
-         try with(interpreter) {
-            for i in 1...Interpreter.Cell.max {
+         try with(try Interpreter<UTF8>("")) {
+            for i in 1...Interpreter<UTF8>.CellValue.max {
                try $0.handleInstruction(.increment)
-               expect($0.cells.first) == i
+               expect($0.state.cells.first) == i
             }
             
             try $0.handleInstruction(.increment)
-            expect($0.cells.first) == 0
+            expect($0.state.cells.first) == 0
          }
       }
          
       func testDecrement() throws {
-         try with(interpreter) {
+         try with(try Interpreter<UTF8>("")) {
             try $0.handleInstruction(.decrement)
-            expect($0.cells.first) == Interpreter.Cell.max
+            expect($0.state.cells.first) == Interpreter<UTF8>.CellValue.max
             
-            for i in (0..<Interpreter.Cell.max).reversed() {
+            for i in (0..<Interpreter<UTF8>.CellValue.max).reversed() {
                try $0.handleInstruction(.decrement)
-               expect($0.cells.first) == i
+               expect($0.state.cells.first) == i
             }
          }
       }
       
       func testNextCell() throws {
-         try with(interpreter) {
+         try with(try Interpreter<UTF8>("")) {
             for i in 1...10 {
                try $0.handleInstruction(.nextCell)
-               expect($0.cellPointer) == i
+               expect($0.state.cellPointer) == i
             }
          }
       }
       
       func testPrevCell() throws {
-         try with(interpreter) {
+         try with(try Interpreter<UTF8>("")) {
             // the cell pointer doesn't support wraparound, so
             // offset ourselves from the beginning by a bit
-            $0.cellPointer = 10
+            $0.state.cellPointer = 10
             
             for i in (0..<10).reversed() {
                try $0.handleInstruction(.prevCell)
-               expect($0.cellPointer) == i
+               expect($0.state.cellPointer) == i
             }
          }
       }
       
       func testOutput() throws {
-         try with(interpreter) {
-            $0.currentCellValue = 66 // ASCII code for "B"
+         try with(try Interpreter<UTF8>("")) {
+            $0.state.currentCellValue = 66 // ASCII code for "B"
             try $0.handleInstruction(.output)
-            expect($0.output) == "B"
+            expect($0.state.outputString) == "B"
          }
       }
       
       func testInput() throws {
-         try with(interpreter) {
-            $0.input = "&"
+         try with(try Interpreter<UTF8>("", input: "&")) {
             try $0.handleInstruction(.input)
-            expect($0.currentCellValue) == 38 // ASCII code for "&" (ampersand)
+            expect($0.state.currentCellValue) == 38 // ASCII code for "&" (ampersand)
          }
       }
    }

@@ -1,4 +1,4 @@
-// ErrorHandlingTests.swift
+// EncodingTests.swift
 // Copyright © 2024 Kaleb A. Ascevich
 //
 // This package is free software: you can redistribute it and/or modify it
@@ -19,15 +19,25 @@ import Nimble
 @testable import BrainflipKit
 
 extension InterpreterTests {
-   final class ErrorHandlingTests: XCTestCase {
-      // MARK: - Input
+   final class EncodingTests: XCTestCase {
+      func testUTF8() async throws {
+         try await with(try Interpreter<UTF8>("-")) {
+            try await $0.run()
+            expect($0.state.currentCellValue) == 255
+         }
+      }
       
-      func testNoInput() throws {
-         try with(Interpreter<UTF8>([], input: "")) {
-            $0.state.currentCellValue = 42 // something other than 0
-            try $0.handleInstruction(.input)
-            
-            expect($0.state.currentCellValue) == 0
+      func testUTF16() async throws {
+         try await with(try Interpreter<UTF16>("-")) {
+            try await $0.run()
+            expect($0.state.currentCellValue) == 65_535
+         }
+      }
+      
+      func testUTF32() async throws {
+         try await with(try Interpreter<UTF32>("-")) {
+            try await $0.run()
+            expect($0.state.currentCellValue) == 4_294_967_295
          }
       }
    }

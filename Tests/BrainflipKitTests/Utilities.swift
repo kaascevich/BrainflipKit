@@ -14,8 +14,6 @@
 // You should have received a copy of the GNU General Public License along
 // with this package. If not, see https://www.gnu.org/licenses/.
 
-import XCTest
-
 @discardableResult func with<ValueType, ReturnType>(
    _ value: ValueType,
    do block: (ValueType) throws -> ReturnType

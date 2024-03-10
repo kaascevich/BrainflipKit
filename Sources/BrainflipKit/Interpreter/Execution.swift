@@ -14,129 +14,112 @@
 // You should have received a copy of the GNU General Public License along
 // with this package. If not, see https://www.gnu.org/licenses/.
 
-import OSLog
-
 public extension Interpreter {
    /// Executes the instructions stored in ``Interpreter/program``.
    ///
-   /// - Parameter input: The input to pass to the program.
-   ///   Defaults to an empty string.
-   ///
    /// - Returns: The program's output.
    ///
-   /// - Precondition: `input` contains only ASCII characters.
-   /// - Precondition: All loops in the program are closed.
-   @discardableResult func run(input: String = "") async throws -> String {
+   /// - Throws: An interpreter ``Error`` if an issue was encountered
+   ///   during execution.
+   @discardableResult func run() async throws -> String {
       resetState()
-      
-      Logger.interpreter.info(#"running program (input: "\#(input)")"#)
-      self.input = input
-      
-      try await checkProgram()
-      
+            
       // while there's still code to execute
-      while self.instructionPointerIsValid {
-         try step()
+      while state.instructionPointerIsValid {
+         try handleInstruction(state.currentInstruction)
+         state.instructionPointer += 1 // point to the next instruction
       }
       
-      Logger.interpreter.info(#"finished (output: "\#(self.output)")"#)
-      return self.output
-   }
-   
-   /// Executes the next instruction and increments
-   /// ``Interpreter/State/instructionPointer``.
-   func step() throws {
-      guard self.instructionPointerIsValid else {
-         // chances are someome tried to step past the last
-         // instruction
-         throw Error(logging: .noInstructionsRemaining)
-      }
-      
-      try handleInstruction(self.currentInstruction)
-      self.instructionPointer += 1 // point to the next instruction
+      return state.outputString
    }
    
    /// Executes an individual ``Instruction``.
    ///
    /// - Parameter instruction: The instruction to execute.
-   internal func handleInstruction(_ instruction: Instruction) throws {
-      Logger.interpreter.debug("executing: \(String(describing: instruction))")
-      
-      switch instruction {
-         // MARK: .increment
-         case .increment:
-            self.currentCellValue &+= 1 // wraparound
-            Logger.interpreter.info("cell incremented @\(self.cellPointer) (new: \(self.currentCellValue))")
-            
-         // MARK: .decrement
-         case .decrement:
-            self.currentCellValue &-= 1 // wraparound
-            Logger.interpreter.info("cell decremented @\(self.cellPointer) (new: \(self.currentCellValue))")
-            
-         // MARK: .nextCell
-         case .nextCell:
-            self.cellPointer += 1
-            Logger.interpreter.info("moved cell pointer forward (new: \(self.cellPointer))")
-            
-         // MARK: .prevCell
-         case .prevCell:
-            self.cellPointer -= 1
-            Logger.interpreter.info("moved cell pointer backward (new: \(self.cellPointer))")
-            
-         // MARK: Others
-         case .loop(let boundType): try handleLoopInstruction(boundType)
-            
-         case .output: try handleOutputInstruction()
-         case .input:  try handleInputInstruction()
-      }
-   }
-   
-   /// Executes a ``Instruction/loop(_:)`` instruction.
    ///
-   /// - Parameter boundType: The bound type of this instruction.
-   private func handleLoopInstruction(_ boundType: Instruction.LoopBound) throws {
-      switch boundType {
-         case .begin:
-            self.stack.append(self.instructionPointer)
-            Logger.interpreter.info("entering loop #\(self.nestingLevel)")
-            
-         case .end:
-            if self.currentCellValue != 0 {
-               Logger.interpreter.info("current cell is not 0 (actual: \(self.currentCellValue)), restarting loop #\(self.nestingLevel)")
-               self.instructionPointer = self.stack.last! // set the IP to the beginning of the loop
-            } else {
-               Logger.interpreter.info("current cell is 0, exiting loop #\(self.nestingLevel)")
-               // make sure we don't end up restarting a loop we're no longer in
-               self.stack.removeLast()
+   /// - Throws: An interpreter ``Error`` if an issue was encountered
+   ///   during execution.
+   internal func handleInstruction(_ instruction: Instruction) throws {
+      switch instruction {
+      case .increment: try handleIncrementInstruction()
+      case .decrement: try handleDecrementInstruction()
+         
+      case .nextCell: try handleNextCellInstruction()
+      case .prevCell: try handlePrevCellInstruction()
+      
+      case .loop(let instructions): try handleLoop(instructions)
+         
+      case .output: handleOutputInstruction()
+      case .input: handleInputInstruction()
+      }
+      
+      /// Executes an ``Instruction/increment(_:)`` instruction.
+      func handleIncrementInstruction() throws {
+         if state.currentCellValue == CellValue.max { // wraparound
+            guard options.allowCellWraparound else {
+               throw Interpreter.Error.cellOverflow
             }
-      }
-   }
-   
-   /// Executes an ``Instruction/output`` instruction.
-   private func handleOutputInstruction() throws {
-      // nab the corresponding character from the ASCII code
-      let newCharacter = Character(Unicode.Scalar(self.currentCellValue))
-      self.output.append(newCharacter)
-      Logger.interpreter.info("appended to output buffer: '\(newCharacter)'")
-   }
-   
-   /// Executes an ``Instruction/input`` instruction.
-   private func handleInputInstruction() throws {
-      // make sure we've actually got some input to work with
-      guard let nextInputCharacter = self.input.first else {
-         Logger.interpreter.notice("nothing left in input buffer; setting current cell to 0")
-         self.currentCellValue = 0 // null out the cell
-         return
-      }
-      self.input.removeFirst() // we deal with one character at a time
-      
-      // make sure this character actually has a corresponding
-      // ASCII value
-      guard let asciiValue = nextInputCharacter.asciiValue else {
-         throw Error(logging: .illegalCharacterInInput(nextInputCharacter))
+            state.currentCellValue = CellValue.min
+         } else {
+            state.currentCellValue += 1
+         }
       }
       
-      self.currentCellValue = asciiValue
-      Logger.interpreter.info("setting current cell to \(asciiValue) (from input: '\(nextInputCharacter)')")
+      /// Executes a ``Instruction/decrement(_:)`` instruction.
+      func handleDecrementInstruction() throws {
+         if state.currentCellValue == CellValue.min { // wraparound
+            guard options.allowCellWraparound else {
+               throw Interpreter.Error.cellUnderflow
+            }
+            state.currentCellValue = CellValue.max
+         } else {
+            state.currentCellValue -= 1
+         }
+      }
+      
+      /// Executes a ``Instruction/nextCell(_:)`` instruction.
+      func handleNextCellInstruction() throws {
+         state.cellPointer += 1
+         guard state.cells.indices.contains(state.cellPointer) else {
+            throw Error.cellPointerOutOfBounds
+         }
+      }
+      /// Executes a ``Instruction/prevCell(_:)`` instruction.
+      func handlePrevCellInstruction() throws {
+         state.cellPointer -= 1
+         guard state.cells.indices.contains(state.cellPointer) else {
+            throw Error.cellPointerOutOfBounds
+         }
+      }
+      
+      /// Executes a ``Instruction/loop(_:)``.
+      ///
+      /// - Parameter instructions: The instructions to loop over.
+      func handleLoop(_ instructions: [Instruction]) throws {
+         while state.currentCellValue != 0 {
+            for instruction in instructions {
+               try handleInstruction(instruction)
+            }
+         }
+      }
+      
+      /// Executes an ``Instruction/output`` instruction.
+      func handleOutputInstruction() {
+         state.output.append(state.currentCellValue)
+      }
+      
+      /// Executes an ``Instruction/input`` instruction.
+      func handleInputInstruction() {
+         // make sure we've actually got some input to work with
+         guard let nextInputCharacter = state.input.first else {
+            state.currentCellValue = 0 // null out the cell
+            return
+         }
+         state.input.removeFirst() // we deal with one character at a time
+         
+         // we should be OK to force-unwrap, since input was validated
+         // before execution
+         state.currentCellValue = nextInputCharacter
+      }
    }
 }

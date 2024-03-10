@@ -14,31 +14,22 @@
 // You should have received a copy of the GNU General Public License along
 // with this package. If not, see https://www.gnu.org/licenses/.
 
-import Foundation
-import OSLog
-
 public extension Interpreter {
    /// Represents an error that can happen during the
    /// lifetime of an ``Interpreter``.
    enum Error: Swift.Error {
-      /// Indicates that an unpaired loop instruction was
-      /// found.
-      case unpairedLoopInstruction(Instruction.LoopBound)
+      /// Indicates that the program is invalid.
+      case invalidProgram
       
-      /// Indicates that an illegal character was found
-      /// in the input buffer.
-      case illegalCharacterInInput(Character)
+      /// Indicates that the cell pointer went out of the
+      /// bounds of the array.
+      case cellPointerOutOfBounds
       
-      /// Indicates that there are no instructions left
-      /// to execute.
-      case noInstructionsRemaining
+      /// Indicates that the current cell value overflowed.
+      case cellOverflow
       
-      /// Creates an `Error`, logging its `errorDescription`
-      /// in the process.
-      internal init(logging error: Self) {
-         Logger.interpreter.error("\(error.description)")
-         self = error
-      }
+      /// Indicates that the current cell value underflowed.
+      case cellUnderflow
    }
 }
 
@@ -46,16 +37,14 @@ extension Interpreter.Error: CustomStringConvertible {
    /// A description of this error.
    public var description: String {
       switch self {
-         case .unpairedLoopInstruction(.begin):
-            "unpaired loop(begin) instruction found"
-         case .unpairedLoopInstruction(.end):
-            "unpaired loop(end) instruction found"
-            
-         case .illegalCharacterInInput(let character):
-            "illegal character found in input: '\(character)'"
-            
-         case .noInstructionsRemaining:
-            "no instructions left to execute"
+      case .invalidProgram:
+         "Invalid program - check to see if all brackets are balanced"
+         
+      case .cellPointerOutOfBounds:
+         "Cell pointer went out of bounds"
+         
+      case .cellOverflow: "Cell overflowed"
+      case .cellUnderflow: "Cell underflowed"
       }
    }
 }

@@ -16,8 +16,8 @@
 
 public extension Interpreter {
    /// The type of a single Brainflip cell.
-   typealias Cell = UInt8
+   typealias CellValue = Encoding.CodeUnit
    
    /// The type of an array of cells.
-   typealias CellArray = [Cell]
+   typealias CellArray = [CellValue]
 }

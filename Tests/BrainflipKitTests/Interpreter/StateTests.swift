@@ -14,70 +14,44 @@
 // You should have received a copy of the GNU General Public License along
 // with this package. If not, see https://www.gnu.org/licenses/.
 
-import XCTest
+import class XCTest.XCTestCase
 import Nimble
 @testable import BrainflipKit
 
 extension InterpreterTests {
    final class StateTests: XCTestCase {
       func testInitializer() throws {
-         let interpreter = Interpreter([])
-         with(interpreter) {
-            expect($0.cells) == Array(repeating: 0, count: 30000)
-            expect($0.cellPointer) == 0
-            expect($0.input).to(beEmpty())
-            expect($0.output).to(beEmpty())
+         with(try Interpreter<UTF8>("")) {
+            expect($0.state.cells) == Array(repeating: 0, count: 30000)
+            expect($0.state.cellPointer) == 0
+            expect($0.state.input).to(beEmpty())
+            expect($0.state.output).to(beEmpty())
             expect($0.program).to(beEmpty())
          }
       }
       
-      func testParsingInitializer() throws {
-         let interpreter = Interpreter(",[>+<-.]")
-         expect(interpreter.program) == [
-            .input,
-            .loop(.begin),
-            .nextCell,
-            .increment,
-            .prevCell,
-            .decrement,
-            .output,
-            .loop(.end)
-         ]
-      }
-      
       func testCurrentCellValue() throws {
-         let interpreter = Interpreter([])
-         with(interpreter) {
-            $0.cellPointer = 5
-            $0.currentCellValue = 42
-            expect($0.currentCellValue) == $0.cells[$0.cellPointer]
+         with(try Interpreter<UTF8>("")) {
+            $0.state.cellPointer = 5
+            $0.state.currentCellValue = 42
+            expect($0.state.currentCellValue) == $0.state.cells[$0.state.cellPointer]
          }
       }
       
       func testCurrentInstruction() throws {
-         let interpreter = Interpreter([.increment, .nextCell, .decrement, .prevCell])
-         with(interpreter) {
-            $0.instructionPointer = 2
-            expect($0.currentInstruction) == .decrement
+         with(try Interpreter<UTF8>("+>-<")) {
+            $0.state.instructionPointer = 2
+            expect($0.state.currentInstruction) == .decrement
          }
       }
       
       func testInstructionPointerIsValid() throws {
-         let interpreter = Interpreter([.increment, .decrement])
-         with(interpreter) {
-            $0.instructionPointer = 1
-            expect($0.instructionPointerIsValid).to(beTrue())
+         with(try Interpreter<UTF8>("+-")) {
+            $0.state.instructionPointer = 1
+            expect($0.state.instructionPointerIsValid).to(beTrue())
             
-            $0.instructionPointer = 2
-            expect($0.instructionPointerIsValid).to(beFalse())
-         }
-      }
-      
-      func testNestingLevel() throws {
-         let interpreter = Interpreter([])
-         with(interpreter) {
-            $0.stack = [1, 2, 3]
-            expect($0.nestingLevel) == 3
+            $0.state.instructionPointer = 2
+            expect($0.state.instructionPointerIsValid).to(beFalse())
          }
       }
    }

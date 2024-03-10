@@ -16,60 +16,32 @@
 
 import ArgumentParser
 import BrainflipKit
-import OSLog
 
 @main struct BrainflipCLI: AsyncParsableCommand {
    // MARK: - Command Configuration
    
-   static let configuration =  CommandConfiguration(
+   static let configuration = CommandConfiguration(
       commandName: "brainflip",
-      abstract: "Run and debug Brainflip programs."
+      abstract: "Run Brainflip programs with a configurable interpreter."
    )
    
    // MARK: - Arguments
    
    @Argument(
       help: "A Brainflip program to execute.",
-      transform: Program.init(_:)
+      transform: { string in
+         guard let program = Program(string) else {
+            throw ValidationError(Interpreter<UTF8>.Error.invalidProgram.description)
+         }
+         return program
+      }
    ) var program: Program
    
    // MARK: - Options
    
-   @Option(
-      name: [.short, .long],
-      help: .init(
-         "The input to pass to the program.",
-         discussion: "If specified, the input must exclusively contain ASCII characters."
-      )
-   ) var input: String = ""
+   @Option(name: .shortAndLong, help: "The input to pass to the program.")
+   var input: String = ""
    
-   // MARK: - Flags
-   
-   @Flag(
-      help: "Checks the program for errors and exits."
-   ) var checkOnly: Bool = false
-   
-   // MARK: - Validation
-   
-   func validate() throws {
-      let nonASCIICharacters = input.filter { !$0.isASCII }
-      guard nonASCIICharacters.isEmpty else {
-         let quotedCharacters = input.map { "'\($0)'" }
-         throw ValidationError("non-ASCII characters found in input (namely, \(quotedCharacters.formatted())).")
-      }
-   }
-   
-   // MARK: - Implementation
-   
-   func run() async throws {
-      let interpreter = Interpreter(program)
-      
-      if checkOnly {
-         try await interpreter.checkProgram()
-         throw CleanExit.message("No issues found.")
-      }
-      
-      let output = try await interpreter.run(input: input)
-      throw CleanExit.message(output)
-   }
+   @OptionGroup(title: "Interpreter Options")
+   var interpreterOptions: InterpreterOptions
 }
