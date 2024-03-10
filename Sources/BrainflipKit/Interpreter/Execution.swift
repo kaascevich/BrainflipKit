@@ -21,7 +21,7 @@ public extension Interpreter {
    ///
    /// - Throws: An interpreter ``Error`` if an issue was encountered
    ///   during execution.
-   @discardableResult func run() async throws -> String {
+   func run() async throws -> String {
       resetState()
             
       // while there's still code to execute

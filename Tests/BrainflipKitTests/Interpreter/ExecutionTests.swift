@@ -23,7 +23,7 @@ extension InterpreterTests {
       func testBasicRun() async throws {
          // increments cell 1 and decrements cell 2
          try await with(try Interpreter("+>-<")) {
-            try await $0.run()
+            _ = try await $0.run()
             
             expect($0.state.instructionPointer) == $0.program.endIndex
             
@@ -35,7 +35,7 @@ extension InterpreterTests {
       func testSimpleLoopingRun() async throws {
          // sets cell 2 to 9
          try await with(try Interpreter("+++[>+++<-]")) {
-            try await $0.run()
+            _ = try await $0.run()
             expect($0.state.cells[1]) == 9
          }
       }
@@ -43,7 +43,7 @@ extension InterpreterTests {
       func testNestedLoopingRun() async throws {
          // sets cell 3 to 27
          try await with(try Interpreter("+++[>+++[>+++<-]<-]")) {
-            try await $0.run()
+            _ = try await $0.run()
             expect($0.state.cells[2]) == 27
          }
       }
