@@ -1,4 +1,4 @@
-// ErrorHandlingTests.swift
+// PointerMovementTests.swift
 // Copyright © 2024 Kaleb A. Ascevich
 //
 // This package is free software: you can redistribute it and/or modify it
@@ -18,16 +18,27 @@ import class XCTest.XCTestCase
 import Nimble
 @testable import BrainflipKit
 
-extension InterpreterTests {
-   final class ErrorHandlingTests: XCTestCase {
-      // MARK: - Input
+extension InterpreterTests.InstructionTests {
+   final class PointerMovementTests: XCTestCase {
+      func testNextCell() throws {
+         try with(try Interpreter("")) {
+            for i in 1...10 {
+               try $0.handleInstruction(.nextCell)
+               expect($0.state.cellPointer) == i
+            }
+         }
+      }
       
-      func testNoInput() throws {
-         try with(Interpreter<UTF8>([], input: "")) {
-            $0.state.currentCellValue = 42 // something other than 0
-            try $0.handleInstruction(.input)
+      func testPrevCell() throws {
+         try with(try Interpreter("")) {
+            // the cell pointer doesn't support wraparound, so
+            // offset ourselves from the beginning by a bit
+            $0.state.cellPointer = 10
             
-            expect($0.state.currentCellValue) == 0
+            for i in (0..<10).reversed() {
+               try $0.handleInstruction(.prevCell)
+               expect($0.state.cellPointer) == i
+            }
          }
       }
    }

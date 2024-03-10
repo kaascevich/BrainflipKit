@@ -19,6 +19,8 @@
 
 import PackageDescription
 
+let swiftLintPlugin = Target.PluginUsage.plugin(name: "SwiftLint", package: "SwiftLintPlugin")
+
 let package = Package(
    name: "BrainflipKit",
    platforms: [
@@ -31,14 +33,8 @@ let package = Package(
    ],
    products: [
       // Products define the executables and libraries a package produces, making them visible to other packages.
-      .library(
-         name: "BrainflipKit",
-         targets: ["BrainflipKit"]
-      ),
-      .executable(
-         name: "brainflip",
-         targets: ["BrainflipCLI"]
-      )
+      .library(name: "BrainflipKit", targets: ["BrainflipKit"]),
+      .executable(name: "brainflip", targets: ["BrainflipCLI"])
    ],
    dependencies: [
       .package(
@@ -47,53 +43,29 @@ let package = Package(
       ),
       .package(
          url: "https://github.com/apple/swift-argument-parser.git",
-         .upToNextMajor(from: .init(1, 2, 0))
+         .upToNextMajor(from: "1.2.0")
       ),
       .package(
          url: "https://github.com/lukepistrol/SwiftLintPlugin",
-         from: .init(0, 2, 2)
+         from: "0.2.2"
       )
    ],
    targets: [
       // Targets are the basic building blocks of a package, defining a module or a test suite.
       // Targets can depend on other targets in this package and products from dependencies.
-      .target(
-         name: "BrainflipKit",
-         plugins: [
-            .plugin(
-               name: "SwiftLint",
-               package: "SwiftLintPlugin"
-            )
-         ]
-      ),
+      .target(name: "BrainflipKit", plugins: [swiftLintPlugin]),
       .executableTarget(
          name: "BrainflipCLI",
          dependencies: [
             "BrainflipKit",
-            .product(
-               name: "ArgumentParser",
-               package: "swift-argument-parser"
-            )
+            .product(name: "ArgumentParser", package: "swift-argument-parser")
          ],
-         plugins: [
-            .plugin(
-               name: "SwiftLint",
-               package: "SwiftLintPlugin"
-            )
-         ]
+         plugins: [swiftLintPlugin]
       ),
       .testTarget(
          name: "BrainflipKitTests",
-         dependencies: [
-            "BrainflipKit",
-            "Nimble"
-         ],
-         plugins: [
-            .plugin(
-               name: "SwiftLint",
-               package: "SwiftLintPlugin"
-            )
-         ]
+         dependencies: ["BrainflipKit", "Nimble"],
+         plugins: [swiftLintPlugin]
       )
    ]
 )

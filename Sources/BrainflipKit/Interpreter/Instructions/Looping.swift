@@ -1,4 +1,4 @@
-// Typealiases.swift
+// Looping.swift
 // Copyright © 2024 Kaleb A. Ascevich
 //
 // This package is free software: you can redistribute it and/or modify it
@@ -14,16 +14,13 @@
 // You should have received a copy of the GNU General Public License along
 // with this package. If not, see https://www.gnu.org/licenses/.
 
-public extension Interpreter {
-   /// The type of a single Brainflip cell.
+internal extension Interpreter {
+   /// Executes a ``Instruction/loop(_:)``.
    ///
-   /// This type does not have anything to do with the
-   /// actual maximum value allowed in a cell. Instead of
-   /// checking this type's `max` property, use the
-   /// ``Options-swift.struct/cellMax`` property of the
-   /// `Options` struct.
-   typealias CellValue = UInt32
-   
-   /// The type of an array of cells.
-   typealias CellArray = [CellValue]
+   /// - Parameter instructions: The instructions to loop over.
+   func handleLoop(_ instructions: [Instruction]) throws {
+      while state.currentCellValue != 0 {
+         try instructions.forEach(handleInstruction)
+      }
+   }
 }

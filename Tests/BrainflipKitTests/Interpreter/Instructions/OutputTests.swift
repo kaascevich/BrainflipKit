@@ -1,4 +1,4 @@
-// StateTests.swift
+// OutputTests.swift
 // Copyright © 2024 Kaleb A. Ascevich
 //
 // This package is free software: you can redistribute it and/or modify it
@@ -18,13 +18,21 @@ import class XCTest.XCTestCase
 import Nimble
 @testable import BrainflipKit
 
-extension InterpreterTests {
-   final class StateTests: XCTestCase {
-      func testCurrentCellValue() throws {
-         with(try Interpreter("")) {
-            $0.state.cellPointer = 5
-            $0.state.currentCellValue = 42
-            expect($0.state.currentCellValue) == $0.state.cells[$0.state.cellPointer]
+extension InterpreterTests.InstructionTests {
+   final class OutputTests: XCTestCase {
+      func testOutput() throws {
+         try with(try Interpreter("")) {
+            $0.state.currentCellValue = 0x42 // ASCII code for "B"
+            try $0.handleInstruction(.output)
+            expect($0.state.output) == "B"
+         }
+      }
+      
+      func testUnicodeOutput() throws {
+         try with(try Interpreter("", options: .init(cellSize: 16))) {
+            $0.state.currentCellValue = 0x2192 // Unicode code unit for "→"
+            try $0.handleInstruction(.output)
+            expect($0.state.output) == "→"
          }
       }
    }

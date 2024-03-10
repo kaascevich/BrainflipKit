@@ -1,4 +1,4 @@
-// Implementation.swift
+// InputTests.swift
 // Copyright © 2024 Kaleb A. Ascevich
 //
 // This package is free software: you can redistribute it and/or modify it
@@ -14,20 +14,26 @@
 // You should have received a copy of the GNU General Public License along
 // with this package. If not, see https://www.gnu.org/licenses/.
 
-import ArgumentParser
-import BrainflipKit
+import class XCTest.XCTestCase
+import Nimble
+@testable import BrainflipKit
 
-extension BrainflipCLI {
-   func run() async throws {
-      let options = Interpreter.Options(
-         cellSize: interpreterOptions.cellSize,
-         arraySize: interpreterOptions.arraySize,
-         initialPointerLocation: interpreterOptions.pointerLocation,
-         allowCellWraparound: interpreterOptions.wraparound
-      )
-      let interpreter = Interpreter(program, input: input, options: options)
-      let output =  try await interpreter.run()
+extension InterpreterTests.InstructionTests {
+   final class InputTests: XCTestCase {
+      func testInput() throws {
+         try with(try Interpreter("", input: "&")) {
+            try $0.handleInstruction(.input)
+            expect($0.state.currentCellValue) == 38 // ASCII code for "&" (ampersand)
+         }
+      }
       
-      throw CleanExit.message(output)
+      func testNoInput() throws {
+         try with(Interpreter("")) {
+            $0.state.currentCellValue = 42 // something other than 0
+            try $0.handleInstruction(.input)
+            
+            expect($0.state.currentCellValue) == 0
+         }
+      }
    }
 }

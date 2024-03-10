@@ -25,12 +25,12 @@ public extension Interpreter {
       resetState()
             
       // while there's still code to execute
-      while state.instructionPointerIsValid {
-         try handleInstruction(state.currentInstruction)
+      while program.indices.contains(state.instructionPointer) {
+         try handleInstruction(program[state.instructionPointer])
          state.instructionPointer += 1 // point to the next instruction
       }
       
-      return state.outputString
+      return state.output
    }
    
    /// Executes an individual ``Instruction``.
@@ -51,75 +51,6 @@ public extension Interpreter {
          
       case .output: handleOutputInstruction()
       case .input: handleInputInstruction()
-      }
-      
-      /// Executes an ``Instruction/increment(_:)`` instruction.
-      func handleIncrementInstruction() throws {
-         if state.currentCellValue == CellValue.max { // wraparound
-            guard options.allowCellWraparound else {
-               throw Interpreter.Error.cellOverflow
-            }
-            state.currentCellValue = CellValue.min
-         } else {
-            state.currentCellValue += 1
-         }
-      }
-      
-      /// Executes a ``Instruction/decrement(_:)`` instruction.
-      func handleDecrementInstruction() throws {
-         if state.currentCellValue == CellValue.min { // wraparound
-            guard options.allowCellWraparound else {
-               throw Interpreter.Error.cellUnderflow
-            }
-            state.currentCellValue = CellValue.max
-         } else {
-            state.currentCellValue -= 1
-         }
-      }
-      
-      /// Executes a ``Instruction/nextCell(_:)`` instruction.
-      func handleNextCellInstruction() throws {
-         state.cellPointer += 1
-         guard state.cells.indices.contains(state.cellPointer) else {
-            throw Error.cellPointerOutOfBounds
-         }
-      }
-      /// Executes a ``Instruction/prevCell(_:)`` instruction.
-      func handlePrevCellInstruction() throws {
-         state.cellPointer -= 1
-         guard state.cells.indices.contains(state.cellPointer) else {
-            throw Error.cellPointerOutOfBounds
-         }
-      }
-      
-      /// Executes a ``Instruction/loop(_:)``.
-      ///
-      /// - Parameter instructions: The instructions to loop over.
-      func handleLoop(_ instructions: [Instruction]) throws {
-         while state.currentCellValue != 0 {
-            for instruction in instructions {
-               try handleInstruction(instruction)
-            }
-         }
-      }
-      
-      /// Executes an ``Instruction/output`` instruction.
-      func handleOutputInstruction() {
-         state.output.append(state.currentCellValue)
-      }
-      
-      /// Executes an ``Instruction/input`` instruction.
-      func handleInputInstruction() {
-         // make sure we've actually got some input to work with
-         guard let nextInputCharacter = state.input.first else {
-            state.currentCellValue = 0 // null out the cell
-            return
-         }
-         state.input.removeFirst() // we deal with one character at a time
-         
-         // we should be OK to force-unwrap, since input was validated
-         // before execution
-         state.currentCellValue = nextInputCharacter
       }
    }
 }

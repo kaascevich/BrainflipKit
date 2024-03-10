@@ -40,11 +40,14 @@ public enum Instruction: Hashable {
    
    /// Finds the character whose ASCII value equals
    /// ``Interpreter/State/currentCellValue`` and
-   /// appends it to the output buffer.
+   /// appends it to the output buffer. If there is
+   /// no corresponding ASCII character, this instruction
+   /// does nothing.
    case output
    
    /// Takes the next character out of the input buffer
    /// and sets ``Interpreter/State/currentCellValue``
-   /// to that character's ASCII value.
+   /// to that character's ASCII value. If it is not an
+   /// ASCII character, the cell remains unchanged.
    case input
 }

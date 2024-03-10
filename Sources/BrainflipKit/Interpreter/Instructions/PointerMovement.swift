@@ -1,4 +1,4 @@
-// Typealiases.swift
+// PointerMovement.swift
 // Copyright © 2024 Kaleb A. Ascevich
 //
 // This package is free software: you can redistribute it and/or modify it
@@ -14,16 +14,22 @@
 // You should have received a copy of the GNU General Public License along
 // with this package. If not, see https://www.gnu.org/licenses/.
 
-public extension Interpreter {
-   /// The type of a single Brainflip cell.
-   ///
-   /// This type does not have anything to do with the
-   /// actual maximum value allowed in a cell. Instead of
-   /// checking this type's `max` property, use the
-   /// ``Options-swift.struct/cellMax`` property of the
-   /// `Options` struct.
-   typealias CellValue = UInt32
+internal extension Interpreter {
+   private func advanceCellPointer(by offset: CellArray.Index) throws {
+      state.cellPointer = state.cellPointer.advanced(by: offset)
+      
+      // ensure that we're still in the array
+      guard state.cells.indices.contains(state.cellPointer)
+      else { throw Error.cellPointerOutOfBounds }
+   }
    
-   /// The type of an array of cells.
-   typealias CellArray = [CellValue]
+   /// Executes a ``Instruction/nextCell(_:)`` instruction.
+   func handleNextCellInstruction() throws {
+      try advanceCellPointer(by: 1)
+   }
+   
+   /// Executes a ``Instruction/prevCell(_:)`` instruction.
+   func handlePrevCellInstruction() throws {
+      try advanceCellPointer(by: -1)
+   }
 }

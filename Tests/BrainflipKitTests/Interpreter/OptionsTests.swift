@@ -20,8 +20,19 @@ import Nimble
 
 extension InterpreterTests {
    final class OptionsTests: XCTestCase {
+      func testCellSize() throws {
+         try with(try Interpreter("", options: .init(
+            cellSize: 16
+         ))) {
+            expect($0.options.cellMax) == 65_535
+            
+            try $0.handleInstruction(.decrement)
+            expect($0.state.cells[0]) == 65_535
+         }
+      }
+      
       func testArraySize() throws {
-         with(try Interpreter<UTF8>("", options: .init(
+         with(try Interpreter("", options: .init(
             arraySize: 20
          ))) {
             expect($0.state.cells.count) == 20
@@ -29,7 +40,7 @@ extension InterpreterTests {
       }
       
       func testInitialPointerLocation() throws {
-         with(try Interpreter<UTF8>("", options: .init(
+         with(try Interpreter("", options: .init(
             initialPointerLocation: 5
          ))) {
             expect($0.state.cellPointer) == 5
@@ -37,15 +48,15 @@ extension InterpreterTests {
       }
       
       func testAllowWraparound() throws {
-         try with(try Interpreter<UTF8>("", options: .init(
+         try with(try Interpreter("", options: .init(
             allowCellWraparound: false
          ))) {
             expect(try $0.handleInstruction(.decrement))
-               .to(throwError(Interpreter<UTF8>.Error.cellUnderflow))
+               .to(throwError(Interpreter.Error.cellUnderflow))
             
             $0.state.currentCellValue = 255
             expect(try $0.handleInstruction(.increment))
-               .to(throwError(Interpreter<UTF8>.Error.cellOverflow))
+               .to(throwError(Interpreter.Error.cellOverflow))
          }
       }
    }

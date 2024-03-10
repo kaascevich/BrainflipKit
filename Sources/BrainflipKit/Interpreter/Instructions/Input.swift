@@ -1,4 +1,4 @@
-// Typealiases.swift
+// Input.swift
 // Copyright © 2024 Kaleb A. Ascevich
 //
 // This package is free software: you can redistribute it and/or modify it
@@ -14,16 +14,19 @@
 // You should have received a copy of the GNU General Public License along
 // with this package. If not, see https://www.gnu.org/licenses/.
 
-public extension Interpreter {
-   /// The type of a single Brainflip cell.
-   ///
-   /// This type does not have anything to do with the
-   /// actual maximum value allowed in a cell. Instead of
-   /// checking this type's `max` property, use the
-   /// ``Options-swift.struct/cellMax`` property of the
-   /// `Options` struct.
-   typealias CellValue = UInt32
-   
-   /// The type of an array of cells.
-   typealias CellArray = [CellValue]
+internal extension Interpreter {
+   /// Executes an ``Instruction/input`` instruction.
+   func handleInputInstruction() {
+      // make sure we've actually got some input to work with
+      guard let nextInputCharacter = state.input.first else {
+         state.currentCellValue = 0 // null out the cell
+         return
+      }
+      
+      state.input.removeFirst() // we deal with one character at a time
+      
+      let characterValue = nextInputCharacter.unicodeScalars.first!.value
+      assert(characterValue < options.cellMax)
+      state.currentCellValue = characterValue
+   }
 }

@@ -22,11 +22,10 @@ extension BrainflipCLI {
       @Option(
          name: [.customShort("s"), .long],
          help: .init(
-            "The bit size to use for the cells. Must be one of 8, 16, or 32.",
-            discussion: "This also affects the encoding used for input and output; 8-bit cells will use UTF-8, 16-bit cells will use UTF-16, and 32-bit cells will use UTF-32.",
+            "The bit size to use for the cells. Must be between 1 and 32.",
             valueName: "size"
          )
-      ) var cellSize: Int = 8
+      ) var cellSize: UInt8 = 8
       
       @Option(
          name: .long,

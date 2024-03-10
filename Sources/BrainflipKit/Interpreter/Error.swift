@@ -18,9 +18,6 @@ public extension Interpreter {
    /// Represents an error that can happen during the
    /// lifetime of an ``Interpreter``.
    enum Error: Swift.Error {
-      /// Indicates that the program is invalid.
-      case invalidProgram
-      
       /// Indicates that the cell pointer went out of the
       /// bounds of the array.
       case cellPointerOutOfBounds
@@ -37,11 +34,7 @@ extension Interpreter.Error: CustomStringConvertible {
    /// A description of this error.
    public var description: String {
       switch self {
-      case .invalidProgram:
-         "Invalid program - check to see if all brackets are balanced"
-         
-      case .cellPointerOutOfBounds:
-         "Cell pointer went out of bounds"
+      case .cellPointerOutOfBounds: "Cell pointer went out of bounds"
          
       case .cellOverflow: "Cell overflowed"
       case .cellUnderflow: "Cell underflowed"

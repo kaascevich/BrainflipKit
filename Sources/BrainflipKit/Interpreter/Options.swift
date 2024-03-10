@@ -16,24 +16,55 @@
 
 public extension Interpreter {
    struct Options {
+      /// The bit size of each cell. Defaults to 8.
+      public let cellSize: UInt8
+      
       /// The size of the array. Defaults to 30,000 cells.
-      internal var arraySize: CellArray.Index
+      public let arraySize: CellArray.Index
       
       /// The initial location of the cell pointer. Defaults
       /// to the first cell (index 0).
-      internal var initialPointerLocation: CellArray.Index
+      public let initialPointerLocation: CellArray.Index
       
       /// Whether or not to allow cell overflow and underflow.
-      internal var allowCellWraparound: Bool
+      /// Defaults to `true`.
+      public let allowCellWraparound: Bool
       
+      /// Creates a new `Options` struct to configure an
+      /// ``Interpreter`` with.
+      ///
+      /// - Parameters:
+      ///   - cellSize: The bit size of each cell.
+      ///   - arraySize: The size of the array.
+      ///   - initialPointerLocation: The initial location
+      ///     of the cell pointer.
+      ///   - allowCellWraparound: Whether or not to allow
+      ///     cell overflow and underflow.
       public init(
+         cellSize: UInt8 = 8,
          arraySize: CellArray.Index = 30_000,
          initialPointerLocation: CellArray.Index = 0,
          allowCellWraparound: Bool = true
       ) {
+         self.cellSize = cellSize
          self.arraySize = arraySize
          self.initialPointerLocation = initialPointerLocation
          self.allowCellWraparound = allowCellWraparound
       }
+      
+      // MARK: - Computed
+      
+      /// The maximum value allowed in a cell.
+      public var cellMax: CellValue {
+         (1 << cellSize) - 1
+      }
+   }
+}
+
+public extension Interpreter.Options {
+   enum EndOfInputBehavior {
+      case doNothing
+      case setToZero
+      case setToMax
    }
 }

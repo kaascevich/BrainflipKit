@@ -1,4 +1,4 @@
-// Typealiases.swift
+// ParserErrorTests.swift
 // Copyright © 2024 Kaleb A. Ascevich
 //
 // This package is free software: you can redistribute it and/or modify it
@@ -14,16 +14,18 @@
 // You should have received a copy of the GNU General Public License along
 // with this package. If not, see https://www.gnu.org/licenses/.
 
-public extension Interpreter {
-   /// The type of a single Brainflip cell.
-   ///
-   /// This type does not have anything to do with the
-   /// actual maximum value allowed in a cell. Instead of
-   /// checking this type's `max` property, use the
-   /// ``Options-swift.struct/cellMax`` property of the
-   /// `Options` struct.
-   typealias CellValue = UInt32
-   
-   /// The type of an array of cells.
-   typealias CellArray = [CellValue]
+import class XCTest.XCTestCase
+import Nimble
+@testable import BrainflipKit
+
+extension ParserTests {
+   final class ParserErrorTests: XCTestCase {
+      func testUnpairedLoops() async throws {
+         let invalidPrograms = ["[", "]", "][", "]][", "][[", "[][", "][]", "[[]", "[]]"]
+         for program in invalidPrograms {
+            expect(try Program(program))
+               .to(throwError(errorType: Parser.InvalidProgramError.self))
+         }
+      }
+   }
 }

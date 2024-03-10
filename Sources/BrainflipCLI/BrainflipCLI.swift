@@ -30,18 +30,33 @@ import BrainflipKit
    @Argument(
       help: "A Brainflip program to execute.",
       transform: { string in
-         guard let program = Program(string) else {
-            throw ValidationError(Interpreter<UTF8>.Error.invalidProgram.description)
+         do {
+            return try Program(string)
+         } catch let error as Parser.InvalidProgramError {
+            throw ValidationError(error.description)
          }
-         return program
       }
    ) var program: Program
    
    // MARK: - Options
    
-   @Option(name: .shortAndLong, help: "The input to pass to the program.")
+   @Option(
+      name: .shortAndLong,
+      help: .init(
+         "The input to pass to the program.",
+         discussion: "Characters whose Unicode values exceed the maximum value of a cell will be removed."
+      )
+   )
    var input: String = ""
    
    @OptionGroup(title: "Interpreter Options")
    var interpreterOptions: InterpreterOptions
+   
+   // MARK: - Validation
+   
+   func validate() throws {
+      guard (1...32).contains(interpreterOptions.cellSize) else {
+         throw ValidationError("Invalid cell size -- must be between 1 and 32")
+      }
+   }
 }

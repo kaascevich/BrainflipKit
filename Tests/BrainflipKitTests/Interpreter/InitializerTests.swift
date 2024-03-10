@@ -1,4 +1,4 @@
-// EncodingTests.swift
+// InitializerTests.swift
 // Copyright © 2024 Kaleb A. Ascevich
 //
 // This package is free software: you can redistribute it and/or modify it
@@ -19,25 +19,26 @@ import Nimble
 @testable import BrainflipKit
 
 extension InterpreterTests {
-   final class EncodingTests: XCTestCase {
-      func testUTF8() async throws {
-         try await with(try Interpreter<UTF8>("-")) {
-            try await $0.run()
-            expect($0.state.currentCellValue) == 255
+   final class InitializerTests: XCTestCase {
+      func testInitializer() throws {
+         with(try Interpreter("")) {
+            expect($0.state.cells) == Array(repeating: 0, count: 30000)
+            expect($0.state.cellPointer) == 0
+            expect($0.state.input).to(beEmpty())
+            expect($0.state.output).to(beEmpty())
+            expect($0.program).to(beEmpty())
          }
       }
       
-      func testUTF16() async throws {
-         try await with(try Interpreter<UTF16>("-")) {
-            try await $0.run()
-            expect($0.state.currentCellValue) == 65_535
+      func testUnicodeInput() throws {
+         // Unicode value fits in 16 bits
+         try with(Interpreter("", input: "→", options: .init(cellSize: 16))) {
+            expect($0.state.input) == "→"
          }
-      }
-      
-      func testUTF32() async throws {
-         try await with(try Interpreter<UTF32>("-")) {
-            try await $0.run()
-            expect($0.state.currentCellValue) == 4_294_967_295
+         
+         // Unicode value does not fit in 16 bits
+         try with(Interpreter("", input: "→")) {
+            expect($0.state.input).to(beEmpty())
          }
       }
    }
