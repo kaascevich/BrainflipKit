@@ -50,11 +50,11 @@
 ///
 /// - term ``Instruction/output``:
 ///     Appends the character whose Unicode value is `currentCellValue`
-///     to the ``Interpreter/State/output`` buffer.
+///     to ``Interpreter/State/outputBuffer``.
 ///
 /// - term ``Instruction/input``:
-///     Takes the next character out of the ``Interpreter/State/input``
-///     buffer and stores its Unicode value into  `currentCellValue`.
+///     Takes the next character out of ``Interpreter/State/inputBuffer``
+///     and stores its Unicode value into  `currentCellValue`.
 ///     
 ///     When the `Interpreter` is created, characters whose values are
 ///     too big to fit in the cell will be removed from the input string.
@@ -79,6 +79,9 @@ public final class Interpreter {
    /// The Brainflip program containing a list of instructions
    /// to execute.
    public let program: Program
+   
+   /// The input to provide to the program.
+   public let input: String
    
    /// The configurable options for this interpreter.
    public let options: Options
@@ -105,6 +108,7 @@ public final class Interpreter {
       self.options = options
       
       let trimmedInput = input.filter { $0.unicodeScalars.first!.value < options.cellMax }
+      self.input = trimmedInput
       self.state = State(input: trimmedInput, options: options)
    }
    

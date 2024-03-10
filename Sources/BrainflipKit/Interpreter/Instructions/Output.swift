@@ -23,6 +23,6 @@ internal extension Interpreter {
       else { return }
       
       let character = Character(unicodeScalar)
-      state.output.append(character)
+      state.outputBuffer.append(character)
    }
 }

@@ -24,7 +24,7 @@ extension InterpreterTests.InstructionTests {
          try with(try Interpreter("")) {
             $0.state.currentCellValue = 0x42 // ASCII code for "B"
             try $0.handleInstruction(.output)
-            expect($0.state.output) == "B"
+            expect($0.state.outputBuffer) == "B"
          }
       }
       
@@ -32,7 +32,7 @@ extension InterpreterTests.InstructionTests {
          try with(try Interpreter("", options: .init(cellSize: 16))) {
             $0.state.currentCellValue = 0x2192 // Unicode code unit for "→"
             try $0.handleInstruction(.output)
-            expect($0.state.output) == "→"
+            expect($0.state.outputBuffer) == "→"
          }
       }
    }

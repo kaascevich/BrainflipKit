@@ -21,7 +21,7 @@ internal extension Interpreter {
          input: String,
          options: Options
       ) {
-         self.input = input
+         self.inputBuffer = input
          
          self.cells = .init(repeating: 0, count: options.arraySize)
          self.cellPointer = options.initialPointerLocation
@@ -58,14 +58,14 @@ internal extension Interpreter {
       /// If an `input` instruction is executed while this
       /// string is empty, the current cell will be set to 0
       /// instead.
-      var input: String
+      var inputBuffer: String
       
       /// The output buffer.
       ///
       /// Each time an ``Instruction/output`` instruction is
       /// executed, the ASCII character corresponding to the
       /// current cell's value is appended to this string.
-      var output: String = ""
+      var outputBuffer: String = ""
       
       // MARK: Computed State
       
@@ -81,6 +81,6 @@ internal extension Interpreter {
    
    /// Resets this interpreter's internal state.
    func resetState() {
-      state = State(input: state.input, options: options)
+      state = State(input: input, options: options)
    }
 }

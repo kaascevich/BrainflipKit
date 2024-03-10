@@ -30,7 +30,7 @@ public extension Interpreter {
          state.instructionPointer += 1 // point to the next instruction
       }
       
-      return state.output
+      return state.outputBuffer
    }
    
    /// Executes an individual ``Instruction``.

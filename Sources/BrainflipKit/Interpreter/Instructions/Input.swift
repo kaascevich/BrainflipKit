@@ -18,12 +18,12 @@ internal extension Interpreter {
    /// Executes an ``Instruction/input`` instruction.
    func handleInputInstruction() {
       // make sure we've actually got some input to work with
-      guard let nextInputCharacter = state.input.first else {
+      guard let nextInputCharacter = state.inputBuffer.first else {
          state.currentCellValue = 0 // null out the cell
          return
       }
       
-      state.input.removeFirst() // we deal with one character at a time
+      state.inputBuffer.removeFirst() // we deal with one character at a time
       
       let characterValue = nextInputCharacter.unicodeScalars.first!.value
       assert(characterValue < options.cellMax)

@@ -57,6 +57,18 @@ extension InterpreterTests {
          }
       }
       
+      func testMultipleRunsWithInput() async throws {
+         // outputs the first input character twice, then the
+         // second character once
+         let interpreter = try Interpreter(",..,.", input: "hello")
+         for _ in 1...2 {
+            try await with(interpreter) {
+               let output = try await $0.run()
+               expect(output) == "hhe"
+            }
+         }
+      }
+      
       func testHelloWorld() async throws {
          // outputs the first input character twice, then the
          // second character once

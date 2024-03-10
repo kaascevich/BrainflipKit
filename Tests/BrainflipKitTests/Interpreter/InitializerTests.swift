@@ -24,8 +24,8 @@ extension InterpreterTests {
          with(try Interpreter("")) {
             expect($0.state.cells) == Array(repeating: 0, count: 30000)
             expect($0.state.cellPointer) == 0
-            expect($0.state.input).to(beEmpty())
-            expect($0.state.output).to(beEmpty())
+            expect($0.state.outputBuffer).to(beEmpty())
+            expect($0.input).to(beEmpty())
             expect($0.program).to(beEmpty())
          }
       }
@@ -33,12 +33,12 @@ extension InterpreterTests {
       func testUnicodeInput() throws {
          // Unicode value fits in 16 bits
          try with(Interpreter("", input: "→", options: .init(cellSize: 16))) {
-            expect($0.state.input) == "→"
+            expect($0.input) == "→"
          }
          
          // Unicode value does not fit in 16 bits
          try with(Interpreter("", input: "→")) {
-            expect($0.state.input).to(beEmpty())
+            expect($0.input).to(beEmpty())
          }
       }
    }
