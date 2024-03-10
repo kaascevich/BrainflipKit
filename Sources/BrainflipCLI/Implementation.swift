@@ -26,7 +26,7 @@ extension BrainflipCLI {
          allowCellWraparound: interpreterOptions.wraparound
       )
       let interpreter = Interpreter(program, input: input, options: options)
-      let output =  try await interpreter.run()
+      let output = try await interpreter.run()
       
       throw CleanExit.message(output)
    }

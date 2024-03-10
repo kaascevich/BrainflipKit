@@ -20,7 +20,7 @@ import BrainflipKit
 @main struct BrainflipCLI: AsyncParsableCommand {
    // MARK: - Command Configuration
    
-   static let configuration = CommandConfiguration(
+   nonisolated(unsafe) static let configuration = CommandConfiguration(
       commandName: "brainflip",
       abstract: "Run Brainflip programs with a configurable interpreter."
    )
