@@ -75,7 +75,7 @@
 /// # See Also
 /// - ``Instruction``
 /// - ``run()``
-public class Interpreter {
+public final class Interpreter {
    /// The Brainflip program containing a list of instructions
    /// to execute.
    public let program: Program
