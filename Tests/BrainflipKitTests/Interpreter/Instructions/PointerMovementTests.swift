@@ -21,7 +21,7 @@ import Nimble
 extension InterpreterTests.InstructionTests {
    final class PointerMovementTests: XCTestCase {
       func testNextCell() throws {
-         try with(try Interpreter("")) {
+         try with(Interpreter("")) {
             for i in 1...10 {
                try $0.handleInstruction(.nextCell)
                expect($0.state.cellPointer) == i
@@ -30,7 +30,7 @@ extension InterpreterTests.InstructionTests {
       }
       
       func testPrevCell() throws {
-         try with(try Interpreter("")) {
+         try with(Interpreter("")) {
             // the cell pointer doesn't support wraparound, so
             // offset ourselves from the beginning by a bit
             $0.state.cellPointer = 10

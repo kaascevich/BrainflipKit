@@ -21,7 +21,7 @@ import Nimble
 extension InterpreterTests.InstructionTests {
    final class IncDecTests: XCTestCase {
       func testIncrement() throws {
-         try with(try Interpreter("")) {
+         try with(Interpreter("")) {
             for i in 1...$0.options.cellMax {
                try $0.handleInstruction(.increment)
                expect($0.state.cells.first) == i
@@ -33,7 +33,7 @@ extension InterpreterTests.InstructionTests {
       }
          
       func testDecrement() throws {
-         try with(try Interpreter("")) {
+         try with(Interpreter("")) {
             try $0.handleInstruction(.decrement)
             expect($0.state.cells.first) == $0.options.cellMax
             

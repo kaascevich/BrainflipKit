@@ -21,7 +21,7 @@ import Nimble
 extension InterpreterTests {
    final class StateTests: XCTestCase {
       func testCurrentCellValue() throws {
-         with(try Interpreter("")) {
+         try with(Interpreter("")) {
             $0.state.cellPointer = 5
             $0.state.currentCellValue = 42
             expect($0.state.currentCellValue) == $0.state.cells[$0.state.cellPointer]

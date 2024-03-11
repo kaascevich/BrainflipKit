@@ -20,7 +20,7 @@ import Nimble
 
 extension ParserTests {
    final class ParserErrorTests: XCTestCase {
-      func testUnpairedLoops() async throws {
+      func testUnpairedLoops() {
          let invalidPrograms = ["[", "]", "][", "]][", "][[", "[][", "][]", "[[]", "[]]"]
          for program in invalidPrograms {
             expect(try Program(program)).to(throwError())

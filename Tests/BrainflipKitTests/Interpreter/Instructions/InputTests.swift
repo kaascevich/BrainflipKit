@@ -21,7 +21,7 @@ import Nimble
 extension InterpreterTests.InstructionTests {
    final class InputTests: XCTestCase {
       func testInput() throws {
-         try with(try Interpreter("", input: "&")) {
+         try with(Interpreter("", input: "&")) {
             try $0.handleInstruction(.input)
             expect($0.state.currentCellValue) == 38 // ASCII code for "&" (ampersand)
          }

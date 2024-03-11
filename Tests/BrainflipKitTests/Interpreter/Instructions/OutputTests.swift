@@ -21,7 +21,7 @@ import Nimble
 extension InterpreterTests.InstructionTests {
    final class OutputTests: XCTestCase {
       func testOutput() throws {
-         try with(try Interpreter("")) {
+         try with(Interpreter("")) {
             $0.state.currentCellValue = 0x42 // ASCII code for "B"
             try $0.handleInstruction(.output)
             expect($0.state.outputBuffer) == "B"
@@ -29,7 +29,7 @@ extension InterpreterTests.InstructionTests {
       }
       
       func testUnicodeOutput() throws {
-         try with(try Interpreter("", options: .init(cellSize: 16))) {
+         try with(Interpreter("", options: .init(cellSize: 16))) {
             $0.state.currentCellValue = 0x2192 // Unicode code unit for "→"
             try $0.handleInstruction(.output)
             expect($0.state.outputBuffer) == "→"

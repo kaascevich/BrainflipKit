@@ -21,7 +21,7 @@ import Nimble
 extension InterpreterTests {
    final class InitializerTests: XCTestCase {
       func testInitializer() throws {
-         with(try Interpreter("")) {
+         try with(Interpreter("")) {
             expect($0.state.cells) == Array(repeating: 0, count: 30000)
             expect($0.state.cellPointer) == 0
             expect($0.state.outputBuffer).to(beEmpty())
