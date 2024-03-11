@@ -23,11 +23,13 @@ public extension Interpreter {
    ///   during execution.
    func run() async throws -> String {
       resetState()
+      
+      var instructionPointer = 0
             
       // while there's still code to execute
-      while program.indices.contains(state.instructionPointer) {
-         try handleInstruction(program[state.instructionPointer])
-         state.instructionPointer += 1 // point to the next instruction
+      while program.indices.contains(instructionPointer) {
+         try await handleInstruction(program[instructionPointer])
+         instructionPointer += 1 // point to the next instruction
       }
       
       return state.outputBuffer
@@ -39,7 +41,7 @@ public extension Interpreter {
    ///
    /// - Throws: An interpreter ``Error`` if an issue was encountered
    ///   during execution.
-   internal func handleInstruction(_ instruction: Instruction) throws {
+   internal func handleInstruction(_ instruction: Instruction) async throws {
       switch instruction {
       case .increment: try handleIncrementInstruction()
       case .decrement: try handleDecrementInstruction()
@@ -47,7 +49,7 @@ public extension Interpreter {
       case .nextCell: try handleNextCellInstruction()
       case .prevCell: try handlePrevCellInstruction()
       
-      case .loop(let instructions): try handleLoop(instructions)
+      case .loop(let instructions): try await handleLoop(instructions)
          
       case .output: handleOutputInstruction()
       case .input: handleInputInstruction()

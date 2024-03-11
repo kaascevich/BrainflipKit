@@ -20,25 +20,25 @@ import Nimble
 
 extension InterpreterTests.InstructionTests {
    final class IncDecTests: XCTestCase {
-      func testIncrement() throws {
-         try with(Interpreter("")) {
+      func testIncrement() async throws {
+         try await with(Interpreter("")) {
             for i in 1...$0.options.cellMax {
-               try $0.handleInstruction(.increment)
+               try await $0.handleInstruction(.increment)
                expect($0.state.cells.first) == i
             }
             
-            try $0.handleInstruction(.increment)
+            try await $0.handleInstruction(.increment)
             expect($0.state.cells.first) == 0
          }
       }
          
-      func testDecrement() throws {
-         try with(Interpreter("")) {
-            try $0.handleInstruction(.decrement)
+      func testDecrement() async throws {
+         try await with(Interpreter("")) {
+            try await $0.handleInstruction(.decrement)
             expect($0.state.cells.first) == $0.options.cellMax
             
             for i in (0..<$0.options.cellMax).reversed() {
-               try $0.handleInstruction(.decrement)
+               try await $0.handleInstruction(.decrement)
                expect($0.state.cells.first) == i
             }
          }

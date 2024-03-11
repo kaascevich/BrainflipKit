@@ -20,11 +20,11 @@ import Nimble
 
 extension InterpreterTests {
    final class OptionsTests: XCTestCase {
-      func testCellSize() throws {
-         try with(Interpreter("", options: .init(cellSize: 16))) {
+      func testCellSize() async throws {
+         try await with(Interpreter("", options: .init(cellSize: 16))) {
             expect($0.options.cellMax) == 65_535
             
-            try $0.handleInstruction(.decrement)
+            try await $0.handleInstruction(.decrement)
             expect($0.state.cells[0]) == 65_535
          }
       }
@@ -41,13 +41,13 @@ extension InterpreterTests {
          }
       }
       
-      func testAllowWraparound() throws {
-         try with(Interpreter("", options: .init(allowCellWraparound: false))) {
-            expect(try $0.handleInstruction(.decrement))
+      func testAllowWraparound() async throws {
+         try await with(Interpreter("", options: .init(allowCellWraparound: false))) {
+            await expecta(try await $0.handleInstruction(.decrement))
                .to(throwError(Interpreter.Error.cellUnderflow))
             
             $0.state.currentCellValue = 255
-            expect(try $0.handleInstruction(.increment))
+            await expecta(try await $0.handleInstruction(.increment))
                .to(throwError(Interpreter.Error.cellOverflow))
          }
       }

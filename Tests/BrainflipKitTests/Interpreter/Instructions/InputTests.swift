@@ -20,17 +20,17 @@ import Nimble
 
 extension InterpreterTests.InstructionTests {
    final class InputTests: XCTestCase {
-      func testInput() throws {
-         try with(Interpreter("", input: "&")) {
-            try $0.handleInstruction(.input)
+      func testInput() async throws {
+         try await with(Interpreter("", input: "&")) {
+            try await $0.handleInstruction(.input)
             expect($0.state.currentCellValue) == 38 // ASCII code for "&" (ampersand)
          }
       }
       
-      func testNoInput() throws {
-         try with(Interpreter("")) {
+      func testNoInput() async throws {
+         try await with(Interpreter("")) {
             $0.state.currentCellValue = 42 // something other than 0
-            try $0.handleInstruction(.input)
+            try await $0.handleInstruction(.input)
             
             expect($0.state.currentCellValue) == 0
          }

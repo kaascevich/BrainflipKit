@@ -42,10 +42,6 @@ internal extension Interpreter {
       /// - ``Interpreter/State/currentCellValue``
       var cellPointer: [CellValue].Index
       
-      /// Stores the index of the current instruction being
-      /// executed by the interpreter.
-      var instructionPointer: Program.Index = 0
-      
       /// The input buffer.
       ///
       /// Each time an ``Instruction/input`` instruction is

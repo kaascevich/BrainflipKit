@@ -20,18 +20,18 @@ import Nimble
 
 extension InterpreterTests.InstructionTests {
    final class OutputTests: XCTestCase {
-      func testOutput() throws {
-         try with(Interpreter("")) {
+      func testOutput() async throws {
+         try await with(Interpreter("")) {
             $0.state.currentCellValue = 0x42 // ASCII code for "B"
-            try $0.handleInstruction(.output)
+            try await $0.handleInstruction(.output)
             expect($0.state.outputBuffer) == "B"
          }
       }
       
-      func testUnicodeOutput() throws {
-         try with(Interpreter("", options: .init(cellSize: 16))) {
+      func testUnicodeOutput() async throws {
+         try await with(Interpreter("", options: .init(cellSize: 16))) {
             $0.state.currentCellValue = 0x2192 // Unicode code unit for "→"
-            try $0.handleInstruction(.output)
+            try await $0.handleInstruction(.output)
             expect($0.state.outputBuffer) == "→"
          }
       }

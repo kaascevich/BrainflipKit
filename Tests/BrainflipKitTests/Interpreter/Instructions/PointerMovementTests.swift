@@ -20,23 +20,23 @@ import Nimble
 
 extension InterpreterTests.InstructionTests {
    final class PointerMovementTests: XCTestCase {
-      func testNextCell() throws {
-         try with(Interpreter("")) {
+      func testNextCell() async throws {
+         try await with(Interpreter("")) {
             for i in 1...10 {
-               try $0.handleInstruction(.nextCell)
+               try await $0.handleInstruction(.nextCell)
                expect($0.state.cellPointer) == i
             }
          }
       }
       
-      func testPrevCell() throws {
-         try with(Interpreter("")) {
+      func testPrevCell() async throws {
+         try await with(Interpreter("")) {
             // the cell pointer doesn't support wraparound, so
             // offset ourselves from the beginning by a bit
             $0.state.cellPointer = 10
             
             for i in (0..<10).reversed() {
-               try $0.handleInstruction(.prevCell)
+               try await $0.handleInstruction(.prevCell)
                expect($0.state.cellPointer) == i
             }
          }
