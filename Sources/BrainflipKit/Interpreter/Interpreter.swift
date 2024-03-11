@@ -122,8 +122,8 @@ public final class Interpreter {
    ///   - input: The input to pass to the program. Characters
    ///     that are too big to fit in a cell will be removed.
    ///
-   /// - Throws: ``BrainflipParser/InvalidProgramError`` if `string` is an
-   ///   invalid program.
+   /// - Throws: - Throws: `some Error` if `string` is not a
+   ///   valid program (that is, if it contains unmatched brackets).
    public convenience init(
       _ string: String,
       input: String = "",

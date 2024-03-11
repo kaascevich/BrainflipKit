@@ -37,9 +37,8 @@ public extension Program {
    ///
    /// - Parameter string: A string to parse into a `Program`.
    ///
-   /// - Throws: ``BrainflipParser/InvalidProgramError`` if `string` is
-   ///   not a valid program (that is, if it contains unmatched
-   ///   brackets).
+   /// - Throws: `some Error` if `string` is not a valid program
+   ///   (that is, if it contains unmatched brackets).
    init(_ string: String) throws {
       self = try BrainflipParser.parse(program: string)
    }

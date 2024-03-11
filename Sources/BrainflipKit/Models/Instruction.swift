@@ -17,37 +17,36 @@
 /// An individual instruction, performing a specific action
 /// when executed by an ``Interpreter``.
 public enum Instruction: Equatable, Hashable {
-   /// Increments ``Interpreter/State/currentCellValue``.
+   /// Increments the current cell.
    ///
    /// The default behavior on overflow is to wrap around,
    /// setting the cell to 0.
    case increment
    
-   /// Decrements ``Interpreter/State/currentCellValue``.
+   /// Decrements the current cell.
    ///
    /// The default behavior on underflow is to wrap around,
    /// setting the cell to its maximum value.
    case decrement
    
-   /// Increments ``Interpreter/State/cellPointer`` by 1.
+   /// Increments the cell pointer by 1.
    case nextCell
    
-   /// Decrements ``Interpreter/State/cellPointer`` by 1.
+   /// Decrements the cell pointer by 1.
    case prevCell
    
    /// Loops over the contained instructions.
    case loop([Self])
    
-   /// Finds the character whose ASCII value equals
-   /// ``Interpreter/State/currentCellValue`` and
-   /// appends it to the output buffer. If there is
-   /// no corresponding ASCII character, this instruction
-   /// does nothing.
+   /// Finds the character whose Unicode value equals
+   /// the current cell and appends it to the output
+   /// buffer. If there is no corresponding Unicode
+   /// character, this instruction does nothing.
    case output
    
    /// Takes the next character out of the input buffer
-   /// and sets ``Interpreter/State/currentCellValue``
-   /// to that character's ASCII value. If it is not an
-   /// ASCII character, the cell remains unchanged.
+   /// and sets the current cell to that character's
+   /// Unicode value. If the cell does not fit the new,
+   /// value, it remains unchanged.
    case input
 }
