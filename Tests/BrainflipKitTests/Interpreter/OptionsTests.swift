@@ -51,5 +51,30 @@ extension InterpreterTests {
                .to(throwError(Interpreter.Error.cellOverflow))
          }
       }
+      
+      func testEndOfInputBehavior() async throws {
+         try await with(Interpreter("", input: "", options: .init(endOfInputBehavior: .noChange))) {
+            $0.state.currentCellValue = 42
+            try await $0.handleInstruction(.input)
+            expect($0.state.currentCellValue) == 42
+         }
+         
+         try await with(Interpreter("", input: "", options: .init(endOfInputBehavior: .setToZero))) {
+            $0.state.currentCellValue = 42
+            try await $0.handleInstruction(.input)
+            expect($0.state.currentCellValue) == 0
+         }
+         
+         try await with(Interpreter("", input: "", options: .init(endOfInputBehavior: .setToMax))) {
+            $0.state.currentCellValue = 42
+            try await $0.handleInstruction(.input)
+            expect($0.state.currentCellValue) == 255
+         }
+         
+         try await with(Interpreter("", input: "", options: .init(endOfInputBehavior: .throwError))) {
+            await expecta(try await $0.handleInstruction(.input))
+               .to(throwError(Interpreter.Error.endOfInput))
+         }
+      }
    }
 }

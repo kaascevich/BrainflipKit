@@ -34,7 +34,7 @@ import BrainflipKit
          do {
             return try Program(string)
          } catch {
-            throw ValidationError("\(error)")
+            throw ValidationError("\n\(error)\n")
          }
       }
    ) var program: Program

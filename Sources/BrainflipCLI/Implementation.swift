@@ -19,11 +19,18 @@ import BrainflipKit
 
 extension BrainflipCLI {
    func run() async throws {
+      let endOfInputBehavior: Interpreter.Options.EndOfInputBehavior = switch interpreterOptions.endOfInputBehavior {
+      case .zero:  .setToZero
+      case .max:   .setToMax
+      case .error: .throwError
+      case  nil:   .noChange
+      }
       let options = Interpreter.Options(
-         cellSize: interpreterOptions.cellSize,
-         arraySize: interpreterOptions.arraySize,
+         cellSize:               interpreterOptions.cellSize,
+         arraySize:              interpreterOptions.arraySize,
          initialPointerLocation: interpreterOptions.pointerLocation,
-         allowCellWraparound: interpreterOptions.wraparound
+         allowCellWraparound:    interpreterOptions.wraparound,
+         endOfInputBehavior:     endOfInputBehavior
       )
       let interpreter = Interpreter(program, input: input, options: options)
       let output = try await interpreter.run()

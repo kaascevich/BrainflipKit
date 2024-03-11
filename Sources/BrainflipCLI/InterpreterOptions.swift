@@ -19,6 +19,11 @@ import BrainflipKit
 
 extension BrainflipCLI {
    struct InterpreterOptions: ParsableArguments {
+      enum EndOfInputBehavior: String, CaseIterable, ExpressibleByArgument {
+         case zero, max
+         case error
+      }
+      
       @Option(
          name: [.customShort("s"), .long],
          help: .init(
@@ -33,14 +38,23 @@ extension BrainflipCLI {
       ) var arraySize: Int = 30_000
       
       @Option(
-         name: .long,
+         name: [.customLong("ptr-location"), .long],
          help: .init("The initial location of the cell pointer (0-indexed).", valueName: "location")
       ) var pointerLocation: Int = 0
       
       @Flag(
-         name: .long,
-         inversion: .prefixedNo,
+         name: .customLong("wrap"),
+         inversion: .prefixedEnableDisable,
          help: "Whether to allow cell values to wrap around when they overflow or underflow."
       ) var wraparound: Bool = true
+      
+      @Option(
+         name: [.customLong("eoi"), .customLong("end-of-input")],
+         help: .init(
+            "The action to take on the current cell when an input instruction is executed, but there are no characters remaining in the input buffer.",
+            discussion: "No action is taken if this option is not specified.",
+            valueName: "behavior"
+         )
+      ) var endOfInputBehavior: EndOfInputBehavior?
    }
 }

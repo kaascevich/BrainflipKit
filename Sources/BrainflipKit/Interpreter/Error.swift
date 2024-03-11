@@ -27,6 +27,9 @@ public extension Interpreter {
       
       /// Indicates that the current cell value underflowed.
       case cellUnderflow
+      
+      /// Indicates that the input buffer was exhausted
+      case endOfInput
    }
 }
 
@@ -38,6 +41,8 @@ extension Interpreter.Error: CustomStringConvertible {
          
       case .cellOverflow: "Cell overflowed"
       case .cellUnderflow: "Cell underflowed"
+         
+      case .endOfInput: "End of input reached"
       }
    }
 }

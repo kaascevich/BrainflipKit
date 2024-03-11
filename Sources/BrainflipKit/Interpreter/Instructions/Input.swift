@@ -16,10 +16,16 @@
 
 internal extension Interpreter {
    /// Executes an ``Instruction/input`` instruction.
-   func handleInputInstruction() {
+   func handleInputInstruction() throws {
       // make sure we've actually got some input to work with
       guard let nextInputCharacter = state.inputBuffer.first else {
-         state.currentCellValue = 0 // null out the cell
+         state.currentCellValue = switch options.endOfInputBehavior {
+         case .noChange:   state.currentCellValue
+         case .setToZero:  0
+         case .setToMax:   options.cellMax
+         case .throwError: throw Error.endOfInput
+         }
+         
          return
       }
       

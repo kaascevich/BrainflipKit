@@ -46,7 +46,7 @@ public enum Instruction: Equatable, Hashable {
    
    /// Takes the next character out of the input buffer
    /// and sets the current cell to that character's
-   /// Unicode value. If the cell does not fit the new,
+   /// Unicode value. If the cell does not fit the new
    /// value, it remains unchanged.
    case input
 }

@@ -30,6 +30,24 @@ public extension Interpreter {
       /// Defaults to `true`.
       public let allowCellWraparound: Bool
       
+      /// The action to take when an input instruction is
+      /// executed with an empty input buffer. Defaults to
+      /// doing nothing (``EndOfInputBehavior/noChange``).
+      public let endOfInputBehavior: EndOfInputBehavior
+      public enum EndOfInputBehavior: Sendable, CaseIterable {
+         /// Does nothing.
+         case noChange
+         
+         /// Sets the current cell to zero.
+         case setToZero
+         
+         /// Sets the current cell to its maximum value.
+         case setToMax
+         
+         /// Throws an error.
+         case throwError
+      }
+      
       /// Creates a new `Options` struct to configure an
       /// ``Interpreter`` with.
       ///
@@ -44,12 +62,14 @@ public extension Interpreter {
          cellSize: UInt8 = 8,
          arraySize: [CellValue].Index = 30_000,
          initialPointerLocation: [CellValue].Index = 0,
-         allowCellWraparound: Bool = true
+         allowCellWraparound: Bool = true,
+         endOfInputBehavior: EndOfInputBehavior = .noChange
       ) {
          self.cellSize = cellSize
          self.arraySize = arraySize
          self.initialPointerLocation = initialPointerLocation
          self.allowCellWraparound = allowCellWraparound
+         self.endOfInputBehavior = endOfInputBehavior
       }
       
       // MARK: - Computed
@@ -58,13 +78,5 @@ public extension Interpreter {
       public var cellMax: CellValue {
          (1 << cellSize) - 1
       }
-   }
-}
-
-public extension Interpreter.Options {
-   enum EndOfInputBehavior {
-      case doNothing
-      case setToZero
-      case setToMax
    }
 }

@@ -52,7 +52,7 @@ public extension Interpreter {
       case .loop(let instructions): try await handleLoop(instructions)
          
       case .output: handleOutputInstruction()
-      case .input: handleInputInstruction()
+      case .input: try handleInputInstruction()
       }
    }
 }
