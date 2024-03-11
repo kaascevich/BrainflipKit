@@ -23,7 +23,4 @@ public extension Interpreter {
    /// ``Options-swift.struct/cellMax`` property of the
    /// `Options` struct.
    typealias CellValue = UInt32
-   
-   /// The type of an array of cells.
-   typealias CellArray = [CellValue]
 }

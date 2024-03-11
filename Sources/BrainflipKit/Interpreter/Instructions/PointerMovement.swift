@@ -15,7 +15,7 @@
 // with this package. If not, see https://www.gnu.org/licenses/.
 
 internal extension Interpreter {
-   private func advanceCellPointer(by offset: CellArray.Index) throws {
+   private func advanceCellPointer(by offset: [CellValue].Index) throws {
       state.cellPointer = state.cellPointer.advanced(by: offset)
       
       // ensure that we're still in the array

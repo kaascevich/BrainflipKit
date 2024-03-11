@@ -16,7 +16,7 @@
 
 import class XCTest.XCTestCase
 import Nimble
-@testable import BrainflipKit
+@testable import typealias BrainflipKit.Program
 
 extension ParserTests {
    final class ParsingTests: XCTestCase {

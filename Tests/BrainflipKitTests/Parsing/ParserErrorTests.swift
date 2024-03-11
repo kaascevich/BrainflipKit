@@ -16,15 +16,14 @@
 
 import class XCTest.XCTestCase
 import Nimble
-@testable import BrainflipKit
+@testable import typealias BrainflipKit.Program
 
 extension ParserTests {
    final class ParserErrorTests: XCTestCase {
       func testUnpairedLoops() async throws {
          let invalidPrograms = ["[", "]", "][", "]][", "][[", "[][", "][]", "[[]", "[]]"]
          for program in invalidPrograms {
-            expect(try Program(program))
-               .to(throwError(errorType: Parser.InvalidProgramError.self))
+            expect(try Program(program)).to(throwError())
          }
       }
    }

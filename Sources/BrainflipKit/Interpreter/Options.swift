@@ -20,11 +20,11 @@ public extension Interpreter {
       public let cellSize: UInt8
       
       /// The size of the array. Defaults to 30,000 cells.
-      public let arraySize: CellArray.Index
+      public let arraySize: [CellValue].Index
       
       /// The initial location of the cell pointer. Defaults
       /// to the first cell (index 0).
-      public let initialPointerLocation: CellArray.Index
+      public let initialPointerLocation: [CellValue].Index
       
       /// Whether or not to allow cell overflow and underflow.
       /// Defaults to `true`.
@@ -42,8 +42,8 @@ public extension Interpreter {
       ///     cell overflow and underflow.
       public init(
          cellSize: UInt8 = 8,
-         arraySize: CellArray.Index = 30_000,
-         initialPointerLocation: CellArray.Index = 0,
+         arraySize: [CellValue].Index = 30_000,
+         initialPointerLocation: [CellValue].Index = 0,
          allowCellWraparound: Bool = true
       ) {
          self.cellSize = cellSize

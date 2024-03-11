@@ -37,26 +37,16 @@ public extension Program {
    ///
    /// - Parameter string: A string to parse into a `Program`.
    ///
-   /// - Throws: ``Parser/InvalidProgramError`` if `string` is
+   /// - Throws: ``BrainflipParser/InvalidProgramError`` if `string` is
    ///   not a valid program (that is, if it contains unmatched
    ///   brackets).
    init(_ string: String) throws {
-      self = try Parser.parse(program: string)
+      self = try BrainflipParser.parse(program: string)
    }
 }
 
 public extension Program {
    var description: String {
-      self.map {
-         switch $0 {
-         case .increment: "+"
-         case .decrement: "-"
-         case .nextCell: ">"
-         case .prevCell: "<"
-         case .output: "."
-         case .input: ","
-         case .loop(let instructions): "[\(Program(instructions).description)]"
-         }
-      }.joined()
+      BrainflipParser.print(program: self)
    }
 }

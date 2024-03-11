@@ -14,7 +14,32 @@
 // You should have received a copy of the GNU General Public License along
 // with this package. If not, see https://www.gnu.org/licenses/.
 
-public enum Parser {
+import Parsing
+
+internal enum BrainflipParser {
+   private struct InstructionParser: ParserPrinter {
+      var body: some ParserPrinter<Substring.UTF8View, Instruction> {
+         OneOf {
+            "+".utf8.map(.case(Instruction.increment))
+            "-".utf8.map(.case(Instruction.decrement))
+            ">".utf8.map(.case(Instruction.nextCell))
+            "<".utf8.map(.case(Instruction.prevCell))
+            ",".utf8.map(.case(Instruction.input))
+            ".".utf8.map(.case(Instruction.output))
+            Parse {
+               "[".utf8
+               Many { Self() } terminator: { "]".utf8 }
+            }.map(.case(Instruction.loop))
+         }
+      }
+   }
+   
+   private struct ProgramParser: ParserPrinter {
+      var body: some ParserPrinter<Substring, Program> {
+         Many { InstructionParser() }
+      }
+   }
+   
    /// Parses a `String` into a `Program`.
    ///
    /// - Parameter string: The original source code for a
@@ -22,98 +47,18 @@ public enum Parser {
    ///
    /// - Returns: The parsed program.
    ///
-   /// - Throws: ``InvalidProgramError`` if `string` is not
-   ///   a valid program (that is, if it contains unmatched
-   ///   brackets).
-   internal static func parse(program string: String) throws -> Program {
-      var index = string.startIndex
-      var program: Program = []
-      
-      while string.indices.contains(index) {
-         let character = string[index]
-         switch character {
-         case "+": program.append(.increment)
-         case "-": program.append(.decrement)
-            
-         case ">": program.append(.nextCell)
-         case "<": program.append(.prevCell)
-            
-         case ",": program.append(.input)
-         case ".": program.append(.output)
-            
-         case "[":
-            let (instructions, newIndex) = try parseLoop(in: string, at: index)
-            index = newIndex
-            program.append(.loop(instructions))
-            
-         case "]":
-            // if we got here, then there's an extra closing bracket
-            // that doesn't have a matching opening bracket
-            throw InvalidProgramError(string)
-            
-         default: break // ignore all other characters
-         }
-         
-         index = string.index(after: index)
-      }
-      
-      return program
+   /// - Throws: `some Error` if `string` is not a valid
+   ///   program (that is, if it contains unmatched brackets).
+   static func parse(program string: String) throws -> Program {
+      try ProgramParser().parse(string.filter("+-><[],.".contains))
    }
    
-   /// Parse a loop.
+   /// Creates a `String` representation of a ``Program``.
    ///
-   /// - Parameters:
-   ///   - string: The program string, trimmed of comment
-   ///     characters.
-   ///   - index: The index of the beginning of this loop.
+   /// - Parameter program: A `Program` instance.
    ///
-   /// - Returns: The instructions contained within the loop,
-   ///   as well as the index where the loop ends.
-   ///
-   /// - Throws: ``InvalidProgramError`` if `string` is not
-   ///   a valid program (that is, if it contains unmatched
-   ///   brackets).
-   private static func parseLoop(
-      in string: String,
-      at index: String.Index
-   ) throws -> ([Instruction], endIndex: String.Index) {
-      guard string.indices.contains(index) else { throw InvalidProgramError(string) }
-      
-      /// The index of the first character in this loop.
-      let startIndex = string.index(after: index)
-      
-      /// The indices to search in for this loop's end index.
-      let searchIndices = startIndex..<string.endIndex
-      
-      /// The amount of nested loops we're currently in.
-      var nestingLevel = 0
-      
-      // we use a very simple stack-like process to find the
-      // end index, except we only store the *size* of the
-      // stack in `nestingLevel`
-      let endIndex: String.Index = try {
-         for index in string.indices[searchIndices] {
-            // check if there's a nested loop inside of this one,
-            // so we can accomodate for it
-            if string[index] == "[" { nestingLevel += 1 }
-            
-            // check if we're exiting a nested loop
-            if string[index] == "]" { nestingLevel -= 1 }
-            
-            // check if we've exited the loop we're parsing - if
-            // so, we've found the index we need
-            if nestingLevel < 0 {
-               return index
-            }
-         }
-         
-         // this loop doesn't have a closing bracket, so the
-         // program is invalid
-         throw InvalidProgramError(string)
-      }()
-      
-      let loopedCharacters = string[startIndex..<endIndex]
-      let loopedInstructions = try parse(program: String(loopedCharacters))
-      return (loopedInstructions, endIndex)
+   /// - Returns: A `String` representation of `program`.
+   static func print(program: Program) -> String {
+      String(try! ProgramParser().print(program)) // swiftlint:disable:this force_try
    }
 }

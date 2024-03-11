@@ -16,7 +16,7 @@
 
 import class XCTest.XCTestCase
 import Nimble
-@testable import BrainflipKit
+@testable import class BrainflipKit.Interpreter
 
 extension InterpreterTests.InstructionTests {
    final class PointerMovementTests: XCTestCase {

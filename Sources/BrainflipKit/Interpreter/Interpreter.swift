@@ -24,38 +24,40 @@
 ///
 /// All Brainflip programs mutate an array of *cells*, which are 8 bits
 /// long by default. A pointer (not an actual `UnsafePointer`, just a
-/// `CellArray.Index`) is used to keep track of the cell that is currently
+/// `[CellValue].Index`) is used to keep track of the cell that is currently
 /// being mutated.
 ///
 /// Brainflip's instructions are as follows:
 ///
 /// - term ``Instruction/increment``:
-///     Increments ``Interpreter/State/currentCellValue`` by 1, wrapping
+///     Increments current cell by 1, wrapping
 ///     back to 0 if necessary.
 ///
 /// - term ``Instruction/decrement``:
-///     Decrements `currentCellValue` by 1, wrapping back to ``Options/cellMax``
+///     Decrements the current cell by 1, wrapping back to ``Options/cellMax``
 ///     if necessary.
 ///
 /// - term ``Instruction/nextCell``:
-///     Moves ``Interpreter/State/cellPointer`` forward 1 cell.
+///     Moves the cell pointer forward 1 cell.
 ///
 /// - term ``Instruction/prevCell``:
-///     Moves `cellPointer` back 1 cell.
+///     Moves the cell pointer back 1 cell.
 ///
 /// - term ``Instruction/loop(_:)``:
-///     If `currentCellValue` is 0, skips the contained instructions.
+///     If the current cell is 0, skips the contained instructions.
 ///     Otherwise, executes the instructions before repeating the
 ///     process.
 ///
 /// - term ``Instruction/output``:
-///     Appends the character whose Unicode value is `currentCellValue`
-///     to ``Interpreter/State/outputBuffer``.
+///     Appends the character whose Unicode value is the current
+///     cell's value to the output buffer. If the current cell's
+///     value does not correspond to a valid Unicode code point,
+///     this instruction does nothing.
 ///
 /// - term ``Instruction/input``:
-///     Takes the next character out of ``Interpreter/State/inputBuffer``
-///     and stores its Unicode value into  `currentCellValue`.
-///     
+///     Takes the next character out of the input buffer
+///     and stores its Unicode value into the current cell.
+///
 ///     When the `Interpreter` is created, characters whose values are
 ///     too big to fit in the cell will be removed from the input string.
 ///
@@ -120,7 +122,7 @@ public final class Interpreter {
    ///   - input: The input to pass to the program. Characters
    ///     that are too big to fit in a cell will be removed.
    ///
-   /// - Throws: ``Parser/InvalidProgramError`` if `string` is an
+   /// - Throws: ``BrainflipParser/InvalidProgramError`` if `string` is an
    ///   invalid program.
    public convenience init(
       _ string: String,

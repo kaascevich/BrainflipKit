@@ -33,14 +33,14 @@ internal extension Interpreter {
       ///
       /// # See Also
       /// - ``Interpreter/State/currentCellValue``
-      var cells: CellArray
+      var cells: [CellValue]
       
       /// Stores the index of the cell currently being used by
       /// the program.
       ///
       /// # See Also
       /// - ``Interpreter/State/currentCellValue``
-      var cellPointer: CellArray.Index
+      var cellPointer: [CellValue].Index
       
       /// Stores the index of the current instruction being
       /// executed by the interpreter.

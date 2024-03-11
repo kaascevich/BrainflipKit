@@ -20,6 +20,7 @@
 import PackageDescription
 
 let swiftLintPlugin = Target.PluginUsage.plugin(name: "SwiftLint", package: "SwiftLintPlugin")
+let strictConcurrency = SwiftSetting.enableExperimentalFeature("StrictConcurrency")
 
 let package = Package(
    name: "BrainflipKit",
@@ -37,25 +38,18 @@ let package = Package(
       .executable(name: "brainflip", targets: ["BrainflipCLI"])
    ],
    dependencies: [
-      .package(
-         url: "https://github.com/Quick/Nimble",
-         branch: "main"
-      ),
-      .package(
-         url: "https://github.com/apple/swift-argument-parser.git",
-         .upToNextMajor(from: "1.2.0")
-      ),
-      .package(
-         url: "https://github.com/lukepistrol/SwiftLintPlugin",
-         from: "0.2.2"
-      )
+      .package(url: "https://github.com/Quick/Nimble", branch: "main"),
+      .package(url: "https://github.com/apple/swift-argument-parser.git", branch: "main"),
+      .package(url: "https://github.com/pointfreeco/swift-parsing.git", branch: "main"),
+      .package(url: "https://github.com/lukepistrol/SwiftLintPlugin", branch: "main")
    ],
    targets: [
       // Targets are the basic building blocks of a package, defining a module or a test suite.
       // Targets can depend on other targets in this package and products from dependencies.
       .target(
          name: "BrainflipKit",
-         swiftSettings: [.enableExperimentalFeature("StrictConcurrency")],
+         dependencies: [.product(name: "Parsing", package: "swift-parsing")],
+         swiftSettings: [strictConcurrency],
          plugins: [swiftLintPlugin]
       ),
       .executableTarget(
@@ -64,13 +58,13 @@ let package = Package(
             "BrainflipKit",
             .product(name: "ArgumentParser", package: "swift-argument-parser")
          ],
-         swiftSettings: [.enableExperimentalFeature("StrictConcurrency")],
+         swiftSettings: [strictConcurrency],
          plugins: [swiftLintPlugin]
       ),
       .testTarget(
          name: "BrainflipKitTests",
          dependencies: ["BrainflipKit", "Nimble"],
-         swiftSettings: [.enableExperimentalFeature("StrictConcurrency")],
+         swiftSettings: [strictConcurrency],
          plugins: [swiftLintPlugin]
       )
    ]

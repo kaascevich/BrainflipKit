@@ -15,6 +15,7 @@
 // with this package. If not, see https://www.gnu.org/licenses/.
 
 import ArgumentParser
+
 import BrainflipKit
 
 @main struct BrainflipCLI: AsyncParsableCommand {
@@ -29,11 +30,11 @@ import BrainflipKit
    
    @Argument(
       help: "A Brainflip program to execute.",
-      transform: { string in
+      transform: { string -> Program in
          do {
             return try Program(string)
-         } catch let error as Parser.InvalidProgramError {
-            throw ValidationError(error.description)
+         } catch {
+            throw ValidationError("\(error)")
          }
       }
    ) var program: Program
