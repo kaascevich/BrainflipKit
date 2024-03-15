@@ -20,7 +20,7 @@ public extension Interpreter {
    /// This type does not have anything to do with the
    /// actual maximum value allowed in a cell. Instead of
    /// checking this type's `max` property, use the
-   /// ``Options-swift.struct/cellMax`` property of the
+   /// ``Options/cellMax`` property of the
    /// `Options` struct.
    typealias CellValue = UInt64
 }

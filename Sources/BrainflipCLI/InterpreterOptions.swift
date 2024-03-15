@@ -27,7 +27,7 @@ extension BrainflipCLI {
       @Option(
          name: [.customShort("s"), .long],
          help: .init(
-            "The bit size to use for the cells. Must be between 1 and 64.",
+            "The bit size to use for the cells. Must be less than \(Interpreter.Options.maxCellSize).",
             valueName: "size"
          )
       ) var cellSize: UInt8 = 8

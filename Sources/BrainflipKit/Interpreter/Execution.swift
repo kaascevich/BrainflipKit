@@ -19,7 +19,7 @@ public extension Interpreter {
    ///
    /// - Returns: The program's output.
    ///
-   /// - Throws: An interpreter ``Error`` if an issue was encountered
+   /// - Throws: ``Error`` if an issue was encountered
    ///   during execution.
    func run() async throws -> String {
       resetState()
@@ -39,7 +39,7 @@ public extension Interpreter {
    ///
    /// - Parameter instruction: The instruction to execute.
    ///
-   /// - Throws: An interpreter ``Error`` if an issue was encountered
+   /// - Throws: ``Error`` if an issue was encountered
    ///   during execution.
    internal func handleInstruction(_ instruction: Instruction) async throws {
       switch instruction {

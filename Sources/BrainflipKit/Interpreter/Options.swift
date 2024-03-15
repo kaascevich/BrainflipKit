@@ -56,6 +56,13 @@ public extension Interpreter {
       ///     of the cell pointer.
       ///   - allowCellWraparound: Whether or not to allow
       ///     cell overflow and underflow.
+      ///
+      /// - Precondition: `cellSize` is less than ``maxCellSize``.
+      ///
+      /// - Note: You *can* set `cellSize` to `0`, and it *will*
+      ///   technically work; however, there is no practical
+      ///   reason to do this, as it makes the language all but
+      ///   useless.
       public init(
          cellSize: UInt8 = 8,
          tapeSize: [CellValue].Index = 30_000,
@@ -63,6 +70,11 @@ public extension Interpreter {
          allowCellWraparound: Bool = true,
          endOfInputBehavior: EndOfInputBehavior? = nil
       ) {
+         precondition(
+            cellSize < Self.maxCellSize,
+            "cellSize is out of bounds (\(cellSize) >= \(Self.maxCellSize)"
+         )
+         
          self.cellSize = cellSize
          self.tapeSize = tapeSize
          self.initialPointerLocation = initialPointerLocation
@@ -80,5 +92,11 @@ public extension Interpreter {
       public var cellMax: CellValue {
          (1 << cellSize) - 1
       }
+      
+      // MARK: - Statics
+      
+      /// The maximum value permissible for ``cellSize``,
+      /// plus 1.
+      public static let maxCellSize = CellValue.bitWidth
    }
 }
