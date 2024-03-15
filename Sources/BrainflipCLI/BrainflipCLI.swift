@@ -56,8 +56,8 @@ import BrainflipKit
    // MARK: - Validation
    
    func validate() throws {
-      guard (1...32).contains(interpreterOptions.cellSize) else {
-         throw ValidationError("Invalid cell size -- must be between 1 and 32")
+      guard (1...64).contains(interpreterOptions.cellSize) else {
+         throw ValidationError("Invalid cell size -- must be between 1 and 64")
       }
    }
 }

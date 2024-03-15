@@ -22,5 +22,5 @@ public extension Interpreter {
    /// checking this type's `max` property, use the
    /// ``Options-swift.struct/cellMax`` property of the
    /// `Options` struct.
-   typealias CellValue = UInt32
+   typealias CellValue = UInt64
 }

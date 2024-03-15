@@ -32,6 +32,6 @@ internal extension Interpreter {
       
       let characterValue = nextInputCharacter.unicodeScalars.first!.value
       assert(characterValue < options.cellMax)
-      state.currentCellValue = characterValue
+      state.currentCellValue = CellValue(characterValue)
    }
 }
