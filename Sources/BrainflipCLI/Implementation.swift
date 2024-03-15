@@ -19,11 +19,11 @@ import BrainflipKit
 
 extension BrainflipCLI {
    func run() async throws {
-      let endOfInputBehavior: Interpreter.Options.EndOfInputBehavior = switch interpreterOptions.endOfInputBehavior {
-      case .zero:  .setToZero
-      case .max:   .setToMax
+      let endOfInputBehavior: Interpreter.Options.EndOfInputBehavior? = switch interpreterOptions.endOfInputBehavior {
+      case .zero:  .setTo(0)
+      case .max:   .setTo(.max)
       case .error: .throwError
-      case  nil:   .noChange
+      case  nil:   nil
       }
       let options = Interpreter.Options(
          cellSize:               interpreterOptions.cellSize,

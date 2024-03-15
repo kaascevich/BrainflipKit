@@ -53,19 +53,19 @@ extension InterpreterTests {
       }
       
       func testEndOfInputBehavior() async throws {
-         try await with(Interpreter("", input: "", options: .init(endOfInputBehavior: .noChange))) {
+         try await with(Interpreter("", input: "", options: .init(endOfInputBehavior: nil))) {
             $0.state.currentCellValue = 42
             try await $0.handleInstruction(.input)
             expect($0.state.currentCellValue) == 42
          }
          
-         try await with(Interpreter("", input: "", options: .init(endOfInputBehavior: .setToZero))) {
+         try await with(Interpreter("", input: "", options: .init(endOfInputBehavior: .setTo(0)))) {
             $0.state.currentCellValue = 42
             try await $0.handleInstruction(.input)
             expect($0.state.currentCellValue) == 0
          }
          
-         try await with(Interpreter("", input: "", options: .init(endOfInputBehavior: .setToMax))) {
+         try await with(Interpreter("", input: "", options: .init(endOfInputBehavior: .setTo(.max)))) {
             $0.state.currentCellValue = 42
             try await $0.handleInstruction(.input)
             expect($0.state.currentCellValue) == 255

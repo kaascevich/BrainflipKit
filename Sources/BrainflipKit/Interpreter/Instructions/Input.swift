@@ -19,10 +19,9 @@ internal extension Interpreter {
    func handleInputInstruction() throws {
       // make sure we've actually got some input to work with
       guard let nextInputCharacter = state.inputBuffer.first else {
-         state.currentCellValue = switch options.endOfInputBehavior {
-         case .noChange:   state.currentCellValue
-         case .setToZero:  0
-         case .setToMax:   options.cellMax
+         switch options.endOfInputBehavior {
+         case nil: break
+         case .setTo(let value): state.currentCellValue = value
          case .throwError: throw Error.endOfInput
          }
          
