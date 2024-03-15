@@ -34,7 +34,7 @@ extension BrainflipCLI {
       
       @Option(
          name: .long,
-         help: .init("The total size of the tape.", valueName: "size")
+         help: .init("The total size of the cell array (also known as the tape).", valueName: "size")
       ) var tapeSize: Int = 30_000
       
       @Option(
