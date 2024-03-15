@@ -17,21 +17,21 @@
 internal extension Interpreter {
    /// Executes an ``Instruction/increment(_:)`` instruction.
    func handleIncrementInstruction() throws {
-      if state.currentCellValue == options.cellMax { // wraparound
+      if self.currentCellValue == options.cellMax { // wraparound
          guard options.allowCellWraparound else { throw Error.cellOverflow }
-         state.currentCellValue = 0
+         self.currentCellValue = 0
       } else {
-         state.currentCellValue += 1
+         self.currentCellValue += 1
       }
    }
    
    /// Executes a ``Instruction/decrement(_:)`` instruction.
    func handleDecrementInstruction() throws {
-      if state.currentCellValue == 0 { // wraparound
+      if self.currentCellValue == 0 { // wraparound
          guard options.allowCellWraparound else { throw Error.cellUnderflow }
-         state.currentCellValue = options.cellMax
+         self.currentCellValue = options.cellMax
       } else {
-         state.currentCellValue -= 1
+         self.currentCellValue -= 1
       }
    }
 }

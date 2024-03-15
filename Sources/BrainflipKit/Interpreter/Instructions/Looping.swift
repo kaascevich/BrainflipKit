@@ -19,7 +19,7 @@ internal extension Interpreter {
    ///
    /// - Parameter instructions: The instructions to loop over.
    func handleLoop(_ instructions: [Instruction]) async throws {
-      while state.currentCellValue != 0 {
+      while self.currentCellValue != 0 {
          for instruction in instructions {
             try await handleInstruction(instruction)
          }

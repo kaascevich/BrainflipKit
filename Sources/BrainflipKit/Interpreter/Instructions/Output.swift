@@ -19,11 +19,11 @@ internal extension Interpreter {
    func handleOutputInstruction() {
       // if this cell's value doesn't correspond to a valid
       // Unicode character, do nothing
-      guard let cellValueAsUInt32 = UInt32(exactly: state.currentCellValue),
+      guard let cellValueAsUInt32 = UInt32(exactly: self.currentCellValue),
             let unicodeScalar = Unicode.Scalar(cellValueAsUInt32)
       else { return }
       
       let character = Character(unicodeScalar)
-      state.outputBuffer.append(character)
+      self.outputBuffer.append(character)
    }
 }

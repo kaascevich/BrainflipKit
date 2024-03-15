@@ -18,20 +18,20 @@ internal extension Interpreter {
    /// Executes an ``Instruction/input`` instruction.
    func handleInputInstruction() throws {
       // make sure we've actually got some input to work with
-      guard let nextInputCharacter = state.inputBuffer.first else {
+      guard let nextInputCharacter = self.inputBuffer.first else {
          switch options.endOfInputBehavior {
          case nil: break
-         case .setTo(let value): state.currentCellValue = value
+         case .setTo(let value): self.currentCellValue = value
          case .throwError: throw Error.endOfInput
          }
          
          return
       }
       
-      state.inputBuffer.removeFirst() // we deal with one character at a time
+      self.inputBuffer.removeFirst() // we deal with one character at a time
       
       let characterValue = nextInputCharacter.unicodeScalars.first!.value
       assert(characterValue < options.cellMax)
-      state.currentCellValue = CellValue(characterValue)
+      self.currentCellValue = CellValue(characterValue)
    }
 }
