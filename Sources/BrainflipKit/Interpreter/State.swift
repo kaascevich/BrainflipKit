@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License along
 // with this package. If not, see https://www.gnu.org/licenses/.
 
-internal extension Interpreter {
+public extension Interpreter {
    /// Represents an interpreter's internal state.
    struct State {
       init(
@@ -34,14 +34,14 @@ internal extension Interpreter {
       ///
       /// # See Also
       /// - ``Interpreter/State/currentCellValue``
-      var tape: [CellValue]
+      public internal(set) var tape: [CellValue]
       
       /// Stores the index of the cell currently being used by
       /// the program.
       ///
       /// # See Also
       /// - ``Interpreter/State/currentCellValue``
-      var cellPointer: [CellValue].Index
+      public internal(set) var cellPointer: [CellValue].Index
       
       /// The input buffer.
       ///
@@ -55,14 +55,14 @@ internal extension Interpreter {
       /// If an `input` instruction is executed while this
       /// string is empty, the current cell will be set to 0
       /// instead.
-      var inputBuffer: String
+      public internal(set) var inputBuffer: String
       
       /// The output buffer.
       ///
       /// Each time an ``Instruction/output`` instruction is
       /// executed, the ASCII character corresponding to the
       /// current cell's value is appended to this string.
-      var outputBuffer: String = ""
+      public internal(set) var outputBuffer: String = ""
       
       // MARK: Computed State
       
@@ -70,14 +70,14 @@ internal extension Interpreter {
       ///
       /// # See Also
       /// - ``Interpreter/State/cellPointer``
-      var currentCellValue: CellValue {
+      public internal(set) var currentCellValue: CellValue {
          get { tape[cellPointer] }
          set { tape[cellPointer] = newValue }
       }
    }
    
    /// Resets this interpreter's internal state.
-   func resetState() {
+   internal func resetState() {
       state = State(input: originalInput, options: options)
    }
 }

@@ -24,22 +24,22 @@ extension InterpreterTests.InstructionTests {
          try await with(Interpreter("")) {
             for i in 1...$0.options.cellMax {
                try await $0.handleInstruction(.increment)
-               expect($0.state.tape.first) == i
+               expect($0.tape.first) == i
             }
             
             try await $0.handleInstruction(.increment)
-            expect($0.state.tape.first) == 0
+            expect($0.tape.first) == 0
          }
       }
          
       func testDecrement() async throws {
          try await with(Interpreter("")) {
             try await $0.handleInstruction(.decrement)
-            expect($0.state.tape.first) == $0.options.cellMax
+            expect($0.tape.first) == $0.options.cellMax
             
             for i in (0..<$0.options.cellMax).reversed() {
                try await $0.handleInstruction(.decrement)
-               expect($0.state.tape.first) == i
+               expect($0.tape.first) == i
             }
          }
       }

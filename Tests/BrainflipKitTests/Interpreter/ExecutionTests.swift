@@ -25,8 +25,8 @@ extension InterpreterTests {
          try await with(Interpreter("+>-<")) {
             _ = try await $0.run()
             
-            expect($0.state.tape[0...1]) == [1, $0.options.cellMax]
-            expect($0.state.cellPointer) == 0
+            expect($0.tape[0...1]) == [1, $0.options.cellMax]
+            expect($0.cellPointer) == 0
          }
       }
       
@@ -34,7 +34,7 @@ extension InterpreterTests {
          // sets cell 2 to 9
          try await with(Interpreter("+++[>+++<-]")) {
             _ = try await $0.run()
-            expect($0.state.tape[1]) == 9
+            expect($0.tape[1]) == 9
          }
       }
       
@@ -42,7 +42,7 @@ extension InterpreterTests {
          // sets cell 3 to 27
          try await with(try Interpreter("+++[>+++[>+++<-]<-]")) {
             _ = try await $0.run()
-            expect($0.state.tape[2]) == 27
+            expect($0.tape[2]) == 27
          }
       }
       

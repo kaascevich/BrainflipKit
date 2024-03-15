@@ -23,7 +23,7 @@ extension InterpreterTests.InstructionTests {
       func testInput() async throws {
          try await with(Interpreter("", input: "&")) {
             try await $0.handleInstruction(.input)
-            expect($0.state.currentCellValue) == 0x26 // ASCII code for "&" (ampersand)
+            expect($0.currentCellValue) == 0x26 // ASCII code for "&" (ampersand)
          }
       }
    }

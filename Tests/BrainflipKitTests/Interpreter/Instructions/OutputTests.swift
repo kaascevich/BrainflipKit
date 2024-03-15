@@ -22,17 +22,17 @@ extension InterpreterTests.InstructionTests {
    final class OutputTests: XCTestCase {
       func testOutput() async throws {
          try await with(Interpreter("")) {
-            $0.state.currentCellValue = 0x42 // ASCII code for "B"
+            $0.currentCellValue = 0x42 // ASCII code for "B"
             try await $0.handleInstruction(.output)
-            expect($0.state.outputBuffer) == "B"
+            expect($0.outputBuffer) == "B"
          }
       }
       
       func testUnicodeOutput() async throws {
          try await with(Interpreter("", options: .init(cellSize: 16))) {
-            $0.state.currentCellValue = 0x2192 // Unicode code unit for "→"
+            $0.currentCellValue = 0x2192 // Unicode code unit for "→"
             try await $0.handleInstruction(.output)
-            expect($0.state.outputBuffer) == "→"
+            expect($0.outputBuffer) == "→"
          }
       }
    }

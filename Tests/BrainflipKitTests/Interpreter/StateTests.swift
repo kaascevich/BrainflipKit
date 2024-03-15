@@ -22,9 +22,17 @@ extension InterpreterTests {
    final class StateTests: XCTestCase {
       func testCurrentCellValue() throws {
          try with(Interpreter("")) {
-            $0.state.cellPointer = 5
-            $0.state.currentCellValue = 42
-            expect($0.state.currentCellValue) == $0.state.tape[$0.state.cellPointer]
+            $0.cellPointer = 5
+            $0.currentCellValue = 42
+            expect($0.currentCellValue) == $0.tape[$0.cellPointer]
+         }
+      }
+      
+      func testDynamicMemberSubscript() throws {
+         try with(Interpreter("")) {
+            $0.cellPointer = 5
+            $0.currentCellValue = 42
+            expect($0.tape[$0.cellPointer]) == $0.tape[$0.cellPointer]
          }
       }
    }

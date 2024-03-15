@@ -22,9 +22,10 @@ extension InterpreterTests {
    final class InitializerTests: XCTestCase {
       func testInitializer() throws {
          try with(Interpreter("")) {
-            expect($0.state.tape) == Array(repeating: 0, count: 30000)
-            expect($0.state.cellPointer) == 0
-            expect($0.state.outputBuffer).to(beEmpty())
+            expect($0.tape) == Array(repeating: 0, count: 30000)
+            expect($0.cellPointer) == 0
+            expect($0.outputBuffer).to(beEmpty())
+            
             expect($0.originalInput).to(beEmpty())
             expect($0.program).to(beEmpty())
          }

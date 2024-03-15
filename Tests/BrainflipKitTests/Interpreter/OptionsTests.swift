@@ -25,19 +25,19 @@ extension InterpreterTests {
             expect($0.options.cellMax) == 65_535
             
             try await $0.handleInstruction(.decrement)
-            expect($0.state.tape[0]) == 65_535
+            expect($0.tape[0]) == 65_535
          }
       }
       
       func testTapeSize() throws {
          try with(Interpreter("", options: .init(tapeSize: 20))) {
-            expect($0.state.tape.count) == 20
+            expect($0.tape.count) == 20
          }
       }
       
       func testInitialPointerLocation() throws {
          try with(Interpreter("", options: .init(initialPointerLocation: 5))) {
-            expect($0.state.cellPointer) == 5
+            expect($0.cellPointer) == 5
          }
       }
       
@@ -46,7 +46,7 @@ extension InterpreterTests {
             await expecta(try await $0.handleInstruction(.decrement))
                .to(throwError(Interpreter.Error.cellUnderflow))
             
-            $0.state.currentCellValue = 255
+            $0.currentCellValue = 255
             await expecta(try await $0.handleInstruction(.increment))
                .to(throwError(Interpreter.Error.cellOverflow))
          }
@@ -54,21 +54,21 @@ extension InterpreterTests {
       
       func testEndOfInputBehavior() async throws {
          try await with(Interpreter("", input: "", options: .init(endOfInputBehavior: nil))) {
-            $0.state.currentCellValue = 42
+            $0.currentCellValue = 42
             try await $0.handleInstruction(.input)
-            expect($0.state.currentCellValue) == 42
+            expect($0.currentCellValue) == 42
          }
          
          try await with(Interpreter("", input: "", options: .init(endOfInputBehavior: .setTo(0)))) {
-            $0.state.currentCellValue = 42
+            $0.currentCellValue = 42
             try await $0.handleInstruction(.input)
-            expect($0.state.currentCellValue) == 0
+            expect($0.currentCellValue) == 0
          }
          
          try await with(Interpreter("", input: "", options: .init(endOfInputBehavior: .setTo(.max)))) {
-            $0.state.currentCellValue = 42
+            $0.currentCellValue = 42
             try await $0.handleInstruction(.input)
-            expect($0.state.currentCellValue) == 255
+            expect($0.currentCellValue) == 255
          }
          
          try await with(Interpreter("", input: "", options: .init(endOfInputBehavior: .throwError))) {

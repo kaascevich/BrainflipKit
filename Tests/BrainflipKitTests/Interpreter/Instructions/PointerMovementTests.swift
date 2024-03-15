@@ -24,7 +24,7 @@ extension InterpreterTests.InstructionTests {
          try await with(Interpreter("")) {
             for i in 1...10 {
                try await $0.handleInstruction(.nextCell)
-               expect($0.state.cellPointer) == i
+               expect($0.cellPointer) == i
             }
          }
       }
@@ -33,11 +33,11 @@ extension InterpreterTests.InstructionTests {
          try await with(Interpreter("")) {
             // the cell pointer doesn't support wraparound, so
             // offset ourselves from the beginning by a bit
-            $0.state.cellPointer = 10
+            $0.cellPointer = 10
             
             for i in (0..<10).reversed() {
                try await $0.handleInstruction(.prevCell)
-               expect($0.state.cellPointer) == i
+               expect($0.cellPointer) == i
             }
          }
       }

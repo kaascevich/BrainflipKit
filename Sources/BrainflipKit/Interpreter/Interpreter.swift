@@ -82,7 +82,7 @@
 /// # See Also
 /// - ``Instruction``
 /// - ``run()``
-public final class Interpreter {
+@dynamicMemberLookup public final class Interpreter {
    /// The Brainflip program containing a list of instructions
    /// to execute.
    public let program: Program
@@ -136,5 +136,16 @@ public final class Interpreter {
    ) throws {
       let program = try Program(string)
       self.init(program, input: input, options: options)
+   }
+   
+   // MARK: - Dynamic Member Lookup
+   
+   public subscript<Value>(dynamicMember keyPath: KeyPath<State, Value>) -> Value {
+      state[keyPath: keyPath]
+   }
+   
+   internal subscript<Value>(dynamicMember keyPath: WritableKeyPath<State, Value>) -> Value {
+      get { state[keyPath: keyPath] }
+      set { state[keyPath: keyPath] = newValue }
    }
 }
