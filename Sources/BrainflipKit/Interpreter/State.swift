@@ -23,17 +23,18 @@ internal extension Interpreter {
       ) {
          self.inputBuffer = input
          
-         self.cells = .init(repeating: 0, count: options.arraySize)
+         self.tape = .init(repeating: 0, count: options.tapeSize)
          self.cellPointer = options.initialPointerLocation
       }
       
-      /// The array of cells that all Brainflip programs manipulate.
+      /// The array of cells -- also referred to as the *tape*
+      /// -- that all Brainflip programs manipulate.
       ///
-      /// The cell array is 30,000 cells long by default.
+      /// The tape is 30,000 cells long by default.
       ///
       /// # See Also
       /// - ``Interpreter/State/currentCellValue``
-      var cells: [CellValue]
+      var tape: [CellValue]
       
       /// Stores the index of the cell currently being used by
       /// the program.
@@ -70,13 +71,13 @@ internal extension Interpreter {
       /// # See Also
       /// - ``Interpreter/State/cellPointer``
       var currentCellValue: CellValue {
-         get { cells[cellPointer] }
-         set { cells[cellPointer] = newValue }
+         get { tape[cellPointer] }
+         set { tape[cellPointer] = newValue }
       }
    }
    
    /// Resets this interpreter's internal state.
    func resetState() {
-      state = State(input: input, options: options)
+      state = State(input: originalInput, options: options)
    }
 }

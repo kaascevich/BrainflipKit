@@ -22,10 +22,10 @@ extension InterpreterTests {
    final class InitializerTests: XCTestCase {
       func testInitializer() throws {
          try with(Interpreter("")) {
-            expect($0.state.cells) == Array(repeating: 0, count: 30000)
+            expect($0.state.tape) == Array(repeating: 0, count: 30000)
             expect($0.state.cellPointer) == 0
             expect($0.state.outputBuffer).to(beEmpty())
-            expect($0.input).to(beEmpty())
+            expect($0.originalInput).to(beEmpty())
             expect($0.program).to(beEmpty())
          }
       }
@@ -33,12 +33,12 @@ extension InterpreterTests {
       func testUnicodeInput() throws {
          // Unicode value fits in 16 bits
          try with(Interpreter("", input: "→", options: .init(cellSize: 16))) {
-            expect($0.input) == "→"
+            expect($0.originalInput) == "→"
          }
          
          // Unicode value does not fit in 16 bits
          try with(Interpreter("", input: "→")) {
-            expect($0.input).to(beEmpty())
+            expect($0.originalInput).to(beEmpty())
          }
       }
    }

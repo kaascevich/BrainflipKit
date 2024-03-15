@@ -18,8 +18,8 @@ internal extension Interpreter {
    private func advanceCellPointer(by offset: [CellValue].Index) throws {
       state.cellPointer = state.cellPointer.advanced(by: offset)
       
-      // ensure that we're still in the array
-      guard state.cells.indices.contains(state.cellPointer)
+      // ensure that we're still in the tape
+      guard state.tape.indices.contains(state.cellPointer)
       else { throw Error.cellPointerOutOfBounds }
    }
    

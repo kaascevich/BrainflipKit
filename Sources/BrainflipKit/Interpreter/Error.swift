@@ -19,7 +19,7 @@ public extension Interpreter {
    /// lifetime of an ``Interpreter``.
    enum Error: Swift.Error {
       /// Indicates that the cell pointer went out of the
-      /// bounds of the array.
+      /// bounds of the tape.
       case cellPointerOutOfBounds
       
       /// Indicates that the current cell value overflowed.

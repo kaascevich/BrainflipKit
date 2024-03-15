@@ -27,7 +27,7 @@ extension BrainflipCLI {
       }
       let options = Interpreter.Options(
          cellSize:               interpreterOptions.cellSize,
-         arraySize:              interpreterOptions.arraySize,
+         tapeSize:               interpreterOptions.tapeSize,
          initialPointerLocation: interpreterOptions.pointerLocation,
          allowCellWraparound:    interpreterOptions.wraparound,
          endOfInputBehavior:     endOfInputBehavior

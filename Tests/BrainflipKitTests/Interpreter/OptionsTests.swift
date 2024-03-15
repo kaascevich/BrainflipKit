@@ -25,13 +25,13 @@ extension InterpreterTests {
             expect($0.options.cellMax) == 65_535
             
             try await $0.handleInstruction(.decrement)
-            expect($0.state.cells[0]) == 65_535
+            expect($0.state.tape[0]) == 65_535
          }
       }
       
-      func testArraySize() throws {
-         try with(Interpreter("", options: .init(arraySize: 20))) {
-            expect($0.state.cells.count) == 20
+      func testTapeSize() throws {
+         try with(Interpreter("", options: .init(tapeSize: 20))) {
+            expect($0.state.tape.count) == 20
          }
       }
       

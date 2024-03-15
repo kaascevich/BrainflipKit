@@ -23,9 +23,9 @@
 /// challenge like no other due to this reduced instruction set.
 ///
 /// All Brainflip programs mutate an array of *cells*, which are 8 bits
-/// long by default. A pointer (not an actual `UnsafePointer`, just a
-/// `[CellValue].Index`) is used to keep track of the cell that is currently
-/// being mutated.
+/// long by default. This array is referred to as the *tape*. A pointer
+/// (not an actual `UnsafePointer`, just a `[CellValue].Index`) is used
+/// to keep track of the cell that is currently being mutated.
 ///
 /// Brainflip's instructions are as follows:
 ///
@@ -88,7 +88,7 @@ public final class Interpreter {
    public let program: Program
    
    /// The input to provide to the program.
-   public let input: String
+   public let originalInput: String
    
    /// The configurable options for this interpreter.
    public let options: Options
@@ -115,7 +115,7 @@ public final class Interpreter {
       self.options = options
       
       let trimmedInput = input.filter { $0.unicodeScalars.first!.value < options.cellMax }
-      self.input = trimmedInput
+      self.originalInput = trimmedInput
       self.state = State(input: trimmedInput, options: options)
    }
    

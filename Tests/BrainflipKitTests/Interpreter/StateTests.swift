@@ -24,7 +24,7 @@ extension InterpreterTests {
          try with(Interpreter("")) {
             $0.state.cellPointer = 5
             $0.state.currentCellValue = 42
-            expect($0.state.currentCellValue) == $0.state.cells[$0.state.cellPointer]
+            expect($0.state.currentCellValue) == $0.state.tape[$0.state.cellPointer]
          }
       }
    }
