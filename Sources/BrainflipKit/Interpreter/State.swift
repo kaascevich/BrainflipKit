@@ -21,7 +21,7 @@ public extension Interpreter {
          input: String,
          options: Options
       ) {
-         self.inputBuffer = input
+         self.inputIterator = input.makeIterator()
          
          self.tape = .init(repeating: 0, count: options.tapeSize)
          self.cellPointer = options.initialPointerLocation
@@ -43,19 +43,19 @@ public extension Interpreter {
       /// - ``Interpreter/State/currentCellValue``
       public internal(set) var cellPointer: [CellValue].Index
       
-      /// The input buffer.
+      /// An iterator that provides input characters to a
+      /// program.
       ///
       /// Each time an ``Instruction/input`` instruction is
-      /// executed, the ASCII value of the first character in
-      /// this string is stored in the current cell, and that
-      /// character is removed from the string. If the first
-      /// character is not an ASCII character, the cell will
-      /// be set to 0, and the character will be removed.
+      /// executed, the ASCII value of the next character
+      /// returned by this iterator is stored in the current
+      /// cell. If the next character is not an ASCII character,
+      /// the cell will be set to 0.
       ///
-      /// If an `input` instruction is executed while this
-      /// string is empty, the current cell will be set to 0
-      /// instead.
-      public internal(set) var inputBuffer: String
+      /// If an `input` instruction is executed, and this
+      /// iterator returns `nil`, the current cell will be
+      /// set to 0 instead.
+      public internal(set) var inputIterator: String.Iterator
       
       /// The output buffer.
       ///
