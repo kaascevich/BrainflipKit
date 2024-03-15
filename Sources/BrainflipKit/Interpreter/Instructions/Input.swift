@@ -18,7 +18,7 @@ internal extension Interpreter {
    /// Executes an ``Instruction/input`` instruction.
    func handleInputInstruction() throws {
       // make sure we've actually got some input to work with
-      guard let nextInputCharacter = self.inputIterator.next() else {
+      guard let nextInputScalar = self.inputIterator.next() else {
          switch options.endOfInputBehavior {
          case nil: break
          case .setTo(let value): self.currentCellValue = value
@@ -28,8 +28,8 @@ internal extension Interpreter {
          return
       }
       
-      let characterValue = nextInputCharacter.unicodeScalars.first!.value
-      assert(characterValue < options.cellMax)
-      self.currentCellValue = CellValue(characterValue)
+      let scalarValue = nextInputScalar.value
+      assert(scalarValue < options.cellMax)
+      self.currentCellValue = CellValue(scalarValue)
    }
 }

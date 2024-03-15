@@ -55,16 +55,15 @@
 ///     this instruction does nothing.
 ///
 /// - term ``Instruction/input``:
-///     Takes the next character out of the input buffer
-///     and stores its Unicode value into the current cell.
+///     Takes the next character of the input and stores its Unicode
+///     value into the current cell.
 ///
 ///     When the `Interpreter` is created, characters whose values
 ///     are too big to fit in the cell will be removed from the
 ///     input string.
 ///
-///     If there are no characters remaining in the input buffer,
-///     this will do nothing by default (this behavior is
-///     configurable).
+///     If there are no characters remaining in the input, this will
+///     do nothing by default (this behavior is configurable).
 ///
 /// All characters other than the ones listed above are treated as
 /// comments and ignored.

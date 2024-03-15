@@ -21,7 +21,7 @@ public extension Interpreter {
          input: String,
          options: Options
       ) {
-         self.inputIterator = input.makeIterator()
+         self.inputIterator = input.unicodeScalars.makeIterator()
          
          self.tape = .init(repeating: 0, count: options.tapeSize)
          self.cellPointer = options.initialPointerLocation
@@ -43,18 +43,16 @@ public extension Interpreter {
       /// - ``Interpreter/State/currentCellValue``
       public internal(set) var cellPointer: [CellValue].Index
       
-      /// An iterator that provides input characters to a
-      /// program.
+      /// An iterator that provides input to a program.
       ///
       /// Each time an ``Instruction/input`` instruction is
-      /// executed, the Unicode value of the next character
-      /// returned by this iterator is stored in the current
-      /// cell.
+      /// executed, the value of this iterator's next Unicode
+      /// scalar is stored in the current cell.
       ///
       /// If an `input` instruction is executed, and this
       /// iterator returns `nil`, the current cell will be
       /// set to 0 instead.
-      public internal(set) var inputIterator: String.Iterator
+      public internal(set) var inputIterator: String.UnicodeScalarView.Iterator
       
       /// The output buffer.
       ///
