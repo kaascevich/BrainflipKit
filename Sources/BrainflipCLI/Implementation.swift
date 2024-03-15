@@ -35,6 +35,10 @@ extension BrainflipCLI {
       let interpreter = Interpreter(program, input: input, options: options)
       let output = try await interpreter.run()
       
-      throw CleanExit.message(output)
+      if verbose {
+         throw CleanExit.message(String(reflecting: interpreter.state))
+      } else {
+         throw CleanExit.message(output)
+      }
    }
 }

@@ -53,8 +53,16 @@ import BrainflipKit
          "The input to pass to the program.",
          discussion: "Characters whose Unicode values exceed the maximum value of a cell will be removed."
       )
-   )
-   var input: String = ""
+   ) var input: String = ""
+   
+   // MARK: - Flags
+   
+   @Flag(
+      name: .shortAndLong,
+      help: "Print the final state of the interpreter once execution is finished."
+   ) var verbose: Bool = false
+   
+   // MARK: - Option Groups
    
    @OptionGroup(title: "Interpreter Options")
    var interpreterOptions: InterpreterOptions

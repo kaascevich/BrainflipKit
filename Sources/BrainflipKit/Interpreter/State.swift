@@ -78,3 +78,14 @@ public extension Interpreter {
       state = State(input: originalInput, options: options)
    }
 }
+
+extension Interpreter.State: CustomDebugStringConvertible {
+   public var debugDescription: String {
+      """
+      Tape: \(Array(tape.reversed().drop { $0 == 0 }.reversed()))
+      Pointer location: \(cellPointer) (current cell value: \(currentCellValue))
+      
+      Output: "\(outputBuffer)"
+      """
+   }
+}

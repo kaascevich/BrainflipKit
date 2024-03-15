@@ -93,7 +93,7 @@
    public let options: Options
    
    /// The interpreter's internal state.
-   internal var state: State
+   public internal(set) var state: State
    
    // MARK: - Initializers
    
