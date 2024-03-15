@@ -47,10 +47,9 @@ public extension Interpreter {
       /// program.
       ///
       /// Each time an ``Instruction/input`` instruction is
-      /// executed, the ASCII value of the next character
+      /// executed, the Unicode value of the next character
       /// returned by this iterator is stored in the current
-      /// cell. If the next character is not an ASCII character,
-      /// the cell will be set to 0.
+      /// cell.
       ///
       /// If an `input` instruction is executed, and this
       /// iterator returns `nil`, the current cell will be
