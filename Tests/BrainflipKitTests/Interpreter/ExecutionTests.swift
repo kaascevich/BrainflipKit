@@ -19,8 +19,8 @@ import Nimble
 @testable import class BrainflipKit.Interpreter
 
 extension InterpreterTests {
-   final class ExecutionTests: XCTestCase {
-      func testBasicRun() async throws {
+   internal final class ExecutionTests: XCTestCase {
+      internal func testBasicRun() async throws {
          // increments cell 1 and decrements cell 2
          try await with(Interpreter("+>-<")) {
             _ = try await $0.run()
@@ -30,7 +30,7 @@ extension InterpreterTests {
          }
       }
       
-      func testSimpleLoopingRun() async throws {
+      internal func testSimpleLoopingRun() async throws {
          // sets cell 2 to 9
          try await with(Interpreter("+++[>+++<-]")) {
             _ = try await $0.run()
@@ -38,7 +38,7 @@ extension InterpreterTests {
          }
       }
       
-      func testNestedLoopingRun() async throws {
+      internal func testNestedLoopingRun() async throws {
          // sets cell 3 to 27
          try await with(try Interpreter("+++[>+++[>+++<-]<-]")) {
             _ = try await $0.run()
@@ -46,7 +46,7 @@ extension InterpreterTests {
          }
       }
       
-      func testRunWithInput() async throws {
+      internal func testRunWithInput() async throws {
          // outputs the first input character twice, then the
          // second character once
          try await with(try Interpreter(",..,.", input: "hello")) {
@@ -55,7 +55,7 @@ extension InterpreterTests {
          }
       }
       
-      func testMultipleRunsWithInput() async throws {
+      internal func testMultipleRunsWithInput() async throws {
          // outputs the first input character twice, then the
          // second character once
          let interpreter = try Interpreter(",..,.", input: "hello")
@@ -67,7 +67,7 @@ extension InterpreterTests {
          }
       }
       
-      func testHelloWorld() async throws {
+      internal func testHelloWorld() async throws {
          // outputs the first input character twice, then the
          // second character once
          let program = ">>>>>+[-->-[>>+>-----<<]<--<---]>-.>>>+.>>..+++[.>]<<<<.+++.------.<<-.>>>>+."

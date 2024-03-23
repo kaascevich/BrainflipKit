@@ -19,8 +19,8 @@ import Nimble
 @testable import typealias BrainflipKit.Program
 
 extension ParserTests {
-   final class ParserErrorTests: XCTestCase {
-      func testUnpairedLoops() {
+   internal final class ParserErrorTests: XCTestCase {
+      internal func testUnpairedLoops() {
          let invalidPrograms = ["[", "]", "][", "]][", "][[", "[][", "][]", "[[]", "[]]"]
          for program in invalidPrograms {
             expect(try Program(program)).to(throwError())

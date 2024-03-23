@@ -19,8 +19,8 @@ import Nimble
 @testable import class BrainflipKit.Interpreter
 
 extension InterpreterTests {
-   final class OptionsTests: XCTestCase {
-      func testCellSize() async throws {
+   internal final class OptionsTests: XCTestCase {
+      internal func testCellSize() async throws {
          try await with(Interpreter("", options: .init(cellSize: 16))) {
             expect($0.options.cellMax) == 65_535
             
@@ -29,19 +29,19 @@ extension InterpreterTests {
          }
       }
       
-      func testTapeSize() throws {
+      internal func testTapeSize() throws {
          try with(Interpreter("", options: .init(tapeSize: 20))) {
             expect($0.tape.count) == 20
          }
       }
       
-      func testInitialPointerLocation() throws {
+      internal func testInitialPointerLocation() throws {
          try with(Interpreter("", options: .init(initialPointerLocation: 5))) {
             expect($0.cellPointer) == 5
          }
       }
       
-      func testAllowWraparound() async throws {
+      internal func testAllowWraparound() async throws {
          try await with(Interpreter("", options: .init(allowCellWraparound: false))) {
             await expecta(try await $0.handleInstruction(.decrement))
                .to(throwError(Interpreter.Error.cellUnderflow))
@@ -52,7 +52,7 @@ extension InterpreterTests {
          }
       }
       
-      func testEndOfInputBehavior() async throws {
+      internal func testEndOfInputBehavior() async throws {
          try await with(Interpreter("", input: "", options: .init(endOfInputBehavior: nil))) {
             $0.currentCellValue = 42
             try await $0.handleInstruction(.input)

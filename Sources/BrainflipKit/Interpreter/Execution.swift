@@ -14,14 +14,14 @@
 // You should have received a copy of the GNU General Public License along
 // with this package. If not, see https://www.gnu.org/licenses/.
 
-public extension Interpreter {
+extension Interpreter {
    /// Executes the instructions stored in ``Interpreter/program``.
    ///
    /// - Returns: The program's output.
    ///
-   /// - Throws: ``Error`` if an issue was encountered
-   ///   during execution.
-   func run() async throws -> String {
+   /// - Throws: An interpreter ``Error`` if an issue was
+   ///   encountered during execution.
+   public func run() async throws -> String {
       resetState()
       
       var instructionPointer = 0
@@ -39,8 +39,8 @@ public extension Interpreter {
    ///
    /// - Parameter instruction: The instruction to execute.
    ///
-   /// - Throws: ``Error`` if an issue was encountered
-   ///   during execution.
+   /// - Throws: An interpreter ``Error`` if an issue was
+   ///   encountered during execution.
    internal func handleInstruction(_ instruction: Instruction) async throws {
       switch instruction {
       case .increment: try handleIncrementInstruction()

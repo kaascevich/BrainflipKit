@@ -19,8 +19,8 @@ import Nimble
 @testable import class BrainflipKit.Interpreter
 
 extension InterpreterTests {
-   final class InitializerTests: XCTestCase {
-      func testInitializer() throws {
+   internal final class InitializerTests: XCTestCase {
+      internal func testInitializer() throws {
          try with(Interpreter("")) {
             expect($0.tape) == Array(repeating: 0, count: 30000)
             expect($0.cellPointer) == 0
@@ -31,7 +31,7 @@ extension InterpreterTests {
          }
       }
       
-      func testUnicodeInput() throws {
+      internal func testUnicodeInput() throws {
          // Unicode value fits in 16 bits
          try with(Interpreter("", input: "→", options: .init(cellSize: 16))) {
             expect($0.originalInput) == "→"

@@ -34,12 +34,18 @@ extension BrainflipCLI {
       
       @Option(
          name: .long,
-         help: .init("The total size of the cell array (also known as the tape).", valueName: "size")
+         help: .init(
+            "The total size of the cell array (also known as the tape).",
+            valueName: "size"
+         )
       ) var tapeSize: Int = 30_000
       
       @Option(
          name: [.customLong("ptr-location"), .long],
-         help: .init("The initial location of the cell pointer (0-indexed).", valueName: "location")
+         help: .init(
+            "The initial location of the cell pointer (0-indexed).",
+            valueName: "location"
+         )
       ) var pointerLocation: Int = 0
       
       @Flag(

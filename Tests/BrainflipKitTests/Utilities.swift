@@ -14,14 +14,14 @@
 // You should have received a copy of the GNU General Public License along
 // with this package. If not, see https://www.gnu.org/licenses/.
 
-@discardableResult func with<ValueType, ReturnType>(
+@discardableResult internal func with<ValueType, ReturnType>(
    _ value: ValueType,
    do block: (ValueType) throws -> ReturnType
 ) rethrows -> ReturnType {
    try block(value)
 }
 
-@discardableResult func with<ValueType, ReturnType>(
+@discardableResult internal func with<ValueType, ReturnType>(
    _ value: ValueType,
    do block: (ValueType) async throws -> ReturnType
 ) async rethrows -> ReturnType {

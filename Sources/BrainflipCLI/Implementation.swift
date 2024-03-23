@@ -63,6 +63,7 @@ extension BrainflipCLI {
          }
          
          if exitIfEmpty, input.allSatisfy(\.isNewline) {
+            // just print usage info and exit
             throw ValidationError("")
          }
          

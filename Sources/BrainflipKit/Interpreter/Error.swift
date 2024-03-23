@@ -16,7 +16,7 @@
 
 public extension Interpreter {
    /// Represents an error that can happen during the
-   /// lifetime of an ``Interpreter``.
+   /// lifetime of an ``Interpreter`` instance.
    enum Error: Swift.Error {
       /// Indicates that the cell pointer went out of the
       /// bounds of the tape.
@@ -28,7 +28,7 @@ public extension Interpreter {
       /// Indicates that the current cell value underflowed.
       case cellUnderflow
       
-      /// Indicates that the input buffer was exhausted
+      /// Indicates that the input buffer was exhausted.
       case endOfInput
    }
 }

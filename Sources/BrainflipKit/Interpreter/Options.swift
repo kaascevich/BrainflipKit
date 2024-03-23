@@ -15,6 +15,7 @@
 // with this package. If not, see https://www.gnu.org/licenses/.
 
 public extension Interpreter {
+   /// Configurable options for an ``Interpreter`` instance.
    struct Options {
       /// The bit size of each cell. Defaults to 8.
       public let cellSize: UInt8
@@ -34,6 +35,9 @@ public extension Interpreter {
       /// executed with an empty input buffer. Defaults to
       /// doing nothing (`nil`).
       public let endOfInputBehavior: EndOfInputBehavior?
+      
+      /// Actions to take when an input instruction is
+      /// executed with an empty input buffer.
       public enum EndOfInputBehavior: Sendable {
          /// Sets the current cell to a value.
          ///
@@ -46,22 +50,26 @@ public extension Interpreter {
          case throwError
       }
       
-      /// Creates a new `Options` struct to configure an
+      /// Creates an `Options` instance to configure an
       /// ``Interpreter`` with.
       ///
       /// - Parameters:
       ///   - cellSize: The bit size of each cell.
       ///   - tapeSize: The size of the tape.
-      ///   - initialPointerLocation: The initial location
-      ///     of the cell pointer.
+      ///   - initialPointerLocation: The initial location of
+      ///     the cell pointer.
       ///   - allowCellWraparound: Whether or not to allow
       ///     cell overflow and underflow.
+      ///   - endOfInputBehavior: The action to take when an
+      ///     input instruction is executed with an empty input
+      ///     buffer.
       ///
       /// - Precondition: `cellSize` is less than ``maxCellSize``.
       ///
       /// - Note: You *can* set `cellSize` to `0`, and it *will*
       ///   technically work; however, there is no practical
-      ///   reason to do this, as it makes the language all but
+      ///   reason to do this, as it prevents you from changing
+      ///   the tape in any way, making the language all but
       ///   useless.
       public init(
          cellSize: UInt8 = 8,

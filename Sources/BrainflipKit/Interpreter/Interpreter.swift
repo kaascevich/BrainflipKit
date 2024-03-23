@@ -89,22 +89,22 @@
    /// The input to provide to the program.
    public let originalInput: String
    
-   /// The configurable options for this interpreter.
+   /// The configurable options for this instance.
    public let options: Options
    
-   /// The interpreter's internal state.
+   /// This instance's internal state.
    public internal(set) var state: State
    
    // MARK: - Initializers
    
-   /// Creates a new `Interpreter` from a ``Program``.
+   /// Creates an `Interpreter` instance from a ``Program``.
    ///
    /// - Parameters:
    ///   - program: A `Program` instance.
    ///   - input: The input to pass to the program. Characters
    ///     that are too big to fit in a cell will be removed.
    ///   - options: Configurable options to be used for this
-   ///     interpreter.
+   ///     instance.
    public init(
       _ program: Program,
       input: String = "",
@@ -118,16 +118,18 @@
       self.state = State(input: trimmedInput, options: options)
    }
    
-   /// Parses a string into a ``Program`` and creates a new
-   /// `Interpreter` from it.
+   /// Parses a string into a ``Program`` and creates an
+   /// `Interpreter` instance from it.
    ///
    /// - Parameters:
    ///   - string: A string to parse into a `Program`.
    ///   - input: The input to pass to the program. Characters
    ///     that are too big to fit in a cell will be removed.
+   ///   - options: Configurable options to be used for this
+   ///     instance.
    ///
-   /// - Throws: - Throws: `some Error` if `string` is not a
-   ///   valid program (that is, if it contains unmatched brackets).
+   /// - Throws: `some Error` if `string` is not a valid program
+   ///   (that is, if it contains unmatched brackets).
    public convenience init(
       _ string: String,
       input: String = "",
@@ -139,10 +141,21 @@
    
    // MARK: - Dynamic Member Lookup
    
+   /// Accesses this instance's state at the specified key path.
+   ///
+   /// Do not call this subscript directly. It is used by the
+   /// compiler when you use dot syntax on an `Interpreter`
+   /// instance to access properties of its ``State``.
+   ///
+   /// - Parameter member: A key path to a property of
+   ///   `Interpreter.State`.
+   ///
+   /// - Returns: The value of this instance's state at
+   ///   the specified key path.
    public internal(set) subscript<Value>(
-      dynamicMember keyPath: WritableKeyPath<State, Value>
+      dynamicMember member: WritableKeyPath<State, Value>
    ) -> Value {
-      get { state[keyPath: keyPath] }
-      set { state[keyPath: keyPath] = newValue }
+      get { state[keyPath: member] }
+      set { state[keyPath: member] = newValue }
    }
 }

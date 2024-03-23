@@ -19,8 +19,8 @@ import Nimble
 @testable import class BrainflipKit.Interpreter
 
 extension InterpreterTests.InstructionTests {
-   final class OutputTests: XCTestCase {
-      func testOutput() async throws {
+   internal final class OutputTests: XCTestCase {
+      internal func testOutput() async throws {
          try await with(Interpreter("")) {
             $0.currentCellValue = 0x42 // ASCII code for "B"
             try await $0.handleInstruction(.output)
@@ -28,7 +28,7 @@ extension InterpreterTests.InstructionTests {
          }
       }
       
-      func testUnicodeOutput() async throws {
+      internal func testUnicodeOutput() async throws {
          try await with(Interpreter("", options: .init(cellSize: 16))) {
             $0.currentCellValue = 0x2192 // Unicode code unit for "→"
             try await $0.handleInstruction(.output)

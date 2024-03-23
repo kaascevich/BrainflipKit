@@ -19,8 +19,8 @@ public extension Interpreter {
    ///
    /// This type does not have anything to do with the
    /// actual maximum value allowed in a cell. Instead of
-   /// checking this type's `max` property, use the
-   /// ``Options/cellMax`` property of the
-   /// `Options` struct.
+   /// checking this type's `max` property, use
+   /// ``Options/cellMax`` on an interpreter's
+   /// ``Interpreter/options`` property.
    typealias CellValue = UInt64
 }

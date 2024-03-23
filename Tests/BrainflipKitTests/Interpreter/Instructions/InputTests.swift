@@ -19,8 +19,8 @@ import Nimble
 @testable import class BrainflipKit.Interpreter
 
 extension InterpreterTests.InstructionTests {
-   final class InputTests: XCTestCase {
-      func testInput() async throws {
+   internal final class InputTests: XCTestCase {
+      internal func testInput() async throws {
          try await with(Interpreter("", input: "&")) {
             try await $0.handleInstruction(.input)
             expect($0.currentCellValue) == 0x26 // ASCII code for "&" (ampersand)

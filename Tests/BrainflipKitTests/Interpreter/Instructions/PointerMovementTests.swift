@@ -19,8 +19,8 @@ import Nimble
 @testable import class BrainflipKit.Interpreter
 
 extension InterpreterTests.InstructionTests {
-   final class PointerMovementTests: XCTestCase {
-      func testNextCell() async throws {
+   internal final class PointerMovementTests: XCTestCase {
+      internal func testNextCell() async throws {
          try await with(Interpreter("")) {
             for i in 1...10 {
                try await $0.handleInstruction(.nextCell)
@@ -29,7 +29,7 @@ extension InterpreterTests.InstructionTests {
          }
       }
       
-      func testPrevCell() async throws {
+      internal func testPrevCell() async throws {
          try await with(Interpreter("")) {
             // the cell pointer doesn't support wraparound, so
             // offset ourselves from the beginning by a bit
@@ -40,6 +40,12 @@ extension InterpreterTests.InstructionTests {
                expect($0.cellPointer) == i
             }
          }
+      }
+      
+      internal func testOutOfBounds() async throws {
+         let interpreter = try Interpreter("")
+         await expecta(try await interpreter.handleInstruction(.prevCell))
+            .to(throwError(Interpreter.Error.cellPointerOutOfBounds))
       }
    }
 }

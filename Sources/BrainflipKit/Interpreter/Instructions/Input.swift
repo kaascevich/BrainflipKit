@@ -14,15 +14,15 @@
 // You should have received a copy of the GNU General Public License along
 // with this package. If not, see https://www.gnu.org/licenses/.
 
-internal extension Interpreter {
+extension Interpreter {
    /// Executes an ``Instruction/input`` instruction.
-   func handleInputInstruction() throws {
+   internal func handleInputInstruction() throws {
       // make sure we've actually got some input to work with
       guard let nextInputScalar = self.inputIterator.next() else {
          switch options.endOfInputBehavior {
-         case nil: break
          case .setTo(let value): self.currentCellValue = value
          case .throwError: throw Error.endOfInput
+         case nil: break
          }
          
          return

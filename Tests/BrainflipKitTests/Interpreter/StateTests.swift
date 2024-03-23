@@ -19,8 +19,8 @@ import Nimble
 @testable import class BrainflipKit.Interpreter
 
 extension InterpreterTests {
-   final class StateTests: XCTestCase {
-      func testCurrentCellValue() throws {
+   internal final class StateTests: XCTestCase {
+      internal func testCurrentCellValue() throws {
          try with(Interpreter("")) {
             $0.cellPointer = 5
             $0.currentCellValue = 42
@@ -28,7 +28,7 @@ extension InterpreterTests {
          }
       }
       
-      func testDynamicMemberSubscript() throws {
+      internal func testDynamicMemberSubscript() throws {
          try with(Interpreter("")) {
             $0.cellPointer = 5
             $0.currentCellValue = 42
@@ -36,7 +36,7 @@ extension InterpreterTests {
          }
       }
       
-      func testDebugDescription() async throws {
+      internal func testDebugDescription() async throws {
          let helloWorldProgram = ">>>>>+[-->-[>>+>-----<<]<--<---]>-.>>>+.>>..+++[.>]<<<<.+++.------.<<-.>>>>+."
          try await with(Interpreter(helloWorldProgram)) {
             _ = try await $0.run()

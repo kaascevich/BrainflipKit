@@ -19,8 +19,8 @@ import Nimble
 @testable import class BrainflipKit.Interpreter
 
 extension InterpreterTests.InstructionTests {
-   final class IncDecTests: XCTestCase {
-      func testIncrement() async throws {
+   internal final class IncDecTests: XCTestCase {
+      internal func testIncrement() async throws {
          try await with(Interpreter("")) {
             for i in 1...$0.options.cellMax {
                try await $0.handleInstruction(.increment)
@@ -32,7 +32,7 @@ extension InterpreterTests.InstructionTests {
          }
       }
          
-      func testDecrement() async throws {
+      internal func testDecrement() async throws {
          try await with(Interpreter("")) {
             try await $0.handleInstruction(.decrement)
             expect($0.tape.first) == $0.options.cellMax

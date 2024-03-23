@@ -14,22 +14,23 @@
 // You should have received a copy of the GNU General Public License along
 // with this package. If not, see https://www.gnu.org/licenses/.
 
-internal extension Interpreter {
+extension Interpreter {
    private func advanceCellPointer(by offset: [CellValue].Index) throws {
-      self.cellPointer = self.cellPointer.advanced(by: offset)
+      self.cellPointer += offset
       
       // ensure that we're still in the tape
-      guard self.tape.indices.contains(self.cellPointer)
-      else { throw Error.cellPointerOutOfBounds }
+      guard self.tape.indices.contains(self.cellPointer) else {
+         throw Error.cellPointerOutOfBounds
+      }
    }
    
    /// Executes a ``Instruction/nextCell(_:)`` instruction.
-   func handleNextCellInstruction() throws {
+   internal func handleNextCellInstruction() throws {
       try advanceCellPointer(by: 1)
    }
    
    /// Executes a ``Instruction/prevCell(_:)`` instruction.
-   func handlePrevCellInstruction() throws {
+   internal func handlePrevCellInstruction() throws {
       try advanceCellPointer(by: -1)
    }
 }

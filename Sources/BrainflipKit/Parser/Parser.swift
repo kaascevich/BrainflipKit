@@ -49,7 +49,7 @@ internal enum BrainflipParser {
    ///
    /// - Throws: `some Error` if `string` is not a valid
    ///   program (that is, if it contains unmatched brackets).
-   static func parse(program string: String) throws -> Program {
+   internal static func parse(program string: String) throws -> Program {
       try ProgramParser().parse(string.filter("+-><[],.".contains))
    }
    
@@ -58,7 +58,7 @@ internal enum BrainflipParser {
    /// - Parameter program: A `Program` instance.
    ///
    /// - Returns: A `String` representation of `program`.
-   static func print(program: Program) -> String {
+   internal static func print(program: Program) -> String {
       String(try! ProgramParser().print(program)) // swiftlint:disable:this force_try
    }
 }

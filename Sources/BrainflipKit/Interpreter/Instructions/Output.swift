@@ -14,13 +14,14 @@
 // You should have received a copy of the GNU General Public License along
 // with this package. If not, see https://www.gnu.org/licenses/.
 
-internal extension Interpreter {
+extension Interpreter {
    /// Executes an ``Instruction/output`` instruction.
-   func handleOutputInstruction() {
+   internal func handleOutputInstruction() {
       // if this cell's value doesn't correspond to a valid
       // Unicode character, do nothing
-      guard let cellValueAsUInt32 = UInt32(exactly: self.currentCellValue),
-            let unicodeScalar = Unicode.Scalar(cellValueAsUInt32)
+      guard
+         let cellValueAsUInt32 = UInt32(exactly: self.currentCellValue),
+         let unicodeScalar = Unicode.Scalar(cellValueAsUInt32)
       else { return }
       
       let character = Character(unicodeScalar)

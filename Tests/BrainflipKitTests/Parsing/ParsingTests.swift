@@ -19,8 +19,8 @@ import Nimble
 @testable import typealias BrainflipKit.Program
 
 extension ParserTests {
-   final class ParsingTests: XCTestCase {
-      func testBasic() throws {
+   internal final class ParsingTests: XCTestCase {
+      internal func testBasic() throws {
          let program = try Program(",[>+<-.]")
          expect(program) == [
             .input,
@@ -35,7 +35,7 @@ extension ParserTests {
          expect(program.description) == ",[>+<-.]"
       }
       
-      func testInstructionsAndComments() throws {
+      internal func testInstructionsAndComments() throws {
          let program = try Program(",++ a comment ++.")
          expect(program) == [
             .input,
@@ -48,13 +48,13 @@ extension ParserTests {
          expect(program.description) == ",++++."
       }
       
-      func testCommentsOnly() throws {
+      internal func testCommentsOnly() throws {
          let program = try Program("the whole thing is just a comment")
          expect(program).to(beEmpty())
          expect(program.description).to(beEmpty())
       }
       
-      func testNestedLoops() throws {
+      internal func testNestedLoops() throws {
          let program = try Program(">+[>-[-<]>>]>")
          expect(program) == [
             .nextCell,

@@ -51,9 +51,7 @@ import BrainflipKit
          guard
             let url = URL(string: filePath),
             let string = try? String(contentsOfFile: filePath)
-         else {
-            throw ValidationError("That file doesn't exist")
-         }
+         else { throw ValidationError("That file doesn't exist") }
          
          guard validExtensions.contains(url.pathExtension) else {
             throw ValidationError("Invalid file type -- must be one of \(formattedValidExtensions)")
