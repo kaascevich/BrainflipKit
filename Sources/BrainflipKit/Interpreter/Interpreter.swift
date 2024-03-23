@@ -103,8 +103,9 @@
    ///
    /// - Parameters:
    ///   - program: A ``Program`` instance.
-   ///   - input: The input to pass to the program. Characters
-   ///     that are too big to fit in a cell will be removed.
+   ///   - input: The input to pass to the program. Unicode
+   ///     scalars that are too big to fit in a cell will be
+   ///     removed.
    ///   - options: Configurable options to be used for this
    ///     instance.
    public init(
@@ -115,9 +116,12 @@
       self.program = program
       self.options = options
       
-      let trimmedInput = input.filter { $0.unicodeScalars.first!.value < options.cellMax }
-      self.originalInput = trimmedInput
-      self.state = State(input: trimmedInput, options: options)
+      let inputScalars = input.unicodeScalars
+      let trimmedScalars = inputScalars.filter { $0.value < options.cellMax }
+      let trimmedInputString = String(trimmedScalars)
+      
+      self.originalInput = trimmedInputString
+      self.state = State(input: trimmedInputString, options: options)
    }
    
    /// Parses `string` into a ``Program`` and creates an
