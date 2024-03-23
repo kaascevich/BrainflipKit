@@ -23,4 +23,6 @@ public extension Interpreter {
    /// ``Options/cellMax`` on an interpreter's
    /// ``Interpreter/options`` property.
    typealias CellValue = UInt64
+   
+   typealias TapeIndex = Int
 }

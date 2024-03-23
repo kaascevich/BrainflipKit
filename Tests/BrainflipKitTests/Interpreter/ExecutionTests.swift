@@ -25,7 +25,7 @@ extension InterpreterTests {
          try await with(Interpreter("+>-<")) {
             _ = try await $0.run()
             
-            expect($0.tape[0...1]) == [1, $0.options.cellMax]
+            expect($0.tape) == [0: 1, 1: $0.options.cellMax]
             expect($0.cellPointer) == 0
          }
       }

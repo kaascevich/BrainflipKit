@@ -18,10 +18,6 @@ public extension Interpreter {
    /// Represents an error that can happen during the
    /// lifetime of an ``Interpreter`` instance.
    enum Error: Swift.Error {
-      /// Indicates that the cell pointer went out of the
-      /// bounds of the tape.
-      case cellPointerOutOfBounds
-      
       /// Indicates that the current cell value overflowed.
       case cellOverflow
       
@@ -37,8 +33,6 @@ extension Interpreter.Error: CustomStringConvertible {
    /// A description of this error.
    public var description: String {
       switch self {
-      case .cellPointerOutOfBounds: "Cell pointer went out of bounds"
-         
       case .cellOverflow: "Cell overflowed"
       case .cellUnderflow: "Cell underflowed"
          

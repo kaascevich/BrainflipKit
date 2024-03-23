@@ -29,8 +29,6 @@ extension BrainflipCLI {
       }
       let options = Interpreter.Options(
          cellSize:               interpreterOptions.cellSize,
-         tapeSize:               interpreterOptions.tapeSize,
-         initialPointerLocation: interpreterOptions.pointerLocation,
          allowCellWraparound:    interpreterOptions.wraparound,
          endOfInputBehavior:     endOfInputBehavior
       )
@@ -47,11 +45,7 @@ extension BrainflipCLI {
       
       let output = try await interpreter.run()
       
-      if verbose {
-         print(interpreter.state.debugDescription)
-      } else {
-         print(output)
-      }
+      print(output)
       Self.exit()
       
       // MARK: Helpers

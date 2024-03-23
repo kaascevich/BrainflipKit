@@ -29,18 +29,6 @@ extension InterpreterTests {
          }
       }
       
-      internal func testTapeSize() throws {
-         try with(Interpreter("", options: .init(tapeSize: 20))) {
-            expect($0.tape.count) == 20
-         }
-      }
-      
-      internal func testInitialPointerLocation() throws {
-         try with(Interpreter("", options: .init(initialPointerLocation: 5))) {
-            expect($0.cellPointer) == 5
-         }
-      }
-      
       internal func testAllowWraparound() async throws {
          try await with(Interpreter("", options: .init(allowCellWraparound: false))) {
             await expecta(try await $0.handleInstruction(.decrement))
@@ -53,25 +41,25 @@ extension InterpreterTests {
       }
       
       internal func testEndOfInputBehavior() async throws {
-         try await with(Interpreter("", input: "", options: .init(endOfInputBehavior: nil))) {
+         try await with(Interpreter("", options: .init(endOfInputBehavior: nil))) {
             $0.currentCellValue = 42
             try await $0.handleInstruction(.input)
             expect($0.currentCellValue) == 42
          }
          
-         try await with(Interpreter("", input: "", options: .init(endOfInputBehavior: .setTo(0)))) {
+         try await with(Interpreter("", options: .init(endOfInputBehavior: .setTo(0)))) {
             $0.currentCellValue = 42
             try await $0.handleInstruction(.input)
             expect($0.currentCellValue) == 0
          }
          
-         try await with(Interpreter("", input: "", options: .init(endOfInputBehavior: .setTo(.max)))) {
+         try await with(Interpreter("", options: .init(endOfInputBehavior: .setTo(.max)))) {
             $0.currentCellValue = 42
             try await $0.handleInstruction(.input)
             expect($0.currentCellValue) == 255
          }
          
-         try await with(Interpreter("", input: "", options: .init(endOfInputBehavior: .throwError))) {
+         try await with(Interpreter("", options: .init(endOfInputBehavior: .throwError))) {
             await expecta(try await $0.handleInstruction(.input))
                .to(throwError(Interpreter.Error.endOfInput))
          }

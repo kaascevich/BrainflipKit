@@ -23,9 +23,9 @@
 /// challenge like no other due to this reduced instruction set.
 ///
 /// All Brainflip programs mutate an array of *cells*, which are 8 bits
-/// long by default. This array is referred to as the *tape*. A pointer
-/// (not an actual `UnsafePointer`, just a `[CellValue].Index`) is used
-/// to keep track of the cell that is currently being mutated.
+/// long by default. This array is referred to as the *tape*. The tape
+/// is infinite in both directions. A *pointer* is used to keep track of
+/// the cell that is currently being mutated.
 ///
 /// Brainflip's instructions are as follows:
 ///
@@ -58,12 +58,13 @@
 ///     Takes the next character of the input and stores its Unicode
 ///     value into the current cell.
 ///
-///     When the `Interpreter` is created, characters whose values
-///     are too big to fit in the cell will be removed from the
-///     input string.
+///     When an `Interpreter` instance is created, characters whose
+///     values are too big to fit in the cell will be removed from
+///     the input string.
 ///
-///     If there are no characters remaining in the input, this will
-///     do nothing by default (this behavior is configurable).
+///     If there are no characters remaining in the input, this
+///     instruction will do nothing by default (this behavior is
+///     configurable).
 ///
 /// All characters other than the ones listed above are treated as
 /// comments and ignored.
@@ -72,7 +73,7 @@
 ///
 /// ```swift
 /// // https://codegolf.stackexchange.com/a/163590/59487
-/// let program = ">>>>>+[-->-[>>+>-----<<]<--<---]>-.>>>+.>>..+++[.>]<<<<.+++.------.<<-.>>>>+."
+/// let program = "+[-->-[>>+>-----<<]<--<---]>-.>>>+.>>..+++[.>]<<<<.+++.------.<<-.>>>>+."
 /// let interpreter = try Interpreter(program)
 /// let output = try interpreter.run()
 /// print(output) // Hello, World!
@@ -97,10 +98,11 @@
    
    // MARK: - Initializers
    
-   /// Creates an `Interpreter` instance from a ``Program``.
+   /// Creates an `Interpreter` instance from the given
+   /// `program`.
    ///
    /// - Parameters:
-   ///   - program: A `Program` instance.
+   ///   - program: A ``Program`` instance.
    ///   - input: The input to pass to the program. Characters
    ///     that are too big to fit in a cell will be removed.
    ///   - options: Configurable options to be used for this
@@ -118,7 +120,7 @@
       self.state = State(input: trimmedInput, options: options)
    }
    
-   /// Parses a string into a ``Program`` and creates an
+   /// Parses `string` into a ``Program`` and creates an
    /// `Interpreter` instance from it.
    ///
    /// - Parameters:
@@ -128,8 +130,9 @@
    ///   - options: Configurable options to be used for this
    ///     instance.
    ///
-   /// - Throws: `some Error` if `string` is not a valid program
-   ///   (that is, if it contains unmatched brackets).
+   /// - Throws: `some Error` if `string` cannot be parsed
+   ///   into a valid program (that is, if it contains
+   ///   unmatched brackets).
    public convenience init(
       _ string: String,
       input: String = "",

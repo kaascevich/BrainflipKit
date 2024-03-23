@@ -25,14 +25,8 @@ extension Interpreter {
       ///   - input: The input that will be provided to the
       ///     program.
       ///   - options: Configurable options for this instance.
-      internal init(
-         input: String,
-         options: Options
-      ) {
+      internal init(input: String, options: Options) {
          self.inputIterator = input.unicodeScalars.makeIterator()
-         
-         self.tape = .init(repeating: 0, count: options.tapeSize)
-         self.cellPointer = options.initialPointerLocation
       }
       
       // MARK: - Properties
@@ -40,18 +34,16 @@ extension Interpreter {
       /// The array of cells -- also referred to as the *tape*
       /// -- that all Brainflip programs manipulate.
       ///
-      /// The tape is 30,000 cells long by default.
-      ///
       /// # See Also
       /// - ``Interpreter/State/currentCellValue``
-      public internal(set) var tape: [CellValue]
+      public internal(set) var tape: [TapeIndex: CellValue] = [:]
       
       /// The index of the cell currently being used by the
       /// program.
       ///
       /// # See Also
       /// - ``Interpreter/State/currentCellValue``
-      public internal(set) var cellPointer: [CellValue].Index
+      public internal(set) var cellPointer: TapeIndex = 0
       
       /// An iterator that provides input to a program.
       ///
@@ -87,33 +79,18 @@ extension Interpreter {
       /// # See Also
       /// - ``Interpreter/State/cellPointer``
       public internal(set) var currentCellValue: CellValue {
-         get { tape[cellPointer] }
+         get { tape[cellPointer, default: 0] }
          set { tape[cellPointer] = newValue }
       }
       
       // MARK: - Extra State
    }
    
-   /// Resets this instance's internal state.
+   /// Resets this interpreter's internal state.
    ///
    /// The program to execute, the original input, and this
    /// instance's options will not be reset by this method.
    internal func resetState() {
       state = State(input: originalInput, options: options)
-   }
-}
-
-// MARK: - Debugging
-
-extension Interpreter.State: CustomDebugStringConvertible {
-   /// A textual representation of this instance, suitable
-   /// for debugging.
-   public var debugDescription: String {
-      """
-      Tape: \(Array(tape.reversed().drop { $0 == 0 }.reversed()))
-      Pointer location: \(cellPointer) (current cell value: \(currentCellValue))
-      
-      Output: "\(outputBuffer)"
-      """
    }
 }

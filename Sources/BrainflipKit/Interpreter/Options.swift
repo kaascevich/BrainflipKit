@@ -20,13 +20,6 @@ public extension Interpreter {
       /// The bit size of each cell. Defaults to 8.
       public let cellSize: UInt8
       
-      /// The size of the tape. Defaults to 30,000 cells.
-      public let tapeSize: [CellValue].Index
-      
-      /// The initial location of the cell pointer. Defaults
-      /// to the first cell (index 0).
-      public let initialPointerLocation: [CellValue].Index
-      
       /// Whether or not to allow cell overflow and underflow.
       /// Defaults to `true`.
       public let allowCellWraparound: Bool
@@ -55,9 +48,6 @@ public extension Interpreter {
       ///
       /// - Parameters:
       ///   - cellSize: The bit size of each cell.
-      ///   - tapeSize: The size of the tape.
-      ///   - initialPointerLocation: The initial location of
-      ///     the cell pointer.
       ///   - allowCellWraparound: Whether or not to allow
       ///     cell overflow and underflow.
       ///   - endOfInputBehavior: The action to take when an
@@ -73,8 +63,6 @@ public extension Interpreter {
       ///   useless.
       public init(
          cellSize: UInt8 = 8,
-         tapeSize: [CellValue].Index = 30_000,
-         initialPointerLocation: [CellValue].Index = 0,
          allowCellWraparound: Bool = true,
          endOfInputBehavior: EndOfInputBehavior? = nil
       ) {
@@ -84,8 +72,6 @@ public extension Interpreter {
          )
          
          self.cellSize = cellSize
-         self.tapeSize = tapeSize
-         self.initialPointerLocation = initialPointerLocation
          self.allowCellWraparound = allowCellWraparound
          
          self.endOfInputBehavior = switch endOfInputBehavior {

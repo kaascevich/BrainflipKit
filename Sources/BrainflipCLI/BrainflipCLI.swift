@@ -71,13 +71,6 @@ import BrainflipKit
       )
    ) var input: String = ""
    
-   // MARK: - Flags
-   
-   @Flag(
-      name: .shortAndLong,
-      help: "Print the final state of the interpreter once execution is finished."
-   ) var verbose: Bool = false
-   
    // MARK: - Option Groups
    
    @OptionGroup(title: "Interpreter Options")

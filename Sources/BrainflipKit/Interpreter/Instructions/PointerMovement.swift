@@ -15,22 +15,13 @@
 // with this package. If not, see https://www.gnu.org/licenses/.
 
 extension Interpreter {
-   private func advanceCellPointer(by offset: [CellValue].Index) throws {
-      self.cellPointer += offset
-      
-      // ensure that we're still in the tape
-      guard self.tape.indices.contains(self.cellPointer) else {
-         throw Error.cellPointerOutOfBounds
-      }
-   }
-   
    /// Executes a ``Instruction/nextCell(_:)`` instruction.
-   internal func handleNextCellInstruction() throws {
-      try advanceCellPointer(by: 1)
+   internal func handleNextCellInstruction() {
+      self.cellPointer += 1
    }
    
    /// Executes a ``Instruction/prevCell(_:)`` instruction.
-   internal func handlePrevCellInstruction() throws {
-      try advanceCellPointer(by: -1)
+   internal func handlePrevCellInstruction() {
+      self.cellPointer -= 1
    }
 }

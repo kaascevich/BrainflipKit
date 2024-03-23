@@ -42,8 +42,8 @@ extension Interpreter {
       case .increment: try handleIncrementInstruction()
       case .decrement: try handleDecrementInstruction()
          
-      case .nextCell: try handleNextCellInstruction()
-      case .prevCell: try handlePrevCellInstruction()
+      case .nextCell: handleNextCellInstruction()
+      case .prevCell: handlePrevCellInstruction()
       
       case .loop(let instructions): try await handleLoop(instructions)
          

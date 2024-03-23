@@ -41,11 +41,5 @@ extension InterpreterTests.InstructionTests {
             }
          }
       }
-      
-      internal func testOutOfBounds() async throws {
-         let interpreter = try Interpreter("")
-         await expecta(try await interpreter.handleInstruction(.prevCell))
-            .to(throwError(Interpreter.Error.cellPointerOutOfBounds))
-      }
    }
 }
