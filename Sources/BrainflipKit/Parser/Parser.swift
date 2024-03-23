@@ -18,17 +18,17 @@ import Parsing
 
 internal enum BrainflipParser {
    private struct InstructionParser: ParserPrinter {
-      var body: some ParserPrinter<Substring.UTF8View, Instruction> {
+      var body: some ParserPrinter<Substring, Instruction> {
          OneOf {
-            "+".utf8.map(.case(Instruction.increment))
-            "-".utf8.map(.case(Instruction.decrement))
-            ">".utf8.map(.case(Instruction.nextCell))
-            "<".utf8.map(.case(Instruction.prevCell))
-            ",".utf8.map(.case(Instruction.input))
-            ".".utf8.map(.case(Instruction.output))
+            "+".map(.case(Instruction.increment))
+            "-".map(.case(Instruction.decrement))
+            ">".map(.case(Instruction.nextCell))
+            "<".map(.case(Instruction.prevCell))
+            ",".map(.case(Instruction.input))
+            ".".map(.case(Instruction.output))
             Parse {
-               "[".utf8
-               Many { Self() } terminator: { "]".utf8 }
+               "["
+               Many { Self() } terminator: { "]" }
             }.map(.case(Instruction.loop))
          }
       }
@@ -50,7 +50,9 @@ internal enum BrainflipParser {
    /// - Throws: `some Error` if `string` is not a valid
    ///   program (that is, if it contains unmatched brackets).
    internal static func parse(program string: String) throws -> Program {
-      try ProgramParser().parse(string.filter("+-><[],.".contains))
+      try ProgramParser().parse(string.filter(
+         "+-><[],.".contains // filter out nonexistent instructions
+      ))
    }
    
    /// Creates a `String` representation of a ``Program``.

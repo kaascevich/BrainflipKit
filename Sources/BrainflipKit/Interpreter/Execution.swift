@@ -23,13 +23,9 @@ extension Interpreter {
    ///   encountered during execution.
    public func run() async throws -> String {
       resetState()
-      
-      var instructionPointer = 0
             
-      // while there's still code to execute
-      while program.indices.contains(instructionPointer) {
-         try await handleInstruction(program[instructionPointer])
-         instructionPointer += 1 // point to the next instruction
+      for instruction in program {
+         try await handleInstruction(instruction)
       }
       
       return self.outputBuffer
