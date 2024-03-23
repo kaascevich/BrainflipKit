@@ -74,16 +74,14 @@ extension Interpreter {
       /// The value of the current cell.
       ///
       /// This property is equivalent to calling
-      /// `tape[cellPointer]`.
+      /// `tape[cellPointer, default: 0]`.
       ///
       /// # See Also
       /// - ``Interpreter/State/cellPointer``
       public internal(set) var currentCellValue: CellValue {
          get { tape[cellPointer, default: 0] }
-         set { tape[cellPointer] = newValue }
+         set { tape[cellPointer, default: 0] = newValue }
       }
-      
-      // MARK: - Extra State
    }
    
    /// Resets this interpreter's internal state.
