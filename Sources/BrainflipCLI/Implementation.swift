@@ -19,6 +19,8 @@ import BrainflipKit
 
 extension BrainflipCLI {
    func run() async throws {
+      // MARK: Setup
+      
       let endOfInputBehavior: Interpreter.Options.EndOfInputBehavior? = switch interpreterOptions.endOfInputBehavior {
       case .zero:  .setTo(0)
       case .max:   .setTo(.max)
@@ -32,13 +34,39 @@ extension BrainflipCLI {
          allowCellWraparound:    interpreterOptions.wraparound,
          endOfInputBehavior:     endOfInputBehavior
       )
-      let interpreter = Interpreter(program, input: input, options: options)
+      
+      let parsedProgram = try Program(program ?? readFromStandardInput(exitIfEmpty: true))
+      
+      let interpreter = Interpreter(
+         parsedProgram,
+         input: input,
+         options: options
+      )
+      
+      // MARK: Interpreting
+      
       let output = try await interpreter.run()
       
       if verbose {
-         throw CleanExit.message(String(reflecting: interpreter.state))
+         print(interpreter.state.debugDescription)
       } else {
-         throw CleanExit.message(output)
+         print(output)
+      }
+      Self.exit()
+      
+      // MARK: Helpers
+      
+      func readFromStandardInput(exitIfEmpty: Bool = false) throws -> String {
+         var input = ""
+         while let nextLine = readLine() {
+            input += nextLine
+         }
+         
+         if exitIfEmpty, input.allSatisfy(\.isNewline) {
+            throw ValidationError("")
+         }
+         
+         return input
       }
    }
 }

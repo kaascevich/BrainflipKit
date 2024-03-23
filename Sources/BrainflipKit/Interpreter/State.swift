@@ -17,6 +17,8 @@
 public extension Interpreter {
    /// Represents an interpreter's internal state.
    struct State {
+      // MARK: - Initializers
+      
       init(
          input: String,
          options: Options
@@ -26,6 +28,8 @@ public extension Interpreter {
          self.tape = .init(repeating: 0, count: options.tapeSize)
          self.cellPointer = options.initialPointerLocation
       }
+      
+      // MARK: - Properties
       
       /// The array of cells -- also referred to as the *tape*
       /// -- that all Brainflip programs manipulate.
@@ -61,7 +65,7 @@ public extension Interpreter {
       /// current cell's value is appended to this string.
       public internal(set) var outputBuffer: String = ""
       
-      // MARK: Computed State
+      // MARK: - Computed State
       
       /// Stores the value of the current cell.
       ///
@@ -71,6 +75,8 @@ public extension Interpreter {
          get { tape[cellPointer] }
          set { tape[cellPointer] = newValue }
       }
+      
+      // MARK: - Extra State
    }
    
    /// Resets this interpreter's internal state.
@@ -78,6 +84,8 @@ public extension Interpreter {
       state = State(input: originalInput, options: options)
    }
 }
+
+// MARK: - Debugging
 
 extension Interpreter.State: CustomDebugStringConvertible {
    public var debugDescription: String {

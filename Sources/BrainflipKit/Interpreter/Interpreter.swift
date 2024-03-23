@@ -139,11 +139,9 @@
    
    // MARK: - Dynamic Member Lookup
    
-   public subscript<Value>(dynamicMember keyPath: KeyPath<State, Value>) -> Value {
-      state[keyPath: keyPath]
-   }
-   
-   internal subscript<Value>(dynamicMember keyPath: WritableKeyPath<State, Value>) -> Value {
+   public internal(set) subscript<Value>(
+      dynamicMember keyPath: WritableKeyPath<State, Value>
+   ) -> Value {
       get { state[keyPath: keyPath] }
       set { state[keyPath: keyPath] = newValue }
    }

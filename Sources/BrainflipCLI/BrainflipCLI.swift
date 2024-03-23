@@ -15,6 +15,7 @@
 // with this package. If not, see https://www.gnu.org/licenses/.
 
 import ArgumentParser
+import Foundation
 
 import BrainflipKit
 
@@ -25,25 +26,42 @@ import BrainflipKit
       commandName: "brainflip",
       abstract: "Run Brainflip programs with a configurable interpreter.",
       discussion: """
-      Brainflip is a Swift interpreter for the Brainf**k programming language
-      -- an incredibly simple language that only has 8 instructions. This
-      interpreter features full Unicode support (assuming the cell size is set
-      to a value high enough to fit Unicode characters).
+      Brainflip is a Swift interpreter for the Brainf**k programming language -- an incredibly simple language that only has 8 instructions. This interpreter features full Unicode support (assuming the cell size is set to a value high enough to fit Unicode characters).
       """
    )
+   
+   static let validExtensions = ["bf", "brainflip", "brainfuck"]
+   static let formattedValidExtensions = validExtensions
+      .map { "." + $0 }
+      .formatted(
+         .list(type: .or)
+         .locale(.init(identifier: "en-us"))
+      )
    
    // MARK: - Arguments
    
    @Argument(
-      help: "A Brainflip program to execute.",
-      transform: { string -> Program in
-         do {
-            return try Program(string)
-         } catch {
-            throw ValidationError("\n\(error)\n")
+      help: .init(
+         "The path to a Brainflip program to execute.",
+         discussion: "The file extension must be one of \(formattedValidExtensions). If this argument is not provided, the program will be read from standard input.",
+         valueName: "file-path"
+      ),
+      completion: .file(extensions: validExtensions),
+      transform: { filePath in
+         guard
+            let url = URL(string: filePath),
+            let string = try? String(contentsOfFile: filePath)
+         else {
+            throw ValidationError("That file doesn't exist")
          }
+         
+         guard validExtensions.contains(url.pathExtension) else {
+            throw ValidationError("Invalid file type -- must be one of \(formattedValidExtensions)")
+         }
+         
+         return string
       }
-   ) var program: Program
+   ) var program: String?
    
    // MARK: - Options
    

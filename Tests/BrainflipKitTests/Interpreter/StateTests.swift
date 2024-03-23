@@ -35,5 +35,19 @@ extension InterpreterTests {
             expect($0.tape[$0.cellPointer]) == $0.tape[$0.cellPointer]
          }
       }
+      
+      func testDebugDescription() async throws {
+         let helloWorldProgram = ">>>>>+[-->-[>>+>-----<<]<--<---]>-.>>>+.>>..+++[.>]<<<<.+++.------.<<-.>>>>+."
+         try await with(Interpreter(helloWorldProgram)) {
+            _ = try await $0.run()
+            
+            expect($0.state.debugDescription) == """
+            Tape: [0, 72, 0, 153, 100, 172, 108, 44, 33, 87]
+            Pointer location: 8 (current cell value: 33)
+            
+            Output: "Hello, World!"
+            """
+         }
+      }
    }
 }
