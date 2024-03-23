@@ -18,7 +18,7 @@
 public typealias Program = [Instruction]
 
 public extension Program {
-   /// Parses the given string into a `Program`.
+   /// Parses the given string into a `Program` instance.
    ///
    /// The following mappings are used to convert a `Character`
    /// into an ``Instruction``:
