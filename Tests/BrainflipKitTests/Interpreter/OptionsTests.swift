@@ -27,6 +27,10 @@ extension InterpreterTests {
             try await $0.handleInstruction(.decrement)
             expect($0.tape[0]) == 65_535
          }
+         
+         // out-of-bounds cell size
+         expect(Interpreter.Options(cellSize: 72))
+            .to(throwAssertion())
       }
       
       internal func testAllowWraparound() async throws {

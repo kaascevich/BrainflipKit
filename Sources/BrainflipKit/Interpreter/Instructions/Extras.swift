@@ -27,6 +27,9 @@ extension Interpreter {
       switch instruction {
       case .stop:
          throw Error.stopInstruction
+         
+      case .zero:
+         self.currentCellValue = 0
       }
    }
 }

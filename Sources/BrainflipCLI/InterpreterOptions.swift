@@ -33,8 +33,8 @@ extension BrainflipCLI {
       ) var cellSize: UInt8 = 8
       
       @Flag(
-         name: .customLong("wrap"),
-         inversion: .prefixedEnableDisable,
+         name: [ .customLong("wrap")],
+         inversion: .prefixedNo,
          help: "Whether to allow cell values to wrap around when they overflow or underflow."
       ) var wraparound: Bool = true
       
@@ -48,7 +48,7 @@ extension BrainflipCLI {
       ) var endOfInputBehavior: EndOfInputBehavior?
       
       @Option(
-         name: .long,
+         name: [.customShort("x"), .customLong("extra"), .long],
          parsing: .upToNextOption,
          help: .init(
             "A list of optional, extra instructions to enable.",

@@ -19,4 +19,7 @@
 public enum ExtraInstruction: Character, Equatable, Hashable, CaseIterable {
    /// Immediately ends the program.
    case stop = "!"
+   
+   /// Sets the current cell to zero.
+   case zero = "0"
 }

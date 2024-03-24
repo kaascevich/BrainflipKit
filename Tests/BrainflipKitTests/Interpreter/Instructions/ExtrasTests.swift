@@ -34,5 +34,14 @@ extension InterpreterTests.InstructionTests {
                .to(throwError(Interpreter.Error.stopInstruction))
          }
       }
+      
+      internal func testZero() async throws {
+         let options = Interpreter.Options(enabledExtraInstructions: [.zero])
+         try await with(Interpreter("", options: options)) {
+            $0.currentCellValue = 42
+            try await $0.handleInstruction(.extra(.zero))
+            expect($0.currentCellValue) == 0
+         }
+      }
    }
 }

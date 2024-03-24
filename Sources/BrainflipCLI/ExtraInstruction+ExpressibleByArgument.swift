@@ -33,6 +33,7 @@ extension ExtraInstruction: ExpressibleByArgument {
    public var details: (name: String, character: Character, description: String) {
       let description = switch self {
       case .stop: "Immediately ends the program."
+      case .zero: "Sets the current cell to zero."
       }
       
       return (name: String(describing: self), character: self.rawValue, description)
