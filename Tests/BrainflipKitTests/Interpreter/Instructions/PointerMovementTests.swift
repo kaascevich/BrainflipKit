@@ -14,31 +14,30 @@
 // You should have received a copy of the GNU General Public License along
 // with this package. If not, see https://www.gnu.org/licenses/.
 
-import class XCTest.XCTestCase
-import Nimble
+import Testing
 @testable import class BrainflipKit.Interpreter
 
 extension InterpreterTests.InstructionTests {
-   internal final class PointerMovementTests: XCTestCase {
-      internal func testNextCell() async throws {
-         try await with(Interpreter("")) {
-            for i in 1...10 {
-               try await $0.handleInstruction(.nextCell)
-               expect($0.cellPointer) == i
-            }
+   @Suite("Next cell & previous cell instructions")
+   struct PointerMovementTests {
+      var interpreter: Interpreter
+      init() throws {
+         interpreter = try Interpreter("")
+      }
+      
+      @Test("Next cell instruction")
+      func nextCellInstruction() async throws {
+         for i in 1...10 {
+            try await interpreter.handleInstruction(.nextCell)
+            #expect(interpreter.cellPointer == i)
          }
       }
       
-      internal func testPrevCell() async throws {
-         try await with(Interpreter("")) {
-            // the cell pointer doesn't support wraparound, so
-            // offset ourselves from the beginning by a bit
-            $0.cellPointer = 10
-            
-            for i in (0..<10).reversed() {
-               try await $0.handleInstruction(.prevCell)
-               expect($0.cellPointer) == i
-            }
+      @Test("Previous cell instruction")
+      func prevCellInstruction() async throws {
+         for i in 1...10 {
+            try await interpreter.handleInstruction(.prevCell)
+            #expect(interpreter.cellPointer == -i) // the pointer can go anywhere now!
          }
       }
    }

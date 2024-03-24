@@ -14,67 +14,63 @@
 // You should have received a copy of the GNU General Public License along
 // with this package. If not, see https://www.gnu.org/licenses/.
 
-import class XCTest.XCTestCase
-import Nimble
+import Testing
 @testable import class BrainflipKit.Interpreter
 
 extension InterpreterTests {
-   internal final class ExecutionTests: XCTestCase {
-      internal func testBasicRun() async throws {
+   @Suite("Program execution")
+   struct ExecutionTests {
+      @Test("Basic program")
+      func basicProgram() async throws {
          // increments cell 1 and decrements cell 2
-         try await with(Interpreter("+>-<")) {
-            _ = try await $0.run()
-            
-            expect($0.tape) == [0: 1, 1: $0.options.cellMax]
-            expect($0.cellPointer) == 0
-         }
+         let interpreter = try Interpreter("+>-<")
+         
+         _ = try await interpreter.run()
+         
+         #expect(interpreter.tape == [
+            0: 1,
+            1: interpreter.options.cellMax
+         ])
+         #expect(interpreter.cellPointer == 0)
       }
       
-      internal func testSimpleLoopingRun() async throws {
+      @Test("Simple loops")
+      func simpleLoops() async throws {
          // sets cell 2 to 9
-         try await with(Interpreter("+++[>+++<-]")) {
-            _ = try await $0.run()
-            expect($0.tape[1]) == 9
-         }
+         let interpreter = try Interpreter("+++[>+++<-]")
+         
+         _ = try await interpreter.run()
+         #expect(interpreter.tape[1] == 9)
       }
       
-      internal func testNestedLoopingRun() async throws {
+      @Test("Nested loops")
+      func nestedLoops() async throws {
          // sets cell 3 to 27
-         try await with(try Interpreter("+++[>+++[>+++<-]<-]")) {
-            _ = try await $0.run()
-            expect($0.tape[2]) == 27
-         }
+         let interpreter = try Interpreter("+++[>+++[>+++<-]<-]")
+         
+         _ = try await interpreter.run()
+         #expect(interpreter.tape[2] == 27)
       }
       
-      internal func testRunWithInput() async throws {
-         // outputs the first input character twice, then the
-         // second character once
-         try await with(try Interpreter(",..,.", input: "hello")) {
-            let output = try await $0.run()
-            expect(output) == "hhe"
-         }
-      }
-      
-      internal func testMultipleRunsWithInput() async throws {
+      @Test("Running with input")
+      func runningWithInput() async throws {
          // outputs the first input character twice, then the
          // second character once
          let interpreter = try Interpreter(",..,.", input: "hello")
-         for _ in 1...2 {
-            try await with(interpreter) {
-               let output = try await $0.run()
-               expect(output) == "hhe"
-            }
-         }
+         
+         let output = try await interpreter.run()
+         #expect(output == "hhe")
       }
       
-      internal func testHelloWorld() async throws {
+      @Test("'Hello, World!' program")
+      func helloWorldProgram() async throws {
          // outputs the first input character twice, then the
          // second character once
          let program = ">>>>>+[-->-[>>+>-----<<]<--<---]>-.>>>+.>>..+++[.>]<<<<.+++.------.<<-.>>>>+."
-         try await with(try Interpreter(program)) {
-            let output = try await $0.run()
-            expect(output) == "Hello, World!"
-         }
+         let interpreter = try Interpreter(program)
+         
+         let output = try await interpreter.run()
+         #expect(output == "Hello, World!")
       }
    }
 }

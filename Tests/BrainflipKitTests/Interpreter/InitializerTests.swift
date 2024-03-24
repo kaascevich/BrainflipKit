@@ -14,33 +14,42 @@
 // You should have received a copy of the GNU General Public License along
 // with this package. If not, see https://www.gnu.org/licenses/.
 
-import class XCTest.XCTestCase
-import Nimble
+import Testing
 @testable import class BrainflipKit.Interpreter
 
 extension InterpreterTests {
-   internal final class InitializerTests: XCTestCase {
-      internal func testInitializer() throws {
-         try with(Interpreter("")) {
-            expect($0.tape).to(beEmpty())
-            expect($0.cellPointer) == 0
-            expect($0.outputBuffer).to(beEmpty())
-            
-            expect($0.originalInput).to(beEmpty())
-            expect($0.program).to(beEmpty())
-         }
+   @Suite("Interpreter initialization")
+   struct InitializerTests {
+      @Test("Default initializer")
+      func defaultInitializer() throws {
+         let interpreter = try Interpreter("")
+         
+         #expect(interpreter.tape.isEmpty)
+         #expect(interpreter.cellPointer == 0)
+         #expect(interpreter.outputBuffer.isEmpty)
+         
+         #expect(interpreter.originalInput.isEmpty)
+         #expect(interpreter.program.isEmpty)
       }
       
-      internal func testUnicodeInput() throws {
-         // Unicode value fits in 16 bits
-         try with(Interpreter("", input: "→", options: .init(cellSize: 16))) {
-            expect($0.originalInput) == "→"
-         }
-         
-         // Unicode value does not fit in 16 bits
-         try with(Interpreter("", input: "→")) {
-            expect($0.originalInput).to(beEmpty())
-         }
+      @Test("Unicode input")
+      func unicodeInput() throws {
+         let interpreter = try Interpreter(
+            "",
+            input: "→",
+            options: .init(cellSize: 16)
+         )
+         #expect(interpreter.originalInput == "→")
+      }
+      
+      @Test("Unicode input that doesn't fit")
+      func unicodeInput_valueTooBig() throws {
+         let interpreter = try Interpreter(
+            "",
+            input: "→",
+            options: .init(cellSize: 8)
+         )
+         #expect(interpreter.originalInput.isEmpty)
       }
    }
 }

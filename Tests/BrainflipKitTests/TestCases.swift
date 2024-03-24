@@ -14,8 +14,15 @@
 // You should have received a copy of the GNU General Public License along
 // with this package. If not, see https://www.gnu.org/licenses/.
 
-internal enum InterpreterTests {
-   internal enum InstructionTests { }
+// swiftlint:disable convenience_type
+
+import Testing
+@testable import BrainflipKit
+
+@Suite("Interpreter")
+struct InterpreterTests {
+   @Suite("Instructions")
+   struct InstructionTests { }
 }
 
-internal enum ParserTests { }
+// swiftlint:enable convenience_type

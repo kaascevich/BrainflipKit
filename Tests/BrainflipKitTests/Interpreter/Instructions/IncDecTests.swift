@@ -14,33 +14,42 @@
 // You should have received a copy of the GNU General Public License along
 // with this package. If not, see https://www.gnu.org/licenses/.
 
-import class XCTest.XCTestCase
-import Nimble
+import Testing
 @testable import class BrainflipKit.Interpreter
 
 extension InterpreterTests.InstructionTests {
-   internal final class IncDecTests: XCTestCase {
-      internal func testIncrement() async throws {
-         try await with(Interpreter("")) {
-            for i in 1...$0.options.cellMax {
-               try await $0.handleInstruction(.increment)
-               expect($0.tape.first?.value) == i
-            }
-            
-            try await $0.handleInstruction(.increment)
-            expect($0.tape.first?.value) == 0
+   @Suite("Increment & decrement instructions")
+   struct IncDecTests {
+      var interpreter: Interpreter
+      init() throws {
+         interpreter = try Interpreter("")
+      }
+      
+      @Test("Increment instruction")
+      func incrementInstruction() async throws {
+         for i in 1...interpreter.options.cellMax {
+            try await interpreter.handleInstruction(.increment)
+            #expect(interpreter.tape.first?.value == i)
          }
+         
+         try await interpreter.handleInstruction(.increment)
+         #expect(
+            interpreter.tape.first?.value == 0,
+            "increment instruction should wrap around"
+         )
       }
          
-      internal func testDecrement() async throws {
-         try await with(Interpreter("")) {
-            try await $0.handleInstruction(.decrement)
-            expect($0.tape.first?.value) == $0.options.cellMax
-            
-            for i in (0..<$0.options.cellMax).reversed() {
-               try await $0.handleInstruction(.decrement)
-               expect($0.tape.first?.value) == i
-            }
+      @Test("Decrement instruction")
+      func decrementInstruction() async throws {
+         try await interpreter.handleInstruction(.decrement)
+         #expect(
+            interpreter.tape.first?.value == interpreter.options.cellMax,
+            "decrement instruction should wrap around"
+         )
+         
+         for i in (0..<interpreter.options.cellMax).reversed() {
+            try await interpreter.handleInstruction(.decrement)
+            #expect(interpreter.tape.first?.value == i)
          }
       }
    }

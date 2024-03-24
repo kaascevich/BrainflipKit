@@ -14,17 +14,18 @@
 // You should have received a copy of the GNU General Public License along
 // with this package. If not, see https://www.gnu.org/licenses/.
 
-import class XCTest.XCTestCase
-import Nimble
+import Testing
 @testable import class BrainflipKit.Interpreter
 
 extension InterpreterTests.InstructionTests {
-   internal final class InputTests: XCTestCase {
-      internal func testInput() async throws {
-         try await with(Interpreter("", input: "&")) {
-            try await $0.handleInstruction(.input)
-            expect($0.currentCellValue) == 0x26 // ASCII code for "&" (ampersand)
-         }
+   @Suite("Input instruction")
+   struct InputTests {
+      @Test("Input instruction")
+      func inputInstruction() async throws {
+         let interpreter = try Interpreter("", input: "&")
+         
+         try await interpreter.handleInstruction(.input)
+         #expect(interpreter.currentCellValue == 0x26) // ASCII code for "&" (ampersand)
       }
    }
 }

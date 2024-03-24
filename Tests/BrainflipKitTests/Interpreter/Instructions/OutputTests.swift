@@ -14,26 +14,28 @@
 // You should have received a copy of the GNU General Public License along
 // with this package. If not, see https://www.gnu.org/licenses/.
 
-import class XCTest.XCTestCase
-import Nimble
+import Testing
 @testable import class BrainflipKit.Interpreter
 
 extension InterpreterTests.InstructionTests {
-   internal final class OutputTests: XCTestCase {
-      internal func testOutput() async throws {
-         try await with(Interpreter("")) {
-            $0.currentCellValue = 0x42 // ASCII code for "B"
-            try await $0.handleInstruction(.output)
-            expect($0.outputBuffer) == "B"
-         }
+   @Suite("Output instruction")
+   struct OutputTests {
+      @Test("Output instruction")
+      func outputInstruction() async throws {
+         let interpreter = try Interpreter("")
+
+         interpreter.currentCellValue = 0x42 // ASCII code for "B"
+         try await interpreter.handleInstruction(.output)
+         #expect(interpreter.outputBuffer == "B")
       }
       
-      internal func testUnicodeOutput() async throws {
-         try await with(Interpreter("", options: .init(cellSize: 16))) {
-            $0.currentCellValue = 0x2192 // Unicode code unit for "→"
-            try await $0.handleInstruction(.output)
-            expect($0.outputBuffer) == "→"
-         }
+      @Test("Output instruction with Unicode characters")
+      func outputInstruction_unicode() async throws {
+         let interpreter = try Interpreter("", options: .init(cellSize: 16))
+         
+         interpreter.currentCellValue = 0x2192 // Unicode value for "→"
+         try await interpreter.handleInstruction(.output)
+         #expect(interpreter.outputBuffer == "→")
       }
    }
 }

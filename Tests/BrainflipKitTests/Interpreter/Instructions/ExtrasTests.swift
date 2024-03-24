@@ -14,34 +14,52 @@
 // You should have received a copy of the GNU General Public License along
 // with this package. If not, see https://www.gnu.org/licenses/.
 
-import class XCTest.XCTestCase
-import Nimble
+import Testing
 @testable import class BrainflipKit.Interpreter
 
 extension InterpreterTests.InstructionTests {
-   internal final class ExtrasTests: XCTestCase {
-      internal func testNone() async throws {
-         try await with(Interpreter("!")) {
-            try await $0.run()
-            // nothing should happen
+   @Suite("Extra instructions")
+   struct ExtrasTests {
+      @Test("No instructions enabled") func disabledInstructions() async throws {
+         let interpreter = try Interpreter("!")
+         
+         await #expect(
+            throws: Never.self,
+            "stop insrtuction does nothing when not enabled"
+         ) {
+            // if this throws, then the stop instruction
+            // has been executed even though we don't want
+            // it to be
+            try await interpreter.run()
          }
       }
       
-      internal func testStop() async throws {
-         let options = Interpreter.Options(enabledExtraInstructions: [.stop])
-         try await with(Interpreter("", options: options)) {
-            await expecta(try await $0.handleInstruction(.extra(.stop)))
-               .to(throwError(Interpreter.Error.stopInstruction))
+      @Test("Stop instruction")
+      func stopInstruction() async throws {
+         let interpreter = try Interpreter("", options: .init(
+            enabledExtraInstructions: [.stop]
+         ))
+         
+         await #expect(
+            throws: Interpreter.Error.stopInstruction,
+            "stop instruction halts the program by throwing an error"
+         ) {
+            try await interpreter.handleInstruction(.extra(.stop))
          }
       }
       
-      internal func testZero() async throws {
-         let options = Interpreter.Options(enabledExtraInstructions: [.zero])
-         try await with(Interpreter("", options: options)) {
-            $0.currentCellValue = 42
-            try await $0.handleInstruction(.extra(.zero))
-            expect($0.currentCellValue) == 0
-         }
+      @Test("Zero instruction")
+      func zeroInstruction() async throws {
+         let interpreter = try Interpreter("", options: .init(
+            enabledExtraInstructions: [.zero]
+         ))
+         
+         interpreter.currentCellValue = 42
+         try await interpreter.handleInstruction(.extra(.zero))
+         #expect(
+            interpreter.currentCellValue == 0,
+            "zero instruction sets the current cell to zero"
+         )
       }
    }
 }

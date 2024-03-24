@@ -14,9 +14,9 @@
 // You should have received a copy of the GNU General Public License along
 // with this package. If not, see https://www.gnu.org/licenses/.
 
-extension Interpreter {
+internal extension Interpreter {
    /// Executes an ``Instruction/input`` instruction.
-   internal func handleInputInstruction() throws {
+   func handleInputInstruction() throws {
       // make sure we've actually got some input to work with
       guard let nextInputScalar = self.inputIterator.next() else {
          switch options.endOfInputBehavior {

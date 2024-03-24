@@ -1,4 +1,4 @@
-// Utilities.swift
+// Scaffolding.swift
 // Copyright © 2024 Kaleb A. Ascevich
 //
 // This package is free software: you can redistribute it and/or modify it
@@ -14,16 +14,19 @@
 // You should have received a copy of the GNU General Public License along
 // with this package. If not, see https://www.gnu.org/licenses/.
 
-@discardableResult internal func with<T, U>(
-   _ value: T,
-   do block: (T) throws -> U
-) rethrows -> U {
-   try block(value)
+#if swift(<6.0)
+
+import XCTest
+import Testing
+
+final class AllTests: XCTestCase {
+   func testAll() async {
+      await XCTestScaffold.runAllTests(hostedBy: self)
+   }
 }
 
-@discardableResult internal func with<T, U>(
-   _ value: T,
-   do block: (T) async throws -> U
-) async rethrows -> U {
-   try await block(value)
-}
+#else
+
+#warning("Scaffolding.swift is no longer necessary in Swift 6 and newer")
+
+#endif

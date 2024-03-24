@@ -14,72 +14,76 @@
 // You should have received a copy of the GNU General Public License along
 // with this package. If not, see https://www.gnu.org/licenses/.
 
-import class XCTest.XCTestCase
-import Nimble
+import Testing
 @testable import typealias BrainflipKit.Program
 
-extension ParserTests {
-   internal final class ParsingTests: XCTestCase {
-      internal func testBasic() throws {
-         let program = try Program(",[>+<-.]")
-         expect(program) == [
-            .input,
-            .loop([
-               .nextCell,
-               .increment,
-               .prevCell,
-               .decrement,
-               .output
-            ])
-         ]
-         expect(program.description) == ",[>+<-.]"
-      }
-      
-      internal func testInstructionsAndComments() throws {
-         let program = try Program(",++ a comment ++.")
-         expect(program) == [
-            .input,
-            .increment,
-            .increment,
-            .increment,
-            .increment,
-            .output
-         ]
-         expect(program.description) == ",++++."
-      }
-      
-      internal func testCommentsOnly() throws {
-         let program = try Program("the whole thing is just a comment")
-         expect(program).to(beEmpty())
-         expect(program.description).to(beEmpty())
-      }
-      
-      internal func testNestedLoops() throws {
-         let program = try Program(">+[>-[-<]>>]>")
-         expect(program) == [
+@Suite("Program parsing")
+struct ParsingTests {
+   @Test("Basic parsing")
+   func basicParsing() throws {
+      let program = try Program(",[>+<-.]")
+      #expect(program == [
+         .input,
+         .loop([
             .nextCell,
             .increment,
+            .prevCell,
+            .decrement,
+            .output
+         ])
+      ])
+      #expect(program.description == ",[>+<-.]")
+   }
+   
+   @Test("Parsing instructions and comments")
+   func instructionsAndComments() throws {
+      let program = try Program(",++ a comment ++.")
+      #expect(program == [
+         .input,
+         .increment,
+         .increment,
+         .increment,
+         .increment,
+         .output
+      ])
+      #expect(program.description == ",++++.")
+   }
+   
+   @Test("Parsing only comments")
+   func commentsOnly() throws {
+      let program = try Program("the whole thing is just a comment")
+      #expect(program.isEmpty)
+      #expect(program.description.isEmpty)
+   }
+   
+   @Test("Parsing nested loops")
+   func nestedLoops() throws {
+      let program = try Program(">+[>-[-<]>>]>")
+      #expect(program == [
+         .nextCell,
+         .increment,
+         .loop([
+            .nextCell,
+            .decrement,
             .loop([
-               .nextCell,
                .decrement,
-               .loop([
-                  .decrement,
-                  .prevCell
-               ]),
-               .nextCell,
-               .nextCell
+               .prevCell
             ]),
+            .nextCell,
             .nextCell
-         ]
-         expect(program.description) == ">+[>-[-<]>>]>"
-      }
-      
-      internal func testExtras() throws {
-         let program = try Program("!")
-         expect(program) == [
-            .extra(.stop)
-         ]
-         expect(program.description) == "!"
-      }
+         ]),
+         .nextCell
+      ])
+      #expect(program.description == ">+[>-[-<]>>]>")
+   }
+   
+   @Test("Extra instructions parsing")
+   func extraInstructions() throws {
+      let program = try Program("!0")
+      #expect(program == [
+         .extra(.stop),
+         .extra(.zero)
+      ])
+      #expect(program.description == "!0")
    }
 }

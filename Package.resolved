@@ -1,33 +1,6 @@
 {
-  "originHash" : "6fd797a4eeb180fe56aa4bd28f0bcd84c01ec473eb135330f8be53d341c7f0ae",
+  "originHash" : "1dbaf5f9a806de141734ea57912db01b2e3f756bdf061bc34f08d807c475376f",
   "pins" : [
-    {
-      "identity" : "cwlcatchexception",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/mattgallagher/CwlCatchException.git",
-      "state" : {
-        "revision" : "3ef6999c73b6938cc0da422f2c912d0158abb0a0",
-        "version" : "2.2.0"
-      }
-    },
-    {
-      "identity" : "cwlpreconditiontesting",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/mattgallagher/CwlPreconditionTesting.git",
-      "state" : {
-        "revision" : "2ef56b2caf25f55fa7eef8784c30d5a767550f54",
-        "version" : "2.2.1"
-      }
-    },
-    {
-      "identity" : "nimble",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/Quick/Nimble",
-      "state" : {
-        "branch" : "main",
-        "revision" : "ca24804d100e56b83a1fdde594d93f4a2c67a87f"
-      }
-    },
     {
       "identity" : "swift-argument-parser",
       "kind" : "remoteSourceControl",
@@ -62,6 +35,15 @@
       "state" : {
         "revision" : "fa8f95c2d536d6620cc2f504ebe8a6167c9fc2dd",
         "version" : "510.0.1"
+      }
+    },
+    {
+      "identity" : "swift-testing",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/apple/swift-testing.git",
+      "state" : {
+        "branch" : "main",
+        "revision" : "ff1cf91ad9b0c066fb1ec0d99c3d0838d1f6442c"
       }
     },
     {

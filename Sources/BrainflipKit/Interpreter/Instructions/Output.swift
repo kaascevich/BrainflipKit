@@ -14,9 +14,9 @@
 // You should have received a copy of the GNU General Public License along
 // with this package. If not, see https://www.gnu.org/licenses/.
 
-extension Interpreter {
+internal extension Interpreter {
    /// Executes an ``Instruction/output`` instruction.
-   internal func handleOutputInstruction() {
+   func handleOutputInstruction() {
       // if this cell's value doesn't correspond to a valid
       // Unicode character, do nothing
       guard

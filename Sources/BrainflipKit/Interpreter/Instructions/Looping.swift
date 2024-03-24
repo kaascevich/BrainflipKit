@@ -14,11 +14,11 @@
 // You should have received a copy of the GNU General Public License along
 // with this package. If not, see https://www.gnu.org/licenses/.
 
-extension Interpreter {
+internal extension Interpreter {
    /// Executes a ``Instruction/loop(_:)``.
    ///
    /// - Parameter instructions: The instructions to loop over.
-   internal func handleLoop(_ instructions: [Instruction]) async throws {
+   func handleLoop(_ instructions: [Instruction]) async throws {
       while self.currentCellValue != 0 {
          for instruction in instructions {
             try await handleInstruction(instruction)

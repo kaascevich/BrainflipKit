@@ -55,7 +55,7 @@ import Parsing
    /// - Throws: An `Error` if `string` cannot be parsed
    ///   into a valid program (that is, if it contains
    ///   unmatched brackets).
-   @usableFromInline internal static func parse(program string: String) throws -> Program {
+   @usableFromInline static func parse(program string: String) throws -> Program {
       try ProgramParser().parse(string.filter(
          // filter out nonexistent instructions
          ("+-><[],." + ExtraInstruction.allCases.map(\.rawValue)).contains
@@ -67,7 +67,7 @@ import Parsing
    /// - Parameter program: A `Program` instance.
    ///
    /// - Returns: A `String` representation of `program`.
-   @usableFromInline internal static func print(program: Program) -> String {
+   @usableFromInline static func print(program: Program) -> String {
       String(try! ProgramParser().print(program)) // swiftlint:disable:this force_try
    }
 }

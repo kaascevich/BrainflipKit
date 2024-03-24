@@ -38,10 +38,10 @@ let package = Package(
       .executable(name: "brainflip", targets: ["BrainflipCLI"])
    ],
    dependencies: [
-      .package(url: "https://github.com/Quick/Nimble", branch: "main"),
       .package(url: "https://github.com/apple/swift-argument-parser.git", branch: "main"),
       .package(url: "https://github.com/pointfreeco/swift-parsing.git", branch: "main"),
-      .package(url: "https://github.com/lukepistrol/SwiftLintPlugin", branch: "main")
+      .package(url: "https://github.com/lukepistrol/SwiftLintPlugin", branch: "main"),
+      .package(url: "https://github.com/apple/swift-testing.git", branch: "main")
    ],
    targets: [
       // Targets are the basic building blocks of a package, defining a module or a test suite.
@@ -63,7 +63,10 @@ let package = Package(
       ),
       .testTarget(
          name: "BrainflipKitTests",
-         dependencies: ["BrainflipKit", "Nimble"],
+         dependencies: [
+            "BrainflipKit",
+            .product(name: "Testing", package: "swift-testing")
+         ],
          swiftSettings: [strictConcurrency],
          plugins: [swiftLintPlugin]
       )

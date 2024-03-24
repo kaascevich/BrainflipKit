@@ -14,14 +14,14 @@
 // You should have received a copy of the GNU General Public License along
 // with this package. If not, see https://www.gnu.org/licenses/.
 
-extension Interpreter {
+internal extension Interpreter {
    /// Executes a ``Instruction/nextCell(_:)`` instruction.
-   @inlinable internal func handleNextCellInstruction() {
+   @inlinable func handleNextCellInstruction() {
       self.cellPointer += 1
    }
    
    /// Executes a ``Instruction/prevCell(_:)`` instruction.
-   @inlinable internal func handlePrevCellInstruction() {
+   @inlinable func handlePrevCellInstruction() {
       self.cellPointer -= 1
    }
 }

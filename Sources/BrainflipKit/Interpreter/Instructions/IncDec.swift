@@ -14,9 +14,9 @@
 // You should have received a copy of the GNU General Public License along
 // with this package. If not, see https://www.gnu.org/licenses/.
 
-extension Interpreter {
+internal extension Interpreter {
    /// Executes an ``Instruction/increment(_:)`` instruction.
-   internal func handleIncrementInstruction() throws {
+   func handleIncrementInstruction() throws {
       if self.currentCellValue == options.cellMax { // wraparound
          guard options.allowCellWraparound else {
             throw Error.cellOverflow(position: self.cellPointer)
@@ -28,7 +28,7 @@ extension Interpreter {
    }
    
    /// Executes a ``Instruction/decrement(_:)`` instruction.
-   internal func handleDecrementInstruction() throws {
+   func handleDecrementInstruction() throws {
       if self.currentCellValue == 0 { // wraparound
          guard options.allowCellWraparound else {
             throw Error.cellUnderflow(position: self.cellPointer)

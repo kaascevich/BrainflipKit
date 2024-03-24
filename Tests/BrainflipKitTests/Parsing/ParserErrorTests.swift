@@ -14,16 +14,19 @@
 // You should have received a copy of the GNU General Public License along
 // with this package. If not, see https://www.gnu.org/licenses/.
 
-import class XCTest.XCTestCase
-import Nimble
+import Testing
 @testable import typealias BrainflipKit.Program
 
-extension ParserTests {
-   internal final class ParserErrorTests: XCTestCase {
-      internal func testUnpairedLoops() {
+extension ParsingTests {
+   @Suite("Parsing errors")
+   struct ParserErrorTests {
+      @Test("Unpaired loops")
+      func unpairedLoops() {
          let invalidPrograms = ["[", "]", "][", "]][", "][[", "[][", "][]", "[[]", "[]]"]
          for program in invalidPrograms {
-            expect(try Program(program)).to(throwError())
+            #expect(throws: (any Error).self) {
+               try Program(program)
+            }
          }
       }
    }

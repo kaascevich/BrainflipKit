@@ -14,58 +14,85 @@
 // You should have received a copy of the GNU General Public License along
 // with this package. If not, see https://www.gnu.org/licenses/.
 
-import class XCTest.XCTestCase
-import Nimble
+import Testing
 @testable import class BrainflipKit.Interpreter
 
 extension InterpreterTests {
-   internal final class OptionsTests: XCTestCase {
-      internal func testCellSize() async throws {
-         try await with(Interpreter("", options: .init(cellSize: 16))) {
-            expect($0.options.cellMax) == 65_535
-            
-            try await $0.handleInstruction(.decrement)
-            expect($0.tape[0]) == 65_535
-         }
+   @Suite("Interpreter options")
+   struct OptionsTests {
+      @Test("cellSize option and cellMax value")
+      func cellSizeOption() async throws {
+         let interpreter = try Interpreter("", options: .init(cellSize: 16))
          
-         // out-of-bounds cell size
-         expect(Interpreter.Options(cellSize: 72))
-            .to(throwAssertion())
+         #expect(interpreter.options.cellMax == 65_535)
+         
+         try await interpreter.handleInstruction(.decrement)
+         #expect(interpreter.tape[0] == 65_535)
       }
       
-      internal func testAllowWraparound() async throws {
-         try await with(Interpreter("", options: .init(allowCellWraparound: false))) {
-            await expecta(try await $0.handleInstruction(.decrement))
-               .to(throwError(Interpreter.Error.cellUnderflow(position: 0)))
-            
-            $0.currentCellValue = 255
-            await expecta(try await $0.handleInstruction(.increment))
-               .to(throwError(Interpreter.Error.cellOverflow(position: 0)))
+      @Test("allowCellWraparound option")
+      func allowWraparoundOption() async throws {
+         let interpreter = try Interpreter("", options: .init(
+            allowCellWraparound: false
+         ))
+         
+         await #expect(throws: Interpreter.Error.cellUnderflow(position: 0)) {
+            try await interpreter.handleInstruction(.decrement)
+         }
+         
+         interpreter.currentCellValue = interpreter.options.cellMax
+         await #expect(throws: Interpreter.Error.cellOverflow(position: 0)) {
+            try await interpreter.handleInstruction(.increment)
          }
       }
       
-      internal func testEndOfInputBehavior() async throws {
-         try await with(Interpreter("", options: .init(endOfInputBehavior: nil))) {
-            $0.currentCellValue = 42
-            try await $0.handleInstruction(.input)
-            expect($0.currentCellValue) == 42
+      @Suite("End of input behavior options")
+      struct EndOfInputBehaviorTests {
+         @Test("Do nothing on end of input")
+         func doNothingOption() async throws {
+            let interpreter = try Interpreter("", options: .init(
+               endOfInputBehavior: nil
+            ))
+            
+            interpreter.currentCellValue = 42
+            try await interpreter.handleInstruction(.input)
+            #expect(interpreter.currentCellValue == 42)
          }
          
-         try await with(Interpreter("", options: .init(endOfInputBehavior: .setTo(0)))) {
-            $0.currentCellValue = 42
-            try await $0.handleInstruction(.input)
-            expect($0.currentCellValue) == 0
+         @Test("Set the current cell to a value on end of input")
+         func setToValueOption() async throws {
+            let interpreter = try Interpreter("", options: .init(
+               endOfInputBehavior: .setTo(0)
+            ))
+            
+            interpreter.currentCellValue = 42
+            try await interpreter.handleInstruction(.input)
+            #expect(interpreter.currentCellValue == 0)
          }
          
-         try await with(Interpreter("", options: .init(endOfInputBehavior: .setTo(.max)))) {
-            $0.currentCellValue = 42
-            try await $0.handleInstruction(.input)
-            expect($0.currentCellValue) == 255
+         @Test("Set the current cell to an out-of-bounds value on end of input")
+         func setToValueOption_outOfRange() async throws {
+            let interpreter = try Interpreter("", options: .init(
+               endOfInputBehavior: .setTo(.max)
+            ))
+            
+            interpreter.currentCellValue = 42
+            try await interpreter.handleInstruction(.input)
+            #expect(
+               interpreter.currentCellValue == 255,
+               "if the provided value is too large, `setTo` will truncate it"
+            )
          }
          
-         try await with(Interpreter("", options: .init(endOfInputBehavior: .throwError))) {
-            await expecta(try await $0.handleInstruction(.input))
-               .to(throwError(Interpreter.Error.endOfInput))
+         @Test("Throw an error on end of input")
+         func throwErrorOption() async throws {
+            let interpreter = try Interpreter("", options: .init(
+               endOfInputBehavior: .throwError
+            ))
+            
+            await #expect(throws: Interpreter.Error.endOfInput) {
+               try await interpreter.handleInstruction(.input)
+            }
          }
       }
    }

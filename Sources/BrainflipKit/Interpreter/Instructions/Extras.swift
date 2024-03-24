@@ -14,12 +14,12 @@
 // You should have received a copy of the GNU General Public License along
 // with this package. If not, see https://www.gnu.org/licenses/.
 
-extension Interpreter {
+internal extension Interpreter {
    /// Executes the instruction contained within
    /// ``Instruction/extra(_:)``, if it is enabled.
    ///
    /// - Parameter instruction: The instruction to execute.
-   internal func handleExtraInstruction(_ instruction: ExtraInstruction) async throws {
+   func handleExtraInstruction(_ instruction: ExtraInstruction) async throws {
       guard options.enabledExtraInstructions.contains(instruction) else {
          return
       }

@@ -17,7 +17,7 @@
 public extension Interpreter {
    /// Represents an error that can happen during the
    /// lifetime of an ``Interpreter`` instance.
-   enum Error: Swift.Error {
+   enum Error: Swift.Error, Equatable, Hashable {
       /// Indicates that the cell value at the specified
       /// `position` overflowed.
       case cellOverflow(position: Int)

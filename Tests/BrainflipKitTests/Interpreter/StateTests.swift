@@ -14,26 +14,29 @@
 // You should have received a copy of the GNU General Public License along
 // with this package. If not, see https://www.gnu.org/licenses/.
 
-import class XCTest.XCTestCase
-import Nimble
+import Testing
 @testable import class BrainflipKit.Interpreter
 
 extension InterpreterTests {
-   internal final class StateTests: XCTestCase {
-      internal func testCurrentCellValue() throws {
-         try with(Interpreter("")) {
-            $0.cellPointer = 5
-            $0.currentCellValue = 42
-            expect($0.currentCellValue) == $0.tape[$0.cellPointer]
-         }
+   @Suite("Interpreter state")
+   struct StateTests {
+      var interpreter: Interpreter
+      init() throws {
+         interpreter = try Interpreter("")
       }
       
-      internal func testDynamicMemberSubscript() throws {
-         try with(Interpreter("")) {
-            $0.cellPointer = 5
-            $0.currentCellValue = 42
-            expect($0.tape[$0.cellPointer]) == $0.tape[$0.cellPointer]
-         }
+      @Test("currentCellValue property")
+      func currentCellValue() throws {
+         interpreter.cellPointer = 5
+         interpreter.currentCellValue = 42
+         #expect(interpreter.currentCellValue == interpreter.tape[interpreter.cellPointer])
+      }
+      
+      @Test("Dynamic member lookup")
+      func dynamicMemberSubscript() throws {
+         interpreter.cellPointer = 5
+         interpreter.currentCellValue = 42
+         #expect(interpreter.currentCellValue == interpreter.state.currentCellValue)
       }
    }
 }
