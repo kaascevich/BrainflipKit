@@ -36,11 +36,11 @@ extension InterpreterTests {
       internal func testAllowWraparound() async throws {
          try await with(Interpreter("", options: .init(allowCellWraparound: false))) {
             await expecta(try await $0.handleInstruction(.decrement))
-               .to(throwError(Interpreter.Error.cellUnderflow))
+               .to(throwError(Interpreter.Error.cellUnderflow(position: 0)))
             
             $0.currentCellValue = 255
             await expecta(try await $0.handleInstruction(.increment))
-               .to(throwError(Interpreter.Error.cellOverflow))
+               .to(throwError(Interpreter.Error.cellOverflow(position: 0)))
          }
       }
       

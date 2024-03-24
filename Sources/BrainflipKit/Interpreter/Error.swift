@@ -18,11 +18,13 @@ public extension Interpreter {
    /// Represents an error that can happen during the
    /// lifetime of an ``Interpreter`` instance.
    enum Error: Swift.Error {
-      /// Indicates that the current cell value overflowed.
-      case cellOverflow
+      /// Indicates that the cell value at the specified
+      /// `position` overflowed.
+      case cellOverflow(position: Int)
       
-      /// Indicates that the current cell value underflowed.
-      case cellUnderflow
+      /// Indicates that the cell value at the specified
+      /// `position` underflowed.
+      case cellUnderflow(position: Int)
       
       /// Indicates that the input buffer was exhausted.
       case endOfInput
@@ -37,12 +39,12 @@ extension Interpreter.Error: CustomStringConvertible {
    /// A description of this error.
    public var description: String {
       switch self {
-      case .cellOverflow: "Cell overflowed"
-      case .cellUnderflow: "Cell underflowed"
+      case .cellOverflow(let position): "The cell at position \(position) overflowed."
+      case .cellUnderflow(let position): "The cell at position \(position) underflowed."
          
-      case .endOfInput: "End of input reached"
+      case .endOfInput: "Executed an input instruction after end-of-input was reached."
          
-      case .stopInstruction: "Stop instruction reached"
+      case .stopInstruction: "Encountered a stop instruction."
       }
    }
 }
