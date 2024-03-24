@@ -14,9 +14,9 @@
 // You should have received a copy of the GNU General Public License along
 // with this package. If not, see https://www.gnu.org/licenses/.
 
-extension Interpreter {
+public extension Interpreter {
    /// Represents an interpreter's internal state.
-   public struct State {
+   struct State {
       // MARK: - Initializers
       
       /// Creates a `State` instance.
@@ -86,13 +86,5 @@ extension Interpreter {
             tape[cellPointer, default: 0] = newValue
          }
       }
-   }
-   
-   /// Resets this interpreter's internal state.
-   ///
-   /// The program to execute, the original input, and this
-   /// instance's options will not be reset by this method.
-   internal func resetState() {
-      state = State(input: originalInput, options: options)
    }
 }

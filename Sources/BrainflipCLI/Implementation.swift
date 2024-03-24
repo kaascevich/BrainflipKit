@@ -34,10 +34,8 @@ extension BrainflipCLI {
          enabledExtraInstructions: Set(interpreterOptions.extraInstructions)
       )
       
-      let parsedProgram = try Program(program ?? readFromStandardInput())
-      
-      let interpreter = Interpreter(
-         parsedProgram,
+      let interpreter = try Interpreter(
+         program ?? readFromStandardInput(),
          input: input,
          options: options
       )

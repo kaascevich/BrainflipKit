@@ -87,14 +87,22 @@
    /// to execute.
    public let program: Program
    
-   /// The input to provide to the program.
-   public let originalInput: String
-   
    /// The configurable options for this instance.
    public let options: Options
    
    /// This instance's internal state.
-   public internal(set) var state: State
+   public private(set) var state: State
+   
+   /// Resets this interpreter's internal state.
+   ///
+   /// The program to execute, the original input, and this
+   /// instance's options will not be reset by this method.
+   internal func resetState() {
+      state = State(input: originalInput, options: options)
+   }
+   
+   /// The input to provide to the program.
+   internal let originalInput: String
    
    // MARK: - Initializers
    
@@ -108,6 +116,9 @@
    ///     removed.
    ///   - options: Configurable options to be used for this
    ///     instance.
+   ///
+   /// - Complexity: O(*n*), where *n* is the length of
+   ///   `input.unicodeScalars`.
    public init(
       _ program: Program,
       input: String = "",
@@ -137,6 +148,9 @@
    /// - Throws: An `Error` if `string` cannot be parsed
    ///   into a valid program (that is, if it contains
    ///   unmatched brackets).
+   ///
+   /// - Complexity: O(*n*), where *n* is the length of
+   ///   `input.unicodeScalars`.
    @inlinable public convenience init(
       _ string: String,
       input: String = "",

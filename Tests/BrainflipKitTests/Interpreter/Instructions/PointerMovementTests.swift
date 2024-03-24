@@ -20,7 +20,7 @@ import Testing
 extension InterpreterTests.InstructionTests {
    @Suite("Next cell & previous cell instructions")
    struct PointerMovementTests {
-      var interpreter: Interpreter
+      let interpreter: Interpreter
       init() throws {
          interpreter = try Interpreter("")
       }

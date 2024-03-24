@@ -19,23 +19,18 @@ import BrainflipKit
 
 extension ExtraInstruction: ExpressibleByArgument {
    public init?(argument: String) {
-      let caseNames = zip(Self.allCases, Self.allValueStrings)
-      let caseName = caseNames.first { $0.1 == argument }
-      
+      let caseName = Self.allCases.first { String(describing: $0) == argument }
       guard let caseName else { return nil }
-      self = caseName.0
+      
+      self = caseName
    }
    
-   public static var allValueStrings: [String] {
-      allCases.map(String.init(describing:))
-   }
+   public static let allValueStrings = allCases.map(String.init(describing:))
    
-   public var details: (name: String, rawValue: Character, description: String) {
-      let description = switch self {
+   public var details: String {
+      switch self {
       case .stop: "Immediately ends the program."
       case .zero: "Sets the current cell to zero."
       }
-      
-      return (name: String(describing: self), self.rawValue, description)
    }
 }

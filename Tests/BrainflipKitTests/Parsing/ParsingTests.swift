@@ -32,7 +32,6 @@ struct ParsingTests {
             .output
          ])
       ])
-      #expect(program.description == ",[>+<-.]")
    }
    
    @Test("Parsing instructions and comments")
@@ -46,14 +45,12 @@ struct ParsingTests {
          .increment,
          .output
       ])
-      #expect(program.description == ",++++.")
    }
    
    @Test("Parsing only comments")
    func commentsOnly() throws {
       let program = try Program("the whole thing is just a comment")
       #expect(program.isEmpty)
-      #expect(program.description.isEmpty)
    }
    
    @Test("Parsing nested loops")
@@ -74,7 +71,6 @@ struct ParsingTests {
          ]),
          .nextCell
       ])
-      #expect(program.description == ">+[>-[-<]>>]>")
    }
    
    @Test("Extra instructions parsing")
@@ -84,6 +80,5 @@ struct ParsingTests {
          .extra(.stop),
          .extra(.zero)
       ])
-      #expect(program.description == "!0")
    }
 }

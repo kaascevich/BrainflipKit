@@ -45,6 +45,9 @@ import Parsing
       }
    }
    
+   static let validInstructions = ["+", "-", ">", "<", "[", "]", ",", "."]
+      + ExtraInstruction.allCases.map(\.rawValue)
+   
    /// Parses a `String` into a `Program`.
    ///
    /// - Parameter string: The original source code for a
@@ -56,10 +59,7 @@ import Parsing
    ///   into a valid program (that is, if it contains
    ///   unmatched brackets).
    @usableFromInline static func parse(program string: String) throws -> Program {
-      try ProgramParser().parse(string.filter(
-         // filter out nonexistent instructions
-         ("+-><[],." + ExtraInstruction.allCases.map(\.rawValue)).contains
-      ))
+      try ProgramParser().parse(string.filter(validInstructions.contains))
    }
    
    /// Creates a `String` representation of a ``Program``.

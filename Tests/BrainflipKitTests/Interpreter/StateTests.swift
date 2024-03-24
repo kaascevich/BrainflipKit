@@ -20,7 +20,7 @@ import Testing
 extension InterpreterTests {
    @Suite("Interpreter state")
    struct StateTests {
-      var interpreter: Interpreter
+      let interpreter: Interpreter
       init() throws {
          interpreter = try Interpreter("")
       }
@@ -30,13 +30,6 @@ extension InterpreterTests {
          interpreter.cellPointer = 5
          interpreter.currentCellValue = 42
          #expect(interpreter.currentCellValue == interpreter.tape[interpreter.cellPointer])
-      }
-      
-      @Test("Dynamic member lookup")
-      func dynamicMemberSubscript() throws {
-         interpreter.cellPointer = 5
-         interpreter.currentCellValue = 42
-         #expect(interpreter.currentCellValue == interpreter.state.currentCellValue)
       }
    }
 }

@@ -36,9 +36,10 @@ public extension Program {
    /// Additionally, the following instructions are also
    /// recognized (although they are disabled by default):
    ///
-   /// | Character |     Instruction      |
-   /// |-----------|----------------------|
-   /// |    `!`    | ``Instruction/stop`` |
+   /// | Character |        Instruction        |
+   /// |-----------|---------------------------|
+   /// |    `!`    | ``ExtraInstruction/stop`` |
+   /// |    `0`    | ``ExtraInstruction/zero`` | 
    ///
    /// All other characters are treated as comments and ignored.
    ///

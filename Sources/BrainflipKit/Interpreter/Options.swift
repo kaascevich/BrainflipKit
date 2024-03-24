@@ -83,9 +83,10 @@ public extension Interpreter {
          self.allowCellWraparound = allowCellWraparound
          self.enabledExtraInstructions = enabledExtraInstructions
          
-         self.endOfInputBehavior = switch endOfInputBehavior {
-         case .setTo(let value): .setTo(min((1 << cellSize) - 1, value))
-         default: endOfInputBehavior
+         self.endOfInputBehavior = if case .setTo(let value) = endOfInputBehavior {
+            .setTo(min((1 << cellSize) - 1, value))
+         } else {
+            endOfInputBehavior
          }
       }
       

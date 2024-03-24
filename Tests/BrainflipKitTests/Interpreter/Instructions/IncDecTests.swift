@@ -20,7 +20,7 @@ import Testing
 extension InterpreterTests.InstructionTests {
    @Suite("Increment & decrement instructions")
    struct IncDecTests {
-      var interpreter: Interpreter
+      let interpreter: Interpreter
       init() throws {
          interpreter = try Interpreter("")
       }
