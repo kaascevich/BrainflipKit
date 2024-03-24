@@ -40,7 +40,7 @@ import Parsing
    }
    
    private struct ProgramParser: ParserPrinter {
-      @inlinable var body: some ParserPrinter<Substring, Program> {
+      var body: some ParserPrinter<Substring, Program> {
          Many { InstructionParser() }
       }
    }

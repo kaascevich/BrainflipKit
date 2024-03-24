@@ -46,13 +46,13 @@ public extension Program {
    ///
    /// - Throws: An `Error` if `string` is not a valid program
    ///   (that is, if it contains unmatched brackets).
-   @inlinable init(_ string: String) throws {
+   init(_ string: String) throws {
       self = try BrainflipParser.parse(program: string)
    }
 }
 
 public extension Program {
-   @inlinable var description: String {
+   var description: String {
       BrainflipParser.print(program: self)
    }
 }
