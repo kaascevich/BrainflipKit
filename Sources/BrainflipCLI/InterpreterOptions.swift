@@ -33,7 +33,7 @@ extension BrainflipCLI {
       ) var cellSize: UInt8 = 8
       
       @Flag(
-         name: [ .customLong("wrap")],
+         name: [.customLong("wrap")],
          inversion: .prefixedNo,
          help: "Whether to allow cell values to wrap around when they overflow or underflow."
       ) var wraparound: Bool = true
@@ -48,13 +48,14 @@ extension BrainflipCLI {
       ) var endOfInputBehavior: EndOfInputBehavior?
       
       @Option(
-         name: [.customShort("x"), .customLong("extra"), .long],
+         name: [.customShort("x"), .customLong("extras"), .long],
          parsing: .upToNextOption,
          help: .init(
             "A list of optional, extra instructions to enable.",
-            discussion: ExtraInstruction.allCases.map(\.details).map {
-               #"(\#($0.character)) "\#($0.name)": \#($0.description)"#
-            }.joined(separator: "\n"),
+            discussion: ExtraInstruction.allCases
+               .map(\.details)
+               .map { "(\($0.rawValue)) \($0.name): \($0.description)" }
+               .joined(separator: "\n"),
             valueName: "instructions"
          )
       ) var extraInstructions: [ExtraInstruction] = []

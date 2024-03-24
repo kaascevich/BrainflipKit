@@ -1,4 +1,4 @@
-// ExtraInstruction+ExpressibleByArgument.swift
+// ExtraInstruction+Argument.swift
 // Copyright © 2024 Kaleb A. Ascevich
 //
 // This package is free software: you can redistribute it and/or modify it
@@ -30,12 +30,12 @@ extension ExtraInstruction: ExpressibleByArgument {
       allCases.map(String.init(describing:))
    }
    
-   public var details: (name: String, character: Character, description: String) {
+   public var details: (name: String, rawValue: Character, description: String) {
       let description = switch self {
       case .stop: "Immediately ends the program."
       case .zero: "Sets the current cell to zero."
       }
       
-      return (name: String(describing: self), character: self.rawValue, description)
+      return (name: String(describing: self), self.rawValue, description)
    }
 }

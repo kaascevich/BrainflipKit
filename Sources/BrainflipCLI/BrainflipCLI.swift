@@ -67,7 +67,7 @@ import BrainflipKit
       name: .shortAndLong,
       help: .init(
          "The input to pass to the program.",
-         discussion: "Characters whose Unicode values exceed the maximum value of a cell will be removed."
+         discussion: "Unicode scalars whose values exceed the maximum value of a cell will be removed."
       )
    ) var input: String = ""
    
