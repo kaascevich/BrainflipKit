@@ -16,7 +16,7 @@
 
 /// An individual instruction, performing a specific action
 /// when executed by an ``Interpreter``.
-public enum Instruction: Equatable, Hashable {
+public enum Instruction: Equatable, Hashable, Sendable {
    /// Increments the current cell.
    ///
    /// The default behavior on overflow is to wrap around,

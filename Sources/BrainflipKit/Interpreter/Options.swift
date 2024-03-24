@@ -16,7 +16,7 @@
 
 public extension Interpreter {
    /// Configurable options for an ``Interpreter`` instance.
-   struct Options {
+   struct Options: Sendable {
       /// The bit size of each cell. Defaults to 8.
       public let cellSize: UInt8
       

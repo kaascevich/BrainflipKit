@@ -16,7 +16,7 @@
 
 internal extension Interpreter {
    /// Executes an ``Instruction/output`` instruction.
-   func handleOutputInstruction() {
+   mutating func handleOutputInstruction() {
       // if this cell's value doesn't correspond to a valid
       // Unicode character, do nothing
       guard

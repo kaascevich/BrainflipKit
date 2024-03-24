@@ -82,7 +82,7 @@
 /// # See Also
 /// - ``Instruction``
 /// - ``run()``
-@dynamicMemberLookup public final class Interpreter {
+@dynamicMemberLookup public struct Interpreter: ~Copyable, Sendable {
    /// The Brainflip program containing a list of instructions
    /// to execute.
    public let program: Program
@@ -92,17 +92,6 @@
    
    /// This instance's internal state.
    public private(set) var state: State
-   
-   /// Resets this interpreter's internal state.
-   ///
-   /// The program to execute, the original input, and this
-   /// instance's options will not be reset by this method.
-   internal func resetState() {
-      state = State(input: originalInput, options: options)
-   }
-   
-   /// The input to provide to the program.
-   internal let originalInput: String
    
    // MARK: - Initializers
    
@@ -131,7 +120,6 @@
       let trimmedScalars = inputScalars.filter { $0.value < options.cellMax }
       let trimmedInputString = String(trimmedScalars)
       
-      self.originalInput = trimmedInputString
       self.state = State(input: trimmedInputString, options: options)
    }
    
@@ -151,7 +139,7 @@
    ///
    /// - Complexity: O(*n*), where *n* is the length of
    ///   `input.unicodeScalars`.
-   @inlinable public convenience init(
+   @inlinable public init(
       _ string: String,
       input: String = "",
       options: Options = .init()

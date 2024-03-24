@@ -15,28 +15,28 @@
 // with this package. If not, see https://www.gnu.org/licenses/.
 
 import Testing
-@testable import class BrainflipKit.Interpreter
+@testable import struct BrainflipKit.Interpreter
 
 extension InterpreterTests.InstructionTests {
    @Suite("Extra instructions")
    struct ExtrasTests {
       @Test("No instructions enabled") func disabledInstructions() async throws {
-         let interpreter = try Interpreter("!")
-         
          await #expect(
             throws: Never.self,
             "stop insrtuction does nothing when not enabled"
          ) {
+            let interpreter = try Interpreter("!")
+            
             // if this throws, then the stop instruction
             // has been executed even though we don't want
             // it to be
-            try await interpreter.run()
+            _ = try await interpreter.run()
          }
       }
       
       @Test("Stop instruction")
       func stopInstruction() async throws {
-         let interpreter = try Interpreter("", options: .init(
+         var interpreter = try Interpreter("", options: .init(
             enabledExtraInstructions: [.stop]
          ))
          
@@ -50,7 +50,7 @@ extension InterpreterTests.InstructionTests {
       
       @Test("Zero instruction")
       func zeroInstruction() async throws {
-         let interpreter = try Interpreter("", options: .init(
+         var interpreter = try Interpreter("", options: .init(
             enabledExtraInstructions: [.zero]
          ))
          

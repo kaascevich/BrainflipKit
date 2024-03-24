@@ -16,7 +16,7 @@
 
 public extension Interpreter {
    /// Represents an interpreter's internal state.
-   struct State {
+   struct State: Sendable {
       // MARK: - Initializers
       
       /// Creates a `State` instance.

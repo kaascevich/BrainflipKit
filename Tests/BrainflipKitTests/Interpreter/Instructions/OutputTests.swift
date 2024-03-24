@@ -15,14 +15,14 @@
 // with this package. If not, see https://www.gnu.org/licenses/.
 
 import Testing
-@testable import class BrainflipKit.Interpreter
+@testable import struct BrainflipKit.Interpreter
 
 extension InterpreterTests.InstructionTests {
    @Suite("Output instruction")
    struct OutputTests {
       @Test("Output instruction")
       func outputInstruction() async throws {
-         let interpreter = try Interpreter("")
+         var interpreter = try Interpreter("")
 
          interpreter.currentCellValue = 0x42 // ASCII code for "B"
          try await interpreter.handleInstruction(.output)
@@ -31,7 +31,7 @@ extension InterpreterTests.InstructionTests {
       
       @Test("Output instruction with Unicode characters")
       func outputInstruction_unicode() async throws {
-         let interpreter = try Interpreter("", options: .init(cellSize: 16))
+         var interpreter = try Interpreter("", options: .init(cellSize: 16))
          
          interpreter.currentCellValue = 0x2192 // Unicode value for "→"
          try await interpreter.handleInstruction(.output)

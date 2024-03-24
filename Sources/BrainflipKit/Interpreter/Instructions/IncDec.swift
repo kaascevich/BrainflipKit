@@ -16,7 +16,7 @@
 
 internal extension Interpreter {
    /// Executes an ``Instruction/increment(_:)`` instruction.
-   func handleIncrementInstruction() throws {
+   mutating func handleIncrementInstruction() throws {
       if self.currentCellValue == options.cellMax { // wraparound
          guard options.allowCellWraparound else {
             throw Error.cellOverflow(position: self.cellPointer)
@@ -28,7 +28,7 @@ internal extension Interpreter {
    }
    
    /// Executes a ``Instruction/decrement(_:)`` instruction.
-   func handleDecrementInstruction() throws {
+   mutating func handleDecrementInstruction() throws {
       if self.currentCellValue == 0 { // wraparound
          guard options.allowCellWraparound else {
             throw Error.cellUnderflow(position: self.cellPointer)

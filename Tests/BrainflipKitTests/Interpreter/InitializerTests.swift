@@ -15,7 +15,7 @@
 // with this package. If not, see https://www.gnu.org/licenses/.
 
 import Testing
-@testable import class BrainflipKit.Interpreter
+@testable import struct BrainflipKit.Interpreter
 
 extension InterpreterTests {
    @Suite("Interpreter initialization")
@@ -28,28 +28,29 @@ extension InterpreterTests {
          #expect(interpreter.cellPointer == 0)
          #expect(interpreter.outputBuffer.isEmpty)
          
-         #expect(interpreter.originalInput.isEmpty)
          #expect(interpreter.program.isEmpty)
       }
       
       @Test("Unicode input")
-      func unicodeInput() throws {
+      func unicodeInput() async throws {
          let interpreter = try Interpreter(
-            "",
+            ",[.,]",
             input: "→",
-            options: .init(cellSize: 16)
+            options: .init(cellSize: 16, endOfInputBehavior: .setTo(0))
          )
-         #expect(interpreter.originalInput == "→")
+         let output = try await interpreter.run()
+         #expect(output == "→")
       }
       
       @Test("Unicode input that doesn't fit")
-      func unicodeInput_valueTooBig() throws {
+      func unicodeInput_valueTooBig() async throws {
          let interpreter = try Interpreter(
-            "",
+            ",[.,]",
             input: "→",
-            options: .init(cellSize: 8)
+            options: .init(cellSize: 8, endOfInputBehavior: .setTo(0))
          )
-         #expect(interpreter.originalInput.isEmpty)
+         let output = try await interpreter.run()
+         #expect(output.isEmpty)
       }
    }
 }

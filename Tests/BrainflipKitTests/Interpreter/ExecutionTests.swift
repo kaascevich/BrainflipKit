@@ -15,7 +15,7 @@
 // with this package. If not, see https://www.gnu.org/licenses/.
 
 import Testing
-@testable import class BrainflipKit.Interpreter
+@testable import struct BrainflipKit.Interpreter
 
 extension InterpreterTests {
    @Suite("Program execution")
@@ -25,13 +25,13 @@ extension InterpreterTests {
          // increments cell 1 and decrements cell 2
          let interpreter = try Interpreter("+>-<")
          
-         _ = try await interpreter.run()
+         let state = try await interpreter.runReturningFinalState()
          
-         #expect(interpreter.tape == [
+         #expect(state.tape == [
             0: 1,
-            1: interpreter.options.cellMax
+            1: Interpreter.Options().cellMax
          ])
-         #expect(interpreter.cellPointer == 0)
+         #expect(state.cellPointer == 0)
       }
       
       @Test("Simple loops")
@@ -39,8 +39,8 @@ extension InterpreterTests {
          // sets cell 2 to 9
          let interpreter = try Interpreter("+++[>+++<-]")
          
-         _ = try await interpreter.run()
-         #expect(interpreter.tape[1] == 9)
+         let state = try await interpreter.runReturningFinalState()
+         #expect(state.tape[1] == 9)
       }
       
       @Test("Nested loops")
@@ -48,8 +48,8 @@ extension InterpreterTests {
          // sets cell 3 to 27
          let interpreter = try Interpreter("+++[>+++[>+++<-]<-]")
          
-         _ = try await interpreter.run()
-         #expect(interpreter.tape[2] == 27)
+         let state = try await interpreter.runReturningFinalState()
+         #expect(state.tape[2] == 27)
       }
       
       @Test("Running with input")

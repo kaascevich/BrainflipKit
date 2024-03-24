@@ -16,12 +16,12 @@
 
 internal extension Interpreter {
    /// Executes a ``Instruction/nextCell(_:)`` instruction.
-   func handleNextCellInstruction() {
+   mutating func handleNextCellInstruction() {
       self.cellPointer += 1
    }
    
    /// Executes a ``Instruction/prevCell(_:)`` instruction.
-   func handlePrevCellInstruction() {
+   mutating func handlePrevCellInstruction() {
       self.cellPointer -= 1
    }
 }

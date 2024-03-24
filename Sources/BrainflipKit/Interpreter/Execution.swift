@@ -17,18 +17,28 @@
 extension Interpreter {
    /// Executes the instructions stored in ``Interpreter/program``.
    ///
-   /// - Returns: The program's output.
+   /// - Returns: A tuple containing the program's output and
+   ///   the final state of the interpreter.
    ///
    /// - Throws: An interpreter ``Error`` if an issue was
    ///   encountered during execution.
-   public func run() async throws -> String {
-      resetState()
-            
+   public consuming func runReturningFinalState() async throws -> State {
       for instruction in program {
          try await handleInstruction(instruction)
       }
       
-      return self.outputBuffer
+      return state
+   }
+   
+   /// Executes the instructions stored in ``Interpreter/program``.
+   ///
+   /// - Returns: The program's output.
+   ///
+   /// - Throws: An interpreter ``Error`` if an issue was
+   ///   encountered during execution.
+   public consuming func run() async throws -> String {
+      let finalState = try await self.runReturningFinalState()
+      return finalState.outputBuffer
    }
    
    /// Executes an individual ``Instruction``.
@@ -37,7 +47,7 @@ extension Interpreter {
    ///
    /// - Throws: An interpreter ``Error`` if an issue was
    ///   encountered during execution.
-   internal func handleInstruction(_ instruction: Instruction) async throws {
+   internal mutating func handleInstruction(_ instruction: Instruction) async throws {
       switch instruction {
       case .increment: try handleIncrementInstruction()
       case .decrement: try handleDecrementInstruction()

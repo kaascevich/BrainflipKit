@@ -15,14 +15,14 @@
 // with this package. If not, see https://www.gnu.org/licenses/.
 
 import Testing
-@testable import class BrainflipKit.Interpreter
+@testable import struct BrainflipKit.Interpreter
 
 extension InterpreterTests.InstructionTests {
    @Suite("Input instruction")
    struct InputTests {
       @Test("Input instruction")
       func inputInstruction() async throws {
-         let interpreter = try Interpreter("", input: "&")
+         var interpreter = try Interpreter("", input: "&")
          
          try await interpreter.handleInstruction(.input)
          #expect(interpreter.currentCellValue == 0x26) // ASCII code for "&" (ampersand)

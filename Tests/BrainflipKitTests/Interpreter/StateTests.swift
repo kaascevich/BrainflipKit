@@ -15,18 +15,15 @@
 // with this package. If not, see https://www.gnu.org/licenses/.
 
 import Testing
-@testable import class BrainflipKit.Interpreter
+@testable import struct BrainflipKit.Interpreter
 
 extension InterpreterTests {
    @Suite("Interpreter state")
    struct StateTests {
-      let interpreter: Interpreter
-      init() throws {
-         interpreter = try Interpreter("")
-      }
-      
       @Test("currentCellValue property")
       func currentCellValue() throws {
+         var interpreter = try Interpreter("")
+         
          interpreter.cellPointer = 5
          interpreter.currentCellValue = 42
          #expect(interpreter.currentCellValue == interpreter.tape[interpreter.cellPointer])

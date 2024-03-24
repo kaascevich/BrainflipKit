@@ -15,18 +15,15 @@
 // with this package. If not, see https://www.gnu.org/licenses/.
 
 import Testing
-@testable import class BrainflipKit.Interpreter
+@testable import struct BrainflipKit.Interpreter
 
 extension InterpreterTests.InstructionTests {
    @Suite("Increment & decrement instructions")
    struct IncDecTests {
-      let interpreter: Interpreter
-      init() throws {
-         interpreter = try Interpreter("")
-      }
-      
       @Test("Increment instruction")
       func incrementInstruction() async throws {
+         var interpreter = try Interpreter("")
+         
          for i in 1...interpreter.options.cellMax {
             try await interpreter.handleInstruction(.increment)
             #expect(interpreter.tape.first?.value == i)
@@ -41,6 +38,8 @@ extension InterpreterTests.InstructionTests {
          
       @Test("Decrement instruction")
       func decrementInstruction() async throws {
+         var interpreter = try Interpreter("")
+         
          try await interpreter.handleInstruction(.decrement)
          #expect(
             interpreter.tape.first?.value == interpreter.options.cellMax,

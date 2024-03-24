@@ -19,7 +19,7 @@ internal extension Interpreter {
    /// ``Instruction/extra(_:)``, if it is enabled.
    ///
    /// - Parameter instruction: The instruction to execute.
-   func handleExtraInstruction(_ instruction: ExtraInstruction) async throws {
+   mutating func handleExtraInstruction(_ instruction: ExtraInstruction) async throws {
       guard options.enabledExtraInstructions.contains(instruction) else {
          return
       }
