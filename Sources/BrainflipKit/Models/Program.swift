@@ -33,19 +33,26 @@ public extension Program {
    /// |    `.`    | ``Instruction/output``    |
    /// |    `,`    | ``Instruction/input``     |
    ///
+   /// Additionally, the following instructions are also
+   /// recognized (although they are disabled by default):
+   ///
+   /// | Character |     Instruction      |
+   /// |-----------|----------------------|
+   /// |    `!`    | ``Instruction/stop`` |
+   ///
    /// All other characters are treated as comments and ignored.
    ///
    /// - Parameter string: A string to parse into a `Program`.
    ///
-   /// - Throws: `some Error` if `string` is not a valid program
+   /// - Throws: An `Error` if `string` is not a valid program
    ///   (that is, if it contains unmatched brackets).
-   init(_ string: String) throws {
+   @inlinable init(_ string: String) throws {
       self = try BrainflipParser.parse(program: string)
    }
 }
 
 public extension Program {
-   var description: String {
+   @inlinable var description: String {
       BrainflipParser.print(program: self)
    }
 }

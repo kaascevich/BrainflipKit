@@ -1,4 +1,4 @@
-// Typealiases.swift
+// Extras.swift
 // Copyright © 2024 Kaleb A. Ascevich
 //
 // This package is free software: you can redistribute it and/or modify it
@@ -14,13 +14,19 @@
 // You should have received a copy of the GNU General Public License along
 // with this package. If not, see https://www.gnu.org/licenses/.
 
-public extension Interpreter {
-   /// The type of a single Brainflip cell.
+extension Interpreter {
+   /// Executes the instruction contained within
+   /// ``Instruction/extra(_:)``, if it is enabled.
    ///
-   /// This type does not have anything to do with the
-   /// actual maximum value allowed in a cell. Instead of
-   /// checking this type's `max` property, use
-   /// ``Options/cellMax`` on an interpreter's
-   /// ``Interpreter/options`` property.
-   typealias CellValue = UInt
+   /// - Parameter instruction: The instruction to execute.
+   internal func handleExtraInstruction(_ instruction: ExtraInstruction) async throws {
+      guard options.enabledExtraInstructions.contains(instruction) else {
+         return
+      }
+      
+      switch instruction {
+      case .stop:
+         throw Error.stopInstruction
+      }
+   }
 }

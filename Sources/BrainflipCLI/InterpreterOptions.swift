@@ -46,5 +46,17 @@ extension BrainflipCLI {
             valueName: "behavior"
          )
       ) var endOfInputBehavior: EndOfInputBehavior?
+      
+      @Option(
+         name: .long,
+         parsing: .upToNextOption,
+         help: .init(
+            "A list of optional, extra instructions to enable.",
+            discussion: ExtraInstruction.allCases.map(\.details).map {
+               #"(\#($0.character)) "\#($0.name)": \#($0.description)"#
+            }.joined(separator: "\n"),
+            valueName: "instructions"
+         )
+      ) var extraInstructions: [ExtraInstruction] = []
    }
 }

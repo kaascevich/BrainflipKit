@@ -36,14 +36,14 @@ extension Interpreter {
       ///
       /// # See Also
       /// - ``Interpreter/State/currentCellValue``
-      public internal(set) var tape: [TapeIndex: CellValue] = [:]
+      public internal(set) var tape: [Int: CellValue] = [:]
       
       /// The index of the cell currently being used by the
       /// program.
       ///
       /// # See Also
       /// - ``Interpreter/State/currentCellValue``
-      public internal(set) var cellPointer: TapeIndex = 0
+      public internal(set) var cellPointer: Int = 0
       
       /// An iterator that provides input to a program.
       ///
@@ -79,8 +79,12 @@ extension Interpreter {
       /// # See Also
       /// - ``Interpreter/State/cellPointer``
       public internal(set) var currentCellValue: CellValue {
-         get { tape[cellPointer, default: 0] }
-         set { tape[cellPointer, default: 0] = newValue }
+         @inlinable get {
+            tape[cellPointer, default: 0]
+         }
+         @usableFromInline set {
+            tape[cellPointer, default: 0] = newValue
+         }
       }
    }
    

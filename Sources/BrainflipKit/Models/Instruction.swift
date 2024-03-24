@@ -49,4 +49,9 @@ public enum Instruction: Equatable, Hashable {
    /// Unicode value. If the cell does not fit the new
    /// value, it remains unchanged.
    case input
+   
+   /// Performs an action corresponding to the wrapped
+   /// ``ExtraInstruction``, or does nothing if that
+   /// instruction is not enabled.
+   case extra(ExtraInstruction)
 }

@@ -28,9 +28,10 @@ extension BrainflipCLI {
       case  nil:   nil
       }
       let options = Interpreter.Options(
-         cellSize:               interpreterOptions.cellSize,
-         allowCellWraparound:    interpreterOptions.wraparound,
-         endOfInputBehavior:     endOfInputBehavior
+         cellSize:                 interpreterOptions.cellSize,
+         allowCellWraparound:      interpreterOptions.wraparound,
+         endOfInputBehavior:       endOfInputBehavior,
+         enabledExtraInstructions: Set(interpreterOptions.extraInstructions)
       )
       
       let parsedProgram = try Program(program ?? readFromStandardInput(exitIfEmpty: true))

@@ -67,11 +67,11 @@
       <CommandLineArguments>
          <CommandLineArgument
             argument = "--help"
-            isEnabled = "NO">
+            isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument
-            argument = "/Users/kaleb/.zshrc"
-            isEnabled = "YES">
+            argument = "blah"
+            isEnabled = "NO">
          </CommandLineArgument>
       </CommandLineArguments>
    </LaunchAction>

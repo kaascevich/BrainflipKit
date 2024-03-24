@@ -26,6 +26,10 @@ public extension Interpreter {
       
       /// Indicates that the input buffer was exhausted.
       case endOfInput
+      
+      /// Indicates that the program was ended by a
+      /// ``ExtraInstruction/stop`` instruction.
+      case stopInstruction
    }
 }
 
@@ -37,6 +41,8 @@ extension Interpreter.Error: CustomStringConvertible {
       case .cellUnderflow: "Cell underflowed"
          
       case .endOfInput: "End of input reached"
+         
+      case .stopInstruction: "Stop instruction reached"
       }
    }
 }

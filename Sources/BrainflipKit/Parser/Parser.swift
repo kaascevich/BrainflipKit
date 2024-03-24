@@ -16,9 +16,9 @@
 
 import Parsing
 
-internal enum BrainflipParser {
+@usableFromInline internal enum BrainflipParser {
    private struct InstructionParser: ParserPrinter {
-      var body: some ParserPrinter<Substring, Instruction> {
+      @usableFromInline var body: some ParserPrinter<Substring, Instruction> {
          OneOf {
             "+".map(.case(Instruction.increment))
             "-".map(.case(Instruction.decrement))
@@ -26,16 +26,21 @@ internal enum BrainflipParser {
             "<".map(.case(Instruction.prevCell))
             ",".map(.case(Instruction.input))
             ".".map(.case(Instruction.output))
+            
             Parse {
                "["
                Many { Self() } terminator: { "]" }
             }.map(.case(Instruction.loop))
+            
+            First()
+               .map(.representing(ExtraInstruction.self))
+               .map(.case(Instruction.extra))
          }
       }
    }
    
    private struct ProgramParser: ParserPrinter {
-      var body: some ParserPrinter<Substring, Program> {
+      @inlinable var body: some ParserPrinter<Substring, Program> {
          Many { InstructionParser() }
       }
    }
@@ -47,11 +52,13 @@ internal enum BrainflipParser {
    ///
    /// - Returns: The parsed program.
    ///
-   /// - Throws: `some Error` if `string` is not a valid
-   ///   program (that is, if it contains unmatched brackets).
-   internal static func parse(program string: String) throws -> Program {
+   /// - Throws: An `Error` if `string` cannot be parsed
+   ///   into a valid program (that is, if it contains
+   ///   unmatched brackets).
+   @usableFromInline internal static func parse(program string: String) throws -> Program {
       try ProgramParser().parse(string.filter(
-         "+-><[],.".contains // filter out nonexistent instructions
+         // filter out nonexistent instructions
+         ("+-><[],." + ExtraInstruction.allCases.map(\.rawValue)).contains
       ))
    }
    
@@ -60,7 +67,7 @@ internal enum BrainflipParser {
    /// - Parameter program: A `Program` instance.
    ///
    /// - Returns: A `String` representation of `program`.
-   internal static func print(program: Program) -> String {
+   @usableFromInline internal static func print(program: Program) -> String {
       String(try! ProgramParser().print(program)) // swiftlint:disable:this force_try
    }
 }

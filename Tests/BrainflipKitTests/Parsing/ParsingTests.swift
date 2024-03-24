@@ -73,5 +73,13 @@ extension ParserTests {
          ]
          expect(program.description) == ">+[>-[-<]>>]>"
       }
+      
+      internal func testExtras() throws {
+         let program = try Program("!")
+         expect(program) == [
+            .extra(.stop)
+         ]
+         expect(program.description) == "!"
+      }
    }
 }

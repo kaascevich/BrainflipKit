@@ -134,10 +134,10 @@
    ///   - options: Configurable options to be used for this
    ///     instance.
    ///
-   /// - Throws: `some Error` if `string` cannot be parsed
+   /// - Throws: An `Error` if `string` cannot be parsed
    ///   into a valid program (that is, if it contains
    ///   unmatched brackets).
-   public convenience init(
+   @inlinable public convenience init(
       _ string: String,
       input: String = "",
       options: Options = .init()
@@ -162,7 +162,11 @@
    public internal(set) subscript<Value>(
       dynamicMember member: WritableKeyPath<State, Value>
    ) -> Value {
-      get { state[keyPath: member] }
-      set { state[keyPath: member] = newValue }
+      @inlinable get {
+         state[keyPath: member]
+      }
+      @usableFromInline set {
+         state[keyPath: member] = newValue
+      }
    }
 }

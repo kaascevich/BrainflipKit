@@ -43,6 +43,11 @@ public extension Interpreter {
          case throwError
       }
       
+      /// Contains extra instructions that an interpreter
+      /// should recognize and execute. Defaults to none
+      /// (`[]`).
+      public let enabledExtraInstructions: Set<ExtraInstruction>
+      
       /// Creates an `Options` instance to configure an
       /// ``Interpreter`` with.
       ///
@@ -53,6 +58,8 @@ public extension Interpreter {
       ///   - endOfInputBehavior: The action to take when an
       ///     input instruction is executed with an empty input
       ///     buffer.
+      ///   - enabledExtraInstructions: Contains extra instructions
+      ///     that an interpreter should recognize and execute.
       ///
       /// - Precondition: `cellSize` is less than ``maxCellSize``.
       ///
@@ -64,7 +71,8 @@ public extension Interpreter {
       public init(
          cellSize: UInt8 = 8,
          allowCellWraparound: Bool = true,
-         endOfInputBehavior: EndOfInputBehavior? = nil
+         endOfInputBehavior: EndOfInputBehavior? = nil,
+         enabledExtraInstructions: Set<ExtraInstruction> = []
       ) {
          precondition(
             cellSize < Self.maxCellSize,
@@ -73,6 +81,7 @@ public extension Interpreter {
          
          self.cellSize = cellSize
          self.allowCellWraparound = allowCellWraparound
+         self.enabledExtraInstructions = enabledExtraInstructions
          
          self.endOfInputBehavior = switch endOfInputBehavior {
          case .setTo(let value): .setTo(min((1 << cellSize) - 1, value))
@@ -83,7 +92,7 @@ public extension Interpreter {
       // MARK: - Computed
       
       /// The maximum value allowed in a cell.
-      public var cellMax: CellValue {
+      @inlinable public var cellMax: CellValue {
          (1 << cellSize) - 1
       }
       

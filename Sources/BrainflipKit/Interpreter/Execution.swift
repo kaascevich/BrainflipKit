@@ -49,6 +49,8 @@ extension Interpreter {
          
       case .output: handleOutputInstruction()
       case .input: try handleInputInstruction()
+         
+      case .extra(let instruction): try await handleExtraInstruction(instruction)
       }
    }
 }
