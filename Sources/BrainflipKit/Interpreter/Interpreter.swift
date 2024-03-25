@@ -27,7 +27,9 @@
 /// is infinite in both directions. A *pointer* is used to keep track of
 /// the cell that is currently being mutated.
 ///
-/// Brainflip's instructions are as follows:
+/// ## Instruction Set
+///
+/// ### Core Instructions
 ///
 /// - term ``Instruction/increment``:
 ///     Increments current cell by 1, wrapping
@@ -66,6 +68,17 @@
 ///     instruction will do nothing by default (this behavior is
 ///     configurable).
 ///
+/// ### Extra Instructions
+///
+/// These instructions are disabled by default. They can be enabled
+/// via the `options` parameter to an initializer.
+///
+/// - term ``ExtraInstruction/stop``:
+///     Immediately ends the program by throwing a
+///     ``Interpreter/Error/stopInstruction`` error.
+/// - term ``ExtraInstruction/zero``:
+///     Sets the value of the current cell to zero.
+///
 /// All characters other than the ones listed above are treated as
 /// comments and ignored.
 ///
@@ -75,13 +88,20 @@
 /// // https://codegolf.stackexchange.com/a/163590/59487
 /// let program = "+[-->-[>>+>-----<<]<--<---]>-.>>>+.>>..+++[.>]<<<<.+++.------.<<-.>>>>+."
 /// let interpreter = try Interpreter(program)
-/// let output = try interpreter.run()
+/// let output = try await interpreter.run()
 /// print(output) // Hello, World!
 /// ```
 ///
 /// # See Also
+///
 /// - ``Instruction``
+/// - ``ExtraInstruction``
+/// - ``Program``
+///
 /// - ``run()``
+/// - ``runReturningFinalState()``
+///
+/// - ``Options``
 @dynamicMemberLookup public struct Interpreter: ~Copyable {
    /// The Brainflip program containing a list of instructions
    /// to execute.

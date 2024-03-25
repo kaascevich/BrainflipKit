@@ -61,6 +61,8 @@ extension Interpreter {
       case .input: try handleInputInstruction()
          
       case .extra(let instruction): try await handleExtraInstruction(instruction)
+         
+      case .comment: break
       }
    }
 }

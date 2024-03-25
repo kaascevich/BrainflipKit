@@ -39,9 +39,10 @@ public extension Program {
    /// | Character |        Instruction        |
    /// |-----------|---------------------------|
    /// |    `!`    | ``ExtraInstruction/stop`` |
-   /// |    `0`    | ``ExtraInstruction/zero`` | 
+   /// |    `0`    | ``ExtraInstruction/zero`` |
    ///
-   /// All other characters are treated as comments and ignored.
+   /// All other characters are parsed into ``Instruction/comment(_:)``
+   /// instructions, which are ignored during execution.
    ///
    /// - Parameter string: A string to parse into a `Program`.
    ///

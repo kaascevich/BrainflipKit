@@ -17,38 +17,36 @@
 private import Parsing
 
 @usableFromInline internal enum BrainflipParser {
-   private struct InstructionParser: ParserPrinter {
-      @usableFromInline var body: some ParserPrinter<Substring, Instruction> {
-         OneOf {
-            "+".map(.case(Instruction.increment))
-            "-".map(.case(Instruction.decrement))
-            ">".map(.case(Instruction.nextCell))
-            "<".map(.case(Instruction.prevCell))
-            ",".map(.case(Instruction.input))
-            ".".map(.case(Instruction.output))
-            
-            Parse {
-               "["
-               Many { Self() } terminator: { "]" }
-            }.map(.case(Instruction.loop))
-            
-            First()
-               .map(.representing(ExtraInstruction.self))
-               .map(.case(Instruction.extra))
+   private struct ProgramParser: ParserPrinter {
+      static let validInstructions = ["+", "-", ">", "<", "[", "]", ",", "."]
+      + ExtraInstruction.allCases.map(\.rawValue)
+      
+      var body: some ParserPrinter<Substring, Program> {
+         Many {
+            OneOf {
+               "+".map(.case(Instruction.increment))
+               "-".map(.case(Instruction.decrement))
+               ">".map(.case(Instruction.nextCell))
+               "<".map(.case(Instruction.prevCell))
+               ",".map(.case(Instruction.input))
+               ".".map(.case(Instruction.output))
+               
+               Parse { "["; Self(); "]" }
+                  .map(.case(Instruction.loop))
+               
+               First()
+                  .map(.representing(ExtraInstruction.self))
+                  .map(.case(Instruction.extra))
+               
+               Prefix(1...) { !Self.validInstructions.contains($0) }
+                  .map(.string)
+                  .map(.case(Instruction.comment))
+            }
          }
       }
    }
    
-   private struct ProgramParser: ParserPrinter {
-      var body: some ParserPrinter<Substring, Program> {
-         Many { InstructionParser() }
-      }
-   }
-   
-   static let validInstructions = ["+", "-", ">", "<", "[", "]", ",", "."]
-      + ExtraInstruction.allCases.map(\.rawValue)
-   
-   /// Parses a `String` into a `Program`.
+   /// Parses a `String` into a ``Program``.
    ///
    /// - Parameter string: The original source code for a
    ///   Brainflip program.
@@ -59,7 +57,7 @@ private import Parsing
    ///   into a valid program (that is, if it contains
    ///   unmatched brackets).
    @usableFromInline static func parse(program string: String) throws -> Program {
-      try ProgramParser().parse(string.filter(validInstructions.contains))
+      try ProgramParser().parse(string)
    }
    
    /// Creates a `String` representation of a ``Program``.

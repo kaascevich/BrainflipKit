@@ -54,4 +54,10 @@ public enum Instruction: Equatable, Hashable, Sendable {
    /// ``ExtraInstruction``, or does nothing if that
    /// instruction is not enabled.
    case extra(ExtraInstruction)
+   
+   /// Does nothing.
+   ///
+   /// This instruction is how comments are represented
+   /// in a program.
+   case comment(String)
 }
