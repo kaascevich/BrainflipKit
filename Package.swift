@@ -19,7 +19,23 @@
 import PackageDescription
 
 let swiftLintPlugin = Target.PluginUsage.plugin(name: "SwiftLint", package: "SwiftLintPlugin")
-let strictConcurrency = SwiftSetting.enableExperimentalFeature("StrictConcurrency")
+let swiftSettings: [SwiftSetting] = [
+   "ConciseMagicFile",
+   "ForwardTrailingClosures",
+   "StrictConcurrency",
+   "ImplicitOpenExistentials",
+   "BareSlashRegexLiterals",
+   "DeprecateApplicationMain",
+   "ImportObjcForwardDeclarations",
+   "DisableOutwardActorInference",
+   "AccessLevelOnImport",
+   "InternalImportsByDefault",
+   "IsolatedDefaultValues",
+   "GlobalConcurrency",
+   "InferSendableFromCaptures",
+   "RegionBasedIsolation",
+   "ExistentialAny"
+].map { .enableExperimentalFeature($0) }
 
 let package = Package(
    name: "BrainflipKit",
@@ -45,7 +61,7 @@ let package = Package(
       .target(
          name: "BrainflipKit",
          dependencies: [.product(name: "Parsing", package: "swift-parsing")],
-         swiftSettings: [strictConcurrency],
+         swiftSettings: swiftSettings,
          plugins: [swiftLintPlugin]
       ),
       .executableTarget(
@@ -54,7 +70,7 @@ let package = Package(
             "BrainflipKit",
             .product(name: "ArgumentParser", package: "swift-argument-parser")
          ],
-         swiftSettings: [strictConcurrency],
+         swiftSettings: swiftSettings,
          plugins: [swiftLintPlugin]
       ),
       .testTarget(
@@ -63,7 +79,7 @@ let package = Package(
             "BrainflipKit",
             .product(name: "Testing", package: "swift-testing")
          ],
-         swiftSettings: [strictConcurrency],
+         swiftSettings: swiftSettings,
          plugins: [swiftLintPlugin]
       )
    ]

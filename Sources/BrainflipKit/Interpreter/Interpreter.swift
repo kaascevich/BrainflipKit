@@ -82,7 +82,7 @@
 /// # See Also
 /// - ``Instruction``
 /// - ``run()``
-@dynamicMemberLookup public struct Interpreter: ~Copyable, Sendable {
+@dynamicMemberLookup public struct Interpreter: ~Copyable {
    /// The Brainflip program containing a list of instructions
    /// to execute.
    public let program: Program
