@@ -78,6 +78,9 @@
 ///     ``Interpreter/Error/stopInstruction`` error.
 /// - term ``ExtraInstruction/zero``:
 ///     Sets the value of the current cell to zero.
+/// - term ``ExtraInstruction/bitwiseNot``:
+///     Sets the value of the current cell to the bitwise NOT of
+///     itself.
 ///
 /// All characters other than the ones listed above are treated as
 /// comments and ignored.

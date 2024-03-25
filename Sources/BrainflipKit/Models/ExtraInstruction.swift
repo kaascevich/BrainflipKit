@@ -22,4 +22,13 @@ public enum ExtraInstruction: Character, Equatable, Hashable, CaseIterable, Send
    
    /// Sets the current cell to zero.
    case zero = "0"
+   
+   /// Performs a bitwise NOT on the current cell.
+   case bitwiseNot = "~"
+   
+   /// Performs a lossy left bit-shift on the current cell.
+   case leftShift = "{"
+   
+   /// Performs a lossy right bit-shift on the current cell.
+   case rightShift = "}"
 }
