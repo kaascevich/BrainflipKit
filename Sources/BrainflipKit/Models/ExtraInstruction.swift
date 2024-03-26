@@ -31,4 +31,7 @@ public enum ExtraInstruction: Character, Equatable, Hashable, CaseIterable, Send
    
    /// Performs a lossy right bit-shift on the current cell.
    case rightShift = "}"
+   
+   /// Sets the current cell to a random value.
+   case random = "?"
 }

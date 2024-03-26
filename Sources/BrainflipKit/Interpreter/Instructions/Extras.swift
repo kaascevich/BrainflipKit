@@ -34,8 +34,14 @@ internal extension Interpreter {
       case .bitwiseNot:
          self.currentCellValue = ~self.currentCellValue % options.cellMax
          
-      case .leftShift:  self.currentCellValue = self.currentCellValue << 1 % options.cellMax
-      case .rightShift: self.currentCellValue = self.currentCellValue >> 1 % options.cellMax
+      case .leftShift:
+         self.currentCellValue = self.currentCellValue << 1 % options.cellMax
+         
+      case .rightShift:
+         self.currentCellValue = self.currentCellValue >> 1 % options.cellMax
+         
+      case .random:
+         self.currentCellValue = UInt.random(in: 0...options.cellMax)
       }
    }
 }

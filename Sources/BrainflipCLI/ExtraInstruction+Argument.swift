@@ -34,6 +34,7 @@ extension ExtraInstruction: ExpressibleByArgument {
       case .bitwiseNot: "Performs a bitwise NOT on the current cell."
       case .leftShift: "Performs a lossy left bit-shift on the current cell."
       case .rightShift: "Performs a lossy right bit-shift on the current cell."
+      case .random: "Sets the current cell to a random value."
       }
    }
 }
