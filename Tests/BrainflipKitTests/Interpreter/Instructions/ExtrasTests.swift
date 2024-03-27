@@ -71,7 +71,7 @@ extension InterpreterTests.InstructionTests {
          interpreter.currentCellValue = 42
          try await interpreter.handleInstruction(.extra(.bitwiseNot))
          #expect(
-            interpreter.currentCellValue == 213, // UInt8 bitwise NOT of 42
+            interpreter.currentCellValue == 4294967253, // UInt32 bitwise NOT of 42
             "bitwise NOT instruction sets the current cell to its own bitwise NOT"
          )
       }

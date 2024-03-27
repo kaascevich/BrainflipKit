@@ -24,14 +24,6 @@ extension BrainflipCLI {
          case error
       }
       
-      @Option(
-         name: [.customShort("s"), .long],
-         help: .init(
-            "The bit size to use for the cells. Must be less than \(Interpreter.Options.maxCellSize).",
-            valueName: "size"
-         )
-      ) var cellSize: UInt8 = 8
-      
       @Flag(
          name: [.customLong("wrap")],
          inversion: .prefixedNo,

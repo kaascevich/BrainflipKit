@@ -36,21 +36,10 @@ extension InterpreterTests {
          let interpreter = try Interpreter(
             ",[.,]",
             input: "→",
-            options: .init(cellSize: 16, endOfInputBehavior: .setTo(0))
+            options: .init(endOfInputBehavior: .setTo(0))
          )
          let output = try await interpreter.run()
          #expect(output == "→")
-      }
-      
-      @Test("Unicode input that doesn't fit")
-      func unicodeInput_valueTooBig() async throws {
-         let interpreter = try Interpreter(
-            ",[.,]",
-            input: "→",
-            options: .init(cellSize: 8, endOfInputBehavior: .setTo(0))
-         )
-         let output = try await interpreter.run()
-         #expect(output.isEmpty)
       }
    }
 }

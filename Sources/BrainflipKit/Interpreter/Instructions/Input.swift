@@ -29,7 +29,6 @@ internal extension Interpreter {
       }
       
       let scalarValue = nextInputScalar.value
-      assert(scalarValue < options.cellMax)
       self.currentCellValue = CellValue(scalarValue)
    }
 }

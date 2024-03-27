@@ -26,7 +26,7 @@ import BrainflipKit
       commandName: "brainflip",
       abstract: "Run Brainflip programs with a configurable interpreter.",
       discussion: """
-      Brainflip is a Swift interpreter for the Brainf**k programming language -- an incredibly simple language that only has 8 instructions. This interpreter features full Unicode support (assuming the cell size is set to a value high enough to fit Unicode characters).
+      Brainflip is a Swift interpreter for the Brainf**k programming language -- an incredibly simple language that only has 8 instructions. This interpreter features full Unicode support, as well as languange extensions in the form of extra instructions (which can be enabled or disabled at will).
       """
    )
    
@@ -75,12 +75,4 @@ import BrainflipKit
    
    @OptionGroup(title: "Interpreter Options")
    var interpreterOptions: InterpreterOptions
-   
-   // MARK: - Validation
-   
-   func validate() throws {
-      guard interpreterOptions.cellSize < Interpreter.Options.maxCellSize else {
-         throw ValidationError("Invalid cell size -- must be less than \(Interpreter.Options.maxCellSize).")
-      }
-   }
 }

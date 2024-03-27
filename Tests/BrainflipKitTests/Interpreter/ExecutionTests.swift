@@ -29,7 +29,7 @@ extension InterpreterTests {
          
          #expect(state.tape == [
             0: 1,
-            1: Interpreter.Options().cellMax
+            1: .max
          ])
          #expect(state.cellPointer == 0)
       }
@@ -62,15 +62,13 @@ extension InterpreterTests {
          #expect(output == "hhe")
       }
       
-      @Test("'Hello, World!' program")
+      @Test("'Hello World!' program")
       func helloWorldProgram() async throws {
-         // outputs the first input character twice, then the
-         // second character once
-         let program = ">>>>>+[-->-[>>+>-----<<]<--<---]>-.>>>+.>>..+++[.>]<<<<.+++.------.<<-.>>>>+."
+         let program = "++++++++[>++++[>++>+++>+++>+<<<<-]>+>+>->>+[<]<-]>>.>---.+++++++..+++.>>.<-.<.+++.------.--------.>>+."
          let interpreter = try Interpreter(program)
          
          let output = try await interpreter.run()
-         #expect(output == "Hello, World!")
+         #expect(output == "Hello World!")
       }
    }
 }

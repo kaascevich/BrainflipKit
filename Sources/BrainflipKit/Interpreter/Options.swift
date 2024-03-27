@@ -17,9 +17,6 @@
 public extension Interpreter {
    /// Configurable options for an ``Interpreter`` instance.
    struct Options: Sendable {
-      /// The bit size of each cell. Defaults to 8.
-      public let cellSize: UInt8
-      
       /// Whether or not to allow cell overflow and underflow.
       /// Defaults to `true`.
       public let allowCellWraparound: Bool
@@ -52,7 +49,6 @@ public extension Interpreter {
       /// ``Interpreter`` with.
       ///
       /// - Parameters:
-      ///   - cellSize: The bit size of each cell.
       ///   - allowCellWraparound: Whether or not to allow
       ///     cell overflow and underflow.
       ///   - endOfInputBehavior: The action to take when an
@@ -60,47 +56,14 @@ public extension Interpreter {
       ///     buffer.
       ///   - enabledExtraInstructions: Contains extra instructions
       ///     that an interpreter should recognize and execute.
-      ///
-      /// - Precondition: `cellSize` is less than ``maxCellSize``.
-      ///
-      /// - Note: You *can* set `cellSize` to `0`, and it *will*
-      ///   technically work; however, there is no practical
-      ///   reason to do this, as it prevents you from modifying
-      ///   the tape in any way, making the language all but
-      ///   useless.
       public init(
-         cellSize: UInt8 = 8,
          allowCellWraparound: Bool = true,
          endOfInputBehavior: EndOfInputBehavior? = nil,
          enabledExtraInstructions: Set<ExtraInstruction> = []
       ) {
-         precondition(
-            cellSize < Self.maxCellSize,
-            "cellSize is out of bounds (\(cellSize) >= \(Self.maxCellSize)"
-         )
-         
-         self.cellSize = cellSize
          self.allowCellWraparound = allowCellWraparound
          self.enabledExtraInstructions = enabledExtraInstructions
-         
-         self.endOfInputBehavior = if case .setTo(let value) = endOfInputBehavior {
-            .setTo(min((1 << cellSize) - 1, value))
-         } else {
-            endOfInputBehavior
-         }
+         self.endOfInputBehavior = endOfInputBehavior
       }
-      
-      // MARK: - Computed
-      
-      /// The maximum value allowed in a cell.
-      @inlinable public var cellMax: CellValue {
-         (1 << cellSize) - 1
-      }
-      
-      // MARK: - Statics
-      
-      /// The maximum value permissible for ``cellSize``,
-      /// plus 1.
-      public static let maxCellSize = CellValue.bitWidth
    }
 }

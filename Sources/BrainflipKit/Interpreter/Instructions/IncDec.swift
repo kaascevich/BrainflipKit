@@ -17,11 +17,11 @@
 internal extension Interpreter {
    /// Executes an ``Instruction/increment(_:)`` instruction.
    mutating func handleIncrementInstruction() throws {
-      if self.currentCellValue == options.cellMax { // wraparound
+      if self.currentCellValue.addingReportingOverflow(1).overflow { // wraparound
          guard options.allowCellWraparound else {
             throw Error.cellOverflow(position: self.cellPointer)
          }
-         self.currentCellValue = 0
+         self.currentCellValue &+= 1
       } else {
          self.currentCellValue += 1
       }
@@ -29,11 +29,11 @@ internal extension Interpreter {
    
    /// Executes a ``Instruction/decrement(_:)`` instruction.
    mutating func handleDecrementInstruction() throws {
-      if self.currentCellValue == 0 { // wraparound
+      if self.currentCellValue.subtractingReportingOverflow(1).overflow { // wraparound
          guard options.allowCellWraparound else {
             throw Error.cellUnderflow(position: self.cellPointer)
          }
-         self.currentCellValue = options.cellMax
+         self.currentCellValue &-= 1
       } else {
          self.currentCellValue -= 1
       }

@@ -16,11 +16,5 @@
 
 public extension Interpreter {
    /// The type of a single Brainflip cell.
-   ///
-   /// This type does not have anything to do with the
-   /// actual maximum value allowed in a cell. Instead of
-   /// checking this type's `max` property, use
-   /// ``Options/cellMax`` on an interpreter's
-   /// ``Interpreter/options`` property.
-   typealias CellValue = UInt
+   typealias CellValue = UInt32
 }

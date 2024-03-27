@@ -31,7 +31,7 @@ extension InterpreterTests.InstructionTests {
       
       @Test("Output instruction with Unicode characters")
       func outputInstruction_unicode() async throws {
-         var interpreter = try Interpreter("", options: .init(cellSize: 16))
+         var interpreter = try Interpreter("")
          
          interpreter.currentCellValue = 0x2192 // Unicode value for "→"
          try await interpreter.handleInstruction(.output)

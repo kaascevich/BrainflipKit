@@ -20,16 +20,6 @@ import Testing
 extension InterpreterTests {
    @Suite("Interpreter options")
    struct OptionsTests {
-      @Test("cellSize option and cellMax value")
-      func cellSizeOption() async throws {
-         var interpreter = try Interpreter("", options: .init(cellSize: 16))
-         
-         #expect(interpreter.options.cellMax == 65_535)
-         
-         try await interpreter.handleInstruction(.decrement)
-         #expect(interpreter.tape[0] == 65_535)
-      }
-      
       @Test("allowCellWraparound option")
       func allowWraparoundOption() async throws {
          var interpreter = try Interpreter("", options: .init(
@@ -40,7 +30,7 @@ extension InterpreterTests {
             try await interpreter.handleInstruction(.decrement)
          }
          
-         interpreter.currentCellValue = interpreter.options.cellMax
+         interpreter.currentCellValue = .max
          await #expect(throws: Interpreter.Error.cellOverflow(position: 0)) {
             try await interpreter.handleInstruction(.increment)
          }
@@ -68,20 +58,6 @@ extension InterpreterTests {
             interpreter.currentCellValue = 42
             try await interpreter.handleInstruction(.input)
             #expect(interpreter.currentCellValue == 0)
-         }
-         
-         @Test("Set the current cell to an out-of-bounds value on end of input")
-         func setToValueOption_outOfRange() async throws {
-            var interpreter = try Interpreter("", options: .init(
-               endOfInputBehavior: .setTo(.max)
-            ))
-            
-            interpreter.currentCellValue = 42
-            try await interpreter.handleInstruction(.input)
-            #expect(
-               interpreter.currentCellValue == 255,
-               "if the provided value is too large, `setTo` will truncate it"
-            )
          }
          
          @Test("Throw an error on end of input")

@@ -32,12 +32,11 @@
 /// ### Core Instructions
 ///
 /// - term ``Instruction/increment``:
-///     Increments current cell by 1, wrapping
-///     back to 0 if necessary.
+///     Increments current cell by 1, wrapping back to 0 if necessary.
 ///
 /// - term ``Instruction/decrement``:
-///     Decrements the current cell by 1, wrapping back to ``Options/cellMax``
-///     if necessary.
+///     Decrements the current cell by 1, wrapping back to
+///     `CellValue.max` if necessary.
 ///
 /// - term ``Instruction/moveRight``:
 ///     Moves the cell pointer forward 1 cell.
@@ -60,10 +59,6 @@
 ///     Takes the next character of the input and stores its Unicode
 ///     value into the current cell.
 ///
-///     When an `Interpreter` instance is created, characters whose
-///     values are too big to fit in the cell will be removed from
-///     the input string.
-///
 ///     If there are no characters remaining in the input, this
 ///     instruction will do nothing by default (this behavior is
 ///     configurable).
@@ -79,8 +74,13 @@
 /// - term ``ExtraInstruction/zero``:
 ///     Sets the value of the current cell to zero.
 /// - term ``ExtraInstruction/bitwiseNot``:
-///     Sets the value of the current cell to the bitwise NOT of
-///     itself.
+///     Performs a bitwise NOT on the current cell.
+/// - term ``ExtraInstruction/leftShift``:
+///     Performs a lossy left bit-shift on the current cell.
+/// - term ``ExtraInstruction/rightShift``:
+///     Performs a lossy right bit-shift on the current cell.
+/// - term ``ExtraInstruction/random``:
+///     Sets the current cell to a random value.
 ///
 /// All characters other than the ones listed above are treated as
 /// comments and ignored.
@@ -88,11 +88,10 @@
 /// # Examples
 ///
 /// ```swift
-/// // https://codegolf.stackexchange.com/a/163590/59487
-/// let program = "+[-->-[>>+>-----<<]<--<---]>-.>>>+.>>..+++[.>]<<<<.+++.------.<<-.>>>>+."
+/// let program = "++++++++[>++++[>++>+++>+++>+<<<<-]>+>+>->>+[<]<-]>>.>---.+++++++..+++.>>.<-.<.+++.------.--------.>>+."
 /// let interpreter = try Interpreter(program)
 /// let output = try await interpreter.run()
-/// print(output) // Hello, World!
+/// print(output) // Hello World!
 /// ```
 ///
 /// # See Also
@@ -123,9 +122,7 @@
    ///
    /// - Parameters:
    ///   - program: A ``Program`` instance.
-   ///   - input: The input to pass to the program. Unicode
-   ///     scalars that are too big to fit in a cell will be
-   ///     removed.
+   ///   - input: The input to pass to the program.
    ///   - options: Configurable options to be used for this
    ///     instance.
    ///
@@ -138,12 +135,7 @@
    ) {
       self.program = program
       self.options = options
-      
-      let inputScalars = input.unicodeScalars
-      let trimmedScalars = inputScalars.filter { $0.value < options.cellMax }
-      let trimmedInputString = String(trimmedScalars)
-      
-      self.state = State(input: trimmedInputString, options: options)
+      self.state = State(input: input, options: options)
    }
    
    /// Parses `string` into a ``Program`` and creates an
