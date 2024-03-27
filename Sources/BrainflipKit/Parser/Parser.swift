@@ -15,23 +15,47 @@
 // with this package. If not, see https://www.gnu.org/licenses/.
 
 private import Parsing
+private import CasePaths
 
 @usableFromInline internal enum BrainflipParser {
    private struct ProgramParser: ParserPrinter {
       static let validInstructions = ["+", "-", ">", "<", "[", "]", ",", "."] + ExtraInstruction.allCases.map(\.rawValue)
       
+      struct RepeatedInstruction<CountType: BinaryInteger>: ParserPrinter {
+         let repeatedCharacter: Character
+         let instruction: (CountType) -> Instruction
+         init(
+            _ character: Character,
+            _ instruction: @escaping (CountType) -> Instruction
+         ) {
+            self.repeatedCharacter = character
+            self.instruction = instruction
+         }
+         
+         var body: some ParserPrinter<Substring, Instruction> {
+            Prefix(1...) { $0 == repeatedCharacter }
+               .map(.convert(
+                  apply: { .init($0.count) },
+                  unapply: { .init(repeating: repeatedCharacter, count: .init($0)) }
+               )).map(.case(instruction))
+         }
+      }
+      
       var body: some ParserPrinter<Substring, Program> {
          Many {
             OneOf {
-               "+".map(.case(Instruction.increment))
-               "-".map(.case(Instruction.decrement))
-               ">".map(.case(Instruction.moveRight))
-               "<".map(.case(Instruction.moveLeft))
+               RepeatedInstruction("+", Instruction.increment)
+               RepeatedInstruction("-", Instruction.decrement)
+               
+               RepeatedInstruction(">", Instruction.moveRight)
+               RepeatedInstruction("<", Instruction.moveLeft)
+               
                ",".map(.case(Instruction.input))
                ".".map(.case(Instruction.output))
                
-               Parse { "["; Self(); "]" }
-                  .map(.case(Instruction.loop))
+               Parse(.case(Instruction.loop)) {
+                  "["; Self(); "]"
+               }
                
                First()
                   .map(.representing(ExtraInstruction.self))

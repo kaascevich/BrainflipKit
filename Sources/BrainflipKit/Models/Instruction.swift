@@ -17,23 +17,21 @@
 /// An individual instruction, performing a specific action
 /// when executed by an ``Interpreter``.
 public enum Instruction: Equatable, Hashable, Sendable {
-   /// Increments the current cell.
+   /// Increments the current cell by a value.
    ///
-   /// The default behavior on overflow is to wrap around,
-   /// setting the cell to 0.
-   case increment
+   /// The default behavior on overflow is to wrap around.
+   case increment(Interpreter.CellValue)
    
-   /// Decrements the current cell.
+   /// Decrements the current cell by a value.
    ///
-   /// The default behavior on underflow is to wrap around,
-   /// setting the cell to its maximum value.
-   case decrement
+   /// The default behavior on underflow is to wrap around.
+   case decrement(Interpreter.CellValue)
    
-   /// Increments the cell pointer by 1.
-   case moveRight
+   /// Increments the cell pointer by a value.
+   case moveRight(Int)
    
-   /// Decrements the cell pointer by 1.
-   case moveLeft
+   /// Decrements the cell pointer by a value.
+   case moveLeft(Int)
    
    /// Loops over the contained instructions.
    case loop([Self])

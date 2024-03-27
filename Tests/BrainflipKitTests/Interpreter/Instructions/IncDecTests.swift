@@ -25,12 +25,12 @@ extension InterpreterTests.InstructionTests {
          var interpreter = try Interpreter("")
          
          for i in 1...500 {
-            try await interpreter.handleInstruction(.increment)
+            try await interpreter.handleInstruction(.increment(1))
             #expect(interpreter.tape.first?.value == UInt32(i))
          }
          
          interpreter.currentCellValue = .max
-         try await interpreter.handleInstruction(.increment)
+         try await interpreter.handleInstruction(.increment(1))
          #expect(
             interpreter.tape.first?.value == .min,
             "increment instruction should wrap around"
@@ -41,7 +41,7 @@ extension InterpreterTests.InstructionTests {
       func decrementInstruction() async throws {
          var interpreter = try Interpreter("")
          
-         try await interpreter.handleInstruction(.decrement)
+         try await interpreter.handleInstruction(.decrement(1))
          #expect(
             interpreter.tape.first?.value == .max,
             "decrement instruction should wrap around"
@@ -49,7 +49,7 @@ extension InterpreterTests.InstructionTests {
          
          interpreter.currentCellValue = 500
          for i in (0..<500).reversed() {
-            try await interpreter.handleInstruction(.decrement)
+            try await interpreter.handleInstruction(.decrement(1))
             #expect(interpreter.tape.first?.value == UInt32(i))
          }
       }

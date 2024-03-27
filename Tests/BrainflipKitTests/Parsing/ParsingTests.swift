@@ -25,10 +25,10 @@ struct ParsingTests {
       #expect(program == [
          .input,
          .loop([
-            .moveRight,
-            .increment,
-            .moveLeft,
-            .decrement,
+            .moveRight(1),
+            .increment(1),
+            .moveLeft(1),
+            .decrement(1),
             .output
          ])
       ])
@@ -40,11 +40,9 @@ struct ParsingTests {
       let program = try Program(",++ a comment ++.")
       #expect(program == [
          .input,
-         .increment,
-         .increment,
+         .increment(2),
          .comment(" a comment "),
-         .increment,
-         .increment,
+         .increment(2),
          .output
       ])
       #expect(program.description == ",++ a comment ++.")
@@ -63,30 +61,33 @@ struct ParsingTests {
    func nestedLoops() throws {
       let program = try Program(">+[>-[-<]>>]>")
       #expect(program == [
-         .moveRight,
-         .increment,
+         .moveRight(1),
+         .increment(1),
          .loop([
-            .moveRight,
-            .decrement,
+            .moveRight(1),
+            .decrement(1),
             .loop([
-               .decrement,
-               .moveLeft
+               .decrement(1),
+               .moveLeft(1)
             ]),
-            .moveRight,
-            .moveRight
+            .moveRight(2)
          ]),
-         .moveRight
+         .moveRight(1)
       ])
       #expect(program.description == ">+[>-[-<]>>]>")
    }
    
    @Test("Extra instructions parsing")
    func extraInstructions() throws {
-      let program = try Program("!0")
+      let program = try Program("!0~{}?")
       #expect(program == [
          .extra(.stop),
-         .extra(.zero)
+         .extra(.zero),
+         .extra(.bitwiseNot),
+         .extra(.leftShift),
+         .extra(.rightShift),
+         .extra(.random)
       ])
-      #expect(program.description == "!0")
+      #expect(program.description == "!0~{}?")
    }
 }

@@ -24,7 +24,7 @@ extension InterpreterTests.InstructionTests {
       func moveRightInstruction() async throws {
          var interpreter = try Interpreter("")
          for i in 1...10 {
-            try await interpreter.handleInstruction(.moveRight)
+            try await interpreter.handleInstruction(.moveRight(1))
             #expect(interpreter.cellPointer == i)
          }
       }
@@ -33,7 +33,7 @@ extension InterpreterTests.InstructionTests {
       func moveLeftInstruction() async throws {
          var interpreter = try Interpreter("")
          for i in 1...10 {
-            try await interpreter.handleInstruction(.moveLeft)
+            try await interpreter.handleInstruction(.moveLeft(1))
             #expect(interpreter.cellPointer == -i) // the pointer can go anywhere now!
          }
       }

@@ -49,11 +49,11 @@ extension Interpreter {
    ///   encountered during execution.
    internal mutating func handleInstruction(_ instruction: Instruction) async throws {
       switch instruction {
-      case .increment: try handleIncrementInstruction()
-      case .decrement: try handleDecrementInstruction()
+      case .increment(let count): try handleIncrementInstruction(count)
+      case .decrement(let count): try handleDecrementInstruction(count)
          
-      case .moveRight: handleMoveRightInstruction()
-      case .moveLeft:  handleMoveLeftInstruction()
+      case .moveRight(let count): handleMoveRightInstruction(count)
+      case .moveLeft(let count):  handleMoveLeftInstruction(count)
       
       case .loop(let instructions): try await handleLoop(instructions)
          

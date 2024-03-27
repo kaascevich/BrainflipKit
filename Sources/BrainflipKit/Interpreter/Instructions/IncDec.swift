@@ -16,26 +16,26 @@
 
 internal extension Interpreter {
    /// Executes an ``Instruction/increment(_:)`` instruction.
-   mutating func handleIncrementInstruction() throws {
-      if self.currentCellValue.addingReportingOverflow(1).overflow { // wraparound
+   mutating func handleIncrementInstruction(_ count: Interpreter.CellValue) throws {
+      if self.currentCellValue.addingReportingOverflow(count).overflow { // wraparound
          guard options.allowCellWraparound else {
             throw Error.cellOverflow(position: self.cellPointer)
          }
-         self.currentCellValue &+= 1
+         self.currentCellValue &+= count
       } else {
-         self.currentCellValue += 1
+         self.currentCellValue += count
       }
    }
    
    /// Executes a ``Instruction/decrement(_:)`` instruction.
-   mutating func handleDecrementInstruction() throws {
-      if self.currentCellValue.subtractingReportingOverflow(1).overflow { // wraparound
+   mutating func handleDecrementInstruction(_ count: Interpreter.CellValue) throws {
+      if self.currentCellValue.subtractingReportingOverflow(count).overflow { // wraparound
          guard options.allowCellWraparound else {
             throw Error.cellUnderflow(position: self.cellPointer)
          }
-         self.currentCellValue &-= 1
+         self.currentCellValue &-= count
       } else {
-         self.currentCellValue -= 1
+         self.currentCellValue -= count
       }
    }
 }

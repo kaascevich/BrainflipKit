@@ -27,12 +27,12 @@ extension InterpreterTests {
          ))
          
          await #expect(throws: Interpreter.Error.cellUnderflow(position: 0)) {
-            try await interpreter.handleInstruction(.decrement)
+            try await interpreter.handleInstruction(.decrement(1))
          }
          
          interpreter.currentCellValue = .max
          await #expect(throws: Interpreter.Error.cellOverflow(position: 0)) {
-            try await interpreter.handleInstruction(.increment)
+            try await interpreter.handleInstruction(.increment(1))
          }
       }
       
