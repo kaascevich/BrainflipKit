@@ -16,7 +16,7 @@
 
 /// An individual instruction, performing a specific action
 /// when executed by an ``Interpreter``.
-public enum Instruction: Equatable, Hashable, Sendable {
+public enum Instruction: Equatable, Hashable, Codable, Sendable {
    /// Increments the current cell by a value.
    ///
    /// The default behavior on overflow is to wrap around.
@@ -47,6 +47,11 @@ public enum Instruction: Equatable, Hashable, Sendable {
    /// Unicode value. If the cell does not fit the new
    /// value, it remains unchanged.
    case input
+   
+   // MARK: Non-Core
+   
+   /// Sets the current cell to a specific value.
+   case setTo(Interpreter.CellValue)
    
    /// Performs an action corresponding to the wrapped
    /// ``ExtraInstruction``, or does nothing if that

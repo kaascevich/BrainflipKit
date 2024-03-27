@@ -33,11 +33,15 @@ extension BrainflipCLI {
          enabledExtraInstructions: Set(interpreterOptions.extraInstructions)
       )
       
-      let interpreter = try Interpreter(
-         program ?? readFromStandardInput(),
-         input: input,
-         options: options
-      )
+      // MARK: - Parsing
+      
+      if printParsed {
+         let formattedProgram = formatProgram(parsedProgram)
+         print(formattedProgram)
+         Self.exit()
+      }
+      
+      let interpreter = Interpreter(parsedProgram, input: input, options: options)
       
       // MARK: Interpreting
       
@@ -45,28 +49,5 @@ extension BrainflipCLI {
       
       print(output)
       Self.exit()
-      
-      // MARK: Helpers
-      
-      /// Reads text from standard input until EOF is reached.
-      ///
-      /// - Returns: Text read from standard input.
-      ///
-      /// - Throws: `ValidationError` if standard input only
-      ///   contains whitespace.
-      func readFromStandardInput() throws -> String {
-         var input = ""
-         while let nextLine = readLine() {
-            input += nextLine
-         }
-         
-         if input.allSatisfy(\.isWhitespace) {
-            // if they didn't type anything meaningful, just
-            // print usage info and exit
-            throw ValidationError("")
-         }
-         
-         return input
-      }
    }
 }

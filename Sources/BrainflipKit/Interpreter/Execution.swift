@@ -60,6 +60,8 @@ extension Interpreter {
       case .output: handleOutputInstruction()
       case .input: try handleInputInstruction()
          
+      case .setTo(let value): handleSetToInstruction(value)
+         
       case .extra(let instruction): try await handleExtraInstruction(instruction)
          
       case .comment: break

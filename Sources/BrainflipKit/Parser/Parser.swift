@@ -44,22 +44,34 @@ private import CasePaths
       var body: some ParserPrinter<Substring, Program> {
          Many {
             OneOf {
+               // MARK: Basic Instructions
+               
+               // condense repeated instructions into a single instruction
                RepeatedInstruction("+", Instruction.increment)
                RepeatedInstruction("-", Instruction.decrement)
-               
                RepeatedInstruction(">", Instruction.moveRight)
                RepeatedInstruction("<", Instruction.moveLeft)
                
                ",".map(.case(Instruction.input))
                ".".map(.case(Instruction.output))
                
+               // MARK: Set-to Loop
+               
+               "[-]".map(.case(Instruction.setTo(0)))
+               
+               // MARK: Loops
+               
                Parse(.case(Instruction.loop)) {
                   "["; Self(); "]"
                }
                
+               // MARK: Extras
+               
                First()
                   .map(.representing(ExtraInstruction.self))
                   .map(.case(Instruction.extra))
+               
+               // MARK: Comments
                
                Prefix(1...) { !Self.validInstructions.contains($0) }
                   .map(.string)

@@ -26,7 +26,10 @@ import BrainflipKit
       commandName: "brainflip",
       abstract: "Run Brainflip programs with a configurable interpreter.",
       discussion: """
-      Brainflip is a Swift interpreter for the Brainf**k programming language -- an incredibly simple language that only has 8 instructions. This interpreter features full Unicode support, as well as languange extensions in the form of extra instructions (which can be enabled or disabled at will).
+      Brainflip is a Swift interpreter for the Brainf**k programming language -- an \
+      incredibly simple language that only has 8 instructions. This interpreter \
+      features full Unicode support, as well as languange extensions in the form of \
+      extra instructions (which can be enabled or disabled at will).
       """
    )
    
@@ -43,36 +46,82 @@ import BrainflipKit
    @Argument(
       help: .init(
          "The path to a Brainflip program to execute.",
-         discussion: "The file extension must be one of \(formattedValidExtensions). If this argument is not provided, the program will be read from standard input.",
+         discussion: """
+         The file extension must be one of \(formattedValidExtensions). If neither \
+         this argument nor the '-p/--program' option is provided, the program will \
+         be read from standard input.
+         
+         This argument is mutually exclusive with the '-p/--program' option. Only \
+         one should be specified.
+         """,
          valueName: "file-path"
       ),
       completion: .file(extensions: validExtensions),
       transform: { filePath in
-         guard
-            let url = URL(string: filePath),
-            let string = try? String(contentsOfFile: filePath)
-         else { throw ValidationError("That file doesn't exist.") }
+         guard let url = URL(string: filePath) else {
+            throw ValidationError("That file doesn't exist.")
+         }
          
          guard validExtensions.contains(url.pathExtension) else {
             throw ValidationError("Invalid file type -- must be one of \(formattedValidExtensions).")
          }
          
-         return string
+         return filePath
       }
-   ) var program: String?
+   ) var programPath: String?
    
    // MARK: - Options
    
    @Option(
-      name: .shortAndLong,
+      name: [.short, .customLong("program")],
       help: .init(
-         "The input to pass to the program.",
-         discussion: "Unicode scalars whose values exceed the maximum value of a cell will be removed."
+         "A Brainflip program to execute.",
+         discussion: """
+         If neither this option nor the 'file-path' argument is provided, the \
+         program will be read from standard input.
+         
+         This argument is mutually exclusive with the 'file-path' argument. Only \
+         one should be specified.
+         """
       )
+   ) var program: String?
+   
+   @Option(
+      name: .shortAndLong,
+      help: "The input to pass to the program."
    ) var input: String = ""
+   
+   // MARK: - Flags
+   
+   @Flag(
+      name: .long,
+      help: "Prints the result of parsing the program and exits."
+   ) var printParsed: Bool = false
    
    // MARK: - Option Groups
    
    @OptionGroup(title: "Interpreter Options")
    var interpreterOptions: InterpreterOptions
+   
+   // MARK: - State
+   
+   internal var parsedProgram: Program = []
+   
+   // MARK: - Validation
+   
+   mutating func validate() throws {
+      parsedProgram = switch (programPath, program) {
+      case (nil, nil):
+         try Program(readFromStandardInput())
+         
+      case (let programPath?, nil):
+         try Program(String(contentsOfFile: programPath))
+         
+      case (nil, let program?):
+         try Program(program)
+         
+      case (_?, _?):
+         throw ValidationError("Only one of 'file-path' or '-p/--program' must be provided.")
+      }
+   }
 }

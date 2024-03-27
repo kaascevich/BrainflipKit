@@ -23,15 +23,18 @@ public extension Program {
    /// The following mappings are used to convert a `Character`
    /// into an ``Instruction``:
    ///
-   /// | Character |        Instruction        |
-   /// |-----------|---------------------------|
-   /// |    `+`    | ``Instruction/increment`` |
-   /// |    `-`    | ``Instruction/decrement`` |
-   /// |    `>`    | ``Instruction/moveRight`` |
-   /// |    `<`    | ``Instruction/moveLeft``  |
-   /// |  `[` `]`  | ``Instruction/loop(_:)``  |
-   /// |    `.`    | ``Instruction/output``    |
-   /// |    `,`    | ``Instruction/input``     |
+   /// | Character |          Instruction          |
+   /// |-----------|-------------------------------|
+   /// |    `+`    | ``Instruction/increment(_:)`` |
+   /// |    `-`    | ``Instruction/decrement(_:)`` |
+   /// |    `>`    | ``Instruction/moveRight(_:)`` |
+   /// |    `<`    | ``Instruction/moveLeft(_:)``  |
+   /// |  `[` `]`  | ``Instruction/loop(_:)``      |
+   /// |    `.`    | ``Instruction/output``        |
+   /// |    `,`    | ``Instruction/input``         |
+   ///
+   /// Repeated occurrences of `+`, `-`, `>`, or `<` are
+   /// condensed into a single instruction.
    ///
    /// Additionally, the following instructions are also
    /// recognized (although they are disabled by default):

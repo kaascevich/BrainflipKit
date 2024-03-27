@@ -90,4 +90,13 @@ struct ParsingTests {
       ])
       #expect(program.description == "!0~{}?")
    }
+   
+   @Test("Set-to parsing")
+   func setToInstruction() throws {
+      let program = try Program("[-]")
+      #expect(program == [
+         .setTo(0)
+      ])
+      #expect(program.description == "[-]")
+   }
 }

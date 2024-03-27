@@ -1,4 +1,4 @@
-// ExtraInstruction.swift
+// SetTo.swift
 // Copyright © 2024 Kaleb A. Ascevich
 //
 // This package is free software: you can redistribute it and/or modify it
@@ -14,24 +14,9 @@
 // You should have received a copy of the GNU General Public License along
 // with this package. If not, see https://www.gnu.org/licenses/.
 
-/// An instruction that can be enabled or disabled
-/// per-``Interpreter``.
-public enum ExtraInstruction: Character, Equatable, Hashable, Codable, CaseIterable, Sendable {
-   /// Immediately ends the program.
-   case stop = "!"
-   
-   /// Sets the current cell to zero.
-   case zero = "0"
-   
-   /// Performs a bitwise NOT on the current cell.
-   case bitwiseNot = "~"
-   
-   /// Performs a lossy left bit-shift on the current cell.
-   case leftShift = "{"
-   
-   /// Performs a lossy right bit-shift on the current cell.
-   case rightShift = "}"
-   
-   /// Sets the current cell to a random value.
-   case random = "?"
+internal extension Interpreter {
+   /// Executes an ``Instruction/setTo(_:)`` instruction.
+   mutating func handleSetToInstruction(_ value: Interpreter.CellValue) {
+      self.currentCellValue = value
+   }
 }
