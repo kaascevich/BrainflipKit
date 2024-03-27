@@ -18,22 +18,22 @@ import Testing
 @testable import struct BrainflipKit.Interpreter
 
 extension InterpreterTests.InstructionTests {
-   @Suite("Next cell & previous cell instructions")
+   @Suite("Move right/left instructions")
    struct PointerMovementTests {
-      @Test("Next cell instruction")
-      func nextCellInstruction() async throws {
+      @Test("Move right instruction")
+      func moveRightInstruction() async throws {
          var interpreter = try Interpreter("")
          for i in 1...10 {
-            try await interpreter.handleInstruction(.nextCell)
+            try await interpreter.handleInstruction(.moveRight)
             #expect(interpreter.cellPointer == i)
          }
       }
       
-      @Test("Previous cell instruction")
-      func prevCellInstruction() async throws {
+      @Test("Move left instruction")
+      func moveLeftInstruction() async throws {
          var interpreter = try Interpreter("")
          for i in 1...10 {
-            try await interpreter.handleInstruction(.prevCell)
+            try await interpreter.handleInstruction(.moveLeft)
             #expect(interpreter.cellPointer == -i) // the pointer can go anywhere now!
          }
       }

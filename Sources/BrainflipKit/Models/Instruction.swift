@@ -30,10 +30,10 @@ public enum Instruction: Equatable, Hashable, Sendable {
    case decrement
    
    /// Increments the cell pointer by 1.
-   case nextCell
+   case moveRight
    
    /// Decrements the cell pointer by 1.
-   case prevCell
+   case moveLeft
    
    /// Loops over the contained instructions.
    case loop([Self])

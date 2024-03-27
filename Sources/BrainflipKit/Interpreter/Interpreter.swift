@@ -39,10 +39,10 @@
 ///     Decrements the current cell by 1, wrapping back to ``Options/cellMax``
 ///     if necessary.
 ///
-/// - term ``Instruction/nextCell``:
+/// - term ``Instruction/moveRight``:
 ///     Moves the cell pointer forward 1 cell.
 ///
-/// - term ``Instruction/prevCell``:
+/// - term ``Instruction/moveLeft``:
 ///     Moves the cell pointer back 1 cell.
 ///
 /// - term ``Instruction/loop(_:)``:

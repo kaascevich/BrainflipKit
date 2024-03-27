@@ -25,9 +25,9 @@ struct ParsingTests {
       #expect(program == [
          .input,
          .loop([
-            .nextCell,
+            .moveRight,
             .increment,
-            .prevCell,
+            .moveLeft,
             .decrement,
             .output
          ])
@@ -63,19 +63,19 @@ struct ParsingTests {
    func nestedLoops() throws {
       let program = try Program(">+[>-[-<]>>]>")
       #expect(program == [
-         .nextCell,
+         .moveRight,
          .increment,
          .loop([
-            .nextCell,
+            .moveRight,
             .decrement,
             .loop([
                .decrement,
-               .prevCell
+               .moveLeft
             ]),
-            .nextCell,
-            .nextCell
+            .moveRight,
+            .moveRight
          ]),
-         .nextCell
+         .moveRight
       ])
       #expect(program.description == ">+[>-[-<]>>]>")
    }

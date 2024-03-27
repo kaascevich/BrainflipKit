@@ -15,13 +15,13 @@
 // with this package. If not, see https://www.gnu.org/licenses/.
 
 internal extension Interpreter {
-   /// Executes a ``Instruction/nextCell(_:)`` instruction.
-   mutating func handleNextCellInstruction() {
+   /// Executes a ``Instruction/moveRight(_:)`` instruction.
+   mutating func handleMoveRightInstruction() {
       self.cellPointer += 1
    }
    
-   /// Executes a ``Instruction/prevCell(_:)`` instruction.
-   mutating func handlePrevCellInstruction() {
+   /// Executes a ``Instruction/moveLeft(_:)`` instruction.
+   mutating func handleMoveLeftInstruction() {
       self.cellPointer -= 1
    }
 }

@@ -25,8 +25,8 @@ private import Parsing
             OneOf {
                "+".map(.case(Instruction.increment))
                "-".map(.case(Instruction.decrement))
-               ">".map(.case(Instruction.nextCell))
-               "<".map(.case(Instruction.prevCell))
+               ">".map(.case(Instruction.moveRight))
+               "<".map(.case(Instruction.moveLeft))
                ",".map(.case(Instruction.input))
                ".".map(.case(Instruction.output))
                

@@ -27,8 +27,8 @@ public extension Program {
    /// |-----------|---------------------------|
    /// |    `+`    | ``Instruction/increment`` |
    /// |    `-`    | ``Instruction/decrement`` |
-   /// |    `>`    | ``Instruction/nextCell``  |
-   /// |    `<`    | ``Instruction/prevCell``  |
+   /// |    `>`    | ``Instruction/moveRight`` |
+   /// |    `<`    | ``Instruction/moveLeft``  |
    /// |  `[` `]`  | ``Instruction/loop(_:)``  |
    /// |    `.`    | ``Instruction/output``    |
    /// |    `,`    | ``Instruction/input``     |

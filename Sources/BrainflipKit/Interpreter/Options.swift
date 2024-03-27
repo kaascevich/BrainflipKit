@@ -65,7 +65,7 @@ public extension Interpreter {
       ///
       /// - Note: You *can* set `cellSize` to `0`, and it *will*
       ///   technically work; however, there is no practical
-      ///   reason to do this, as it prevents you from changing
+      ///   reason to do this, as it prevents you from modifying
       ///   the tape in any way, making the language all but
       ///   useless.
       public init(
