@@ -18,8 +18,7 @@ private import Parsing
 
 @usableFromInline internal enum BrainflipParser {
    private struct ProgramParser: ParserPrinter {
-      static let validInstructions = ["+", "-", ">", "<", "[", "]", ",", "."]
-      + ExtraInstruction.allCases.map(\.rawValue)
+      static let validInstructions = ["+", "-", ">", "<", "[", "]", ",", "."] + ExtraInstruction.allCases.map(\.rawValue)
       
       var body: some ParserPrinter<Substring, Program> {
          Many {

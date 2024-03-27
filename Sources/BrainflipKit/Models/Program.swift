@@ -36,10 +36,14 @@ public extension Program {
    /// Additionally, the following instructions are also
    /// recognized (although they are disabled by default):
    ///
-   /// | Character |        Instruction        |
-   /// |-----------|---------------------------|
-   /// |    `!`    | ``ExtraInstruction/stop`` |
-   /// |    `0`    | ``ExtraInstruction/zero`` |
+   /// | Character |           Instruction           |
+   /// |-----------|---------------------------------|
+   /// |    `!`    | ``ExtraInstruction/stop``       |
+   /// |    `0`    | ``ExtraInstruction/zero``       |
+   /// |    `~`    | ``ExtraInstruction/bitwiseNot`` |
+   /// |    `{`    | ``ExtraInstruction/leftShift``  |
+   /// |    `}`    | ``ExtraInstruction/rightShift`` |
+   /// |    `?`    | ``ExtraInstruction/random``     |
    ///
    /// All other characters are parsed into ``Instruction/comment(_:)``
    /// instructions, which are ignored during execution.
