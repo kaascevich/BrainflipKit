@@ -42,13 +42,9 @@ internal enum BrainflipOptimizer {
 
    private enum ClearLoopOptimization: Optimization {
       static func optimize(_ program: inout Program) {
-         program.replace([
-            .loop([
-               .add(-1)
-            ])
-         ], with: [
-            .setTo(0)
-         ])
+         let clearOperation = [Instruction.setTo(0)]
+         program.replace([.loop([.add(-1)])], with: clearOperation)
+         program.replace([.loop([.add(+1)])], with: clearOperation)
       }
    }
    

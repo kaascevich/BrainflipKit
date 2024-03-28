@@ -21,7 +21,10 @@ import Testing
 struct OptimizerTests {
    @Test("Clear-loop optimization")
    func clearLoopOptimization() throws {
-      let program = try Program("[-]")
+      var program = try Program("[-]")
+      #expect(program == [.setTo(0)])
+      
+      program = try Program("[+]")
       #expect(program == [.setTo(0)])
    }
    
