@@ -23,6 +23,7 @@ internal enum BrainflipOptimizer {
       var program = program
       
       ClearLoopOptimization.optimize(&program)
+      ScanLoopOptimization.optimize(&program)
       
       var previousOptimization: Program
       repeat {
@@ -83,6 +84,13 @@ internal enum BrainflipOptimizer {
          program.removeAll {
             $0 == .add(0) || $0 == .move(0)
          }
+      }
+   }
+   
+   private enum ScanLoopOptimization: Optimization {
+      static func optimize(_ program: inout Program) {
+         program.replace([.loop([.move(-1)])], with: [.scanLeft])
+         program.replace([.loop([.move(+1)])], with: [.scanRight])
       }
    }
 }

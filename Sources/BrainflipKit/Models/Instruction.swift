@@ -49,6 +49,12 @@ import CasePaths
    /// Sets the current cell to a specific value.
    case setTo(Interpreter.CellValue)
    
+   /// Moves the pointer to the next zero cell.
+   case scanRight
+   
+   /// Moves the pointer to the previous zero cell.
+   case scanLeft
+   
    /// Performs an action corresponding to the wrapped
    /// ``ExtraInstruction``, or does nothing if that
    /// instruction is not enabled.

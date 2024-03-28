@@ -64,6 +64,9 @@ extension Interpreter {
          
       case .setTo(let value): handleSetToInstruction(value)
          
+      case .scanLeft:  handleScanLeftInstruction()
+      case .scanRight: handleScanRightInstruction()
+         
       case .extra(let instruction): try await handleExtraInstruction(instruction)
       }
    }

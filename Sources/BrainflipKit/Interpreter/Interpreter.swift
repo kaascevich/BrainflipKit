@@ -64,6 +64,10 @@
 ///
 /// - term ``Instruction/setTo(_:)``:
 ///     Sets the current cell to a specific value.
+/// - term ``Instruction/scanRight``:
+///     Moves the pointer to the next zero cell.
+/// - term ``Instruction/scanLeft``:
+///     Moves the pointer to the previous zero cell.
 ///
 /// ### Extra Instructions
 ///
@@ -81,10 +85,6 @@
 ///     Performs a lossy right bit-shift on the current cell.
 /// - term ``ExtraInstruction/random``:
 ///     Sets the current cell to a random value.
-/// - term ``ExtraInstruction/nextZero``:
-///     Moves the pointer to the next zero cell.
-/// - term ``ExtraInstruction/prevZero``:
-///     Moves the pointer to the previous zero cell.
 ///
 /// All characters other than the ones listed above are treated as
 /// comments and ignored.

@@ -41,8 +41,6 @@ public extension Program {
    /// |    `»`    | ``ExtraInstruction/leftShift``  | ⌥ ⇧ \\    |
    /// |    `«`    | ``ExtraInstruction/rightShift`` | ⌥ \\      |
    /// |    `?`    | ``ExtraInstruction/random``     |           |
-   /// |    `≥`    | ``ExtraInstruction/nextZero``   | ⌥ >       |
-   /// |    `≤`    | ``ExtraInstruction/prevZero``   | ⌥ <       |
    ///
    /// All other characters are ignored.
    ///
@@ -52,11 +50,12 @@ public extension Program {
    /// execution. The tricks currently used to optimize programs
    /// are:
    ///
-   /// - Repeated occurrences of `+`, `-`, `>`, or `<` are
-   ///   condensed into a single instruction.
+   /// - Repeated occurrences of `+` and `-` are condensed into
+   ///   a single instruction, as are `>` and `<`.
+   /// - Instructions that do not have any effect (such as `add`
+   ///   or `move` instructions with a value of `0`) are removed.
    /// - The `[-]` construct is replaced with a `setTo(0)`
    ///   instruction.
-   /// - Empty loops are removed.
    ///
    /// - Parameter string: A string to parse into a `Program`.
    ///

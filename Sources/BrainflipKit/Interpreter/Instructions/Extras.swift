@@ -36,9 +36,6 @@ internal extension Interpreter {
          
       case .random:
          self.currentCellValue = CellValue.random(in: 0...(.max))
-         
-      case .nextZero: repeat { self.cellPointer += 1 } while self.currentCellValue != 0
-      case .prevZero: repeat { self.cellPointer -= 1 } while self.currentCellValue != 0
       }
    }
 }

@@ -42,4 +42,14 @@ struct OptimizerTests {
       let program = try Program("+-<> +<>-")
       #expect(program.isEmpty)
    }
+   
+   @Test("Scan-loop optimization")
+   func scanLoopOptimization() throws {
+      let program = try Program("[>] + [<]")
+      #expect(program == [
+         .scanRight,
+         .add(1),
+         .scanLeft
+      ])
+   }
 }

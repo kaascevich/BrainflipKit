@@ -71,15 +71,13 @@ struct ParsingTests {
    
    @Test("Extra instructions parsing")
    func extraInstructions() throws {
-      let program = try Program("!~«»?≥≤")
+      let program = try Program("!~«»?")
       #expect(program == [
          .extra(.stop),
          .extra(.bitwiseNot),
          .extra(.leftShift),
          .extra(.rightShift),
-         .extra(.random),
-         .extra(.nextZero),
-         .extra(.prevZero)
+         .extra(.random)
       ])
    }
    
