@@ -26,9 +26,9 @@ struct ParsingTests {
          .input,
          .loop([
             .move(1),
-            .increment(1),
+            .add(1),
             .move(-1),
-            .decrement(1),
+            .add(-1),
             .output
          ])
       ])
@@ -39,7 +39,7 @@ struct ParsingTests {
       let program = try Program(",++ a comment ++.")
       #expect(program == [
          .input,
-         .increment(4),
+         .add(4),
          .output
       ])
    }
@@ -55,12 +55,12 @@ struct ParsingTests {
       let program = try Program(">+[>-[-<]>>]>")
       #expect(program == [
          .move(1),
-         .increment(1),
+         .add(1),
          .loop([
             .move(1),
-            .decrement(1),
+            .add(-1),
             .loop([
-               .decrement(1),
+               .add(-1),
                .move(-1)
             ]),
             .move(2)
@@ -100,30 +100,30 @@ struct ParsingTests {
       """)
       #expect(program == [
          .loop([]),
-         .increment(10),
+         .add(10),
          .loop([
             .move(2),
-            .increment(1),
+            .add(1),
             .move(1),
-            .increment(1),
+            .add(1),
             .move(1),
-            .increment(6),
+            .add(6),
             .loop([
                .move(-2),
-               .increment(1),
+               .add(1),
                .move(-1),
-               .increment(3),
+               .add(3),
                .move(3),
-               .decrement(1)
+               .add(-1)
             ]),
             .move(-4),
-            .decrement(1)
+            .add(-1)
          ]),
          .extra(.random),
          .extra(.stop),
          .loop([
             .move(2),
-            .increment(1),
+            .add(1),
             .move(-2)
          ]),
          .move(1),
@@ -133,7 +133,7 @@ struct ParsingTests {
          .move(-4),
          .loop([
             .move(1),
-            .increment(2),
+            .add(2),
             .move(-1),
             .setTo(0)
          ]),

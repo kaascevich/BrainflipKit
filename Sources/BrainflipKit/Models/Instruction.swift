@@ -17,15 +17,11 @@
 /// An individual instruction, performing a specific action
 /// when executed by an ``Interpreter``.
 public enum Instruction: Equatable, Hashable, Codable, Sendable {
-   /// Increments the current cell by a value.
+   /// Increments (or decrements) the current cell by a
+   /// value.
    ///
    /// The default behavior on overflow is to wrap around.
-   case increment(Interpreter.CellValue)
-   
-   /// Decrements the current cell by a value.
-   ///
-   /// The default behavior on underflow is to wrap around.
-   case decrement(Interpreter.CellValue)
+   case add(Interpreter.SignedCellValue)
    
    /// Increments (or decrements) the cell pointer by
    /// a value.

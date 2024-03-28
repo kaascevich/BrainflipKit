@@ -23,28 +23,27 @@ public extension Program {
    /// The following mappings are used to convert a `Character`
    /// into an ``Instruction``:
    ///
-   /// | Character |          Instruction          |
-   /// |-----------|-------------------------------|
-   /// |    `+`    | ``Instruction/increment(_:)`` |
-   /// |    `-`    | ``Instruction/decrement(_:)`` |
-   /// |  `<` `>`  | ``Instruction/move(_:)``      |
-   /// |  `[` `]`  | ``Instruction/loop(_:)``      |
-   /// |    `.`    | ``Instruction/output``        |
-   /// |    `,`    | ``Instruction/input``         |
+   /// | Character |       Instruction        |
+   /// |-----------|--------------------------|
+   /// |  `+` `-`  | ``Instruction/add(_:)``  |
+   /// |  `<` `>`  | ``Instruction/move(_:)`` |
+   /// |  `[` `]`  | ``Instruction/loop(_:)`` |
+   /// |    `.`    | ``Instruction/output``   |
+   /// |    `,`    | ``Instruction/input``    |
    ///
    /// Additionally, the following instructions are also
    /// recognized (although they are disabled by default):
    ///
-   /// | Character |           Instruction           | Key Combo (macOS) |
-   /// |-----------|---------------------------------|-------------------|
-   /// |    `!`    | ``ExtraInstruction/stop``       |                   |
-   /// |    `0`    | ``ExtraInstruction/zero``       |                   |
-   /// |    `~`    | ``ExtraInstruction/bitwiseNot`` |                   |
-   /// |    `»`    | ``ExtraInstruction/leftShift``  | ⌥ ⇧ \\            |
-   /// |    `«`    | ``ExtraInstruction/rightShift`` | ⌥ \\              |
-   /// |    `?`    | ``ExtraInstruction/random``     |                   |
-   /// |    `≥`    | ``ExtraInstruction/nextZero``   | ⌥ >               |
-   /// |    `≤`    | ``ExtraInstruction/prevZero``   | ⌥ <               |
+   /// | Character |           Instruction           | Key Combo |
+   /// |-----------|---------------------------------|-----------|
+   /// |    `!`    | ``ExtraInstruction/stop``       |           |
+   /// |    `0`    | ``ExtraInstruction/zero``       |           |
+   /// |    `~`    | ``ExtraInstruction/bitwiseNot`` |           |
+   /// |    `»`    | ``ExtraInstruction/leftShift``  | ⌥ ⇧ \\    |
+   /// |    `«`    | ``ExtraInstruction/rightShift`` | ⌥ \\      |
+   /// |    `?`    | ``ExtraInstruction/random``     |           |
+   /// |    `≥`    | ``ExtraInstruction/nextZero``   | ⌥ >       |
+   /// |    `≤`    | ``ExtraInstruction/prevZero``   | ⌥ <       |
    ///
    /// All other characters are ignored.
    ///

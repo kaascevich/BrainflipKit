@@ -51,8 +51,7 @@ extension Interpreter {
       switch instruction {
       // MARK: Core
       
-      case .increment(let count): try handleIncrementInstruction(count)
-      case .decrement(let count): try handleDecrementInstruction(count)
+      case .add(let count): try handleAddInstruction(count)
          
       case .move(let count): handleMoveInstruction(count)
       

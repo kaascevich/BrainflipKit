@@ -31,12 +31,9 @@
 ///
 /// ### Core Instructions
 ///
-/// - term ``Instruction/increment``:
-///     Increments current cell by 1, wrapping back to 0 if necessary.
-///
-/// - term ``Instruction/decrement``:
-///     Decrements the current cell by 1, wrapping back to
-///     `CellValue.max` if necessary.
+/// - term ``Instruction/add(_:)``:
+///     Increments (or decrements) the current cell by the specified
+///     amount, wrapping around if necessary.
 ///
 /// - term ``Instruction/move(_:)``:
 ///     Moves the cell pointer by the specified amount. If the amount

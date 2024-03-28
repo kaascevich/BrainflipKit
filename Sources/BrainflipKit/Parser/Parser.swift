@@ -65,8 +65,10 @@ internal enum BrainflipParser {
          Many {
             OneOf {
                // condense repeated instructions into a single instruction
-               CountRepeated("+").map(Instruction.increment)
-               CountRepeated("-").map(Instruction.decrement)
+               CountRepeated("+")
+                  .map(Instruction.add)
+               CountRepeated("-")
+                  .map(-).map(Instruction.add)
                
                CountRepeated(">")
                   .map(Instruction.move)

@@ -17,4 +17,6 @@
 public extension Interpreter {
    /// The type of a single Brainflip cell.
    typealias CellValue = UInt32
+   
+   typealias SignedCellValue = Int32
 }
