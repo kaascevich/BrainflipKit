@@ -18,18 +18,28 @@ import Foundation
 import Algorithms
 import CasePaths
 
-private protocol Optimization {
-   static func optimize(_ program: inout Program)
-}
-
 internal enum BrainflipOptimizer {
    static func optimizingWithoutNesting(program: Program) -> Program {
       var program = program
+      
       ClearLoopOptimization.optimize(&program)
-      AdjacentInstructionOptimization.optimize(&program)
+      
+      var previousOptimization: Program
+      repeat {
+         previousOptimization = program
+         AdjacentInstructionOptimization.optimize(&program)
+         UselessInstructionOptimization.optimize(&program)
+      } while program != previousOptimization
+      
       return program
    }
    
+   // MARK: - Optimizations
+   
+   private protocol Optimization {
+      static func optimize(_ program: inout Program)
+   }
+
    private enum ClearLoopOptimization: Optimization {
       static func optimize(_ program: inout Program) {
          program.replace([
@@ -68,6 +78,14 @@ internal enum BrainflipOptimizer {
             let values = chunk.map { $0[case: casePath]! }
             let sum = values.reduce(0, +)
             return [casePath(sum)]
+         }
+      }
+   }
+   
+   private enum UselessInstructionOptimization: Optimization {
+      static func optimize(_ program: inout Program) {
+         program.removeAll {
+            $0 == .add(0) || $0 == .move(0)
          }
       }
    }

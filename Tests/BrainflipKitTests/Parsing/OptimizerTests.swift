@@ -33,4 +33,10 @@ struct OptimizerTests {
          .add(-2)
       ])
    }
+   
+   @Test("Useless instruction optimization")
+   func uselessInstructionOptimization() throws {
+      let program = try Program("+-<> +<>-")
+      #expect(program.isEmpty)
+   }
 }
