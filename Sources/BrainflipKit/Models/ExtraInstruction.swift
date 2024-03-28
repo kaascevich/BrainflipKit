@@ -27,17 +27,17 @@ public enum ExtraInstruction: Character, Equatable, Hashable, Codable, CaseItera
    case bitwiseNot = "~"
    
    /// Performs a lossy left bit-shift on the current cell.
-   case leftShift = "{"
+   case leftShift = "«"
    
    /// Performs a lossy right bit-shift on the current cell.
-   case rightShift = "}"
+   case rightShift = "»"
    
    /// Sets the current cell to a random value.
    case random = "?"
    
    /// Moves the pointer to the next zero cell.
-   case nextZero = ")"
+   case nextZero = "≥"
    
    /// Moves the pointer to the previous zero cell.
-   case prevZero = "("
+   case prevZero = "≤"
 }

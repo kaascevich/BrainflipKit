@@ -36,14 +36,16 @@ public extension Program {
    /// Additionally, the following instructions are also
    /// recognized (although they are disabled by default):
    ///
-   /// | Character |           Instruction           |
-   /// |-----------|---------------------------------|
-   /// |    `!`    | ``ExtraInstruction/stop``       |
-   /// |    `0`    | ``ExtraInstruction/zero``       |
-   /// |    `~`    | ``ExtraInstruction/bitwiseNot`` |
-   /// |    `{`    | ``ExtraInstruction/leftShift``  |
-   /// |    `}`    | ``ExtraInstruction/rightShift`` |
-   /// |    `?`    | ``ExtraInstruction/random``     |
+   /// | Character |           Instruction           | Key Combo (macOS) |
+   /// |-----------|---------------------------------|-------------------|
+   /// |    `!`    | ``ExtraInstruction/stop``       |                   |
+   /// |    `0`    | ``ExtraInstruction/zero``       |                   |
+   /// |    `~`    | ``ExtraInstruction/bitwiseNot`` |                   |
+   /// |    `»`    | ``ExtraInstruction/leftShift``  | ⌥ ⇧ \\            |
+   /// |    `«`    | ``ExtraInstruction/rightShift`` | ⌥ \\              |
+   /// |    `?`    | ``ExtraInstruction/random``     |                   |
+   /// |    `≥`    | ``ExtraInstruction/nextZero``   | ⌥ >               |
+   /// |    `≤`    | ``ExtraInstruction/prevZero``   | ⌥ <               |
    ///
    /// All other characters are parsed into ``Instruction/comment(_:)``
    /// instructions, which are ignored during execution.
@@ -56,9 +58,8 @@ public extension Program {
    ///
    /// - Repeated occurrences of `+`, `-`, `>`, or `<` are
    ///   condensed into a single instruction.
-   /// - The `[-]++`...`++` construct is replaced with a `setTo(n)`
-   ///   instruction, where *n* is the number of `+` instructions
-   ///   that follow `[-]`.
+   /// - The `[-]` construct is replaced with a `setTo(0)`
+   ///   instruction.
    ///
    /// - Parameter string: A string to parse into a `Program`.
    ///
@@ -66,11 +67,5 @@ public extension Program {
    ///   (that is, if it contains unmatched brackets).
    init(_ string: String) throws {
       self = try BrainflipParser.parse(program: string)
-   }
-}
-
-public extension Program {
-   var description: String {
-      BrainflipParser.print(program: self)
    }
 }

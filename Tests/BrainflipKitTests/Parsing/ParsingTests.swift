@@ -32,7 +32,6 @@ struct ParsingTests {
             .output
          ])
       ])
-      #expect(program.description == ",[>+<-.]")
    }
    
    @Test("Parsing instructions and comments")
@@ -45,7 +44,6 @@ struct ParsingTests {
          .increment(2),
          .output
       ])
-      #expect(program.description == ",++ a comment ++.")
    }
    
    @Test("Parsing only comments")
@@ -54,7 +52,6 @@ struct ParsingTests {
       #expect(program == [
          .comment("the whole thing is just a comment")
       ])
-      #expect(program.description == "the whole thing is just a comment")
    }
    
    @Test("Parsing nested loops")
@@ -74,41 +71,37 @@ struct ParsingTests {
          ]),
          .moveRight(1)
       ])
-      #expect(program.description == ">+[>-[-<]>>]>")
    }
    
    @Test("Extra instructions parsing")
    func extraInstructions() throws {
-      let program = try Program("!0~{}?")
+      let program = try Program("!0~«»?≥≤")
       #expect(program == [
          .extra(.stop),
          .extra(.zero),
          .extra(.bitwiseNot),
          .extra(.leftShift),
          .extra(.rightShift),
-         .extra(.random)
+         .extra(.random),
+         .extra(.nextZero),
+         .extra(.prevZero)
       ])
-      #expect(program.description == "!0~{}?")
    }
    
    @Test("Set-to parsing")
    func setToInstruction() throws {
-      let program = try Program("[-]++++")
-      #expect(program == [
-         .setTo(4)
-      ])
-      #expect(program.description == "[-]++++")
+      let program = try Program("[-]")
+      #expect(program == [.setTo(0)])
    }
    
    @Test("'Obscure Problem Tester'")
    func obscureProblemTester() throws {
-      let programString = """
+      let program = try Program("""
       This program tests for several obscure interpreter problems; it should output an H
       
       []++++++++++[>>+>+>++++++[<<+<+++>>>-]<<<<-]
       "A*$";?@![#>>+<<]>[>>]<<<<[>++<[-]]>.>.
-      """
-      let program = try Program(programString)
+      """)
       #expect(program == [
          .comment("This program tests for several obscure interpreter problems; it should output an H\n\n"),
          .loop([]),
@@ -157,6 +150,5 @@ struct ParsingTests {
          .moveRight(1),
          .output
       ])
-      #expect(program.description == programString)
    }
 }
