@@ -32,8 +32,11 @@ extension BrainflipCLI {
          endOfInputBehavior:       endOfInputBehavior,
          enabledExtraInstructions: Set(interpreterOptions.extraInstructions)
       )
-      
+            
       // MARK: - Parsing
+      
+      let programSource = try await getProgramSource()
+      let parsedProgram = try Program(programSource)
       
       if printParsed {
          let formattedProgram = formatProgram(parsedProgram)

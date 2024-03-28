@@ -16,7 +16,7 @@
 
 /// An individual instruction, performing a specific action
 /// when executed by an ``Interpreter``.
-public enum Instruction: Equatable, Hashable, Codable, Sendable {
+public enum Instruction: Equatable, Hashable, Sendable {
    /// Increments (or decrements) the current cell by a
    /// value.
    ///

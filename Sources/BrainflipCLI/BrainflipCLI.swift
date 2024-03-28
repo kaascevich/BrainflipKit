@@ -33,7 +33,7 @@ import BrainflipKit
       """
    )
    
-   static let validExtensions = ["bf", "brainflip", "brainfuck"]
+   static let validExtensions = ["b", "bf", "brainflip", "brainfuck"]
    static let formattedValidExtensions = validExtensions
       .map { "." + $0 }
       .formatted(
@@ -100,26 +100,4 @@ import BrainflipKit
    
    @OptionGroup(title: "Interpreter Options")
    var interpreterOptions: InterpreterOptions
-   
-   // MARK: - State
-   
-   internal var parsedProgram: Program = []
-   
-   // MARK: - Validation
-   
-   mutating func validate() async throws {
-      parsedProgram = switch (programPath, program) {
-      case (nil, nil):
-         try Program(await readFromStandardInput())
-         
-      case (let programPath?, nil):
-         try Program(String(contentsOfFile: programPath))
-         
-      case (nil, let program?):
-         try Program(program)
-         
-      case (_?, _?):
-         throw ValidationError("Only one of 'file-path' or '-p/--program' must be provided.")
-      }
-   }
 }

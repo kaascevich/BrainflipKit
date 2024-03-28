@@ -69,4 +69,25 @@ extension BrainflipCLI {
       
       return lines.joined(separator: "\n")
    }
+   
+   /// Obtains the source code for a Brainflip program
+   /// from command-line arguments or standard input.
+   ///
+   /// - Returns: The source code for the Brainflip
+   ///   program provided by the user.
+   func getProgramSource() async throws -> String {
+      switch (programPath, program) {
+      case (nil, nil):
+         try await readFromStandardInput()
+         
+      case (let programPath?, nil):
+         try String(contentsOfFile: programPath)
+         
+      case (nil, let program?):
+         program
+         
+      case (_?, _?):
+         throw ValidationError("Only one of 'file-path' or '-p/--program' must be provided.")
+      }
+   }
 }
