@@ -93,6 +93,7 @@ struct ParsingTests {
       "A*$";?@![#>>+<<]>[>>]<<<<[>++<[-]]>.>.
       """)
       #expect(program == [
+         .loop([]),
          .add(10),
          .loop([
             .move(2),

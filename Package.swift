@@ -37,6 +37,10 @@ let swiftSettings: [SwiftSetting] = [
    "ExistentialAny"
 ].map { .enableExperimentalFeature($0) }
 
+func dependency(fromRepository repositoryPath: String) -> Package.Dependency {
+   .package(url: "https://github.com/\(repositoryPath).git", branch: "main")
+}
+
 let package = Package(
    name: "BrainflipKit",
    platforms: [
@@ -52,15 +56,19 @@ let package = Package(
       .executable(name: "brainflip", targets: ["BrainflipCLI"])
    ],
    dependencies: [
-      .package(url: "https://github.com/apple/swift-argument-parser.git", branch: "main"),
-      .package(url: "https://github.com/pointfreeco/swift-parsing.git", branch: "main"),
-      .package(url: "https://github.com/lukepistrol/SwiftLintPlugin", branch: "main"),
-      .package(url: "https://github.com/apple/swift-testing.git", branch: "main")
-   ],
+      "apple/swift-algorithms",
+      "apple/swift-argument-parser",
+      "pointfreeco/swift-parsing",
+      "lukepistrol/SwiftLintPlugin",
+      "apple/swift-testing"
+   ].map(dependency(fromRepository:)),
    targets: [
       .target(
          name: "BrainflipKit",
-         dependencies: [.product(name: "Parsing", package: "swift-parsing")],
+         dependencies: [
+            .product(name: "Parsing", package: "swift-parsing"),
+            .product(name: "Algorithms", package: "swift-algorithms")
+         ],
          swiftSettings: swiftSettings,
          plugins: [swiftLintPlugin]
       ),

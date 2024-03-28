@@ -14,18 +14,20 @@
 // You should have received a copy of the GNU General Public License along
 // with this package. If not, see https://www.gnu.org/licenses/.
 
+import CasePaths
+
 /// An individual instruction, performing a specific action
 /// when executed by an ``Interpreter``.
-public enum Instruction: Equatable, Hashable, Sendable {
+@CasePathable public enum Instruction: Equatable, Hashable, Sendable {
    /// Increments (or decrements) the current cell by a
    /// value.
    ///
    /// The default behavior on overflow is to wrap around.
-   case add(Interpreter.SignedCellValue)
+   case add(Int32)
    
    /// Increments (or decrements) the cell pointer by
    /// a value.
-   case move(Int)
+   case move(Int32)
    
    /// Loops over the contained instructions.
    case loop([Self])

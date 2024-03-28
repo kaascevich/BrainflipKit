@@ -16,7 +16,7 @@
 
 internal extension Interpreter {
    /// Executes an ``Instruction/add(_:)`` instruction.
-   mutating func handleAddInstruction(_ value: SignedCellValue) throws {
+   mutating func handleAddInstruction(_ value: Int32) throws {
       let twosComplementValue = CellValue(bitPattern: value)
       
       let overflowCheck = if value < 0 {

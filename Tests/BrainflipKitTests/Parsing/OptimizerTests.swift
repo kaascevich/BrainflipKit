@@ -25,9 +25,12 @@ struct OptimizerTests {
       #expect(program == [.setTo(0)])
    }
    
-   @Test("Empty-loop optimization")
-   func emptyLoopOptimization() throws {
-      let program = try Program("[]")
-      #expect(program.isEmpty)
+   @Test("Adjacent instruction optimization")
+   func adjacentInstructionOptimization() throws {
+      let program = try Program(">>><<+---")
+      #expect(program == [
+         .move(1),
+         .add(-2)
+      ])
    }
 }

@@ -14,9 +14,11 @@
 // You should have received a copy of the GNU General Public License along
 // with this package. If not, see https://www.gnu.org/licenses/.
 
+import CasePaths
+
 /// An instruction that can be enabled or disabled
 /// per-``Interpreter``.
-public enum ExtraInstruction: Character, Equatable, Hashable, CaseIterable, Sendable {
+@CasePathable public enum ExtraInstruction: Character, Equatable, Hashable, CaseIterable, Sendable {
    /// Immediately ends the program.
    case stop = "!"
    

@@ -20,21 +20,6 @@ import Parsing
 
 internal enum BrainflipParser {
    struct InstructionParser: Parser {
-      // MARK: - Utilities
-      
-      struct CountRepeated<CountType: BinaryInteger>: Parser {
-         let repeatedCharacter: Character
-         @inlinable init(_ character: Character) {
-            self.repeatedCharacter = character
-         }
-         
-         var body: some Parser<Substring, CountType> {
-            Prefix(1...) { $0 == repeatedCharacter }
-               .map(\.count)
-               .map(CountType.init(_:))
-         }
-      }
-      
       // MARK: - Instructions
       
       struct ExtrasParser: Parser {
@@ -57,16 +42,11 @@ internal enum BrainflipParser {
       
       var body: some Parser<Substring, Instruction> {
          OneOf {
-            // condense repeated instructions into a single instruction
-            CountRepeated("+")
-               .map(Instruction.add)
-            CountRepeated("-")
-               .map(-).map(Instruction.add)
+            "+".map { Instruction.add(+1) }
+            "-".map { Instruction.add(-1) }
             
-            CountRepeated(">")
-               .map(Instruction.move)
-            CountRepeated("<")
-               .map(-).map(Instruction.move)
+            ">".map { Instruction.move(+1) }
+            "<".map { Instruction.move(-1) }
             
             ",".map { Instruction.input }
             ".".map { Instruction.output }

@@ -16,7 +16,7 @@
 
 internal extension Interpreter {
    /// Executes a ``Instruction/move(_:)`` instruction.
-   mutating func handleMoveInstruction(_ count: Int) {
-      self.cellPointer += count
+   mutating func handleMoveInstruction(_ count: Int32) {
+      self.cellPointer += Int(count)
    }
 }
