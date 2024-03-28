@@ -49,12 +49,12 @@ extension BrainflipCLI {
    func formatProgram(_ program: Program, indentLevel: Int = 0) -> String {
       var lines: [String] = []
       
-      let indent = String(repeating: "   ", count: indentLevel)
+      let indent = String(repeating: "  ", count: indentLevel)
       
       for instruction in program {
          let linesToAppend = switch instruction {
          case .loop(let instructions): [
-            indent + "loop (",
+            indent + "loop(",
             // don't apply any indent here, because that'll be redundant
             formatProgram(instructions, indentLevel: indentLevel + 1),
             indent + ")"
