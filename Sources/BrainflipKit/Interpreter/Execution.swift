@@ -51,23 +51,28 @@ extension Interpreter {
       switch instruction {
       // MARK: Core
       
-      case .add(let count): try handleAddInstruction(count)
+      case let .add(count): try handleAddInstruction(count)
          
-      case .move(let count): handleMoveInstruction(count)
+      case let .move(count): handleMoveInstruction(count)
       
-      case .loop(let instructions): try await handleLoop(instructions)
+      case let .loop(instructions): try await handleLoop(instructions)
          
       case .output: handleOutputInstruction()
       case .input: try handleInputInstruction()
          
       // MARK: Non-core
          
-      case .setTo(let value): handleSetToInstruction(value)
+      case let .setTo(value): handleSetToInstruction(value)
+         
+      case let .multiply(value, offset): try handleMultiplyInstruction(
+         multiplyingBy: value,
+         storingAtOffset: offset
+      )
          
       case .scanLeft:  handleScanLeftInstruction()
       case .scanRight: handleScanRightInstruction()
          
-      case .extra(let instruction): try await handleExtraInstruction(instruction)
+      case let .extra(instruction): try await handleExtraInstruction(instruction)
       }
    }
 }

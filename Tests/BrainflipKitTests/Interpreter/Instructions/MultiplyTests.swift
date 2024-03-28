@@ -1,4 +1,4 @@
-// Scan.swift
+// MultiplyTests.swift
 // Copyright © 2024 Kaleb A. Ascevich
 //
 // This package is free software: you can redistribute it and/or modify it
@@ -14,14 +14,21 @@
 // You should have received a copy of the GNU General Public License along
 // with this package. If not, see https://www.gnu.org/licenses/.
 
-internal extension Interpreter {
-   /// Executes an ``Instruction/scanLeft(_:)`` instruction.
-   mutating func handleScanLeftInstruction() {
-      while self.currentCellValue != 0 { self.cellPointer -= 1 }
-   }
-   
-   /// Executes an ``Instruction/scanRight(_:)`` instruction.
-   mutating func handleScanRightInstruction() {
-      while self.currentCellValue != 0 { self.cellPointer += 1 }
+import Testing
+@testable import struct BrainflipKit.Interpreter
+
+extension InterpreterTests.InstructionTests {
+   @Suite("Mutliply instruction")
+   struct MultiplyTestsTests {
+      @Test("Multiply instruction")
+      func multiplyInstruction() async throws {
+         var interpreter = try Interpreter("")
+         
+         interpreter.currentCellValue = 3
+         interpreter.tape[2] = 5
+         try await interpreter.handleInstruction(.multiply(value: 4, offset: 2))
+         #expect(interpreter.tape[2] == 17) // (3*4) + 5
+         #expect(interpreter.currentCellValue == 0)
+      }
    }
 }

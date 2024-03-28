@@ -52,4 +52,12 @@ struct OptimizerTests {
          .scanLeft
       ])
    }
+   
+   @Test("Multiply-loop optimization")
+   func multiplyLoopOptimization() throws {
+      let program = try Program("[->>++++<<]")
+      #expect(program == [
+         .multiply(value: 4, offset: 2)
+      ])
+   }
 }

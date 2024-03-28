@@ -1,4 +1,4 @@
-// Add.swift
+// Multiply.swift
 // Copyright © 2024 Kaleb A. Ascevich
 //
 // This package is free software: you can redistribute it and/or modify it
@@ -15,20 +15,20 @@
 // with this package. If not, see https://www.gnu.org/licenses/.
 
 internal extension Interpreter {
-   /// Executes an ``Instruction/add(_:)`` instruction.
-   mutating func handleAddInstruction(_ value: Int32) throws {
-      let twosComplementValue = CellValue(bitPattern: value)
+   /// Executes an ``Instruction/multiply(_:)`` instruction.
+   mutating func handleMultiplyInstruction(
+      multiplyingBy value: UInt32,
+      storingAtOffset cellOffset: Int
+   ) throws {
+      let multiplicationValue = self.currentCellValue.multipliedReportingOverflow(by: value)
+      let additionValue = self.tape[self.cellPointer + cellOffset, default: 0]
+         .addingReportingOverflow(multiplicationValue.partialValue)
       
-      let overflowCheck = if value < 0 {
-         self.currentCellValue.subtractingReportingOverflow
-      } else {
-         self.currentCellValue.addingReportingOverflow
+      if multiplicationValue.overflow || additionValue.overflow { // wraparound
+         try checkOverflowAllowed(throwing: .cellOverflow(position: self.cellPointer))
       }
       
-      if overflowCheck(twosComplementValue).overflow { // wraparound
-         let errorType = if value < 0 { Error.cellUnderflow } else { Error.cellOverflow }
-         try checkOverflowAllowed(throwing: errorType(self.cellPointer))
-      }
-      self.currentCellValue &+= twosComplementValue
+      self.tape[self.cellPointer + cellOffset] = additionValue.partialValue
+      self.currentCellValue = 0
    }
 }

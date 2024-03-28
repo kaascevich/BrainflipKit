@@ -83,7 +83,7 @@ public extension Interpreter {
             tape[cellPointer, default: 0]
          }
          @usableFromInline set {
-            tape[cellPointer, default: 0] = newValue
+            tape[cellPointer] = newValue
          }
       }
    }

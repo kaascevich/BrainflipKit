@@ -14,8 +14,6 @@
 // You should have received a copy of the GNU General Public License along
 // with this package. If not, see https://www.gnu.org/licenses/.
 
-// swiftlint:disable cyclomatic_complexity
-
 internal extension Interpreter {
    /// Executes the instruction contained within
    /// ``Instruction/extra(_:)``, if it is enabled.
@@ -39,5 +37,3 @@ internal extension Interpreter {
       }
    }
 }
-
-// swiftlint:enable cyclomatic_complexity

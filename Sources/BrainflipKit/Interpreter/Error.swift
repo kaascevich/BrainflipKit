@@ -48,3 +48,11 @@ extension Interpreter.Error: CustomStringConvertible {
       }
    }
 }
+
+extension Interpreter {
+   func checkOverflowAllowed(throwing error: Error) throws {
+      guard options.allowCellWraparound else {
+         throw error
+      }
+   }
+}

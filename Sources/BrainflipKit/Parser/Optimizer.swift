@@ -24,6 +24,7 @@ internal enum BrainflipOptimizer {
       
       ClearLoopOptimization.optimize(&program)
       ScanLoopOptimization.optimize(&program)
+      MultiplyLoopOptimization.optimize(&program)
       
       var previousOptimization: Program
       repeat {
@@ -91,6 +92,38 @@ internal enum BrainflipOptimizer {
       static func optimize(_ program: inout Program) {
          program.replace([.loop([.move(-1)])], with: [.scanLeft])
          program.replace([.loop([.move(+1)])], with: [.scanRight])
+      }
+   }
+   
+   private enum MultiplyLoopOptimization: Optimization {
+      static func optimize(_ program: inout Program) {
+         program = program.map {
+            guard
+               case let .loop(instructions) = $0,
+               instructions.count == 4
+            else {
+               return $0
+            }
+            
+            let first  = instructions[0]
+            let second = instructions[1]
+            let third  = instructions[2]
+            let fourth = instructions[3]
+            
+            guard
+               case .add(-1) = first,
+               case let .move(forwardOffset) = second,
+               case let .add(value) = third,
+               case let .move(backwardOffset) = fourth,
+               
+               forwardOffset == -backwardOffset,
+               value >= 0
+            else {
+               return $0
+            }
+            
+            return .multiply(value: .init(value), offset: Int(forwardOffset))
+         }
       }
    }
 }
