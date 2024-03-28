@@ -57,6 +57,7 @@ public extension Program {
    ///   condensed into a single instruction.
    /// - The `[-]` construct is replaced with a `setTo(0)`
    ///   instruction.
+   /// - Empty loops are removed.
    ///
    /// - Parameter string: A string to parse into a `Program`.
    ///

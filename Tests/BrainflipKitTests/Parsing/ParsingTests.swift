@@ -84,12 +84,6 @@ struct ParsingTests {
       ])
    }
    
-   @Test("Set-to parsing")
-   func setToInstruction() throws {
-      let program = try Program("[-]")
-      #expect(program == [.setTo(0)])
-   }
-   
    @Test("'Obscure Problem Tester'")
    func obscureProblemTester() throws {
       let program = try Program("""
@@ -99,7 +93,6 @@ struct ParsingTests {
       "A*$";?@![#>>+<<]>[>>]<<<<[>++<[-]]>.>.
       """)
       #expect(program == [
-         .loop([]),
          .add(10),
          .loop([
             .move(2),

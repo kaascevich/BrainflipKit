@@ -16,10 +16,10 @@
 
 import Foundation
 
-private import Parsing
+import Parsing
 
 internal enum BrainflipParser {
-   private struct ProgramParser: Parser {
+   struct InstructionParser: Parser {
       // MARK: - Utilities
       
       struct CountRepeated<CountType: BinaryInteger>: Parser {
@@ -45,44 +45,42 @@ internal enum BrainflipParser {
          }
       }
       
-      struct SetToZeroParser: Parser {
-         var body: some Parser<Substring, Instruction> {
-            "[-]".map(.case(Instruction.setTo(0)))
-         }
-      }
-      
       struct LoopParser: Parser {
          var body: some Parser<Substring, Instruction> {
-            Parse {
+            Parse(Instruction.loop) {
                "["; ProgramParser(); "]"
-            }.map(Instruction.loop)
+            }
          }
       }
       
       // MARK: - Main Parser
       
-      var body: some Parser<Substring, Program> {
-         Many {
-            OneOf {
-               // condense repeated instructions into a single instruction
-               CountRepeated("+")
-                  .map(Instruction.add)
-               CountRepeated("-")
-                  .map(-).map(Instruction.add)
-               
-               CountRepeated(">")
-                  .map(Instruction.move)
-               CountRepeated("<")
-                  .map(-).map(Instruction.move)
-               
-               ",".map(.case(Instruction.input))
-               ".".map(.case(Instruction.output))
-               
-               ExtrasParser()
-               SetToZeroParser()
-               LoopParser()
-            }
+      var body: some Parser<Substring, Instruction> {
+         OneOf {
+            // condense repeated instructions into a single instruction
+            CountRepeated("+")
+               .map(Instruction.add)
+            CountRepeated("-")
+               .map(-).map(Instruction.add)
+            
+            CountRepeated(">")
+               .map(Instruction.move)
+            CountRepeated("<")
+               .map(-).map(Instruction.move)
+            
+            ",".map { Instruction.input }
+            ".".map { Instruction.output }
+            
+            ExtrasParser()
+            LoopParser()
          }
+      }
+   }
+   
+   struct ProgramParser: Parser {
+      var body: some Parser<Substring, Program> {
+         Many(element: InstructionParser.init)
+            .map(BrainflipOptimizer.optimizingWithoutNesting)
       }
    }
 }

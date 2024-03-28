@@ -40,11 +40,11 @@ let swiftSettings: [SwiftSetting] = [
 let package = Package(
    name: "BrainflipKit",
    platforms: [
-      .macOS(.v12),
-      .iOS(.v15),
-      .tvOS(.v15),
-      .watchOS(.v7),
-      .macCatalyst(.v15),
+      .macOS(.v13),
+      .iOS(.v16),
+      .tvOS(.v16),
+      .watchOS(.v8),
+      .macCatalyst(.v16),
       .visionOS(.v1)
    ],
    products: [
