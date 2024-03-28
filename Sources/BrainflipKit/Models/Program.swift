@@ -37,7 +37,6 @@ public extension Program {
    /// | Character |           Instruction           | Key Combo |
    /// |-----------|---------------------------------|-----------|
    /// |    `!`    | ``ExtraInstruction/stop``       |           |
-   /// |    `0`    | ``ExtraInstruction/zero``       |           |
    /// |    `~`    | ``ExtraInstruction/bitwiseNot`` |           |
    /// |    `»`    | ``ExtraInstruction/leftShift``  | ⌥ ⇧ \\    |
    /// |    `«`    | ``ExtraInstruction/rightShift`` | ⌥ \\      |

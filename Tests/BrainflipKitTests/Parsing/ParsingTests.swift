@@ -71,10 +71,9 @@ struct ParsingTests {
    
    @Test("Extra instructions parsing")
    func extraInstructions() throws {
-      let program = try Program("!0~«»?≥≤")
+      let program = try Program("!~«»?≥≤")
       #expect(program == [
          .extra(.stop),
-         .extra(.zero),
          .extra(.bitwiseNot),
          .extra(.leftShift),
          .extra(.rightShift),

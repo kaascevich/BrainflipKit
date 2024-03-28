@@ -48,20 +48,6 @@ extension InterpreterTests.InstructionTests {
          }
       }
       
-      @Test("Zero instruction")
-      func zeroInstruction() async throws {
-         var interpreter = try Interpreter("", options: .init(
-            enabledExtraInstructions: [.zero]
-         ))
-         
-         interpreter.currentCellValue = 42
-         try await interpreter.handleInstruction(.extra(.zero))
-         #expect(
-            interpreter.currentCellValue == 0,
-            "zero instruction sets the current cell to zero"
-         )
-      }
-      
       @Test("Bitwise NOT instruction")
       func bitwiseNotInstruction() async throws {
          var interpreter = try Interpreter("", options: .init(

@@ -30,7 +30,6 @@ extension ExtraInstruction: ExpressibleByArgument {
    public var details: String {
       switch self {
       case .stop: "Immediately ends the program."
-      case .zero: "Sets the current cell to zero."
       case .bitwiseNot: "Performs a bitwise NOT on the current cell."
       case .leftShift: "Performs a lossy left bit-shift on the current cell."
       case .rightShift: "Performs a lossy right bit-shift on the current cell."

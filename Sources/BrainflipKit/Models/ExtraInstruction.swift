@@ -22,9 +22,6 @@ import CasePaths
    /// Immediately ends the program.
    case stop = "!"
    
-   /// Sets the current cell to zero.
-   case zero = "0"
-   
    /// Performs a bitwise NOT on the current cell.
    case bitwiseNot = "~"
    

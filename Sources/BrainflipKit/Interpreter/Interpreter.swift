@@ -73,8 +73,6 @@
 /// - term ``ExtraInstruction/stop``:
 ///     Immediately ends the program by throwing a
 ///     ``Interpreter/Error/stopInstruction`` error.
-/// - term ``ExtraInstruction/zero``:
-///     Sets the value of the current cell to zero.
 /// - term ``ExtraInstruction/bitwiseNot``:
 ///     Performs a bitwise NOT on the current cell.
 /// - term ``ExtraInstruction/leftShift``:
