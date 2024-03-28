@@ -38,11 +38,9 @@
 ///     Decrements the current cell by 1, wrapping back to
 ///     `CellValue.max` if necessary.
 ///
-/// - term ``Instruction/moveRight``:
-///     Moves the cell pointer forward 1 cell.
-///
-/// - term ``Instruction/moveLeft``:
-///     Moves the cell pointer back 1 cell.
+/// - term ``Instruction/move(_:)``:
+///     Moves the cell pointer by the specified amount. If the amount
+///     is negative, move the pointer backward.
 ///
 /// - term ``Instruction/loop(_:)``:
 ///     If the current cell is 0, skips the contained instructions.
