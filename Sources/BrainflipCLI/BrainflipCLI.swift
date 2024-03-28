@@ -15,7 +15,7 @@
 // with this package. If not, see https://www.gnu.org/licenses/.
 
 import ArgumentParser
-import Foundation
+import struct Foundation.URL
 
 import BrainflipKit
 
@@ -86,10 +86,8 @@ import BrainflipKit
       )
    ) var program: String?
    
-   @Option(
-      name: .shortAndLong,
-      help: "The input to pass to the program."
-   ) var input: String = ""
+   @Option(name: .shortAndLong, help: "The input to pass to the program.")
+   var input: String = ""
    
    // MARK: - Flags
    

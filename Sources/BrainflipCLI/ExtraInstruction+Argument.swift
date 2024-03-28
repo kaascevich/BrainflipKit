@@ -15,7 +15,7 @@
 // with this package. If not, see https://www.gnu.org/licenses/.
 
 import ArgumentParser
-import BrainflipKit
+import enum BrainflipKit.ExtraInstruction
 
 extension ExtraInstruction: ExpressibleByArgument {
    public init?(argument: String) {
