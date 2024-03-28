@@ -25,17 +25,14 @@ internal extension Interpreter {
       }
       
       switch instruction {
-      case .stop:
-         throw Error.stopInstruction
+      case .stop: throw Error.stopInstruction
          
-      case .zero:
-         self.currentCellValue = 0
+      case .zero: self.currentCellValue = 0
          
-      case .bitwiseNot:
-         self.currentCellValue = ~self.currentCellValue
+      case .bitwiseNot: self.currentCellValue = ~self.currentCellValue
          
-      case .leftShift:  self.currentCellValue = self.currentCellValue << 1
-      case .rightShift: self.currentCellValue = self.currentCellValue >> 1
+      case .leftShift:  self.currentCellValue <<= 1
+      case .rightShift: self.currentCellValue >>= 1
          
       case .random:
          self.currentCellValue = CellValue.random(in: 0...(.max))

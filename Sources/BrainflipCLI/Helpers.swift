@@ -24,7 +24,7 @@ extension BrainflipCLI {
    ///
    /// - Throws: `ValidationError` if standard input only
    ///   contains whitespace.
-   func readFromStandardInput() throws -> String {
+   func readFromStandardInput() async throws -> String {
       var input = ""
       while let nextLine = readLine() {
          input += nextLine

@@ -33,9 +33,6 @@ public extension Program {
    /// |    `.`    | ``Instruction/output``        |
    /// |    `,`    | ``Instruction/input``         |
    ///
-   /// Repeated occurrences of `+`, `-`, `>`, or `<` are
-   /// condensed into a single instruction.
-   ///
    /// Additionally, the following instructions are also
    /// recognized (although they are disabled by default):
    ///
@@ -50,6 +47,18 @@ public extension Program {
    ///
    /// All other characters are parsed into ``Instruction/comment(_:)``
    /// instructions, which are ignored during execution.
+   ///
+   /// ## Optimization
+   ///
+   /// Some constructs can be simplified to speed up program
+   /// execution. The tricks currently used to optimize programs
+   /// are:
+   ///
+   /// - Repeated occurrences of `+`, `-`, `>`, or `<` are
+   ///   condensed into a single instruction.
+   /// - The `[-]++`...`++` construct is replaced with a `setTo(n)`
+   ///   instruction, where *n* is the number of `+` instructions
+   ///   that follow `[-]`.
    ///
    /// - Parameter string: A string to parse into a `Program`.
    ///

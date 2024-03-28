@@ -14,73 +14,107 @@
 // You should have received a copy of the GNU General Public License along
 // with this package. If not, see https://www.gnu.org/licenses/.
 
-private import Parsing
-private import CasePaths
+import Foundation
 
-@usableFromInline internal enum BrainflipParser {
+private import Parsing
+
+internal enum BrainflipParser {
    private struct ProgramParser: ParserPrinter {
-      static let validInstructions = ["+", "-", ">", "<", "[", "]", ",", "."] + ExtraInstruction.allCases.map(\.rawValue)
+      // MARK: - Utilities
       
-      struct RepeatedInstruction<CountType: BinaryInteger>: ParserPrinter {
-         let repeatedCharacter: Character
-         let instruction: (CountType) -> Instruction
-         init(
-            _ character: Character,
-            _ instruction: @escaping (CountType) -> Instruction
-         ) {
-            self.repeatedCharacter = character
-            self.instruction = instruction
+      struct Count<
+         RepeatedItem,
+         Input: RangeReplaceableCollection<RepeatedItem>,
+         Output: BinaryInteger
+      >: Conversion {
+         let repeatedItem: RepeatedItem
+         @inlinable init(repeating item: RepeatedItem) {
+            self.repeatedItem = item
          }
          
-         var body: some ParserPrinter<Substring, Instruction> {
-            Prefix(1...) { $0 == repeatedCharacter }
-               .map(.convert(
-                  apply: { .init($0.count) },
-                  unapply: { .init(repeating: repeatedCharacter, count: .init($0)) }
-               )).map(.case(instruction))
+         @inlinable func apply(_ items: Input) throws -> Output {
+            .init(items.count)
+         }
+         
+         @inlinable func unapply(_ count: Output) throws -> Input {
+            .init(repeating: repeatedItem, count: Int(count))
          }
       }
+      
+      struct CountRepeated<CountType: BinaryInteger>: ParserPrinter {
+         let repeatedCharacter: Character
+         @inlinable init(_ character: Character) {
+            self.repeatedCharacter = character
+         }
+         
+         var body: some ParserPrinter<Substring, CountType> {
+            Prefix(1...) { $0 == repeatedCharacter }
+               .map(Count<_, _, CountType>(repeating: repeatedCharacter))
+         }
+      }
+      
+      // MARK: - Instructions
+      
+      struct ExtrasParser: ParserPrinter {
+         var body: some ParserPrinter<Substring, Instruction> {
+            First()
+               .map(.representing(ExtraInstruction.self))
+               .map(.case(Instruction.extra))
+         }
+      }
+      
+      struct SetToParser: ParserPrinter {
+         var body: some ParserPrinter<Substring, Instruction> {
+            "[-]".utf8
+            CharacterSet(charactersIn: "+")
+               .map(Count(repeating: "+"))
+               .map(.case(Instruction.setTo))
+         }
+      }
+      
+      struct LoopParser: ParserPrinter {
+         var body: some ParserPrinter<Substring, Instruction> {
+            Parse(.case(Instruction.loop)) {
+               "["; ProgramParser(); "]"
+            }
+         }
+      }
+      
+      struct CommentParser: ParserPrinter {
+         static let validInstructions = ["+", "-", ">", "<", "[", "]", ",", "."] + ExtraInstruction.allCases.map(\.rawValue)
+         
+         var body: some ParserPrinter<Substring, Instruction> {
+            Prefix(1...) { !Self.validInstructions.contains($0) }
+               .map(.string)
+               .map(.case(Instruction.comment))
+         }
+      }
+      
+      // MARK: - Main Parser
       
       var body: some ParserPrinter<Substring, Program> {
          Many {
             OneOf {
-               // MARK: Basic Instructions
-               
                // condense repeated instructions into a single instruction
-               RepeatedInstruction("+", Instruction.increment)
-               RepeatedInstruction("-", Instruction.decrement)
-               RepeatedInstruction(">", Instruction.moveRight)
-               RepeatedInstruction("<", Instruction.moveLeft)
+               CountRepeated("+").map(.case(Instruction.increment))
+               CountRepeated("-").map(.case(Instruction.decrement))
+               CountRepeated(">").map(.case(Instruction.moveRight))
+               CountRepeated("<").map(.case(Instruction.moveLeft))
                
                ",".map(.case(Instruction.input))
                ".".map(.case(Instruction.output))
                
-               // MARK: Set-to Loop
-               
-               "[-]".map(.case(Instruction.setTo(0)))
-               
-               // MARK: Loops
-               
-               Parse(.case(Instruction.loop)) {
-                  "["; Self(); "]"
-               }
-               
-               // MARK: Extras
-               
-               First()
-                  .map(.representing(ExtraInstruction.self))
-                  .map(.case(Instruction.extra))
-               
-               // MARK: Comments
-               
-               Prefix(1...) { !Self.validInstructions.contains($0) }
-                  .map(.string)
-                  .map(.case(Instruction.comment))
+               ExtrasParser()
+               SetToParser()
+               LoopParser()
+               CommentParser()
             }
          }
       }
    }
-   
+}
+
+extension BrainflipParser {
    /// Parses a `String` into a ``Program``.
    ///
    /// - Parameter string: The original source code for a

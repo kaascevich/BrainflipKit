@@ -93,10 +93,70 @@ struct ParsingTests {
    
    @Test("Set-to parsing")
    func setToInstruction() throws {
-      let program = try Program("[-]")
+      let program = try Program("[-]++++")
       #expect(program == [
-         .setTo(0)
+         .setTo(4)
       ])
-      #expect(program.description == "[-]")
+      #expect(program.description == "[-]++++")
+   }
+   
+   @Test("'Obscure Problem Tester'")
+   func obscureProblemTester() throws {
+      let programString = """
+      This program tests for several obscure interpreter problems; it should output an H
+      
+      []++++++++++[>>+>+>++++++[<<+<+++>>>-]<<<<-]
+      "A*$";?@![#>>+<<]>[>>]<<<<[>++<[-]]>.>.
+      """
+      let program = try Program(programString)
+      #expect(program == [
+         .comment("This program tests for several obscure interpreter problems; it should output an H\n\n"),
+         .loop([]),
+         .increment(10),
+         .loop([
+            .moveRight(2),
+            .increment(1),
+            .moveRight(1),
+            .increment(1),
+            .moveRight(1),
+            .increment(6),
+            .loop([
+               .moveLeft(2),
+               .increment(1),
+               .moveLeft(1),
+               .increment(3),
+               .moveRight(3),
+               .decrement(1)
+            ]),
+            .moveLeft(4),
+            .decrement(1)
+         ]),
+         .comment("\n\"A*$\";"),
+         .extra(.random),
+         .comment("@"),
+         .extra(.stop),
+         .loop([
+            .comment("#"),
+            .moveRight(2),
+            .increment(1),
+            .moveLeft(2)
+         ]),
+         .moveRight(1),
+         .loop([
+            .moveRight(2)
+         ]),
+         .moveLeft(4),
+         .loop([
+            .moveRight(1),
+            .increment(2),
+            .moveLeft(1),
+            .setTo(0)
+         ]),
+         .moveRight(1),
+         .output,
+         .moveRight(1),
+         .output
+      ])
+      #expect(program.description == programString)
    }
 }

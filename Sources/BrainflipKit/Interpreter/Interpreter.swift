@@ -63,6 +63,13 @@
 ///     instruction will do nothing by default (this behavior is
 ///     configurable).
 ///
+/// ### Optimization Instructions
+///
+/// These instructions are used internally to optimize programs.
+///
+/// - term ``Instruction/setTo(_:)``:
+///     Sets the current cell to a specific value.
+///
 /// ### Extra Instructions
 ///
 /// These instructions are disabled by default. They can be enabled

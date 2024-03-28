@@ -28,7 +28,6 @@ internal extension Interpreter {
          return
       }
       
-      let scalarValue = nextInputScalar.value
-      self.currentCellValue = CellValue(scalarValue)
+      self.currentCellValue = nextInputScalar.value
    }
 }

@@ -109,10 +109,10 @@ import BrainflipKit
    
    // MARK: - Validation
    
-   mutating func validate() throws {
+   mutating func validate() async throws {
       parsedProgram = switch (programPath, program) {
       case (nil, nil):
-         try Program(readFromStandardInput())
+         try Program(await readFromStandardInput())
          
       case (let programPath?, nil):
          try Program(String(contentsOfFile: programPath))
