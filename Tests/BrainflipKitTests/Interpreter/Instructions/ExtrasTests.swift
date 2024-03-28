@@ -103,5 +103,49 @@ extension InterpreterTests.InstructionTests {
             "right shift instruction right shifts the current cell by 1"
          )
       }
+      
+      @Test("Next zero cell instruction")
+      func nextZeroInstruction() async throws {
+         var interpreter = try Interpreter("", options: .init(
+            enabledExtraInstructions: [.nextZero]
+         ))
+         
+         interpreter.tape = [
+            0: 1,
+            1: 2,
+            2: 3,
+            3: 4,
+            4: 5,
+            5: 0
+         ]
+         
+         try await interpreter.handleInstruction(.extra(.nextZero))
+         #expect(
+            interpreter.cellPointer == 5,
+            "next zero instruction moves the cell pointer to the next zero cell"
+         )
+      }
+      
+      @Test("Previous zero cell instruction")
+      func prevZeroInstruction() async throws {
+         var interpreter = try Interpreter("", options: .init(
+            enabledExtraInstructions: [.prevZero]
+         ))
+         
+         interpreter.tape = [
+            0: 1,
+            1: 2,
+            2: 3,
+            3: 4,
+            4: 5
+         ]
+         interpreter.cellPointer = 4
+         
+         try await interpreter.handleInstruction(.extra(.prevZero))
+         #expect(
+            interpreter.cellPointer == -1,
+            "previous zero instruction moves the cell pointer to the previous zero cell"
+         )
+      }
    }
 }

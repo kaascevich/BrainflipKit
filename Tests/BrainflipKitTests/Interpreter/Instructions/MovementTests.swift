@@ -1,4 +1,4 @@
-// PointerMovementTests.swift
+// MovementTests.swift
 // Copyright © 2024 Kaleb A. Ascevich
 //
 // This package is free software: you can redistribute it and/or modify it
@@ -19,7 +19,7 @@ import Testing
 
 extension InterpreterTests.InstructionTests {
    @Suite("Move right/left instructions")
-   struct PointerMovementTests {
+   struct MovementTests {
       @Test("Move right instruction")
       func moveRightInstruction() async throws {
          var interpreter = try Interpreter("")

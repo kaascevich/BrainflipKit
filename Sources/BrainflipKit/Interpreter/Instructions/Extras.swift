@@ -14,6 +14,8 @@
 // You should have received a copy of the GNU General Public License along
 // with this package. If not, see https://www.gnu.org/licenses/.
 
+// swiftlint:disable cyclomatic_complexity
+
 internal extension Interpreter {
    /// Executes the instruction contained within
    /// ``Instruction/extra(_:)``, if it is enabled.
@@ -36,6 +38,11 @@ internal extension Interpreter {
          
       case .random:
          self.currentCellValue = CellValue.random(in: 0...(.max))
+         
+      case .nextZero: repeat { self.cellPointer += 1 } while self.currentCellValue != 0
+      case .prevZero: repeat { self.cellPointer -= 1 } while self.currentCellValue != 0
       }
    }
 }
+
+// swiftlint:enable cyclomatic_complexity

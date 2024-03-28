@@ -34,4 +34,10 @@ public enum ExtraInstruction: Character, Equatable, Hashable, Codable, CaseItera
    
    /// Sets the current cell to a random value.
    case random = "?"
+   
+   /// Moves the pointer to the next zero cell.
+   case nextZero = ")"
+   
+   /// Moves the pointer to the previous zero cell.
+   case prevZero = "("
 }

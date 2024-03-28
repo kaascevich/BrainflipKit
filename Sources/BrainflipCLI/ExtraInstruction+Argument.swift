@@ -35,6 +35,8 @@ extension ExtraInstruction: ExpressibleByArgument {
       case .leftShift: "Performs a lossy left bit-shift on the current cell."
       case .rightShift: "Performs a lossy right bit-shift on the current cell."
       case .random: "Sets the current cell to a random value."
+      case .nextZero: "Moves the pointer to the next zero cell."
+      case .prevZero: "Moves the pointer to the previous zero cell."
       }
    }
 }
