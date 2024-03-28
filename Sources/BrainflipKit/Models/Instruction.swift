@@ -27,11 +27,9 @@ public enum Instruction: Equatable, Hashable, Codable, Sendable {
    /// The default behavior on underflow is to wrap around.
    case decrement(Interpreter.CellValue)
    
-   /// Increments the cell pointer by a value.
-   case moveRight(Int)
-   
-   /// Decrements the cell pointer by a value.
-   case moveLeft(Int)
+   /// Increments (or decrements) the cell pointer by
+   /// a value.
+   case move(Int)
    
    /// Loops over the contained instructions.
    case loop([Self])
@@ -57,10 +55,4 @@ public enum Instruction: Equatable, Hashable, Codable, Sendable {
    /// ``ExtraInstruction``, or does nothing if that
    /// instruction is not enabled.
    case extra(ExtraInstruction)
-   
-   /// Does nothing.
-   ///
-   /// This instruction is how comments are represented
-   /// in a program.
-   case comment(String)
 }

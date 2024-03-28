@@ -25,9 +25,9 @@ struct ParsingTests {
       #expect(program == [
          .input,
          .loop([
-            .moveRight(1),
+            .move(1),
             .increment(1),
-            .moveLeft(1),
+            .move(-1),
             .decrement(1),
             .output
          ])
@@ -39,9 +39,7 @@ struct ParsingTests {
       let program = try Program(",++ a comment ++.")
       #expect(program == [
          .input,
-         .increment(2),
-         .comment(" a comment "),
-         .increment(2),
+         .increment(4),
          .output
       ])
    }
@@ -49,27 +47,25 @@ struct ParsingTests {
    @Test("Parsing only comments")
    func commentsOnly() throws {
       let program = try Program("the whole thing is just a comment")
-      #expect(program == [
-         .comment("the whole thing is just a comment")
-      ])
+      #expect(program.isEmpty)
    }
    
    @Test("Parsing nested loops")
    func nestedLoops() throws {
       let program = try Program(">+[>-[-<]>>]>")
       #expect(program == [
-         .moveRight(1),
+         .move(1),
          .increment(1),
          .loop([
-            .moveRight(1),
+            .move(1),
             .decrement(1),
             .loop([
                .decrement(1),
-               .moveLeft(1)
+               .move(-1)
             ]),
-            .moveRight(2)
+            .move(2)
          ]),
-         .moveRight(1)
+         .move(1)
       ])
    }
    
@@ -103,51 +99,47 @@ struct ParsingTests {
       "A*$";?@![#>>+<<]>[>>]<<<<[>++<[-]]>.>.
       """)
       #expect(program == [
-         .comment("This program tests for several obscure interpreter problems; it should output an H\n\n"),
          .loop([]),
          .increment(10),
          .loop([
-            .moveRight(2),
+            .move(2),
             .increment(1),
-            .moveRight(1),
+            .move(1),
             .increment(1),
-            .moveRight(1),
+            .move(1),
             .increment(6),
             .loop([
-               .moveLeft(2),
+               .move(-2),
                .increment(1),
-               .moveLeft(1),
+               .move(-1),
                .increment(3),
-               .moveRight(3),
+               .move(3),
                .decrement(1)
             ]),
-            .moveLeft(4),
+            .move(-4),
             .decrement(1)
          ]),
-         .comment("\n\"A*$\";"),
          .extra(.random),
-         .comment("@"),
          .extra(.stop),
          .loop([
-            .comment("#"),
-            .moveRight(2),
+            .move(2),
             .increment(1),
-            .moveLeft(2)
+            .move(-2)
          ]),
-         .moveRight(1),
+         .move(1),
          .loop([
-            .moveRight(2)
+            .move(2)
          ]),
-         .moveLeft(4),
+         .move(-4),
          .loop([
-            .moveRight(1),
+            .move(1),
             .increment(2),
-            .moveLeft(1),
+            .move(-1),
             .setTo(0)
          ]),
-         .moveRight(1),
+         .move(1),
          .output,
-         .moveRight(1),
+         .move(1),
          .output
       ])
    }

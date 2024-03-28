@@ -27,8 +27,7 @@ public extension Program {
    /// |-----------|-------------------------------|
    /// |    `+`    | ``Instruction/increment(_:)`` |
    /// |    `-`    | ``Instruction/decrement(_:)`` |
-   /// |    `>`    | ``Instruction/moveRight(_:)`` |
-   /// |    `<`    | ``Instruction/moveLeft(_:)``  |
+   /// |  `<` `>`  | ``Instruction/move(_:)``      |
    /// |  `[` `]`  | ``Instruction/loop(_:)``      |
    /// |    `.`    | ``Instruction/output``        |
    /// |    `,`    | ``Instruction/input``         |
@@ -47,8 +46,7 @@ public extension Program {
    /// |    `≥`    | ``ExtraInstruction/nextZero``   | ⌥ >               |
    /// |    `≤`    | ``ExtraInstruction/prevZero``   | ⌥ <               |
    ///
-   /// All other characters are parsed into ``Instruction/comment(_:)``
-   /// instructions, which are ignored during execution.
+   /// All other characters are ignored.
    ///
    /// ## Optimization
    ///

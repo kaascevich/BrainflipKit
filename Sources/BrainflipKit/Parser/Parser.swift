@@ -59,16 +59,6 @@ internal enum BrainflipParser {
          }
       }
       
-      struct CommentParser: Parser {
-         static let validInstructions = ["+", "-", ">", "<", "[", "]", ",", "."] + ExtraInstruction.allCases.map(\.rawValue)
-         
-         var body: some Parser<Substring, Instruction> {
-            Prefix(1...) { !Self.validInstructions.contains($0) }
-               .map(.string)
-               .map(.case(Instruction.comment))
-         }
-      }
-      
       // MARK: - Main Parser
       
       var body: some Parser<Substring, Program> {
@@ -77,8 +67,11 @@ internal enum BrainflipParser {
                // condense repeated instructions into a single instruction
                CountRepeated("+").map(Instruction.increment)
                CountRepeated("-").map(Instruction.decrement)
-               CountRepeated(">").map(Instruction.moveRight)
-               CountRepeated("<").map(Instruction.moveLeft)
+               
+               CountRepeated(">")
+                  .map(Instruction.move)
+               CountRepeated("<")
+                  .map(-).map(Instruction.move)
                
                ",".map(.case(Instruction.input))
                ".".map(.case(Instruction.output))
@@ -86,7 +79,6 @@ internal enum BrainflipParser {
                ExtrasParser()
                SetToZeroParser()
                LoopParser()
-               CommentParser()
             }
          }
       }
@@ -94,6 +86,8 @@ internal enum BrainflipParser {
 }
 
 extension BrainflipParser {
+   static let validInstructions = ["+", "-", ">", "<", "[", "]", ",", "."] + ExtraInstruction.allCases.map(\.rawValue)
+   
    /// Parses a `String` into a ``Program``.
    ///
    /// - Parameter string: The original source code for a
@@ -105,6 +99,6 @@ extension BrainflipParser {
    ///   into a valid program (that is, if it contains
    ///   unmatched brackets).
    @usableFromInline static func parse(program string: String) throws -> Program {
-      try ProgramParser().parse(string)
+      try ProgramParser().parse(string.filter(validInstructions.contains))
    }
 }

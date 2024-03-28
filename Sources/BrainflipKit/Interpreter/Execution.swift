@@ -49,22 +49,23 @@ extension Interpreter {
    ///   encountered during execution.
    internal mutating func handleInstruction(_ instruction: Instruction) async throws {
       switch instruction {
+      // MARK: Core
+      
       case .increment(let count): try handleIncrementInstruction(count)
       case .decrement(let count): try handleDecrementInstruction(count)
          
-      case .moveRight(let count): handleMoveRightInstruction(count)
-      case .moveLeft(let count):  handleMoveLeftInstruction(count)
+      case .move(let count): handleMoveInstruction(count)
       
       case .loop(let instructions): try await handleLoop(instructions)
          
       case .output: handleOutputInstruction()
       case .input: try handleInputInstruction()
          
+      // MARK: Non-core
+         
       case .setTo(let value): handleSetToInstruction(value)
          
       case .extra(let instruction): try await handleExtraInstruction(instruction)
-         
-      case .comment: break
       }
    }
 }
