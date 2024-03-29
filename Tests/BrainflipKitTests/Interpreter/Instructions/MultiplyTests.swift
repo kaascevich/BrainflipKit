@@ -26,7 +26,9 @@ extension InterpreterTests.InstructionTests {
          
          interpreter.currentCellValue = 3
          interpreter.tape[2] = 5
-         try await interpreter.handleInstruction(.multiply(value: 4, offset: 2))
+         try await interpreter.handleInstruction(
+            .multiply(value: 4, offset: 2)
+         )
          #expect(interpreter.tape[2] == 17) // (3*4) + 5
          #expect(interpreter.currentCellValue == 0)
       }

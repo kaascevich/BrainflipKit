@@ -27,13 +27,20 @@ extension BrainflipCLI {
       @Flag(
          name: [.customLong("wrap")],
          inversion: .prefixedNo,
-         help: "Whether to allow cell values to wrap around when they overflow or underflow."
+         help: """
+         Whether to allow cell values to wrap around when they overflow or \
+         underflow.
+         """
       ) var wraparound: Bool = true
       
       @Option(
          name: [.customLong("eoi"), .customLong("end-of-input")],
          help: .init(
-            "The action to take on the current cell when an input instruction is executed, but there are no characters remaining in the input buffer.",
+            """
+            The action to take on the current cell when an input instruction \
+            is executed, but there are no characters remaining in the input \
+            buffer.
+            """,
             discussion: "No action is taken if this option is not specified.",
             valueName: "behavior"
          )
@@ -45,7 +52,9 @@ extension BrainflipCLI {
          help: .init(
             "A list of optional, extra instructions to enable.",
             discussion: ExtraInstruction.allCases
-               .map { "(\($0.rawValue)) \(String(describing: $0)): \($0.details)" }
+               .map {
+                  "(\($0.rawValue)) \(String(describing: $0)): \($0.details)"
+               }
                .joined(separator: "\n"),
             valueName: "instructions"
          )

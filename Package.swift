@@ -18,7 +18,10 @@
 
 import PackageDescription
 
-let swiftLintPlugin = Target.PluginUsage.plugin(name: "SwiftLint", package: "SwiftLintPlugin")
+let swiftLintPlugin = Target.PluginUsage.plugin(
+   name: "SwiftLint",
+   package: "SwiftLintPlugin"
+)
 let swiftSettings: [SwiftSetting] = [
    "ConciseMagicFile",
    "ForwardTrailingClosures",
@@ -37,8 +40,13 @@ let swiftSettings: [SwiftSetting] = [
    "ExistentialAny"
 ].map { .enableExperimentalFeature($0) }
 
-func dependency(fromRepository repositoryPath: String) -> Package.Dependency {
-   .package(url: "https://github.com/\(repositoryPath).git", branch: "main")
+func dependency(
+   fromRepository repositoryPath: String
+) -> Package.Dependency {
+   .package(
+      url: "https://github.com/\(repositoryPath).git",
+      branch: "main"
+   )
 }
 
 let package = Package(

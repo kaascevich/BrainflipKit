@@ -26,10 +26,11 @@ import BrainflipKit
       commandName: "brainflip",
       abstract: "Run Brainflip programs with a configurable interpreter.",
       discussion: """
-      Brainflip is an optimizing Swift interpreter for the Brainf**k programming \
-      language -- an incredibly simple language that only has 8 instructions. This \
-      interpreter features full Unicode support, as well as languange extensions in \
-      the form of extra instructions (which can be enabled or disabled at will).
+      Brainflip is an optimizing Swift interpreter for the Brainf**k \
+      programming language -- an incredibly simple language that only has 8 \
+      instructions. This interpreter features full Unicode support, as well as \
+      languange extensions in the form of extra instructions (which can be \
+      enabled or disabled at will).
       """
    )
    
@@ -47,12 +48,12 @@ import BrainflipKit
       help: .init(
          "The path to a Brainflip program to execute.",
          discussion: """
-         The file extension must be one of \(formattedValidExtensions). If neither \
-         this argument nor the '-p/--program' option is provided, the program will \
-         be read from standard input.
+         The file extension must be one of \(formattedValidExtensions). If \
+         neither this argument nor the '-p/--program' option is provided, the \
+         program will be read from standard input.
          
-         This argument is mutually exclusive with the '-p/--program' option. Only \
-         one should be specified.
+         This argument is mutually exclusive with the '-p/--program' option. \
+         Only one should be specified.
          """,
          valueName: "file-path"
       ),
@@ -63,7 +64,9 @@ import BrainflipKit
          }
          
          guard validExtensions.contains(url.pathExtension) else {
-            throw ValidationError("Invalid file type -- must be one of \(formattedValidExtensions).")
+            throw ValidationError(
+               "Invalid file type -- must be one of \(formattedValidExtensions)."
+            )
          }
          
          return filePath
@@ -80,8 +83,8 @@ import BrainflipKit
          If neither this option nor the 'file-path' argument is provided, the \
          program will be read from standard input.
          
-         This argument is mutually exclusive with the 'file-path' argument. Only \
-         one should be specified.
+         This argument is mutually exclusive with the 'file-path' argument. \
+         Only one should be specified.
          """
       )
    ) var program: String?

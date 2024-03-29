@@ -66,7 +66,8 @@ internal enum BrainflipParser {
 }
 
 extension BrainflipParser {
-   static let validInstructions = ["+", "-", ">", "<", "[", "]", ",", "."] + ExtraInstruction.allCases.map(\.rawValue)
+   static let validInstructions = ["+", "-", ">", "<", "[", "]", ",", "."]
+      + ExtraInstruction.allCases.map(\.rawValue)
    
    /// Parses a `String` into a ``Program``.
    ///
@@ -78,7 +79,10 @@ extension BrainflipParser {
    /// - Throws: An `Error` if `string` cannot be parsed
    ///   into a valid program (that is, if it contains
    ///   unmatched brackets).
-   @usableFromInline static func parse(program string: String) throws -> Program {
-      try ProgramParser().parse(string.filter(validInstructions.contains))
+   @usableFromInline static func parse(
+      program string: String
+   ) throws -> Program {
+      try ProgramParser()
+         .parse(string.filter(validInstructions.contains))
    }
 }

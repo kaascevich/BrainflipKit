@@ -87,7 +87,9 @@ extension BrainflipCLI {
          program
          
       case (_?, _?):
-         throw ValidationError("Only one of 'file-path' or '-p/--program' must be provided.")
+         throw ValidationError(
+            "Only one of 'file-path' or '-p/--program' must be provided."
+         )
       }
    }
 }

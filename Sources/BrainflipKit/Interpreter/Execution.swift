@@ -47,32 +47,44 @@ extension Interpreter {
    ///
    /// - Throws: An interpreter ``Error`` if an issue was
    ///   encountered during execution.
-   internal mutating func handleInstruction(_ instruction: Instruction) async throws {
+   internal mutating func handleInstruction(
+      _ instruction: Instruction
+   ) async throws {
       switch instruction {
       // MARK: Core
       
-      case let .add(count): try handleAddInstruction(count)
+      case let .add(count):
+         try handleAddInstruction(count)
          
-      case let .move(count): handleMoveInstruction(count)
+      case let .move(count):
+         handleMoveInstruction(count)
       
-      case let .loop(instructions): try await handleLoop(instructions)
+      case let .loop(instructions):
+         try await handleLoop(instructions)
          
-      case .output: handleOutputInstruction()
-      case .input: try handleInputInstruction()
+      case .output:
+         handleOutputInstruction()
+      case .input:
+         try handleInputInstruction()
          
       // MARK: Non-core
          
-      case let .setTo(value): handleSetToInstruction(value)
+      case let .setTo(value):
+         handleSetToInstruction(value)
          
-      case let .multiply(value, offset): try handleMultiplyInstruction(
-         multiplyingBy: value,
-         storingAtOffset: offset
-      )
+      case let .multiply(value, offset):
+         try handleMultiplyInstruction(
+            multiplyingBy: value,
+            storingAtOffset: offset
+         )
          
-      case .scanLeft:  handleScanLeftInstruction()
-      case .scanRight: handleScanRightInstruction()
+      case .scanLeft:
+         handleScanLeftInstruction()
+      case .scanRight:
+         handleScanRightInstruction()
          
-      case let .extra(instruction): try await handleExtraInstruction(instruction)
+      case let .extra(instruction):
+         try await handleExtraInstruction(instruction)
       }
    }
 }

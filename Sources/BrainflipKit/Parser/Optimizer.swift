@@ -61,11 +61,11 @@ internal enum BrainflipOptimizer {
          }.flatMap { chunk in
             // we only need to check the first value, since all others
             // should match it
-            let casePath: CaseKeyPath<Instruction, Int32>? = switch chunk.first {
+            let casePath = switch chunk.first {
             case .add:  \Instruction.Cases.add
             case .move: \Instruction.Cases.move
             default: nil
-            }
+            } as CaseKeyPath<Instruction, Int32>?
             
             // make sure we're actually dealing with one of the
             // cases we're interested in optimizing
@@ -122,7 +122,10 @@ internal enum BrainflipOptimizer {
                return $0
             }
             
-            return .multiply(value: .init(value), offset: Int(forwardOffset))
+            return .multiply(
+               value: .init(value),
+               offset: Int(forwardOffset)
+            )
          }
       }
    }

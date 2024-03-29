@@ -84,7 +84,8 @@ struct ParsingTests {
    @Test("'Obscure Problem Tester'")
    func obscureProblemTester() throws {
       let program = try Program("""
-      This program tests for several obscure interpreter problems; it should output an H
+      This program tests for several obscure interpreter problems;
+      it should output an H
       
       []++++++++++[>>+>+>++++++[<<+<+++>>>-]<<<<-]
       "A*$";?@![#>>+<<]>[>>]<<<<[>++<[-]]>.>.

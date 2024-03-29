@@ -22,7 +22,9 @@ extension ParsingTests {
    struct ParserErrorTests {
       @Test("Unpaired loops")
       func unpairedLoops() {
-         let invalidPrograms = ["[", "]", "][", "]][", "][[", "[][", "][]", "[[]", "[]]"]
+         let invalidPrograms = [
+            "[", "]", "][", "]][", "][[", "[][", "][]", "[[]", "[]]"
+         ]
          for program in invalidPrograms {
             #expect(throws: (any Error).self) {
                try Program(program)

@@ -64,7 +64,10 @@ extension InterpreterTests {
       
       @Test("'Hello World!' program")
       func helloWorldProgram() async throws {
-         let program = "++++++++[>++++[>++>+++>+++>+<<<<-]>+>+>->>+[<]<-]>>.>---.+++++++..+++.>>.<-.<.+++.------.--------.>>+."
+         let program = """
+         ++++++++[>++++[>++>+++>+++>+<<<<-]>+>+>->>+[<]<-]>>
+         .>---.+++++++..+++.>>.<-.<.+++.------.--------.>>+.
+         """
          let interpreter = try Interpreter(program)
          
          let output = try await interpreter.run()

@@ -26,7 +26,11 @@ internal extension Interpreter {
       }
       
       if overflowCheck(twosComplementValue).overflow { // wraparound
-         let errorType = if value < 0 { Error.cellUnderflow } else { Error.cellOverflow }
+         let errorType = if value < 0 {
+            Error.cellUnderflow
+         } else {
+            Error.cellOverflow
+         }
          try checkOverflowAllowed(throwing: errorType(self.cellPointer))
       }
       self.currentCellValue &+= twosComplementValue

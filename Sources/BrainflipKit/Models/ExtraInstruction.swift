@@ -18,7 +18,9 @@ import CasePaths
 
 /// An instruction that can be enabled or disabled
 /// per-``Interpreter``.
-@CasePathable public enum ExtraInstruction: Character, Equatable, Hashable, CaseIterable, Sendable {
+@CasePathable public enum ExtraInstruction:
+   Character, Equatable, Hashable, CaseIterable, Sendable
+{
    /// Immediately ends the program.
    case stop = "!"
    

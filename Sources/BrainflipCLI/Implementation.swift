@@ -21,12 +21,13 @@ extension BrainflipCLI {
    func run() async throws {
       // MARK: Setup
       
-      let endOfInputBehavior: Interpreter.Options.EndOfInputBehavior? = switch interpreterOptions.endOfInputBehavior {
+      let endOfInputBehavior = switch interpreterOptions.endOfInputBehavior {
       case .zero:  .setTo(0)
       case .max:   .setTo(.max)
       case .error: .throwError
       case  nil:   nil
-      }
+      } as Interpreter.Options.EndOfInputBehavior?
+      
       let options = Interpreter.Options(
          allowCellWraparound:      interpreterOptions.wraparound,
          endOfInputBehavior:       endOfInputBehavior,
@@ -44,7 +45,10 @@ extension BrainflipCLI {
          Self.exit()
       }
       
-      let interpreter = Interpreter(parsedProgram, input: input, options: options)
+      let interpreter = Interpreter(
+         parsedProgram,
+         input: input,
+         options: options)
       
       // MARK: Interpreting
       

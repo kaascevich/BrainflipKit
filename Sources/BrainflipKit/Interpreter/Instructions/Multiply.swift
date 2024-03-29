@@ -20,12 +20,15 @@ internal extension Interpreter {
       multiplyingBy value: UInt32,
       storingAtOffset cellOffset: Int
    ) throws {
-      let multiplicationValue = self.currentCellValue.multipliedReportingOverflow(by: value)
+      let multiplicationValue = self.currentCellValue
+         .multipliedReportingOverflow(by: value)
       let additionValue = self.tape[self.cellPointer + cellOffset, default: 0]
          .addingReportingOverflow(multiplicationValue.partialValue)
       
       if multiplicationValue.overflow || additionValue.overflow { // wraparound
-         try checkOverflowAllowed(throwing: .cellOverflow(position: self.cellPointer))
+         try checkOverflowAllowed(
+            throwing: .cellOverflow(position: self.cellPointer)
+         )
       }
       
       self.tape[self.cellPointer + cellOffset] = additionValue.partialValue
