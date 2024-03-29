@@ -22,7 +22,7 @@ extension InterpreterTests.InstructionTests {
    struct AddTests {
       @Test("Add instruction")
       func addInstruction() async throws {
-         var interpreter = try Interpreter("")
+         var interpreter = try await Interpreter("")
          
          for i in 1...500 {
             try await interpreter.handleInstruction(.add(1))
@@ -39,7 +39,7 @@ extension InterpreterTests.InstructionTests {
          
       @Test("Add instruction - negative")
       func addInstruction_negative() async throws {
-         var interpreter = try Interpreter("")
+         var interpreter = try await Interpreter("")
          
          try await interpreter.handleInstruction(.add(-1))
          #expect(

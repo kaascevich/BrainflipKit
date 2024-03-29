@@ -65,3 +65,8 @@ import CasePaths
    /// instruction is not enabled.
    case extra(ExtraInstruction)
 }
+
+public extension Instruction {
+   static let validInstructions = ["+", "-", ">", "<", "[", "]", ",", "."]
+      + ExtraInstruction.allCases.map(\.rawValue)
+}

@@ -23,7 +23,7 @@ extension InterpreterTests {
       @Test("Basic program")
       func basicProgram() async throws {
          // increments cell 1 and decrements cell 2
-         let interpreter = try Interpreter("+>-<")
+         let interpreter = try await Interpreter("+>-<")
          
          let state = try await interpreter.runReturningFinalState()
          
@@ -37,7 +37,7 @@ extension InterpreterTests {
       @Test("Simple loops")
       func simpleLoops() async throws {
          // sets cell 2 to 9
-         let interpreter = try Interpreter("+++[>+++<-]")
+         let interpreter = try await Interpreter("+++[>+++<-]")
          
          let state = try await interpreter.runReturningFinalState()
          #expect(state.tape[1] == 9)
@@ -46,7 +46,7 @@ extension InterpreterTests {
       @Test("Nested loops")
       func nestedLoops() async throws {
          // sets cell 3 to 27
-         let interpreter = try Interpreter("+++[>+++[>+++<-]<-]")
+         let interpreter = try await Interpreter("+++[>+++[>+++<-]<-]")
          
          let state = try await interpreter.runReturningFinalState()
          #expect(state.tape[2] == 27)
@@ -56,7 +56,7 @@ extension InterpreterTests {
       func runningWithInput() async throws {
          // outputs the first input character twice, then the
          // second character once
-         let interpreter = try Interpreter(",..,.", input: "hello")
+         let interpreter = try await Interpreter(",..,.", input: "hello")
          
          let output = try await interpreter.run()
          #expect(output == "hhe")
@@ -68,7 +68,7 @@ extension InterpreterTests {
          ++++++++[>++++[>++>+++>+++>+<<<<-]>+>+>->>+[<]<-]>>
          .>---.+++++++..+++.>>.<-.<.+++.------.--------.>>+.
          """
-         let interpreter = try Interpreter(program)
+         let interpreter = try await Interpreter(program)
          
          let output = try await interpreter.run()
          #expect(output == "Hello World!")

@@ -34,10 +34,21 @@ extension BrainflipCLI {
          enabledExtraInstructions: Set(interpreterOptions.extraInstructions)
       )
             
-      // MARK: - Parsing
+      // MARK: - Obtaining Source
       
       let programSource = try await getProgramSource()
-      let parsedProgram = try Program(
+      
+      if filter {
+         let filteredSource = programSource.filter(
+            Instruction.validInstructions.contains
+         )
+         print(filteredSource)
+         Self.exit()
+      }
+      
+      // MARK: - Parsing
+      
+      let parsedProgram = try await Program(
          programSource,
          optimizations: optimizations
       )

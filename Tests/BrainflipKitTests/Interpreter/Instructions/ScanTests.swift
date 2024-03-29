@@ -22,7 +22,7 @@ extension InterpreterTests.InstructionTests {
    struct ScanTests {
       @Test("Scan left instruction")
       func scanLeftInstruction() async throws {
-         var interpreter = try Interpreter("")
+         var interpreter = try await Interpreter("")
          
          interpreter.tape = [
             0: 1,
@@ -42,7 +42,7 @@ extension InterpreterTests.InstructionTests {
       
       @Test("Scan right instruction")
       func scanRightInstruction() async throws {
-         var interpreter = try Interpreter("")
+         var interpreter = try await Interpreter("")
          
          interpreter.tape = [
             0: 1,

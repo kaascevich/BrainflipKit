@@ -23,6 +23,7 @@ internal enum BrainflipOptimizer {
       var program = program
       
       DeadLoopsOptimization.optimize(&program)
+      
       ClearLoopOptimization.optimize(&program)
       ScanLoopOptimization.optimize(&program)
       MultiplyLoopOptimization.optimize(&program)

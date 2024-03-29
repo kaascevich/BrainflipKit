@@ -22,7 +22,7 @@ extension InterpreterTests {
    struct OptionsTests {
       @Test("allowCellWraparound option")
       func allowWraparoundOption() async throws {
-         var interpreter = try Interpreter("", options: .init(
+         var interpreter = try await Interpreter("", options: .init(
             allowCellWraparound: false
          ))
          
@@ -40,7 +40,7 @@ extension InterpreterTests {
       struct EndOfInputBehaviorTests {
          @Test("Do nothing on end of input")
          func doNothingOption() async throws {
-            var interpreter = try Interpreter("", options: .init(
+            var interpreter = try await Interpreter("", options: .init(
                endOfInputBehavior: nil
             ))
             
@@ -51,7 +51,7 @@ extension InterpreterTests {
          
          @Test("Set the current cell to a value on end of input")
          func setToValueOption() async throws {
-            var interpreter = try Interpreter("", options: .init(
+            var interpreter = try await Interpreter("", options: .init(
                endOfInputBehavior: .setTo(0)
             ))
             
@@ -62,7 +62,7 @@ extension InterpreterTests {
          
          @Test("Throw an error on end of input")
          func throwErrorOption() async throws {
-            var interpreter = try Interpreter("", options: .init(
+            var interpreter = try await Interpreter("", options: .init(
                endOfInputBehavior: .throwError
             ))
             

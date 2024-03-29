@@ -87,9 +87,6 @@ internal enum BrainflipParser {
 }
 
 extension BrainflipParser {
-   static let validInstructions = ["+", "-", ">", "<", "[", "]", ",", "."]
-      + ExtraInstruction.allCases.map(\.rawValue)
-   
    /// Parses a `String` into a ``Program``.
    ///
    /// - Parameters:
@@ -106,8 +103,8 @@ extension BrainflipParser {
    @usableFromInline static func parse(
       program string: String,
       optimizations: Bool = true
-   ) throws -> Program {
+   ) async throws -> Program {
       try ProgramParser(optimizations: optimizations)
-         .parse(string.filter(validInstructions.contains))
+         .parse(string.filter(Instruction.validInstructions.contains))
    }
 }

@@ -66,8 +66,8 @@ public extension Program {
    init(
       _ string: String,
       optimizations: Bool = true
-   ) throws {
-      self = try BrainflipParser.parse(
+   ) async throws {
+      self = try await BrainflipParser.parse(
          program: string,
          optimizations: optimizations
       )

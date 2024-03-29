@@ -22,7 +22,7 @@ extension InterpreterTests.InstructionTests {
    struct SetToTests {
       @Test("Set-to instruction")
       func setToInstruction() async throws {
-         var interpreter = try Interpreter("")
+         var interpreter = try await Interpreter("")
          
          interpreter.currentCellValue = 69
          try await interpreter.handleInstruction(.setTo(42))

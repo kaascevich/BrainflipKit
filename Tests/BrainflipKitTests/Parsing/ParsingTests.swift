@@ -20,8 +20,8 @@ import Testing
 @Suite("Program parsing")
 struct ParsingTests {
    @Test("Basic parsing")
-   func basicParsing() throws {
-      let program = try Program(",[>+<-.]")
+   func basicParsing() async throws {
+      let program = try await Program(",[>+<-.]")
       #expect(program == [
          .input,
          .loop([
@@ -35,8 +35,8 @@ struct ParsingTests {
    }
    
    @Test("Parsing instructions and comments")
-   func instructionsAndComments() throws {
-      let program = try Program(",++ a comment ++.")
+   func instructionsAndComments() async throws {
+      let program = try await Program(",++ a comment ++.")
       #expect(program == [
          .input,
          .add(4),
@@ -45,14 +45,14 @@ struct ParsingTests {
    }
    
    @Test("Parsing only comments")
-   func commentsOnly() throws {
-      let program = try Program("the whole thing is just a comment")
+   func commentsOnly() async throws {
+      let program = try await Program("the whole thing is just a comment")
       #expect(program.isEmpty)
    }
    
    @Test("Parsing nested loops")
-   func nestedLoops() throws {
-      let program = try Program(">+[>-[-<]>>]>")
+   func nestedLoops() async throws {
+      let program = try await Program(">+[>-[-<]>>]>")
       #expect(program == [
          .move(1),
          .add(1),
@@ -70,8 +70,8 @@ struct ParsingTests {
    }
    
    @Test("Extra instructions parsing")
-   func extraInstructions() throws {
-      let program = try Program("!~«»?")
+   func extraInstructions() async throws {
+      let program = try await Program("!~«»?")
       #expect(program == [
          .extra(.stop),
          .extra(.bitwiseNot),
@@ -82,8 +82,8 @@ struct ParsingTests {
    }
    
    @Test("'Obscure Problem Tester'")
-   func obscureProblemTester() throws {
-      let program = try Program("""
+   func obscureProblemTester() async throws {
+      let program = try await Program("""
       This program tests for several obscure interpreter problems;
       it should output an H
       
@@ -137,8 +137,8 @@ struct ParsingTests {
    }
    
    @Test("Optimizations disabled")
-   func optimizationsDisabled() throws {
-      let program = try Program("""
+   func optimizationsDisabled() async throws {
+      let program = try await Program("""
       This program tests for several obscure interpreter problems;
       it should output an H
       

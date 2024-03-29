@@ -101,6 +101,15 @@ import BrainflipKit
    
    @Flag(
       name: .long,
+      help: .init("""
+      Prints the result of filtering non-instruction characters from the \
+      program and exits.
+      """,
+      discussion: "This flag overrides the '--print-parsed' flag.")
+   ) var filter: Bool = false
+   
+   @Flag(
+      name: .long,
       inversion: .prefixedEnableDisable,
       help: "Whether to optimize the program before interpreting it."
    ) var optimizations: Bool = true

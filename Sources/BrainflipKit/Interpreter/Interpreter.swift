@@ -96,7 +96,7 @@
 /// ++++++++[>++++[>++>+++>+++>+<<<<-]>+>+>->>+[<]<-]>>
 /// .>---.+++++++..+++.>>.<-.<.+++.------.--------.>>+.
 /// """
-/// let interpreter = try Interpreter(program)
+/// let interpreter = try await Interpreter(program)
 /// let output = try await interpreter.run()
 /// print(output) // Hello World!
 /// ```
@@ -165,8 +165,8 @@
       _ string: String,
       input: String = "",
       options: Options = .init()
-   ) throws {
-      let program = try Program(string)
+   ) async throws {
+      let program = try await Program(string)
       self.init(program, input: input, options: options)
    }
    

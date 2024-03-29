@@ -22,7 +22,7 @@ extension InterpreterTests.InstructionTests {
    struct OutputTests {
       @Test("Output instruction")
       func outputInstruction() async throws {
-         var interpreter = try Interpreter("")
+         var interpreter = try await Interpreter("")
 
          interpreter.currentCellValue = 0x42 // ASCII code for "B"
          try await interpreter.handleInstruction(.output)
@@ -31,7 +31,7 @@ extension InterpreterTests.InstructionTests {
       
       @Test("Output instruction with Unicode characters")
       func outputInstruction_unicode() async throws {
-         var interpreter = try Interpreter("")
+         var interpreter = try await Interpreter("")
          
          interpreter.currentCellValue = 0x2192 // Unicode value for "→"
          try await interpreter.handleInstruction(.output)

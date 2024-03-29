@@ -26,7 +26,7 @@ extension InterpreterTests.InstructionTests {
             throws: Never.self,
             "stop insrtuction does nothing when not enabled"
          ) {
-            let interpreter = try Interpreter("!")
+            let interpreter = try await Interpreter("!")
             
             // if this throws, then the stop instruction
             // has been executed even though we don't want
@@ -37,7 +37,7 @@ extension InterpreterTests.InstructionTests {
       
       @Test("Stop instruction")
       func stopInstruction() async throws {
-         var interpreter = try Interpreter("", options: .init(
+         var interpreter = try await Interpreter("", options: .init(
             enabledExtraInstructions: [.stop]
          ))
          
@@ -51,7 +51,7 @@ extension InterpreterTests.InstructionTests {
       
       @Test("Bitwise NOT instruction")
       func bitwiseNotInstruction() async throws {
-         var interpreter = try Interpreter("", options: .init(
+         var interpreter = try await Interpreter("", options: .init(
             enabledExtraInstructions: [.bitwiseNot]
          ))
          
@@ -65,7 +65,7 @@ extension InterpreterTests.InstructionTests {
       
       @Test("Left shift instruction")
       func leftShiftInstruction() async throws {
-         var interpreter = try Interpreter("", options: .init(
+         var interpreter = try await Interpreter("", options: .init(
             enabledExtraInstructions: [.leftShift]
          ))
          
@@ -79,7 +79,7 @@ extension InterpreterTests.InstructionTests {
       
       @Test("Right shift instruction")
       func rightShiftInstruction() async throws {
-         var interpreter = try Interpreter("", options: .init(
+         var interpreter = try await Interpreter("", options: .init(
             enabledExtraInstructions: [.rightShift]
          ))
          

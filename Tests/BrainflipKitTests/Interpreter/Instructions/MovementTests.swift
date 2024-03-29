@@ -22,7 +22,7 @@ extension InterpreterTests.InstructionTests {
    struct MovementTests {
       @Test("Move instruction")
       func moveRightInstruction() async throws {
-         var interpreter = try Interpreter("")
+         var interpreter = try await Interpreter("")
          for i in 1...10 {
             try await interpreter.handleInstruction(.move(1))
             #expect(interpreter.cellPointer == i)
