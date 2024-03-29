@@ -57,11 +57,19 @@ public extension Program {
    /// - The `[-]` construct is replaced with a `setTo(0)`
    ///   instruction.
    ///
-   /// - Parameter string: A string to parse into a `Program`.
+   /// - Parameters:
+   ///   - string: A string to parse into a `Program`.
+   ///   - optimizations: Whether to optimize the program.
    ///
    /// - Throws: An `Error` if `string` is not a valid program
    ///   (that is, if it contains unmatched brackets).
-   init(_ string: String) throws {
-      self = try BrainflipParser.parse(program: string)
+   init(
+      _ string: String,
+      optimizations: Bool = true
+   ) throws {
+      self = try BrainflipParser.parse(
+         program: string,
+         optimizations: optimizations
+      )
    }
 }

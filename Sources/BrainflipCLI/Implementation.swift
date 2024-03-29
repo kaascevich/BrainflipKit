@@ -37,7 +37,10 @@ extension BrainflipCLI {
       // MARK: - Parsing
       
       let programSource = try await getProgramSource()
-      let parsedProgram = try Program(programSource)
+      let parsedProgram = try Program(
+         programSource,
+         optimizations: optimizations
+      )
       
       if printParsed {
          let formattedProgram = formatProgram(parsedProgram)
@@ -48,7 +51,8 @@ extension BrainflipCLI {
       let interpreter = Interpreter(
          parsedProgram,
          input: input,
-         options: options)
+         options: options
+      )
       
       // MARK: Interpreting
       

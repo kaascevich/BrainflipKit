@@ -21,8 +21,11 @@ import Testing
 struct OptimizerTests {
    @Test("Clear-loop optimization")
    func clearLoopOptimization() throws {
-      let program = try Program("[-]")
-      #expect(program == [.setTo(0)])
+      let program = try Program("+[-]")
+      #expect(program == [
+         .add(1),
+         .setTo(0)
+      ])
    }
    
    @Test("Adjacent instruction optimization")
@@ -42,8 +45,9 @@ struct OptimizerTests {
    
    @Test("Scan-loop optimization")
    func scanLoopOptimization() throws {
-      let program = try Program("[>] + [<]")
+      let program = try Program("+[>]+[<]")
       #expect(program == [
+         .add(1),
          .scanRight,
          .add(1),
          .scanLeft
@@ -52,9 +56,28 @@ struct OptimizerTests {
    
    @Test("Multiply-loop optimization")
    func multiplyLoopOptimization() throws {
-      let program = try Program("[->>++++<<]")
+      let program = try Program("+[->>++++<<]")
       #expect(program == [
+         .add(1),
          .multiply(factor: 4, offset: 2)
       ])
+   }
+   
+   @Test("Dead-loop optimization")
+   func deadLoopsOptimization() throws {
+      do {
+         let program = try Program("+[-][][->+<]")
+         #expect(program == [
+            .add(1),
+            .setTo(0)
+         ])
+      }
+      
+      do {
+         let program = try Program("[->+<][-]")
+         #expect(program == [
+            .multiply(factor: 1, offset: 1)
+         ])
+      }
    }
 }

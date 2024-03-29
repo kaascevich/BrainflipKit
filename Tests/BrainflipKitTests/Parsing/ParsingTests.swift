@@ -135,4 +135,61 @@ struct ParsingTests {
          .output
       ])
    }
+   
+   @Test("Optimizations disabled")
+   func optimizationsDisabled() throws {
+      let program = try Program("""
+      This program tests for several obscure interpreter problems;
+      it should output an H
+      
+      []++++++++++[>>+>+>++++++[<<+<+++>>>-]<<<<-]
+      "A*$";?@![#>>+<<]>[>>]<<<<[>++<[-]]>.>.
+      """, optimizations: false)
+      #expect(program == [
+         .loop([]),
+         .add(1), .add(1), .add(1), .add(1), .add(1),
+         .add(1), .add(1), .add(1), .add(1), .add(1),
+         .loop([
+            .move(1), .move(1),
+            .add(1),
+            .move(1),
+            .add(1),
+            .move(1),
+            .add(1), .add(1), .add(1),
+            .add(1), .add(1), .add(1),
+            .loop([
+               .move(-1), .move(-1),
+               .add(1),
+               .move(-1),
+               .add(1), .add(1), .add(1),
+               .move(1), .move(1), .move(1),
+               .add(-1)
+            ]),
+            .move(-1), .move(-1), .move(-1), .move(-1),
+            .add(-1)
+         ]),
+         .extra(.random),
+         .extra(.stop),
+         .loop([
+            .move(1), .move(1),
+            .add(1),
+            .move(-1), .move(-1)
+         ]),
+         .move(1),
+         .loop([
+            .move(1), .move(1)
+         ]),
+         .move(-1), .move(-1), .move(-1), .move(-1),
+         .loop([
+            .move(1),
+            .add(1), .add(1),
+            .move(-1),
+            .loop([.add(-1)])
+         ]),
+         .move(1),
+         .output,
+         .move(1),
+         .output
+      ])
+   }
 }

@@ -22,6 +22,7 @@ internal enum BrainflipOptimizer {
    static func optimizingWithoutNesting(program: Program) -> Program {
       var program = program
       
+      DeadLoopsOptimization.optimize(&program)
       ClearLoopOptimization.optimize(&program)
       ScanLoopOptimization.optimize(&program)
       MultiplyLoopOptimization.optimize(&program)
@@ -116,6 +117,25 @@ internal enum BrainflipOptimizer {
                factor: .init(factor),
                offset: Int(forwardOffset)
             )
+         }
+      }
+   }
+   
+   private enum DeadLoopsOptimization: Optimization {
+      static func optimize(_ program: inout Program) {
+         let windows = Array(program.enumerated())
+            .windows(ofCount: 2)
+         var indicesToRemove: [Int] = []
+         for window in windows {
+            if case .loop = window.first?.1, case .loop = window.last?.1 {
+               indicesToRemove.append(window.last!.0)
+            }
+         }
+         
+         // remove indices from last to first, so as not
+         // to invalidate indices before we've used them
+         for index in indicesToRemove.reversed() {
+            program.remove(at: index)
          }
       }
    }

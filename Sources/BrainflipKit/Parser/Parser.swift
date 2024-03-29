@@ -20,6 +20,11 @@ import Parsing
 
 internal enum BrainflipParser {
    struct InstructionParser: Parser {
+      let optimizations: Bool
+      init(optimizations: Bool = true) {
+         self.optimizations = optimizations
+      }
+      
       // MARK: - Instructions
       
       struct ExtrasParser: Parser {
@@ -31,9 +36,16 @@ internal enum BrainflipParser {
       }
       
       struct LoopParser: Parser {
+         let optimizations: Bool
+         init(optimizations: Bool = true) {
+            self.optimizations = optimizations
+         }
+         
          var body: some Parser<Substring, Instruction> {
             Parse(Instruction.loop) {
-               "["; ProgramParser(); "]"
+               "["
+               ProgramParser(optimizations: optimizations)
+               "]"
             }
          }
       }
@@ -52,15 +64,24 @@ internal enum BrainflipParser {
             ".".map { Instruction.output }
             
             ExtrasParser()
-            LoopParser()
+            LoopParser(optimizations: optimizations)
          }
       }
    }
    
    struct ProgramParser: Parser {
+      let optimizations: Bool
+      init(optimizations: Bool = true) {
+         self.optimizations = optimizations
+      }
+      
       var body: some Parser<Substring, Program> {
-         Many(element: InstructionParser.init)
-            .map(BrainflipOptimizer.optimizingWithoutNesting)
+         if optimizations {
+            Many { InstructionParser(optimizations: optimizations) }
+               .map(BrainflipOptimizer.optimizingWithoutNesting)
+         } else {
+            Many { InstructionParser(optimizations: optimizations) }
+         }
       }
    }
 }
@@ -71,8 +92,11 @@ extension BrainflipParser {
    
    /// Parses a `String` into a ``Program``.
    ///
-   /// - Parameter string: The original source code for a
-   ///   Brainflip program.
+   /// - Parameters:
+   ///   - string: The original source code for a
+   ///     Brainflip program.
+   ///   - optimizations: Whether to optimize the
+   ///     program.
    ///
    /// - Returns: The parsed program.
    ///
@@ -80,9 +104,10 @@ extension BrainflipParser {
    ///   into a valid program (that is, if it contains
    ///   unmatched brackets).
    @usableFromInline static func parse(
-      program string: String
+      program string: String,
+      optimizations: Bool = true
    ) throws -> Program {
-      try ProgramParser()
+      try ProgramParser(optimizations: optimizations)
          .parse(string.filter(validInstructions.contains))
    }
 }

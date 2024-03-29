@@ -99,6 +99,12 @@ import BrainflipKit
       help: "Prints the result of parsing the program and exits."
    ) var printParsed: Bool = false
    
+   @Flag(
+      name: .long,
+      inversion: .prefixedEnableDisable,
+      help: "Whether to optimize the program before interpreting it."
+   ) var optimizations: Bool = true
+   
    // MARK: - Option Groups
    
    @OptionGroup(title: "Interpreter Options")
