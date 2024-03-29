@@ -46,7 +46,6 @@ internal enum BrainflipOptimizer {
       static func optimize(_ program: inout Program) {
          let clearOperation = [Instruction.setTo(0)]
          program.replace([.loop([.add(-1)])], with: clearOperation)
-         program.replace([.loop([.add(+1)])], with: clearOperation)
       }
    }
    
@@ -100,30 +99,21 @@ internal enum BrainflipOptimizer {
          program = program.map {
             guard
                case let .loop(instructions) = $0,
-               instructions.count == 4
-            else {
-               return $0
-            }
-            
-            let first  = instructions[0]
-            let second = instructions[1]
-            let third  = instructions[2]
-            let fourth = instructions[3]
-            
-            guard
-               case .add(-1) = first,
-               case let .move(forwardOffset) = second,
-               case let .add(value) = third,
-               case let .move(backwardOffset) = fourth,
+               instructions.count == 4,
+               
+               case     .add(-1)              = instructions[0],
+               case let .move(forwardOffset)  = instructions[1],
+               case let .add(factor)          = instructions[2],
+               case let .move(backwardOffset) = instructions[3],
                
                forwardOffset == -backwardOffset,
-               value >= 0
+               factor >= 0
             else {
                return $0
             }
             
             return .multiply(
-               value: .init(value),
+               factor: .init(factor),
                offset: Int(forwardOffset)
             )
          }

@@ -17,21 +17,22 @@
 internal extension Interpreter {
    /// Executes an ``Instruction/multiply(_:)`` instruction.
    mutating func handleMultiplyInstruction(
-      multiplyingBy value: UInt32,
+      multiplyingBy factor: UInt32,
       storingAtOffset cellOffset: Int
    ) throws {
-      let multiplicationValue = self.currentCellValue
-         .multipliedReportingOverflow(by: value)
-      let additionValue = self.tape[self.cellPointer + cellOffset, default: 0]
-         .addingReportingOverflow(multiplicationValue.partialValue)
+      let multiplicationResult = self.currentCellValue
+         .multipliedReportingOverflow(by: factor)
+      let additionResult = self.tape[self.cellPointer + cellOffset, default: 0]
+         .addingReportingOverflow(multiplicationResult.partialValue)
       
-      if multiplicationValue.overflow || additionValue.overflow { // wraparound
+      // wraparound
+      if multiplicationResult.overflow || additionResult.overflow {
          try checkOverflowAllowed(
             throwing: .cellOverflow(position: self.cellPointer)
          )
       }
       
-      self.tape[self.cellPointer + cellOffset] = additionValue.partialValue
+      self.tape[self.cellPointer + cellOffset] = additionResult.partialValue
       self.currentCellValue = 0
    }
 }

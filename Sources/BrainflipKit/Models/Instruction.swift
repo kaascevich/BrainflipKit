@@ -52,7 +52,7 @@ import CasePaths
    /// Multiplies the current cell by `value`, then
    /// adds the result to the cell `offset` cells
    /// away from the current one.
-   case multiply(value: Interpreter.CellValue, offset: Int)
+   case multiply(factor: Interpreter.CellValue, offset: Int)
    
    /// Moves the pointer to the next zero cell.
    case scanRight

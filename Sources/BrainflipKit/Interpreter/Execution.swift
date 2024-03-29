@@ -72,9 +72,9 @@ extension Interpreter {
       case let .setTo(value):
          handleSetToInstruction(value)
          
-      case let .multiply(value, offset):
+      case let .multiply(factor, offset):
          try handleMultiplyInstruction(
-            multiplyingBy: value,
+            multiplyingBy: factor,
             storingAtOffset: offset
          )
          
