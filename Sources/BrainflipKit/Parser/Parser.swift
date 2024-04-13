@@ -14,73 +14,54 @@
 // You should have received a copy of the GNU General Public License along
 // with this package. If not, see https://www.gnu.org/licenses/.
 
-import Foundation
-
 import Parsing
 
 internal enum BrainflipParser {
    struct InstructionParser: Parser {
       let optimizations: Bool
-      init(optimizations: Bool = true) {
-         self.optimizations = optimizations
-      }
-      
-      // MARK: - Instructions
-      
-      struct ExtrasParser: Parser {
-         var body: some Parser<Substring, Instruction> {
-            First()
-               .map(.representing(ExtraInstruction.self))
-               .map(Instruction.extra)
-         }
-      }
-      
-      struct LoopParser: Parser {
-         let optimizations: Bool
-         init(optimizations: Bool = true) {
-            self.optimizations = optimizations
-         }
-         
-         var body: some Parser<Substring, Instruction> {
-            Parse(Instruction.loop) {
-               "["
-               ProgramParser(optimizations: optimizations)
-               "]"
-            }
-         }
-      }
-      
-      // MARK: - Main Parser
-      
-      var body: some Parser<Substring, Instruction> {
+            
+      var body: some Parser<Substring.UTF8View, Instruction> {
          OneOf {
-            "+".map { Instruction.add(+1) }
-            "-".map { Instruction.add(-1) }
+            // MARK: Simple
             
-            ">".map { Instruction.move(+1) }
-            "<".map { Instruction.move(-1) }
+            "+".utf8.map { Instruction.add(+1) }
+            "-".utf8.map { Instruction.add(-1) }
             
-            ",".map { Instruction.input }
-            ".".map { Instruction.output }
+            ">".utf8.map { Instruction.move(+1) }
+            "<".utf8.map { Instruction.move(-1) }
             
-            ExtrasParser()
-            LoopParser(optimizations: optimizations)
+            ",".utf8.map { Instruction.input }
+            ".".utf8.map { Instruction.output }
+            
+            // MARK: Extras
+            
+            From(.substring) {
+               First().map(.representing(ExtraInstruction.self))
+            }
+            .map(Instruction.extra)
+            
+            // MARK: Loops
+            
+            Parse(Instruction.loop) {
+               "[".utf8
+               ProgramParser(optimizations: optimizations)
+               "]".utf8
+            }
          }
       }
    }
    
    struct ProgramParser: Parser {
       let optimizations: Bool
-      init(optimizations: Bool = true) {
-         self.optimizations = optimizations
-      }
-      
-      var body: some Parser<Substring, Program> {
+      var body: some Parser<Substring.UTF8View, Program> {
+         let programParser = Many {
+            InstructionParser(optimizations: optimizations)
+         }
+         
          if optimizations {
-            Many { InstructionParser(optimizations: optimizations) }
-               .map(BrainflipOptimizer.optimizingWithoutNesting)
+            programParser.map(BrainflipOptimizer.optimizingWithoutNesting)
          } else {
-            Many { InstructionParser(optimizations: optimizations) }
+            programParser
          }
       }
    }
@@ -90,21 +71,21 @@ extension BrainflipParser {
    /// Parses a `String` into a ``Program``.
    ///
    /// - Parameters:
-   ///   - string: The original source code for a
+   ///   - source: The original source code for a
    ///     Brainflip program.
    ///   - optimizations: Whether to optimize the
    ///     program.
    ///
    /// - Returns: The parsed program.
    ///
-   /// - Throws: An `Error` if `string` cannot be parsed
+   /// - Throws: An `Error` if `source` cannot be parsed
    ///   into a valid program (that is, if it contains
    ///   unmatched brackets).
-   @usableFromInline static func parse(
-      program string: String,
+   static func parse(
+      program source: String,
       optimizations: Bool = true
    ) async throws -> Program {
       try ProgramParser(optimizations: optimizations)
-         .parse(string.filter(Instruction.validInstructions.contains))
+         .parse(source.filter(Instruction.validInstructions.contains))
    }
 }

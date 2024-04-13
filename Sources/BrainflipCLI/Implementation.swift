@@ -21,7 +21,7 @@ extension BrainflipCLI {
    func run() async throws {
       // MARK: Setup
       
-      let endOfInputBehavior = switch interpreterOptions.endOfInputBehavior {
+      let endOfInputBehavior = switch self.interpreterOptions.endOfInputBehavior {
       case .zero:  .setTo(0)
       case .max:   .setTo(.max)
       case .error: .throwError
@@ -29,47 +29,51 @@ extension BrainflipCLI {
       } as Interpreter.Options.EndOfInputBehavior?
       
       let options = Interpreter.Options(
-         allowCellWraparound:      interpreterOptions.wraparound,
+         allowCellWraparound:      self.interpreterOptions.wraparound,
          endOfInputBehavior:       endOfInputBehavior,
-         enabledExtraInstructions: Set(interpreterOptions.extraInstructions)
+         enabledExtraInstructions: Set(self.interpreterOptions.extraInstructions)
       )
             
       // MARK: - Obtaining Source
       
       let programSource = try await getProgramSource()
       
-      if filter {
+      if self.printFiltered {
          let filteredSource = programSource.filter(
             Instruction.validInstructions.contains
          )
-         print(filteredSource)
-         Self.exit()
+         throw CleanExit.message(filteredSource)
       }
       
       // MARK: - Parsing
       
       let parsedProgram = try await Program(
          programSource,
-         optimizations: optimizations
+         optimizations: self.optimizations
       )
       
-      if printParsed {
+      if self.printParsed {
          let formattedProgram = formatProgram(parsedProgram)
-         print(formattedProgram)
-         Self.exit()
+         throw CleanExit.message(formattedProgram)
       }
       
+      let inputIterator = if let input {
+         input.unicodeScalars.makeIterator()
+      } else {
+         StandardInputIterator(echoing: self.inputEchoing)
+      } as any IteratorProtocol<_>
+            
       let interpreter = Interpreter(
          parsedProgram,
-         input: input,
+         inputIterator: inputIterator,
+         outputStream: StandardOutputStream(),
          options: options
       )
       
       // MARK: Interpreting
       
-      let output = try await interpreter.run()
-      
-      print(output)
-      Self.exit()
+      // StandardOutputStream prints the output for us, so
+      // we don't need to do it ourselves
+      _ = try await interpreter.run()
    }
 }

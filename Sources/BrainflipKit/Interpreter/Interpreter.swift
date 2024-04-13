@@ -45,8 +45,8 @@
 ///     process.
 ///
 /// - term ``Instruction/output``:
-///     Appends the character whose Unicode value is the current
-///     cell's value to the output buffer. If the current cell's
+///     Writes the character whose Unicode value is the current
+///     cell's value to the output stream. If the current cell's
 ///     value does not correspond to a valid Unicode code point,
 ///     this instruction does nothing.
 ///
@@ -111,7 +111,7 @@
 /// - ``runReturningFinalState()``
 ///
 /// - ``Options``
-@dynamicMemberLookup public struct Interpreter: ~Copyable {
+@dynamicMemberLookup public struct Interpreter {
    /// The Brainflip program containing a list of instructions
    /// to execute.
    public let program: Program
@@ -129,7 +129,9 @@
    ///
    /// - Parameters:
    ///   - program: A ``Program`` instance.
-   ///   - input: The input to pass to the program.
+   ///   - inputIterator: The input to pass to the program.
+   ///   - outputStream: The stream to write outputted characters
+   ///     to.
    ///   - options: Configurable options to be used for this
    ///     instance.
    ///
@@ -137,37 +139,81 @@
    ///   `input.unicodeScalars`.
    public init(
       _ program: Program,
-      input: String = "",
+      inputIterator: InputIterator,
+      outputStream: OutputStream = "",
       options: Options = .init()
    ) {
       self.program = program
       self.options = options
-      self.state = State(input: input, options: options)
+      self.state = State(
+         inputIterator: inputIterator,
+         outputStream: outputStream
+      )
    }
    
-   /// Parses `string` into a ``Program`` and creates an
+   /// Parses `source` into a ``Program`` and creates an
    /// `Interpreter` instance from it.
    ///
    /// - Parameters:
-   ///   - string: A string to parse into a `Program`.
-   ///   - input: The input to pass to the program. Characters
-   ///     that are too big to fit in a cell will be removed.
+   ///   - source: A string to parse into a `Program`.
+   ///   - inputIterator: An iterator over the input to pass to
+   ///     the program.
+   ///   - outputStream: The stream to write outputted characters
+   ///     to.
    ///   - options: Configurable options to be used for this
    ///     instance.
    ///
-   /// - Throws: An `Error` if `string` cannot be parsed
+   /// - Throws: An `Error` if `source` cannot be parsed
    ///   into a valid program (that is, if it contains
    ///   unmatched brackets).
    ///
    /// - Complexity: O(*n*), where *n* is the length of
    ///   `input.unicodeScalars`.
    @inlinable public init(
-      _ string: String,
-      input: String = "",
+      _ source: String,
+      inputIterator: InputIterator,
+      outputStream: OutputStream = "",
       options: Options = .init()
    ) async throws {
-      let program = try await Program(string)
-      self.init(program, input: input, options: options)
+      let program = try await Program(source)
+      self.init(
+         program,
+         inputIterator: inputIterator,
+         outputStream: outputStream,
+         options: options
+      )
+   }
+   
+   /// Parses `source` into a ``Program`` and creates an
+   /// `Interpreter` instance from it.
+   ///
+   /// - Parameters:
+   ///   - source: A string to parse into a `Program`.
+   ///   - input: The input to pass to the program.
+   ///   - outputStream: The stream to write outputted characters
+   ///     to.
+   ///   - options: Configurable options to be used for this
+   ///     instance.
+   ///
+   /// - Throws: An `Error` if `source` cannot be parsed
+   ///   into a valid program (that is, if it contains
+   ///   unmatched brackets).
+   ///
+   /// - Complexity: O(*n*), where *n* is the length of
+   ///   `input.unicodeScalars`.
+   public init(
+      _ source: String,
+      input: String = "",
+      outputStream: OutputStream = "",
+      options: Options = .init()
+   ) async throws {
+      let inputIterator = input.unicodeScalars.makeIterator()
+      try await self.init(
+         source,
+         inputIterator: inputIterator,
+         outputStream: outputStream,
+         options: options
+      )
    }
    
    // MARK: - Dynamic Member Lookup

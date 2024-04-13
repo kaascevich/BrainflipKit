@@ -58,17 +58,17 @@ public extension Program {
    ///   instruction.
    ///
    /// - Parameters:
-   ///   - string: A string to parse into a `Program`.
+   ///   - source: A string to parse into a `Program`.
    ///   - optimizations: Whether to optimize the program.
    ///
-   /// - Throws: An `Error` if `string` is not a valid program
+   /// - Throws: An `Error` if `source` is not a valid program
    ///   (that is, if it contains unmatched brackets).
    init(
-      _ string: String,
+      _ source: String,
       optimizations: Bool = true
    ) async throws {
       self = try await BrainflipParser.parse(
-         program: string,
+         program: source,
          optimizations: optimizations
       )
    }

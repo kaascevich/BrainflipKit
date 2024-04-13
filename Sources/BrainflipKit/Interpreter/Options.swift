@@ -22,12 +22,12 @@ public extension Interpreter {
       public let allowCellWraparound: Bool
       
       /// The action to take when an input instruction is
-      /// executed with an empty input buffer. Defaults to
+      /// executed with an empty input iterator. Defaults to
       /// doing nothing (`nil`).
       public let endOfInputBehavior: EndOfInputBehavior?
       
       /// Actions to take when an input instruction is
-      /// executed with an empty input buffer.
+      /// executed with an empty input iterator.
       public enum EndOfInputBehavior: Sendable {
          /// Sets the current cell to a value.
          ///
@@ -53,7 +53,7 @@ public extension Interpreter {
       ///     cell overflow and underflow.
       ///   - endOfInputBehavior: The action to take when an
       ///     input instruction is executed with an empty input
-      ///     buffer.
+      ///     iterator.
       ///   - enabledExtraInstructions: Contains extra instructions
       ///     that an interpreter should recognize and execute.
       public init(

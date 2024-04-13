@@ -1,4 +1,4 @@
-// Typealiases.swift
+// StringFromStandardInput.swift
 // Copyright © 2024 Kaleb A. Ascevich
 //
 // This package is free software: you can redistribute it and/or modify it
@@ -14,10 +14,27 @@
 // You should have received a copy of the GNU General Public License along
 // with this package. If not, see https://www.gnu.org/licenses/.
 
-/// The type of a single Brainflip cell.
-public typealias CellValue = UInt32
+import ArgumentParser
 
-public extension Interpreter {
-   typealias InputIterator = any IteratorProtocol<Unicode.Scalar>
-   typealias OutputStream = any TextOutputStream
+extension BrainflipCLI {
+   /// Reads text from standard input until EOF is reached.
+   ///
+   /// - Returns: Text read from standard input.
+   ///
+   /// - Throws: `ValidationError` if standard input only
+   ///   contains whitespace.
+   func stringFromStandardInput() async throws -> String {
+      var input = ""
+      while let nextLine = readLine() {
+         input += nextLine
+      }
+      
+      if input.allSatisfy(\.isWhitespace) {
+         // if they didn't type anything meaningful, just
+         // print usage info and exit
+         throw ValidationError("")
+      }
+      
+      return input
+   }
 }

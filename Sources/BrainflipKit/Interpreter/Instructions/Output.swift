@@ -24,6 +24,6 @@ internal extension Interpreter {
       }
       
       let character = Character(unicodeScalar)
-      self.outputBuffer.append(character)
+      self.outputStream.write(.init(character))
    }
 }

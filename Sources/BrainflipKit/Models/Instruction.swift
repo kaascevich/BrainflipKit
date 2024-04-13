@@ -33,12 +33,12 @@ import CasePaths
    case loop([Self])
    
    /// Finds the character whose Unicode value equals
-   /// the current cell and appends it to the output
-   /// buffer. If there is no corresponding Unicode
+   /// the current cell and writes it to the output
+   /// stream. If there is no corresponding Unicode
    /// character, this instruction does nothing.
    case output
    
-   /// Takes the next character out of the input buffer
+   /// Takes the next character out of the input iterator
    /// and sets the current cell to that character's
    /// Unicode value. If the cell does not fit the new
    /// value, it remains unchanged.
@@ -47,12 +47,12 @@ import CasePaths
    // MARK: Non-Core
    
    /// Sets the current cell to a specific value.
-   case setTo(Interpreter.CellValue)
+   case setTo(CellValue)
    
    /// Multiplies the current cell by `value`, then
    /// adds the result to the cell `offset` cells
    /// away from the current one.
-   case multiply(factor: Interpreter.CellValue, offset: Int)
+   case multiply(factor: CellValue, offset: Int)
    
    /// Moves the pointer to the next zero cell.
    case scanRight

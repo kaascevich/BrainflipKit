@@ -22,6 +22,7 @@ internal extension Interpreter {
       while self.currentCellValue != 0 {
          for instruction in instructions {
             try await handleInstruction(instruction)
+            await Task.yield()
          }
       }
    }

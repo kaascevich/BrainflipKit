@@ -26,7 +26,7 @@ public extension Interpreter {
       /// `position` underflowed.
       case cellUnderflow(position: Int)
       
-      /// Indicates that the input buffer was exhausted.
+      /// Indicates that the input iterator was exhausted.
       case endOfInput
       
       /// Indicates that the program was ended by a

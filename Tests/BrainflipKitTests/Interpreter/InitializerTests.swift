@@ -17,6 +17,8 @@
 import Testing
 @testable import struct BrainflipKit.Interpreter
 
+// swiftlint:disable force_cast
+
 extension InterpreterTests {
    @Suite("Interpreter initialization")
    struct InitializerTests {
@@ -26,7 +28,7 @@ extension InterpreterTests {
          
          #expect(interpreter.tape.isEmpty)
          #expect(interpreter.cellPointer == 0)
-         #expect(interpreter.outputBuffer.isEmpty)
+         #expect((interpreter.outputStream as! String).isEmpty)
          
          #expect(interpreter.program.isEmpty)
       }
@@ -39,7 +41,9 @@ extension InterpreterTests {
             options: .init(endOfInputBehavior: .setTo(0))
          )
          let output = try await interpreter.run()
-         #expect(output == "→")
+         #expect(output as! String == "→")
       }
    }
 }
+
+// swiftlint:enable force_cast

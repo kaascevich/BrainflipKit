@@ -26,7 +26,5 @@ final class AllTests: XCTestCase {
 }
 
 #else
-
 #warning("Scaffolding.swift is no longer necessary in Swift 6 and newer")
-
 #endif

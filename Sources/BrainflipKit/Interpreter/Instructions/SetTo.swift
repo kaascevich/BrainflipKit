@@ -16,7 +16,7 @@
 
 internal extension Interpreter {
    /// Executes an ``Instruction/setTo(_:)`` instruction.
-   mutating func handleSetToInstruction(_ value: Interpreter.CellValue) {
+   mutating func handleSetToInstruction(_ value: CellValue) {
       self.currentCellValue = value
    }
 }

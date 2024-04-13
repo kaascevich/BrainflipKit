@@ -18,27 +18,6 @@ import ArgumentParser
 import BrainflipKit
 
 extension BrainflipCLI {
-   /// Reads text from standard input until EOF is reached.
-   ///
-   /// - Returns: Text read from standard input.
-   ///
-   /// - Throws: `ValidationError` if standard input only
-   ///   contains whitespace.
-   func readFromStandardInput() async throws -> String {
-      var input = ""
-      while let nextLine = readLine() {
-         input += nextLine
-      }
-      
-      if input.allSatisfy(\.isWhitespace) {
-         // if they didn't type anything meaningful, just
-         // print usage info and exit
-         throw ValidationError("")
-      }
-      
-      return input
-   }
-   
    /// Formats the given program, indenting loops.
    ///
    /// - Parameters:
@@ -76,9 +55,9 @@ extension BrainflipCLI {
    /// - Returns: The source code for the Brainflip
    ///   program provided by the user.
    func getProgramSource() async throws -> String {
-      switch (programPath, program) {
+      switch (self.programPath, self.program) {
       case (nil, nil):
-         try await readFromStandardInput()
+         try await stringFromStandardInput()
          
       case (let programPath?, nil):
          try String(contentsOfFile: programPath)

@@ -72,9 +72,7 @@ import BrainflipKit
          return filePath
       }
    ) var programPath: String?
-   
-   // MARK: - Options
-   
+      
    @Option(
       name: [.short, .customLong("program")],
       help: .init(
@@ -89,11 +87,35 @@ import BrainflipKit
       )
    ) var program: String?
    
-   @Option(name: .shortAndLong, help: "The input to pass to the program.")
-   var input: String = ""
+   @Flag(
+      name: .long,
+      inversion: .prefixedEnableDisable,
+      help: "Whether to optimize the program before interpreting it."
+   ) var optimizations: Bool = true
    
-   // MARK: - Flags
+   @Option(
+      name: .shortAndLong,
+      help: .init(
+         "The input to pass to the program.",
+         discussion: """
+         If this option is not specified, the input will be read from standard \
+         input as the program requests it.
+         """
+      )
+   )
+   var input: String?
    
+   @Flag(
+      name: .long,
+      inversion: .prefixedNo,
+      help: .init(
+         "Whether to echo input characters as they are being typed.",
+         discussion: """
+         This flag has no effect if the '-i/--input' option is specified.
+         """
+      )
+   ) var inputEchoing: Bool = true
+      
    @Flag(
       name: .long,
       help: "Prints the result of parsing the program and exits."
@@ -101,18 +123,14 @@ import BrainflipKit
    
    @Flag(
       name: .long,
-      help: .init("""
-      Prints the result of filtering non-instruction characters from the \
-      program and exits.
-      """,
-      discussion: "This flag overrides the '--print-parsed' flag.")
-   ) var filter: Bool = false
-   
-   @Flag(
-      name: .long,
-      inversion: .prefixedEnableDisable,
-      help: "Whether to optimize the program before interpreting it."
-   ) var optimizations: Bool = true
+      help: .init(
+         """
+         Prints the result of filtering non-instruction characters from the \
+         program and exits.
+         """,
+         discussion: "This flag overrides the '--print-parsed' flag."
+      )
+   ) var printFiltered: Bool = false
    
    // MARK: - Option Groups
    

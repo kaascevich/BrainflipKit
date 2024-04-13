@@ -56,14 +56,14 @@ struct OptimizerTests {
    
    @Test("Multiply-loop optimization")
    func multiplyLoopOptimization() async throws {
-      let program = try await Program("+[->>++++<<]")
+      let program = try await Program("+[- >> ++++ <<]")
       #expect(program == [
          .add(1),
          .multiply(factor: 4, offset: 2)
       ])
    }
    
-   @Test("Dead-loop optimization")
+   @Test("Dead loops optimization")
    func deadLoopsOptimization() async throws {
       do {
          let program = try await Program("+[-][][->+<]")

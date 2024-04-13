@@ -22,11 +22,17 @@ public extension Interpreter {
       /// Creates a `State` instance.
       ///
       /// - Parameters:
-      ///   - input: The input that will be provided to the
-      ///     program.
+      ///   - inputIterator: An iterator over the input that will be
+      ///     provided to the program.
+      ///   - outputStream: The stream to write outputted characters
+      ///     to.
       ///   - options: Configurable options for this instance.
-      internal init(input: String, options: Options) {
-         self.inputIterator = input.unicodeScalars.makeIterator()
+      internal init(
+         inputIterator: InputIterator,
+         outputStream: OutputStream = ""
+      ) {
+         self.inputIterator = inputIterator
+         self.outputStream = outputStream
       }
       
       // MARK: - Properties
@@ -57,17 +63,17 @@ public extension Interpreter {
       ///
       /// # See Also
       /// - ``Instruction/input``
-      public internal(set) var inputIterator: String.UnicodeScalarView.Iterator
+      public internal(set) var inputIterator: InputIterator
       
-      /// The output buffer.
+      /// The output stream.
       ///
       /// Each time an ``Instruction/output`` instruction is
       /// executed, the Unicode scalar corresponding to
-      /// ``currentCellValue`` is appended to this string.
+      /// ``currentCellValue`` is written to this stream.
       ///
       /// # See Also
       /// - ``Instruction/output``
-      public internal(set) var outputBuffer: String = ""
+      public internal(set) var outputStream: OutputStream
       
       // MARK: - Computed State
       

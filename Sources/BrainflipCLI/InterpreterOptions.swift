@@ -39,7 +39,7 @@ extension BrainflipCLI {
             """
             The action to take on the current cell when an input instruction \
             is executed, but there are no characters remaining in the input \
-            buffer.
+            iterator.
             """,
             discussion: "No action is taken if this option is not specified.",
             valueName: "behavior"

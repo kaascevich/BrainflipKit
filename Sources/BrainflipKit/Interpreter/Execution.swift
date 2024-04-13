@@ -25,6 +25,7 @@ extension Interpreter {
    public consuming func runReturningFinalState() async throws -> State {
       for instruction in program {
          try await handleInstruction(instruction)
+         await Task.yield()
       }
       
       return state
@@ -36,9 +37,9 @@ extension Interpreter {
    ///
    /// - Throws: An interpreter ``Error`` if an issue was
    ///   encountered during execution.
-   public consuming func run() async throws -> String {
+   public consuming func run() async throws -> OutputStream {
       let finalState = try await self.runReturningFinalState()
-      return finalState.outputBuffer
+      return finalState.outputStream
    }
    
    /// Executes an individual ``Instruction``.
@@ -65,7 +66,7 @@ extension Interpreter {
       case .output:
          handleOutputInstruction()
       case .input:
-         try handleInputInstruction()
+         try await handleInputInstruction()
          
       // MARK: Non-core
          

@@ -17,6 +17,8 @@
 import Testing
 @testable import struct BrainflipKit.Interpreter
 
+// swiftlint:disable force_cast
+
 extension InterpreterTests.InstructionTests {
    @Suite("Output instruction")
    struct OutputTests {
@@ -26,7 +28,7 @@ extension InterpreterTests.InstructionTests {
 
          interpreter.currentCellValue = 0x42 // ASCII code for "B"
          try await interpreter.handleInstruction(.output)
-         #expect(interpreter.outputBuffer == "B")
+         #expect(interpreter.outputStream as! String == "B")
       }
       
       @Test("Output instruction with Unicode characters")
@@ -35,7 +37,9 @@ extension InterpreterTests.InstructionTests {
          
          interpreter.currentCellValue = 0x2192 // Unicode value for "→"
          try await interpreter.handleInstruction(.output)
-         #expect(interpreter.outputBuffer == "→")
+         #expect(interpreter.outputStream as! String == "→")
       }
    }
 }
+
+// swiftlint:enable force_cast
