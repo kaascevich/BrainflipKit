@@ -19,9 +19,9 @@ import class Foundation.FileHandle
 import ArgumentParser
 
 #if canImport(Glibc)
-import Glibc
-#elseif canImport(Darwin)
-import Darwin
+private import Glibc
+#elseif canImport(Darwin.C)
+private import Darwin.C
 #endif
 
 extension BrainflipCLI {

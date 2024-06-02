@@ -14,78 +14,58 @@
 // You should have received a copy of the GNU General Public License along
 // with this package. If not, see https://www.gnu.org/licenses/.
 
-import Parsing
+internal import Parsing
+internal typealias ParserProtocol = Parsing.Parser
 
-internal enum BrainflipParser {
-   struct InstructionParser: Parser {
+internal extension Program {
+   struct Parser: ParserProtocol {
+      /// Whether to optimize the parsed program.
       let optimizations: Bool
-            
-      var body: some Parser<Substring.UTF8View, Instruction> {
-         OneOf {
-            // MARK: Simple
-            
-            "+".utf8.map { Instruction.add(+1) }
-            "-".utf8.map { Instruction.add(-1) }
-            
-            ">".utf8.map { Instruction.move(+1) }
-            "<".utf8.map { Instruction.move(-1) }
-            
-            ",".utf8.map { Instruction.input }
-            ".".utf8.map { Instruction.output }
-            
-            // MARK: Extras
-            
-            From(.substring) {
-               First().map(.representing(ExtraInstruction.self))
-            }
-            .map(Instruction.extra)
-            
-            // MARK: Loops
-            
-            Parse(Instruction.loop) {
-               "[".utf8
-               ProgramParser(optimizations: optimizations)
-               "]".utf8
+      
+      private struct InstructionParser: ParserProtocol {
+         let optimizations: Bool
+         
+         var body: some ParserProtocol<Substring.UTF8View, Instruction> {
+            OneOf {
+               // MARK: Simple
+               
+               "+".utf8.map { Instruction.add(+1) }
+               "-".utf8.map { Instruction.add(-1) }
+               
+               ">".utf8.map { Instruction.move(+1) }
+               "<".utf8.map { Instruction.move(-1) }
+               
+               ",".utf8.map { Instruction.input }
+               ".".utf8.map { Instruction.output }
+               
+               // MARK: Extras
+               
+               From(.substring) {
+                  First().map(.representing(ExtraInstruction.self))
+               }
+               .map(Instruction.extra)
+               
+               // MARK: Loops
+               
+               Parse(Instruction.loop) {
+                  "[".utf8
+                  Program.Parser(optimizations: optimizations)
+                  "]".utf8
+               }
             }
          }
       }
-   }
-   
-   struct ProgramParser: Parser {
-      let optimizations: Bool
-      var body: some Parser<Substring.UTF8View, Program> {
+      
+      var body: some ParserProtocol<Substring.UTF8View, Program> {
          let programParser = Many {
             InstructionParser(optimizations: optimizations)
          }
          
          if optimizations {
-            programParser.map(BrainflipOptimizer.optimizingWithoutNesting)
+            programParser.map(Optimizer.optimizingWithoutNesting)
          } else {
             programParser
          }
       }
-   }
-}
-
-extension BrainflipParser {
-   /// Parses a `String` into a ``Program``.
-   ///
-   /// - Parameters:
-   ///   - source: The original source code for a
-   ///     Brainflip program.
-   ///   - optimizations: Whether to optimize the
-   ///     program.
-   ///
-   /// - Returns: The parsed program.
-   ///
-   /// - Throws: An `Error` if `source` cannot be parsed
-   ///   into a valid program (that is, if it contains
-   ///   unmatched brackets).
-   static func parse(
-      program source: String,
-      optimizations: Bool = true
-   ) async throws -> Program {
-      try ProgramParser(optimizations: optimizations)
-         .parse(source.filter(Instruction.validInstructions.contains))
    }
 }

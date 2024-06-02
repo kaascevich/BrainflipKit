@@ -44,21 +44,57 @@ public extension Program {
    ///
    /// All other characters are ignored.
    ///
-   /// ## Optimization
+   /// ## Optimizations
    ///
    /// Some constructs can be simplified to speed up program
-   /// execution. The tricks currently used to optimize programs
-   /// are:
+   /// execution.
    ///
-   /// - Repeated occurrences of `+` and `-` are condensed into
-   ///   a single instruction, as are `>` and `<`.
-   /// - Instructions that do not have any effect (such as `add`
-   ///   or `move` instructions with a value of `0`) are removed.
-   /// - The `[-]` construct is replaced with a `setTo(0)`
-   ///   instruction.
+   /// ### Adjacent Instructions
+   ///
+   /// Repeated occurrences of `+` and `-` are condensed into a
+   /// single instruction, as are `>` and `<`.
+   ///
+   /// ### Instructions With No Effect
+   /// Instructions that do not have any effect (such as `add`
+   /// or `move` instructions with a value of `0`) are removed.
+   ///
+   /// ### Clear Loops
+   /// The `[-]` construct is replaced with a `setTo(0)`
+   /// instruction.
+   ///
+   /// ### Scan Loops
+   /// The `[>]` and `[<]` constructs are replaced with
+   /// `scanRight` and `scanLeft` instructions, respectively.
+   ///
+   /// ### Dead Code
+   /// Loops that occur immediately after other loops are
+   /// removed.
+   ///
+   /// This can be done because, immediately after a loop
+   /// finishes, the current cell's value is always 0 (because
+   /// that's the end condition for a loop); therefore, an
+   /// immediately following loop will never be entered.
+   ///
+   /// ### Multiply Loops
+   ///
+   /// This replaces constructs of the following form with
+   /// equivalent `multiply(factor, offset)` instructions.
+   ///
+   /// ```
+   /// loop (
+   ///   add(-1)
+   ///   move(offset)
+   ///   add(factor)
+   ///   move(-offset)
+   /// )
+   /// ```
+   ///
+   /// For example, `[-<<<++>>>]` would be reduced to
+   /// `multiply(factor: 2, offset: -3)`.
    ///
    /// - Parameters:
-   ///   - source: A string to parse into a `Program`.
+   ///   - source: The original source code for a Brainflip
+   ///     program.
    ///   - optimizations: Whether to optimize the program.
    ///
    /// - Throws: An `Error` if `source` is not a valid program
@@ -67,9 +103,7 @@ public extension Program {
       _ source: String,
       optimizations: Bool = true
    ) async throws {
-      self = try await BrainflipParser.parse(
-         program: source,
-         optimizations: optimizations
-      )
+      self = try Parser(optimizations: optimizations)
+         .parse(source.filter(Instruction.validInstructions.contains))
    }
 }

@@ -18,10 +18,6 @@
 
 import PackageDescription
 
-let swiftLintPlugin = Target.PluginUsage.plugin(
-   name: "SwiftLint",
-   package: "SwiftLintPlugin"
-)
 let swiftSettings: [SwiftSetting] = [
    "ConciseMagicFile",
    "ForwardTrailingClosures",
@@ -67,7 +63,7 @@ let package = Package(
       "apple/swift-algorithms",
       "apple/swift-argument-parser",
       "pointfreeco/swift-parsing",
-      "lukepistrol/SwiftLintPlugin",
+//      "pointfreeco/swift-case-paths",
       "apple/swift-testing"
    ].map(dependency(fromRepository:)),
    targets: [
@@ -77,8 +73,7 @@ let package = Package(
             .product(name: "Parsing", package: "swift-parsing"),
             .product(name: "Algorithms", package: "swift-algorithms")
          ],
-         swiftSettings: swiftSettings,
-         plugins: [swiftLintPlugin]
+         swiftSettings: swiftSettings
       ),
       .executableTarget(
          name: "BrainflipCLI",
@@ -86,8 +81,7 @@ let package = Package(
             "BrainflipKit",
             .product(name: "ArgumentParser", package: "swift-argument-parser")
          ],
-         swiftSettings: swiftSettings,
-         plugins: [swiftLintPlugin]
+         swiftSettings: swiftSettings
       ),
       .testTarget(
          name: "BrainflipKitTests",
@@ -95,8 +89,7 @@ let package = Package(
             "BrainflipKit",
             .product(name: "Testing", package: "swift-testing")
          ],
-         swiftSettings: swiftSettings,
-         plugins: [swiftLintPlugin]
+         swiftSettings: swiftSettings
       )
    ]
 )

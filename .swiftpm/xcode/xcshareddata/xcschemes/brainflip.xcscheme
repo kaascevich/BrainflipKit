@@ -75,16 +75,16 @@
       </BuildableProductRunnable>
       <CommandLineArguments>
          <CommandLineArgument
-            argument = "/Users/kaleb/Downloads/awib.b -i &quot;++++++++[&gt;++++[&gt;++&gt;+++&gt;+++&gt;+&lt;&lt;&lt;&lt;-]&gt;+&gt;+&gt;-&gt;&gt;+[&lt;]&lt;-]&gt;&gt;.&gt;---.+++++++..+++.&gt;&gt;.&lt;-.&lt;.+++.------.--------.&gt;&gt;+.&quot;"
-            isEnabled = "YES">
+            argument = "&apos;/Users/kaleb/Developer/Other/Brainflip/New Brainflip/awib.b&apos; -i &quot;++++++++[&gt;++++[&gt;++&gt;+++&gt;+++&gt;+&lt;&lt;&lt;&lt;-]&gt;+&gt;+&gt;-&gt;&gt;+[&lt;]&lt;-]&gt;&gt;.&gt;---.+++++++..+++.&gt;&gt;.&lt;-.&lt;.+++.------.--------.&gt;&gt;+.&quot;"
+            isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument
             argument = "--help"
             isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument
-            argument = "--input-from-stdin -p &quot;,[.,]&quot; --eoi zero"
-            isEnabled = "NO">
+            argument = "-p &quot;,[.,]&quot; --eoi zero"
+            isEnabled = "YES">
          </CommandLineArgument>
       </CommandLineArguments>
    </LaunchAction>

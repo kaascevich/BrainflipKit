@@ -18,9 +18,9 @@ import class Foundation.FileHandle
 private let standardInputDescriptor = FileHandle.standardInput.fileDescriptor
 
 #if canImport(Glibc)
-import Glibc
-#elseif canImport(Darwin)
-import Darwin.C
+private import Glibc
+#elseif canImport(Darwin.C)
+private import Darwin.C
 #endif
 
 extension BrainflipCLI {
