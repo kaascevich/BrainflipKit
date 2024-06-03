@@ -32,18 +32,15 @@ extension BrainflipCLI {
       
       /// Creates a new instance.
       init() {
-         self.originalTerminalState = {
-            var currentTerminalState = termios()
-            withUnsafeMutablePointer(to: &currentTerminalState) {
-               _ = tcgetattr(standardInputDescriptor, $0)
-            }
-            return currentTerminalState
-         }()
+         var currentTerminalState = termios()
+         withUnsafeMutablePointer(to: &currentTerminalState) {
+            _ = tcgetattr(standardInputDescriptor, $0)
+         }
+            
+         self.originalTerminalState = currentTerminalState
       }
       
-      deinit {
-         self.disable()
-      }
+      deinit { self.disable() }
       
       /// Enables raw mode.
       ///
@@ -61,7 +58,9 @@ extension BrainflipCLI {
          }
          
          // apply the new settings
-         _ = tcsetattr(standardInputDescriptor, TCSAFLUSH, &rawTerminalState)
+         withUnsafePointer(to: rawTerminalState) {
+            _ = tcsetattr(standardInputDescriptor, TCSAFLUSH, $0)
+         }
       }
       
       /// Disables raw mode.

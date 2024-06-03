@@ -17,8 +17,6 @@
 import Testing
 @testable import struct BrainflipKit.Interpreter
 
-// swiftlint:disable force_cast
-
 extension InterpreterTests {
    @Suite("Program execution")
    struct ExecutionTests {
@@ -57,11 +55,11 @@ extension InterpreterTests {
       @Test("Running with input")
       func runningWithInput() async throws {
          // outputs the first input character twice, then the
-         // second character once
-         let interpreter = try await Interpreter(",..,.", input: "hello")
+         // third character once
+         let interpreter = try await Interpreter(",..,,.", input: "hello")
          
          let output = try await interpreter.run()
-         #expect(output as! String == "hhe")
+         #expect(output as! String == "hhl")
       }
       
       @Test("'Hello World!' program")
@@ -77,5 +75,3 @@ extension InterpreterTests {
       }
    }
 }
-
-// swiftlint:enable force_cast

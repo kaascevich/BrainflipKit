@@ -26,7 +26,7 @@ extension InterpreterTests.InstructionTests {
          
          interpreter.tape = [
             0: 1,
-            1: 2,
+            1: 0, // this cell is zero
             2: 3,
             3: 4,
             4: 5
@@ -35,7 +35,7 @@ extension InterpreterTests.InstructionTests {
          
          try await interpreter.handleInstruction(.scanLeft)
          #expect(
-            interpreter.cellPointer == -1,
+            interpreter.cellPointer == 1,
             "scan left instruction moves the cell pointer to the previous zero cell"
          )
       }
@@ -48,14 +48,13 @@ extension InterpreterTests.InstructionTests {
             0: 1,
             1: 2,
             2: 3,
-            3: 4,
+            3: 0, // this cell is zero
             4: 5,
-            5: 0
          ]
          
          try await interpreter.handleInstruction(.scanRight)
          #expect(
-            interpreter.cellPointer == 5,
+            interpreter.cellPointer == 3,
             "scan right instruction moves the cell pointer to the next zero cell"
          )
       }

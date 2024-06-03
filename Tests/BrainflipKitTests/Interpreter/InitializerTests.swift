@@ -17,8 +17,6 @@
 import Testing
 @testable import struct BrainflipKit.Interpreter
 
-// swiftlint:disable force_cast
-
 extension InterpreterTests {
    @Suite("Interpreter initialization")
    struct InitializerTests {
@@ -45,5 +43,3 @@ extension InterpreterTests {
       }
    }
 }
-
-// swiftlint:enable force_cast

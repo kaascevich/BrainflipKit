@@ -17,8 +17,6 @@
 import Testing
 @testable import struct BrainflipKit.Interpreter
 
-// swiftlint:disable force_cast
-
 extension InterpreterTests.InstructionTests {
    @Suite("Output instruction")
    struct OutputTests {
@@ -41,5 +39,3 @@ extension InterpreterTests.InstructionTests {
       }
    }
 }
-
-// swiftlint:enable force_cast

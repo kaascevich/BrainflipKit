@@ -62,8 +62,12 @@ extension BrainflipCLI {
       /// Appends the given string to the standard output
       /// stream.
       func write(_ string: String) {
+         // For some reason, Swift's `print` function only
+         // flushes the output stream after a newline -- even
+         // if the `terminator` parameter is altered. So we've
+         // gotta do it ourselves.
          print(string, terminator: "")
-         fflush(stdout) // flush the stream
+         fflush(stdout)
       }
    }
 }

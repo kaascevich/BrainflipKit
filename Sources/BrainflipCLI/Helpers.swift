@@ -21,7 +21,7 @@ extension BrainflipCLI {
    /// Formats the given program, indenting loops.
    ///
    /// - Parameters:
-   ///   - program: The program to indent.
+   ///   - program: The program to format.
    ///   - indentLevel: The level of indentation to apply.
    ///
    /// - Returns: A formatted program.

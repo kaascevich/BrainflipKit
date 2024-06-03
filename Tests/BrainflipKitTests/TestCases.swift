@@ -14,8 +14,6 @@
 // You should have received a copy of the GNU General Public License along
 // with this package. If not, see https://www.gnu.org/licenses/.
 
-// swiftlint:disable convenience_type
-
 import Testing
 @testable import BrainflipKit
 
@@ -24,5 +22,3 @@ struct InterpreterTests {
    @Suite("Instructions")
    struct InstructionTests { }
 }
-
-// swiftlint:enable convenience_type

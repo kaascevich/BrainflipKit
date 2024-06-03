@@ -52,9 +52,7 @@ extension BrainflipCLI {
          help: .init(
             "A list of optional, extra instructions to enable.",
             discussion: ExtraInstruction.allCases
-               .map {
-                  "(\($0.rawValue)) \(String(describing: $0)): \($0.details)"
-               }
+               .map { "(\($0.rawValue)) \($0): \($0.details)" }
                .joined(separator: "\n"),
             valueName: "instructions"
          )
