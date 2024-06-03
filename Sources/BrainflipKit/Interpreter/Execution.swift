@@ -73,8 +73,7 @@ extension Interpreter {
             storingAtOffset: offset
          )
          
-      case .scanLeft:  handleScanLeftInstruction()
-      case .scanRight: handleScanRightInstruction()
+      case let .scan(increment): handleScanInstruction(increment)
          
       case let .extra(instruction):
          try await handleExtraInstruction(instruction)

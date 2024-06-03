@@ -60,8 +60,15 @@ internal extension Program {
       }
       
       private static func optimizeScanLoops(_ program: inout Program) {
-         program.replace([.loop([.move(-1)])], with: [.scanLeft])
-         program.replace([.loop([.move(+1)])], with: [.scanRight])
+         program = program.map {
+            guard
+               case let .loop(instructions) = $0,
+               instructions.count == 1,
+               case let .move(increment) = instructions[0]
+            else { return $0 }
+            
+            return .scan(increment)
+         }
       }
       
       private static func optimizeMultiplyLoops(_ program: inout Program) {
@@ -122,10 +129,10 @@ internal extension Program {
             previousOptimization = program
             removeAdjacentInstructions(&program)
             removeUselessInstructions(&program)
+            optimizeScanLoops(&program)
          } while program != previousOptimization
          
          optimizeClearLoops(&program)
-         optimizeScanLoops(&program)
          optimizeMultiplyLoops(&program)
          
          return program

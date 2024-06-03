@@ -52,11 +52,9 @@ public enum Instruction: Equatable, Hashable, Sendable {
    /// away from the current one.
    case multiply(factor: CellValue, offset: Int)
    
-   /// Moves the pointer to the next zero cell.
-   case scanRight
-   
-   /// Moves the pointer to the previous zero cell.
-   case scanLeft
+   /// Repeatedly moves the cell pointer by the specified
+   /// amount until it lands on a zero cell.
+   case scan(Int32)
    
    /// Performs an action corresponding to the wrapped
    /// ``ExtraInstruction``, or does nothing if that

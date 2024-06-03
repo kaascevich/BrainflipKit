@@ -45,12 +45,12 @@ struct OptimizerTests {
    
    @Test("Scan-loop optimization")
    func scanLoopOptimization() async throws {
-      let program = try await Program("+[>]+[<]")
+      let program = try await Program("+[>>>]+[<<]")
       #expect(program == [
          .add(1),
-         .scanRight,
+         .scan(3),
          .add(1),
-         .scanLeft
+         .scan(-2)
       ])
    }
    

@@ -18,44 +18,29 @@ import Testing
 @testable import struct BrainflipKit.Interpreter
 
 extension InterpreterTests.InstructionTests {
-   @Suite("Scan instructions")
+   @Suite("Scan instruction")
    struct ScanTests {
-      @Test("Scan left instruction")
-      func scanLeftInstruction() async throws {
-         var interpreter = try await Interpreter("")
-         
-         interpreter.tape = [
-            0: 1,
-            1: 0, // this cell is zero
-            2: 3,
-            3: 4,
-            4: 5
-         ]
-         interpreter.cellPointer = 4
-         
-         try await interpreter.handleInstruction(.scanLeft)
-         #expect(
-            interpreter.cellPointer == 1,
-            "scan left instruction moves the cell pointer to the previous zero cell"
-         )
-      }
-      
-      @Test("Scan right instruction")
-      func scanRightInstruction() async throws {
+      @Test("Scan instruction")
+      func scanInstruction() async throws {
          var interpreter = try await Interpreter("")
          
          interpreter.tape = [
             0: 1,
             1: 2,
             2: 3,
-            3: 0, // this cell is zero
+            3: 0, // this cell is zero, but at an odd index
             4: 5,
+            5: 6,
+            6: 0, // this cell is zero, and at an even index
          ]
          
-         try await interpreter.handleInstruction(.scanRight)
+         try await interpreter.handleInstruction(.scan(2))
          #expect(
-            interpreter.cellPointer == 3,
-            "scan right instruction moves the cell pointer to the next zero cell"
+            interpreter.cellPointer == 6,
+            """
+            scan instruction repeatedly moves the cell pointer by the \
+            specified amount until it lands on a zero cell
+            """
          )
       }
    }

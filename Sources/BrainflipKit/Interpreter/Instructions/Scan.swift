@@ -15,13 +15,10 @@
 // with this package. If not, see https://www.gnu.org/licenses/.
 
 internal extension Interpreter {
-   /// Executes an ``Instruction/scanLeft(_:)`` instruction.
-   mutating func handleScanLeftInstruction() {
-      while self.currentCellValue != 0 { self.cellPointer -= 1 }
-   }
-   
-   /// Executes an ``Instruction/scanRight(_:)`` instruction.
-   mutating func handleScanRightInstruction() {
-      while self.currentCellValue != 0 { self.cellPointer += 1 }
+   /// Executes an ``Instruction/scan(_:)`` instruction.
+   mutating func handleScanInstruction(_ increment: Int32) {
+      while self.currentCellValue != 0 {
+         self.cellPointer += Int(increment)
+      }
    }
 }

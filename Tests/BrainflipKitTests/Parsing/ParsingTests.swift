@@ -119,9 +119,7 @@ struct ParsingTests {
             .move(-2)
          ]),
          .move(1),
-         .loop([
-            .move(2)
-         ]),
+         .scan(2),
          .move(-4),
          .loop([
             .move(1),
