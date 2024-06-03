@@ -167,8 +167,8 @@
    ///   into a valid program (that is, if it contains
    ///   unmatched brackets).
    ///
-   /// - Complexity: O(*n*), where *n* is the length of
-   ///   `input.unicodeScalars`.
+   /// - Complexity: O(*n*), where *n* is the number of Unicode
+   ///   scalars in `inputIterator`.
    @inlinable public init(
       _ source: String,
       inputIterator: InputIterator,
@@ -207,10 +207,9 @@
       outputStream: OutputStream = "",
       options: Options = .init()
    ) async throws {
-      let inputIterator = input.unicodeScalars.makeIterator()
       try await self.init(
          source,
-         inputIterator: inputIterator,
+         inputIterator: input.unicodeScalars.makeIterator(),
          outputStream: outputStream,
          options: options
       )
@@ -232,11 +231,7 @@
    public internal(set) subscript<Value>(
       dynamicMember member: WritableKeyPath<State, Value>
    ) -> Value {
-      @inlinable get {
-         state[keyPath: member]
-      }
-      @usableFromInline set {
-         state[keyPath: member] = newValue
-      }
+      @inlinable get { state[keyPath: member] }
+      @usableFromInline set { state[keyPath: member] = newValue }
    }
 }

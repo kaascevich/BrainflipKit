@@ -85,12 +85,8 @@ public extension Interpreter {
       /// # See Also
       /// - ``Interpreter/State/cellPointer``
       public internal(set) var currentCellValue: CellValue {
-         @inlinable get {
-            tape[cellPointer, default: 0]
-         }
-         @usableFromInline set {
-            tape[cellPointer] = newValue
-         }
+         @inlinable get { tape[cellPointer, default: 0] }
+         @usableFromInline set { tape[cellPointer] = newValue }
       }
    }
 }

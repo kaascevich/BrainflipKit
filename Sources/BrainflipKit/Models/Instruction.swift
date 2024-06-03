@@ -14,11 +14,9 @@
 // You should have received a copy of the GNU General Public License along
 // with this package. If not, see https://www.gnu.org/licenses/.
 
-import CasePaths
-
 /// An individual instruction, performing a specific action
 /// when executed by an ``Interpreter``.
-@CasePathable public enum Instruction: Equatable, Hashable, Sendable {
+public enum Instruction: Equatable, Hashable, Sendable {
    /// Increments (or decrements) the current cell by a
    /// value.
    ///
@@ -30,7 +28,7 @@ import CasePaths
    case move(Int32)
    
    /// Loops over the contained instructions.
-   case loop([Self])
+   case loop([Instruction])
    
    /// Finds the character whose Unicode value equals
    /// the current cell and writes it to the output

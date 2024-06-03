@@ -99,10 +99,7 @@ public extension Program {
    ///
    /// - Throws: An `Error` if `source` is not a valid program
    ///   (that is, if it contains unmatched brackets).
-   init(
-      _ source: String,
-      optimizations: Bool = true
-   ) async throws {
+   init(_ source: String, optimizations: Bool = true) async throws {
       self = try Parser(optimizations: optimizations)
          .parse(source.filter(Instruction.validInstructions.contains))
    }

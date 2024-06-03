@@ -18,11 +18,12 @@ internal extension Interpreter {
    /// Executes an ``Instruction/multiply(_:)`` instruction.
    mutating func handleMultiplyInstruction(
       multiplyingBy factor: UInt32,
-      storingAtOffset cellOffset: Int
+      storingAtOffset offset: Int
    ) throws {
       let multiplicationResult = self.currentCellValue
          .multipliedReportingOverflow(by: factor)
-      let additionResult = self.tape[self.cellPointer + cellOffset, default: 0]
+      
+      let additionResult = self.tape[self.cellPointer + offset, default: 0]
          .addingReportingOverflow(multiplicationResult.partialValue)
       
       // wraparound
@@ -32,7 +33,7 @@ internal extension Interpreter {
          )
       }
       
-      self.tape[self.cellPointer + cellOffset] = additionResult.partialValue
+      self.tape[self.cellPointer + offset] = additionResult.partialValue
       self.currentCellValue = 0
    }
 }

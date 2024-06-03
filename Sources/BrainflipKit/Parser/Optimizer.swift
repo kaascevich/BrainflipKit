@@ -15,7 +15,7 @@
 // with this package. If not, see https://www.gnu.org/licenses/.
 
 private import Algorithms
-import CasePaths
+private import CasePaths
 
 internal extension Program {
    enum Optimizer {
@@ -26,18 +26,20 @@ internal extension Program {
       }
       
       private static func removeAdjacentInstructions(_ program: inout Program) {
-         program = program.chunked {
+         let chunks = program.chunked {
             switch ($0, $1) {
-               // we only care about these two instruction types
+            // we only care about these two instruction types
             case (.add, .add), (.move, .move): true
             default: false
             }
-         }.flatMap { chunk in
+         }
+            
+         program = chunks.flatMap { chunk -> Array.SubSequence in
             // we only need to check the first value, since all others
             // should match it
             let casePath: _? = switch chunk.first {
-            case .add:  \Instruction.Cases.add
-            case .move: \Instruction.Cases.move
+            case .add:  /Instruction.add
+            case .move: /Instruction.move
             default: nil
             }
             
@@ -47,16 +49,14 @@ internal extension Program {
                return chunk
             }
             
-            let values = chunk.map { $0[case: casePath]! }
+            let values = chunk.map { casePath.extract(from: $0)! }
             let sum = values.reduce(0, +)
-            return [casePath(sum)]
+            return [casePath.embed(sum)]
          }
       }
       
       private static func removeUselessInstructions(_ program: inout Program) {
-         program.removeAll {
-            $0 == .add(0) || $0 == .move(0)
-         }
+         program.removeAll { $0 == .add(0) || $0 == .move(0) }
       }
       
       private static func optimizeScanLoops(_ program: inout Program) {
@@ -132,14 +132,3 @@ internal extension Program {
       }
    }
 }
-
-#if swift(<6.0)
-
-extension KeyPath: @unchecked Sendable
-where Root: Sendable, Value: Sendable { }
-
-extension Instruction.AllCasePaths: @unchecked Sendable { }
-
-#else
-#warning("Sendable extensions for KeyPath are redundant in Swift 6 and newer")
-#endif
