@@ -23,6 +23,8 @@ import struct ArgumentParser.ValidationError
 private import Glibc
 #elseif canImport(Darwin.C)
 private import Darwin.C
+#elseif canImport(WinSDK)
+private import WinSDK
 #else
 #error("Unsupported platform")
 #endif
@@ -32,6 +34,10 @@ enum IO {
       /// Encapsulates the process of enabling and disabling raw mode
       /// for a terminal.
       private struct TerminalRawMode: ~Copyable {
+      #if os(Windows)
+         // TODO: Get raw mode working on Windows
+         #error("Raw mode on Windows is not yet supported")
+      #else
          /// The original state of the terminal.
          private let originalTerminalState: termios
          
@@ -72,6 +78,7 @@ enum IO {
                _ = tcsetattr(standardInput, TCSAFLUSH, $0)
             }
          }
+      #endif
       }
       
       let enableEcho: Bool

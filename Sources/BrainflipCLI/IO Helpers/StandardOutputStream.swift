@@ -18,6 +18,8 @@
 private import Glibc
 #elseif canImport(Darwin.C)
 private import Darwin.C
+#elseif canImport(WinSDK)
+private import WinSDK
 #else
 #error("Unsupported platform")
 #endif
