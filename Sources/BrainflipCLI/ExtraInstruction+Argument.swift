@@ -17,7 +17,7 @@
 import ArgumentParser
 import enum BrainflipKit.ExtraInstruction
 
-extension ExtraInstruction: ExpressibleByArgument {
+extension ExtraInstruction: @retroactive ExpressibleByArgument {
    public init?(argument: String) {
       let caseName = Self.allCases.first { String(describing: $0) == argument }
       guard let caseName else { return nil }

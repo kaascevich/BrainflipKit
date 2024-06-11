@@ -1,4 +1,4 @@
-// Implementation.swift
+// Brainflip+Impl.swift
 // Copyright © 2024 Kaleb A. Ascevich
 //
 // This package is free software: you can redistribute it and/or modify it
@@ -17,7 +17,7 @@
 import ArgumentParser
 import BrainflipKit
 
-extension BrainflipCLI {
+extension BrainflipCommand {
    func run() async throws {
       // MARK: Setup
       
@@ -36,7 +36,7 @@ extension BrainflipCLI {
             
       // MARK: - Obtaining Source
       
-      let programSource = try await getProgramSource()
+      let programSource = try await chooseProgramSource()
       
       if self.printFiltered {
          let filteredSource = programSource.filter(
@@ -53,20 +53,20 @@ extension BrainflipCLI {
       )
       
       if self.printParsed {
-         let formattedProgram = formatProgram(parsedProgram)
+         let formattedProgram = Self.formatProgram(parsedProgram)
          throw CleanExit.message(formattedProgram)
       }
       
-      let inputIterator = if let input {
+      let inputIterator: any IteratorProtocol<_> = if let input {
          input.unicodeScalars.makeIterator()
       } else {
-         StandardInputIterator(echoing: self.inputEchoing)
-      } as any IteratorProtocol<_>
+         IO.StandardInputIterator(echoing: self.inputEchoing)
+      }
             
       let interpreter = Interpreter(
          parsedProgram,
          inputIterator: inputIterator,
-         outputStream: StandardOutputStream(),
+         outputStream: IO.StandardOutputStream(),
          options: options
       )
       

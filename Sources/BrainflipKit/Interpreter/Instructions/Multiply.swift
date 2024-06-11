@@ -26,11 +26,12 @@ internal extension Interpreter {
       let additionResult = self.tape[self.cellPointer + offset, default: 0]
          .addingReportingOverflow(multiplicationResult.partialValue)
       
-      // wraparound
+      // check for wraparound
       if multiplicationResult.overflow || additionResult.overflow {
-         try checkOverflowAllowed(
-            throwing: .cellOverflow(position: self.cellPointer)
-         )
+         // check whether it's allowed
+         guard options.allowCellWraparound else {
+            throw Error.cellOverflow(position: self.cellPointer)
+         }
       }
       
       self.tape[self.cellPointer + offset] = additionResult.partialValue

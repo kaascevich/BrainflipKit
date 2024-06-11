@@ -14,16 +14,16 @@
 // You should have received a copy of the GNU General Public License along
 // with this package. If not, see https://www.gnu.org/licenses/.
 
-import ArgumentParser
+import struct ArgumentParser.ValidationError
 
-extension BrainflipCLI {
+extension IO {
    /// Reads text from standard input until EOF is reached.
    ///
    /// - Returns: Text read from standard input.
    ///
    /// - Throws: `ValidationError` if standard input only
    ///   contains whitespace.
-   func stringFromStandardInput() async throws -> String {
+   static func stringFromStandardInput() async throws -> String {
       var input = ""
       while let nextLine = readLine() {
          input += nextLine

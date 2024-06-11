@@ -1,4 +1,4 @@
-// Helpers.swift
+// Brainflip+Helpers.swift
 // Copyright © 2024 Kaleb A. Ascevich
 //
 // This package is free software: you can redistribute it and/or modify it
@@ -14,10 +14,10 @@
 // You should have received a copy of the GNU General Public License along
 // with this package. If not, see https://www.gnu.org/licenses/.
 
-import ArgumentParser
+import struct ArgumentParser.ValidationError
 import BrainflipKit
 
-extension BrainflipCLI {
+extension BrainflipCommand {
    /// Formats the given program, indenting loops.
    ///
    /// - Parameters:
@@ -25,7 +25,7 @@ extension BrainflipCLI {
    ///   - indentLevel: The level of indentation to apply.
    ///
    /// - Returns: A formatted program.
-   func formatProgram(_ program: Program, indentLevel: Int = 0) -> String {
+   static func formatProgram(_ program: Program, indentLevel: Int = 0) -> String {
       var lines: [String] = []
       
       let indent = String(repeating: "  ", count: indentLevel)
@@ -38,8 +38,8 @@ extension BrainflipCLI {
             formatProgram(instructions, indentLevel: indentLevel + 1),
             indent + ")"
          ]
-         
-         // output the instruction's details
+            
+            // output the instruction's details
          default: [indent + String(describing: instruction)]
          }
          
@@ -54,13 +54,13 @@ extension BrainflipCLI {
    ///
    /// - Returns: The source code for the Brainflip
    ///   program provided by the user.
-   func getProgramSource() async throws -> String {
+   func chooseProgramSource() async throws -> String {
       switch (self.programPath, self.program) {
       case (nil, nil):
-         try await stringFromStandardInput()
+         try await IO.stringFromStandardInput()
          
       case (let programPath?, nil):
-         try String(contentsOfFile: programPath)
+         try String(contentsOfFile: programPath, encoding: .unicode)
          
       case (nil, let program?):
          program

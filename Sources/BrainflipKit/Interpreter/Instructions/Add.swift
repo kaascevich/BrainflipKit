@@ -17,22 +17,22 @@
 internal extension Interpreter {
    /// Executes an ``Instruction/add(_:)`` instruction.
    mutating func handleAddInstruction(_ value: Int32) throws {
+      let (overflowCheck, errorType) = if value < 0 {
+         (self.currentCellValue.subtractingReportingOverflow, Error.cellUnderflow)
+      } else {
+         (self.currentCellValue.addingReportingOverflow, Error.cellOverflow)
+      }
+      
       let twosComplementValue = CellValue(bitPattern: value)
       
-      let overflowCheck = if value < 0 {
-         self.currentCellValue.subtractingReportingOverflow
-      } else {
-         self.currentCellValue.addingReportingOverflow
+      // check for wraparound
+      if overflowCheck(twosComplementValue).overflow {
+         // check whether it's allowed
+         guard options.allowCellWraparound else {
+            throw errorType(self.cellPointer)
+         }
       }
       
-      if overflowCheck(twosComplementValue).overflow { // wraparound
-         let errorType = if value < 0 {
-            Error.cellUnderflow
-         } else {
-            Error.cellOverflow
-         }
-         try checkOverflowAllowed(throwing: errorType(self.cellPointer))
-      }
       self.currentCellValue &+= twosComplementValue
    }
 }

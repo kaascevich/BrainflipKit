@@ -50,9 +50,10 @@ public extension Program {
    /// execution.
    ///
    /// ### Adjacent Instructions
-   ///
    /// Repeated occurrences of `+` and `-` are condensed into a
-   /// single instruction, as are `>` and `<`.
+   /// single instruction, as are `>` and `<`. Additionally,
+   /// instructions that cancel each other out (such as `+-` or
+   /// `><`) are removed.
    ///
    /// ### Instructions With No Effect
    /// Instructions that do not have any effect (such as `add`
@@ -63,8 +64,8 @@ public extension Program {
    /// instruction.
    ///
    /// ### Scan Loops
-   /// The `[>]` and `[<]` constructs are replaced with
-   /// `scanRight` and `scanLeft` instructions, respectively.
+   /// A `loop` instruction containing only `move` instructions
+   /// is replaced with a `scan` instruction.
    ///
    /// ### Dead Code
    /// Loops that occur immediately after other loops are

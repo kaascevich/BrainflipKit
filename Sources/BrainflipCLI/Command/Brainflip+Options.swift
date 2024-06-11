@@ -1,4 +1,4 @@
-// InterpreterOptions.swift
+// Brainflip+Options.swift
 // Copyright © 2024 Kaleb A. Ascevich
 //
 // This package is free software: you can redistribute it and/or modify it
@@ -17,7 +17,7 @@
 import ArgumentParser
 import BrainflipKit
 
-extension BrainflipCLI {
+extension BrainflipCommand {
    struct InterpreterOptions: ParsableArguments {
       enum EndOfInputBehavior: String, CaseIterable, ExpressibleByArgument {
          case zero, max

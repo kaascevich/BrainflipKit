@@ -1,4 +1,4 @@
-// swift-tools-version: 5.10
+// swift-tools-version: 6.0
 
 // Package.swift
 // Copyright © 2024 Kaleb A. Ascevich
@@ -18,78 +18,39 @@
 
 import PackageDescription
 
-let swiftSettings: [SwiftSetting] = [
-   "ConciseMagicFile",
-   "ForwardTrailingClosures",
-   "StrictConcurrency",
-   "ImplicitOpenExistentials",
-   "BareSlashRegexLiterals",
-   "DeprecateApplicationMain",
-   "ImportObjcForwardDeclarations",
-   "DisableOutwardActorInference",
-   "AccessLevelOnImport",
-   "InternalImportsByDefault",
-   "IsolatedDefaultValues",
-   "GlobalConcurrency",
-   "InferSendableFromCaptures",
-   "RegionBasedIsolation",
-   "ExistentialAny"
-].map { .enableExperimentalFeature($0) }
-
-func dependency(
-   fromRepository repositoryPath: String
-) -> Package.Dependency {
-   .package(
-      url: "https://github.com/\(repositoryPath).git",
-      branch: "main"
-   )
+func dependency(fromRepo repoPath: String) -> Package.Dependency {
+   .package(url: "https://github.com/\(repoPath).git", branch: "main")
 }
 
 let package = Package(
    name: "BrainflipKit",
-   platforms: [
-      .macOS(.v13),
-      .iOS(.v16),
-      .tvOS(.v16),
-      .watchOS(.v8),
-      .macCatalyst(.v16),
-      .visionOS(.v1)
-   ],
+   platforms: [.macOS(.v15)],
    products: [
-      .library(name: "BrainflipKit", targets: ["BrainflipKit"]),
       .executable(name: "brainflip", targets: ["BrainflipCLI"])
    ],
    dependencies: [
       "apple/swift-algorithms",
       "apple/swift-argument-parser",
       "pointfreeco/swift-parsing",
-//      "pointfreeco/swift-case-paths",
-      "apple/swift-testing"
-   ].map(dependency(fromRepository:)),
+   ].map(dependency(fromRepo:)),
    targets: [
-      .target(
-         name: "BrainflipKit",
-         dependencies: [
-            .product(name: "Parsing", package: "swift-parsing"),
-            .product(name: "Algorithms", package: "swift-algorithms")
-         ],
-         swiftSettings: swiftSettings
-      ),
       .executableTarget(
          name: "BrainflipCLI",
          dependencies: [
             "BrainflipKit",
             .product(name: "ArgumentParser", package: "swift-argument-parser")
-         ],
-         swiftSettings: swiftSettings
+         ]
+      ),
+      .target(
+         name: "BrainflipKit",
+         dependencies: [
+            .product(name: "Parsing", package: "swift-parsing"),
+            .product(name: "Algorithms", package: "swift-algorithms")
+         ]
       ),
       .testTarget(
          name: "BrainflipKitTests",
-         dependencies: [
-            "BrainflipKit",
-            .product(name: "Testing", package: "swift-testing")
-         ],
-         swiftSettings: swiftSettings
+         dependencies: ["BrainflipKit"]
       )
    ]
 )
