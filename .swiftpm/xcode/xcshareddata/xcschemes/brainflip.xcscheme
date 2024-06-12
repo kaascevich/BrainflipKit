@@ -79,8 +79,16 @@
             isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument
-            argument = "--help"
+            argument = "--generate-completion-script zsh"
+            isEnabled = "NO">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "-p &quot;,[&gt;+&lt;-.]&quot; -i &quot;~&quot;"
             isEnabled = "YES">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "--help"
+            isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument
             argument = "-p &quot;,[.,]&quot; --eoi zero"

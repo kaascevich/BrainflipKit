@@ -39,7 +39,7 @@ extension BrainflipCommand {
             indent + ")"
          ]
             
-            // output the instruction's details
+         // output the instruction's details
          default: [indent + String(describing: instruction)]
          }
          

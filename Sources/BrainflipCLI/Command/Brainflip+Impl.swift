@@ -42,7 +42,8 @@ extension BrainflipCommand {
          let filteredSource = programSource.filter(
             Instruction.validInstructions.contains
          )
-         throw CleanExit.message(filteredSource)
+         print(filteredSource)
+         throw ExitCode.success
       }
       
       // MARK: - Parsing
@@ -54,7 +55,9 @@ extension BrainflipCommand {
       
       if self.printParsed {
          let formattedProgram = Self.formatProgram(parsedProgram)
-         throw CleanExit.message(formattedProgram)
+         print(formattedProgram)
+         
+         throw ExitCode.success
       }
       
       let inputIterator: any IteratorProtocol<_> = if let input {

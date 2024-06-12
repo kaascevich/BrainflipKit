@@ -88,7 +88,6 @@ import BrainflipKit
    ) var program: String?
    
    @Flag(
-      name: .long,
       inversion: .prefixedEnableDisable,
       help: "Whether to optimize the program before interpreting it."
    ) var optimizations: Bool = true
@@ -106,7 +105,6 @@ import BrainflipKit
    var input: String?
    
    @Flag(
-      name: .long,
       inversion: .prefixedNo,
       help: .init(
          "Whether to echo input characters as they are being typed.",
@@ -117,12 +115,10 @@ import BrainflipKit
    ) var inputEchoing: Bool = true
       
    @Flag(
-      name: .long,
       help: "Prints the result of parsing the program and exits."
    ) var printParsed: Bool = false
    
    @Flag(
-      name: .long,
       help: .init(
          """
          Prints the result of filtering non-instruction characters from the \

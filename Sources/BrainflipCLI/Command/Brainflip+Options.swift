@@ -25,7 +25,7 @@ extension BrainflipCommand {
       }
       
       @Flag(
-         name: [.customLong("wrap")],
+         name: [.customLong("wrap"), .long],
          inversion: .prefixedNo,
          help: """
          Whether to allow cell values to wrap around when they overflow or \
