@@ -15,7 +15,6 @@
 // with this package. If not, see https://www.gnu.org/licenses/.
 
 import ArgumentParser
-import BrainflipKit
 
 extension BrainflipCommand {
    struct InputOptions: ParsableArguments {

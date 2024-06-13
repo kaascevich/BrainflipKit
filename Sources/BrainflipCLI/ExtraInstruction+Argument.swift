@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License along
 // with this package. If not, see https://www.gnu.org/licenses/.
 
-import ArgumentParser
+import protocol ArgumentParser.ExpressibleByArgument
 import enum BrainflipKit.ExtraInstruction
 
 extension ExtraInstruction: @retroactive ExpressibleByArgument {

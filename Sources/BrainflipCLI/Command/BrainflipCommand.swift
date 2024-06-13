@@ -17,8 +17,6 @@
 import ArgumentParser
 import struct Foundation.URL
 
-import BrainflipKit
-
 @main struct BrainflipCommand: AsyncParsableCommand {
    // MARK: - Command Configuration
    
