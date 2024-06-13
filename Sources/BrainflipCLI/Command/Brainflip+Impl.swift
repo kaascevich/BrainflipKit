@@ -21,12 +21,13 @@ extension BrainflipCommand {
    func run() async throws {
       // MARK: Setup
       
-      let endOfInputBehavior = switch self.interpreterOptions.endOfInputBehavior {
-      case .zero:  .setTo(0)
-      case .max:   .setTo(.max)
-      case .error: .throwError
-      case  nil:   nil
-      } as Interpreter.Options.EndOfInputBehavior?
+      let endOfInputBehavior: Interpreter.Options.EndOfInputBehavior? =
+         switch self.interpreterOptions.endOfInputBehavior {
+         case .zero:  .setTo(0)
+         case .max:   .setTo(.max)
+         case .error: .throwError
+         case  nil:   nil
+         }
       
       let options = Interpreter.Options(
          allowCellWraparound:      self.interpreterOptions.wraparound,
@@ -43,6 +44,7 @@ extension BrainflipCommand {
             Instruction.validInstructions.contains
          )
          print(filteredSource)
+         
          throw ExitCode.success
       }
       
@@ -60,11 +62,15 @@ extension BrainflipCommand {
          throw ExitCode.success
       }
       
-      let inputIterator: any IteratorProtocol<_> = if let input {
-         input.unicodeScalars.makeIterator()
-      } else {
-         IO.StandardInputIterator(echoing: self.inputEchoing)
-      }
+      let inputIterator: any IteratorProtocol<_> =
+         if let input = self.inputOptions.input {
+            input.unicodeScalars.makeIterator()
+         } else {
+            IO.StandardInputIterator(
+               echo: self.inputOptions.inputEchoing,
+               printBell: self.inputOptions.bellOnInputRequest
+            )
+         }
             
       let interpreter = Interpreter(
          parsedProgram,
@@ -88,7 +94,7 @@ extension BrainflipCommand {
    private func chooseProgramSource() async throws -> String {
       switch (self.programPath, self.program) {
       case (nil, nil):
-         try await IO.stringFromStandardInput()
+         try await IO.readAllLines()
          
       case (let programPath?, nil):
          try String(contentsOfFile: programPath, encoding: .unicode)

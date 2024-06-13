@@ -81,18 +81,22 @@ enum IO {
       #endif
       }
       
-      let enableEcho: Bool
-      init(echoing enableEcho: Bool) {
-         self.enableEcho = enableEcho
+      let echo: Bool
+      let printBell: Bool
+      init(echo: Bool, printBell: Bool) {
+         self.echo = echo
+         self.printBell = printBell
       }
       
       func next() -> Unicode.Scalar? {
          // before any raw mode shenanigans, print a bell character so
          // the user knows that we want input
-         StandardOutputStream().write("\u{7}")
+         if printBell {
+            StandardOutputStream().write("\u{7}")
+         }
          
          let rawMode = TerminalRawMode()
-         rawMode.enable(echoing: enableEcho)
+         rawMode.enable(echoing: echo)
          defer { rawMode.disable() }
          
          var nextCharacter: UInt8 = 0

@@ -24,13 +24,29 @@ import BrainflipKit
    
    static let configuration = CommandConfiguration(
       commandName: "brainflip",
-      abstract: "Run Brainflip programs with a configurable interpreter.",
+      abstract: "Run brainf**k programs with a configurable interpreter.",
       discussion: """
-      Brainflip is an optimizing Swift interpreter for the Brainf**k \
+      Brainflip is an optimizing Swift interpreter for the brainf**k \
       programming language -- an incredibly simple language that only has 8 \
       instructions. This interpreter features full Unicode support, as well as \
       languange extensions in the form of extra instructions (which can be \
       enabled or disabled at will).
+      
+      Here's a list of all the differences between Brainflip and a standard, \
+      run-of-the-mill brainf**k interpreter:
+       - Full Unicode support
+       - 32-bit cells instead of 8-bit cells ('cuz Unicode)
+       - Infinite tape in both directions
+       - Customizable end-of-input behavior
+       - Cell wrapping can be disabled
+       - Optional extra instructions
+       - Relatively basic optimizations, including:
+         - Condensing repeated instructions
+         - Merging `+`/`-` and `<`/`>` instructions
+         - Removing instructions that cancel each other out
+         - Replacing `[-]` with a dedicated instruction
+         - Replacing copy/multiplication loops with a dedicated instruction
+         - Replacing scan loops (such as `[>>]`) with a dedicated instruction
       """
    )
    
@@ -91,28 +107,6 @@ import BrainflipKit
       inversion: .prefixedEnableDisable,
       help: "Whether to optimize the program before interpreting it."
    ) var optimizations: Bool = true
-   
-   @Option(
-      name: .shortAndLong,
-      help: .init(
-         "The input to pass to the program.",
-         discussion: """
-         If this option is not specified, the input will be read from standard \
-         input as the program requests it.
-         """
-      )
-   )
-   var input: String?
-   
-   @Flag(
-      inversion: .prefixedNo,
-      help: .init(
-         "Whether to echo input characters as they are being typed.",
-         discussion: """
-         This flag has no effect if the '-i/--input' option is specified.
-         """
-      )
-   ) var inputEchoing: Bool = true
       
    @Flag(
       help: "Prints the result of parsing the program and exits."
@@ -132,4 +126,7 @@ import BrainflipKit
    
    @OptionGroup(title: "Interpreter Options")
    var interpreterOptions: InterpreterOptions
+   
+   @OptionGroup(title: "Input Options")
+   var inputOptions: InputOptions
 }

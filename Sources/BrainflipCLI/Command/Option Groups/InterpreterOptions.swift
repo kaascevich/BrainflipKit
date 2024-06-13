@@ -1,4 +1,4 @@
-// Brainflip+Options.swift
+// InterpreterOptions.swift
 // Copyright © 2024 Kaleb A. Ascevich
 //
 // This package is free software: you can redistribute it and/or modify it

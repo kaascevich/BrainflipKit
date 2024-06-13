@@ -23,13 +23,13 @@ extension IO {
    ///
    /// - Throws: `ValidationError` if standard input only
    ///   contains whitespace.
-   static func stringFromStandardInput() async throws -> String {
+   static func readAllLines() async throws -> String {
       var input = ""
       while let nextLine = readLine() {
          input += nextLine
       }
       
-      if input.allSatisfy(\.isWhitespace) {
+      guard !input.allSatisfy(\.isWhitespace) else {
          // if they didn't type anything meaningful, just
          // print usage info and exit
          throw ValidationError("")
