@@ -30,14 +30,12 @@ private import WinSDK
 #endif
 
 enum IO {
+   // TODO: Get raw mode working on Windows
+   @available(Windows, unavailable, message: "Terminal raw mode on Windows is not yet supported")
    struct StandardInputIterator: IteratorProtocol {
       /// Encapsulates the process of enabling and disabling raw mode
       /// for a terminal.
       private struct TerminalRawMode: ~Copyable {
-      #if os(Windows)
-         // TODO: Get raw mode working on Windows
-         #error("Raw mode on Windows is not yet supported")
-      #else
          /// The original state of the terminal.
          private let originalTerminalState: termios
          
@@ -78,7 +76,6 @@ enum IO {
                _ = tcsetattr(standardInput, TCSAFLUSH, $0)
             }
          }
-      #endif
       }
       
       let echo: Bool
