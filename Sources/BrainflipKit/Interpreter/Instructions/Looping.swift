@@ -9,7 +9,7 @@ internal extension Interpreter {
   /// Executes a ``Instruction/loop(_:)``.
   ///
   /// - Parameter instructions: The instructions to loop over.
-  mutating func handleLoop(_ instructions: [Instruction]) async throws {
+  mutating func handleLoop(_ instructions: [Instruction]) async throws(Self.Error) {
     while self.currentCellValue != 0 {
       for instruction in instructions {
         try await handleInstruction(instruction)

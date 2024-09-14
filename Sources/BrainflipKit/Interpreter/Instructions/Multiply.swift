@@ -10,7 +10,7 @@ internal extension Interpreter {
   mutating func handleMultiplyInstruction(
     multiplyingBy factor: UInt32,
     storingAtOffset offset: Int
-  ) throws {
+  ) throws(Self.Error) {
     let multiplicationResult = self.currentCellValue
       .multipliedReportingOverflow(by: factor)
     

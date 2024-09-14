@@ -85,13 +85,19 @@ extension BrainflipCommand {
   private func chooseProgramSource() async throws -> String {
     switch (self.programPath, self.program) {
     case (nil, nil):
-      try await IO.readAllLines()
+      let input = await IO.readAllLines()
+      guard !input.allSatisfy(\.isWhitespace) else {
+        // if they didn't type anything meaningful, just
+        // print usage info and exit
+        throw ValidationError("")
+      }
+      return input
       
     case (let programPath?, nil):
-      try String(contentsOfFile: programPath, encoding: .unicode)
+      return try String(contentsOfFile: programPath, encoding: .unicode)
       
     case (nil, let program?):
-      program
+      return program
       
     case (_?, _?):
       throw ValidationError(

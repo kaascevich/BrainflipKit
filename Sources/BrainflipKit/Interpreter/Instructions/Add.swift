@@ -7,7 +7,7 @@
 
 internal extension Interpreter {
   /// Executes an ``Instruction/add(_:)`` instruction.
-  mutating func handleAddInstruction(_ value: Int32) throws {
+  mutating func handleAddInstruction(_ value: Int32) throws(Self.Error) {
     let (overflowCheck, errorType) = if value < 0 {
       (self.currentCellValue.subtractingReportingOverflow, Error.cellUnderflow)
     } else {

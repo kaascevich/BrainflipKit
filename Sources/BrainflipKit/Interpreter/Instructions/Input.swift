@@ -7,7 +7,7 @@
 
 internal extension Interpreter {
   /// Executes an ``Instruction/input`` instruction.
-  mutating func handleInputInstruction() async throws {
+  mutating func handleInputInstruction() async throws(Self.Error) {
     // make sure we've actually got some input to work with
     guard let nextInputScalar = self.inputIterator.next() else {
       switch options.endOfInputBehavior {

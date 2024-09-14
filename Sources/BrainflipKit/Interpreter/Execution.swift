@@ -13,7 +13,7 @@ extension Interpreter {
   ///
   /// - Throws: An interpreter ``Error`` if an issue was
   ///   encountered during execution.
-  public consuming func runReturningFinalState() async throws -> State {
+  public consuming func runReturningFinalState() async throws(Self.Error) -> State {
     for instruction in program {
       try await handleInstruction(instruction)
       await Task.yield()
@@ -28,7 +28,7 @@ extension Interpreter {
   ///
   /// - Throws: An interpreter ``Error`` if an issue was
   ///   encountered during execution.
-  public consuming func run() async throws -> OutputStream {
+  public consuming func run() async throws(Self.Error) -> OutputStream {
     try await self.runReturningFinalState().outputStream
   }
   
@@ -40,7 +40,7 @@ extension Interpreter {
   ///  encountered during execution.
   internal mutating func handleInstruction(
     _ instruction: Instruction
-  ) async throws {
+  ) async throws(Self.Error) {
     switch instruction {
     // MARK: Core
     
