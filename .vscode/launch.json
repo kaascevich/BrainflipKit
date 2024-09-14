@@ -1,0 +1,28 @@
+{
+  "configurations": [
+    {
+      "type": "lldb",
+      "request": "launch",
+      "sourceLanguages": [
+        "swift"
+      ],
+      "args": [],
+      "cwd": "${workspaceFolder:BrainflipKit}",
+      "name": "Debug brainflip",
+      "program": "${workspaceFolder:BrainflipKit}/.build/debug/brainflip",
+      "preLaunchTask": "swift: Build Debug brainflip"
+    },
+    {
+      "type": "lldb",
+      "request": "launch",
+      "sourceLanguages": [
+        "swift"
+      ],
+      "args": [],
+      "cwd": "${workspaceFolder:BrainflipKit}",
+      "name": "Release brainflip",
+      "program": "${workspaceFolder:BrainflipKit}/.build/release/brainflip",
+      "preLaunchTask": "swift: Build Release brainflip"
+    }
+  ]
+}
