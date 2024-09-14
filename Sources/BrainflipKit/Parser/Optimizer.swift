@@ -11,11 +11,18 @@ private import CasePaths
 internal extension Program {
   enum Optimizer {
     // MARK: - Optimizations
+
+    /// Removes empty loops.
+    ///
+    /// - Parameter program: The program to optimize.
     private static func optimizeClearLoops(_ program: inout Program) {
       let clearOperation = [Instruction.setTo(0)]
       program.replace([.loop([.add(-1)])], with: clearOperation)
     }
     
+    /// Removes adjacent instructions of the same type.
+    ///
+    /// - Parameter program: The program to optimize.
     private static func removeAdjacentInstructions(_ program: inout Program) {
       let chunks = program.chunked {
         switch ($0, $1) {
@@ -24,7 +31,7 @@ internal extension Program {
         default: false
         }
       }
-        
+      
       program = chunks.flatMap { chunk -> Array.SubSequence in
         // we only need to check the first value, since all others
         // should match it
@@ -46,12 +53,20 @@ internal extension Program {
       }
     }
     
+    /// Removes useless instructions from the program.
+    /// 
+    /// - Parameter program: The program to optimize.
     private static func removeUselessInstructions(_ program: inout Program) {
       program.removeAll { $0 == .add(0) || $0 == .move(0) }
     }
     
+    /// Optimizes scan loops.
+    /// 
+    /// - Parameter program: The program to optimize.
     private static func optimizeScanLoops(_ program: inout Program) {
       program = program.map {
+        // Swift doesn't have pattern matching for arrays, so we
+        // have to do this the hard way.
         guard
           case let .loop(instructions) = $0,
           instructions.count == 1,
@@ -62,8 +77,13 @@ internal extension Program {
       }
     }
     
+    /// Optimizes multiplication loops.
+    /// 
+    /// - Parameter program: The program to optimize.
     private static func optimizeMultiplyLoops(_ program: inout Program) {
       program = program.map {
+        // Swift doesn't have pattern matching for arrays, so we
+        // have to do this the hard way.
         guard
           case let .loop(instructions) = $0,
           instructions.count == 4
@@ -72,10 +92,10 @@ internal extension Program {
         // check if the loop's instructions match what
         // we're looking for
         guard
-          case    .add(-1)     = instructions[0],
-          case let .move(offset)  = instructions[1],
-          case let .add(factor)  = instructions[2],
-          case    .move(-offset) = instructions[3],
+          case .add(-1)          = instructions[0],
+          case .move(let offset) = instructions[1],
+          case .add(let factor)  = instructions[2],
+          case .move(-offset)    = instructions[3],
           factor >= 0
         else { return $0 }
         
@@ -86,6 +106,15 @@ internal extension Program {
       }
     }
     
+    /// Removes loops that will never be executed.
+    /// 
+    /// In Brainflip, loops will only start (or continue) looping if
+    /// the current cell is not zero. This means that, for the instruction
+    /// directly after the loop, the current cell will always be 0. If
+    /// that instruction happens to be a loop, that loop will never be
+    /// executed. So we remove those here.
+    /// 
+    /// - Parameter program: The program to optimize.
     private static func removeDeadLoops(_ program: inout Program) {
       let windows = [_](program.enumerated()).windows(ofCount: 2)
       var indicesToRemove: [Int] = []
@@ -110,6 +139,11 @@ internal extension Program {
     
     // MARK: - Main Optimizer
     
+    /// Optimizes a program, ignoring instructions within loops.
+    /// 
+    /// - Parameter program: The program to optimize.
+    /// 
+    /// - Returns: The optimized program.
     static func optimizingWithoutNesting(_ program: Program) -> Program {
       var program = program
       
