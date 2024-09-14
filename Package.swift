@@ -17,6 +17,7 @@ let package = Package(
   name: "BrainflipKit",
   platforms: [.macOS(.v15)],
   products: [
+    .library(name: "BrainflipKit", targets: ["BrainflipKit"]),
     .executable(name: "brainflip", targets: ["BrainflipCLI"])
   ],
   dependencies: [
