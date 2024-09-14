@@ -12,8 +12,8 @@ extension InterpreterTests {
   @Suite("Interpreter initialization")
   struct InitializerTests {
     @Test("Default initializer")
-    func defaultInitializer() async throws {
-      let interpreter = try await Interpreter("")
+    func defaultInitializer() throws {
+      let interpreter = try Interpreter("")
       
       #expect(interpreter.tape.isEmpty)
       #expect(interpreter.cellPointer == 0)
@@ -24,7 +24,7 @@ extension InterpreterTests {
     
     @Test("Unicode input")
     func unicodeInput() async throws {
-      let interpreter = try await Interpreter(
+      let interpreter = try Interpreter(
         ",[.,]",
         input: "→",
         options: .init(endOfInputBehavior: .setTo(0))

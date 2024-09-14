@@ -165,8 +165,8 @@
     inputIterator: InputIterator,
     outputStream: OutputStream = "",
     options: Options = .init()
-  ) async throws {
-    let program = try await Program(source)
+  ) throws {
+    let program = try Program(source)
     self.init(
       program,
       inputIterator: inputIterator,
@@ -197,8 +197,8 @@
     input: String = "",
     outputStream: OutputStream = "",
     options: Options = .init()
-  ) async throws {
-    try await self.init(
+  ) throws {
+    try self.init(
       source,
       inputIterator: input.unicodeScalars.makeIterator(),
       outputStream: outputStream,

@@ -18,6 +18,7 @@ extension IO {
     var input = ""
     while let nextLine = readLine() {
       input += nextLine
+      await Task.yield()
     }
     return input
   }

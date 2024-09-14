@@ -11,8 +11,8 @@ import Testing
 @Suite("Program parsing")
 struct ParsingTests {
   @Test("Basic parsing")
-  func basicParsing() async throws {
-    let program = try await Program(",[>+<-.]")
+  func basicParsing() throws {
+    let program = try Program(",[>+<-.]")
     #expect(program == [
       .input,
       .loop([
@@ -26,8 +26,8 @@ struct ParsingTests {
   }
   
   @Test("Parsing instructions and comments")
-  func instructionsAndComments() async throws {
-    let program = try await Program(",++ a comment ++.")
+  func instructionsAndComments() throws {
+    let program = try Program(",++ a comment ++.")
     #expect(program == [
       .input,
       .add(4),
@@ -36,14 +36,14 @@ struct ParsingTests {
   }
   
   @Test("Parsing only comments")
-  func commentsOnly() async throws {
-    let program = try await Program("the whole thing is just a comment")
+  func commentsOnly() throws {
+    let program = try Program("the whole thing is just a comment")
     #expect(program.isEmpty)
   }
   
   @Test("Parsing nested loops")
-  func nestedLoops() async throws {
-    let program = try await Program(">+[>-[-<]>>]>")
+  func nestedLoops() throws {
+    let program = try Program(">+[>-[-<]>>]>")
     #expect(program == [
       .move(1),
       .add(1),
@@ -61,8 +61,8 @@ struct ParsingTests {
   }
   
   @Test("Extra instructions parsing")
-  func extraInstructions() async throws {
-    let program = try await Program("!~«»?")
+  func extraInstructions() throws {
+    let program = try Program("!~«»?")
     #expect(program == [
       .extra(.stop),
       .extra(.bitwiseNot),
@@ -73,8 +73,8 @@ struct ParsingTests {
   }
   
   @Test("'Obscure Problem Tester'")
-  func obscureProblemTester() async throws {
-    let program = try await Program("""
+  func obscureProblemTester() throws {
+    let program = try Program("""
     This program tests for several obscure interpreter problems;
     it should output an H
     
@@ -126,8 +126,8 @@ struct ParsingTests {
   }
   
   @Test("Optimizations disabled")
-  func optimizationsDisabled() async throws {
-    let program = try await Program("""
+  func optimizationsDisabled() throws {
+    let program = try Program("""
     This program tests for several obscure interpreter problems;
     it should output an H
     

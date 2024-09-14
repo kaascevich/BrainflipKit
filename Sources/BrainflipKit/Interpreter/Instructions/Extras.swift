@@ -12,7 +12,7 @@ internal extension Interpreter {
   /// - Parameter instruction: The instruction to execute.
   mutating func handleExtraInstruction(
     _ instruction: ExtraInstruction
-  ) async throws(Self.Error) {
+  ) throws(Self.Error) {
     guard options.enabledExtraInstructions.contains(instruction) else {
       return
     }

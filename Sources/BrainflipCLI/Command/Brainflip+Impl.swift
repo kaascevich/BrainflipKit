@@ -41,7 +41,7 @@ extension BrainflipCommand {
     
     // MARK: - Parsing
     
-    let parsedProgram = try await Program(
+    let parsedProgram = try Program(
       programSource,
       optimizations: self.optimizations
     )
@@ -101,7 +101,7 @@ extension BrainflipCommand {
       
     case (_?, _?):
       throw ValidationError(
-        "Only one of 'file-path' or '-p/--program' must be provided."
+        "Only one of 'file-path' or '-p/--program' (or neither) must be provided."
       )
     }
   }

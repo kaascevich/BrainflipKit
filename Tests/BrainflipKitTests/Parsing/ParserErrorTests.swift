@@ -12,13 +12,13 @@ extension ParsingTests {
   @Suite("Parsing errors")
   struct ParserErrorTests {
     @Test("Unpaired loops")
-    func unpairedLoops() async {
+    func unpairedLoops() {
       let invalidPrograms = [
         "[", "]", "][", "]][", "][[", "[][", "][]", "[[]", "[]]"
       ]
       for program in invalidPrograms {
-        await #expect(throws: (any Error).self) {
-          try await Program(program)
+        #expect(throws: Error.self) {
+          try Program(program)
         }
       }
     }

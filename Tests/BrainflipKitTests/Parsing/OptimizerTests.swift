@@ -11,8 +11,8 @@ import Testing
 @Suite("Program optimization")
 struct OptimizerTests {
   @Test("Clear-loop optimization")
-  func clearLoopOptimization() async throws {
-    let program = try await Program("+[-]")
+  func clearLoopOptimization() throws {
+    let program = try Program("+[-]")
     #expect(program == [
       .add(1),
       .setTo(0)
@@ -20,8 +20,8 @@ struct OptimizerTests {
   }
   
   @Test("Adjacent instruction optimization")
-  func adjacentInstructionOptimization() async throws {
-    let program = try await Program(">>><<+---")
+  func adjacentInstructionOptimization() throws {
+    let program = try Program(">>><<+---")
     #expect(program == [
       .move(1),
       .add(-2)
@@ -29,14 +29,14 @@ struct OptimizerTests {
   }
   
   @Test("Useless instruction optimization")
-  func uselessInstructionOptimization() async throws {
-    let program = try await Program("+-<> +<>-")
+  func uselessInstructionOptimization() throws {
+    let program = try Program("+-<> +<>-")
     #expect(program.isEmpty)
   }
   
   @Test("Scan-loop optimization")
-  func scanLoopOptimization() async throws {
-    let program = try await Program("+[>>>]+[<<]")
+  func scanLoopOptimization() throws {
+    let program = try Program("+[>>>]+[<<]")
     #expect(program == [
       .add(1),
       .scan(3),
@@ -46,8 +46,8 @@ struct OptimizerTests {
   }
   
   @Test("Multiply-loop optimization")
-  func multiplyLoopOptimization() async throws {
-    let program = try await Program("+[- >> ++++ <<]")
+  func multiplyLoopOptimization() throws {
+    let program = try Program("+[- >> ++++ <<]")
     #expect(program == [
       .add(1),
       .multiply(factor: 4, offset: 2)
@@ -55,9 +55,9 @@ struct OptimizerTests {
   }
   
   @Test("Dead loops optimization")
-  func deadLoopsOptimization() async throws {
+  func deadLoopsOptimization() throws {
     do {
-      let program = try await Program("+[-][][->+<]")
+      let program = try Program("+[-][][->+<]")
       #expect(program == [
         .add(1),
         .setTo(0)
@@ -65,7 +65,7 @@ struct OptimizerTests {
     }
     
     do {
-      let program = try await Program("[->+<][-]")
+      let program = try Program("[->+<][-]")
       #expect(program == [
         .multiply(factor: 1, offset: 1)
       ])

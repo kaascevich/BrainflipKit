@@ -51,7 +51,7 @@ extension Interpreter {
     case let .loop(instructions): try await handleLoop(instructions)
       
     case .output: handleOutputInstruction()
-    case .input: try await handleInputInstruction()
+    case .input: try handleInputInstruction()
       
     // MARK: Non-core
       
@@ -66,7 +66,7 @@ extension Interpreter {
     case let .scan(increment): handleScanInstruction(increment)
       
     case let .extra(instruction):
-      try await handleExtraInstruction(instruction)
+      try handleExtraInstruction(instruction)
     }
   }
 }
