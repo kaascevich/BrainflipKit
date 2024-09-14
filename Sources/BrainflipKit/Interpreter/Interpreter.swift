@@ -13,9 +13,9 @@
 /// eight instructions. However, creating programs in Brainflip can be a
 /// challenge like no other due to this reduced instruction set.
 ///
-/// All Brainflip programs mutate an array of *cells*, which are 8 bits
-/// long by default. This array is referred to as the *tape*. The tape
-/// is infinite in both directions. A *pointer* is used to keep track of
+/// All Brainflip programs mutate an array of _cells_, which are 8 bits
+/// long by default. This array is referred to as the _tape_. The tape
+/// is infinite in both directions. A _pointer_ is used to keep track of
 /// the cell that is currently being mutated.
 ///
 /// ## Instruction Set
@@ -55,10 +55,9 @@
 ///
 /// - term ``Instruction/setTo(_:)``:
 ///     Sets the current cell to a specific value.
-/// - term ``Instruction/scanRight``:
-///     Moves the pointer to the next zero cell.
-/// - term ``Instruction/scanLeft``:
-///     Moves the pointer to the previous zero cell.
+/// - term ``Instruction/scan(_:)``:
+///     Moves the pointer to the next (or previous) zero
+///     cell.
 ///
 /// ### Extra Instructions
 ///
@@ -94,13 +93,16 @@
 ///
 /// # See Also
 ///
+/// ## Programs
 /// - ``Instruction``
 /// - ``ExtraInstruction``
 /// - ``Program``
 ///
+/// ## Running
 /// - ``run()``
 /// - ``runReturningFinalState()``
 ///
+/// ## Options
 /// - ``Options``
 @dynamicMemberLookup public struct Interpreter {
   /// The Brainflip program containing a list of instructions
@@ -126,7 +128,7 @@
   ///   - options: Configurable options to be used for this
   ///     instance.
   ///
-  /// - Complexity: O(*n*), where *n* is the length of
+  /// - Complexity: O(_n_), where _n_ is the length of
   ///   `input.unicodeScalars`.
   public init(
     _ program: Program,
@@ -158,7 +160,7 @@
   ///   into a valid program (that is, if it contains
   ///   unmatched brackets).
   ///
-  /// - Complexity: O(*n*), where *n* is the number of Unicode
+  /// - Complexity: O(_n_), where _n_ is the number of Unicode
   ///   scalars in `inputIterator`.
   @inlinable public init(
     _ source: String,
@@ -190,7 +192,7 @@
   ///   into a valid program (that is, if it contains
   ///   unmatched brackets).
   ///
-  /// - Complexity: O(*n*), where *n* is the length of
+  /// - Complexity: O(_n_), where _n_ is the length of
   ///   `input.unicodeScalars`.
   public init(
     _ source: String,

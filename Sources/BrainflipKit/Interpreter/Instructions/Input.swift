@@ -8,7 +8,7 @@
 internal extension Interpreter {
   /// Executes an ``Instruction/input`` instruction.
   mutating func handleInputInstruction() throws(Self.Error) {
-    // make sure we've actually got some input to work with
+    // make sure we actually have some input to work with
     guard let nextInputScalar = self.inputIterator.next() else {
       switch options.endOfInputBehavior {
       case .setTo(let value): self.currentCellValue = value

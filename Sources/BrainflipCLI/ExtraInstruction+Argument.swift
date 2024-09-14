@@ -10,10 +10,10 @@ import enum BrainflipKit.ExtraInstruction
 
 extension ExtraInstruction: ExpressibleByArgument {
   public init?(argument: String) {
-    let caseName = Self.allCases.first { String(describing: $0) == argument }
-    guard let caseName else { return nil }
+    let `case` = Self.allCases.first { String(describing: $0) == argument }
+    guard let `case` else { return nil }
     
-    self = caseName
+    self = `case`
   }
   
   public static let allValueStrings = allCases.map(String.init(describing:))

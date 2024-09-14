@@ -5,15 +5,7 @@
 // directory of this repository for more information. If this file is missing,
 // the license can also be found at <https://opensource.org/license/mit>.
 
-#if canImport(Glibc)
-private import Glibc
-#elseif canImport(Darwin.C)
-private import Darwin.C
-#elseif canImport(WinSDK)
-private import WinSDK
-#else
-#error("Unsupported platform")
-#endif
+import class Foundation.FileHandle
 
 extension IO {
   /// An output stream that prints to standard output
@@ -22,12 +14,12 @@ extension IO {
     /// Appends the given string to the standard output
     /// stream.
     func write(_ string: String) {
-      // For some reason, Swift's `print` function only
-      // flushes the output stream after a newline -- even
-      // if the `terminator` parameter is altered. So we've
-      // gotta do it ourselves.
-      print(string, terminator: "")
-      fflush(stdout)
+      // we can't use `print()` directly since it only
+      // flushes the output stream on a newline. for some
+      // reason, using the `standardOutput` file handle
+      // provided by Foundation _does_ flush the stream, so
+      // we'll just use that instead.
+      FileHandle.standardOutput.write(string.data(using: .utf8)!)
     }
   }
 }

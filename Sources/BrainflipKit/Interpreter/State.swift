@@ -28,7 +28,7 @@ public extension Interpreter {
     
     // MARK: - Properties
     
-    /// The array of cells -- also referred to as the *tape*
+    /// The array of cells -- also referred to as the _tape_
     /// -- that all Brainflip programs manipulate.
     ///
     /// # See Also

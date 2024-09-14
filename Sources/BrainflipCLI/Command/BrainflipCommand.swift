@@ -23,19 +23,19 @@ import struct Foundation.URL
     
     Here's a list of all the differences between Brainflip and a standard, \
     run-of-the-mill brainf**k interpreter:
-     - Full Unicode support
-     - 32-bit cells instead of 8-bit cells ('cuz Unicode)
-     - Infinite tape in both directions
-     - Customizable end-of-input behavior
-     - Cell wrapping can be disabled
-     - Optional extra instructions
-     - Relatively basic optimizations, including:
-       - Condensing repeated instructions
-       - Merging `+`/`-` and `<`/`>` instructions
-       - Removing instructions that cancel each other out
-       - Replacing `[-]` with a dedicated instruction
-       - Replacing copy/multiplication loops with a dedicated instruction
-       - Replacing scan loops (such as `[>>]`) with a dedicated instruction
+    - Full Unicode support
+    - 32-bit cells instead of 8-bit cells ('cuz Unicode)
+    - Infinite tape in both directions
+    - Customizable end-of-input behavior
+    - Cell wrapping can be disabled
+    - Optional extra instructions
+    - Relatively basic optimizations, including:
+      - Condensing repeated instructions
+      - Merging `+`/`-` and `<`/`>` instructions
+      - Removing instructions that cancel each other out
+      - Replacing `[-]` with a dedicated instruction
+      - Replacing copy/multiplication loops with a dedicated instruction
+      - Replacing scan loops (such as `[>>]`) with a dedicated instruction
     """
   )
   
@@ -55,7 +55,8 @@ import struct Foundation.URL
       discussion: """
       The file extension must be one of \(formattedValidExtensions). If \
       neither this argument nor the '-p/--program' option is provided, the \
-      program will be read from standard input.
+      program will be read from standard input; in this case, to indicate \
+      you're done inputting the program, press ^D (control-D).
       
       This argument is mutually exclusive with the '-p/--program' option. \
       Only one should be specified.

@@ -5,7 +5,7 @@
 // directory of this repository for more information. If this file is missing,
 // the license can also be found at <https://opensource.org/license/mit>.
 
-import class Foundation.FileHandle
+import Foundation
 private let standardInput = FileHandle.standardInput.fileDescriptor
 
 import struct ArgumentParser.ValidationError
@@ -73,10 +73,10 @@ enum IO {
     let printBell: Bool
     
     func next() -> Unicode.Scalar? {
-      // before any raw mode shenanigans, print a bell character so
-      // the user knows that we want input
+      // before any raw mode shenanigans, print a bell character to
+      // standard error so the user knows that we want inpu dt
       if printBell {
-        StandardOutputStream().write("\u{7}")
+        FileHandle.standardError.write(Data([0x07]))
       }
       
       let rawMode = TerminalRawMode()

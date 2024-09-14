@@ -10,7 +10,7 @@ import BrainflipKit
 
 extension BrainflipCommand {
   func run() async throws {
-    // MARK: Setup
+    // MARK: - Setup
     
     let endOfInputBehavior: Interpreter.Options.EndOfInputBehavior? =
       switch self.interpreterOptions.endOfInputBehavior {
@@ -82,8 +82,10 @@ extension BrainflipCommand {
   ///
   /// - Returns: The source code for the Brainflip
   ///  program provided by the user.
-  private func chooseProgramSource() async throws -> String {
+  private func chooseProgramSource() async throws(ValidationError) -> String {
     switch (self.programPath, self.program) {
+    // if they didn't provide a program or a path to one,
+    // read from standard input
     case (nil, nil):
       let input = await IO.readAllLines()
       guard !input.allSatisfy(\.isWhitespace) else {
@@ -93,12 +95,17 @@ extension BrainflipCommand {
       }
       return input
       
+    // if they provided a program path, read from that
     case (let programPath?, nil):
-      return try String(contentsOfFile: programPath, encoding: .unicode)
+      // we already checked that this path is valid, so don't bother
+      // throwing out
+      return try! String(contentsOfFile: programPath, encoding: .unicode)
       
+
+    // if they provided a program, just use that
     case (nil, let program?):
       return program
-      
+    
     case (_?, _?):
       throw ValidationError(
         "Only one of 'file-path' or '-p/--program' (or neither) must be provided."
