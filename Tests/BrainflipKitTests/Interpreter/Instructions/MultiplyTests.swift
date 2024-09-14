@@ -13,7 +13,7 @@ extension InterpreterTests.InstructionTests {
   struct MultiplyTestsTests {
     @Test("Multiply instruction")
     func multiplyInstruction() async throws {
-      var interpreter = try await Interpreter("")
+      var interpreter = try Interpreter("")
       
       interpreter.currentCellValue = 3
       interpreter.tape[2] = 5

@@ -13,7 +13,7 @@ extension InterpreterTests.InstructionTests {
   struct ScanTests {
     @Test("Scan instruction")
     func scanInstruction() async throws {
-      var interpreter = try await Interpreter("")
+      var interpreter = try Interpreter("")
       
       interpreter.tape = [
         0: 1,

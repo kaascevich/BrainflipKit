@@ -86,7 +86,7 @@
 /// ++++++++[>++++[>++>+++>+++>+<<<<-]>+>+>->>+[<]<-]>>
 /// .>---.+++++++..+++.>>.<-.<.+++.------.--------.>>+.
 /// """
-/// let interpreter = try await Interpreter(program)
+/// let interpreter = try Interpreter(program)
 /// let output = try await interpreter.run()
 /// print(output) // Hello World!
 /// ```
