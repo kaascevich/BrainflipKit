@@ -7,6 +7,8 @@
 
 internal extension Interpreter {
   /// Executes a ``Instruction/move(_:)`` instruction.
+  /// 
+  /// - Parameter count: The number of cells to move.
   mutating func handleMoveInstruction(_ count: Int32) {
     self.cellPointer += Int(count)
   }

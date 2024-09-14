@@ -7,6 +7,12 @@
 
 internal extension Interpreter {
   /// Executes an ``Instruction/add(_:)`` instruction.
+  /// 
+  /// - Parameter value: The value to add to the current cell value.
+  /// 
+  /// - Throws: ``Error/cellOverflow`` or ``Error/cellUnderflow``
+  ///   if an overflow/underflow occurs and ``Options/allowCellWraparound``
+  ///   is `false`.
   mutating func handleAddInstruction(_ value: Int32) throws(Self.Error) {
     let (overflowCheck, errorType) = if value < 0 {
       (self.currentCellValue.subtractingReportingOverflow, Error.cellUnderflow)

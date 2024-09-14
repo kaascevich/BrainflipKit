@@ -77,11 +77,15 @@ extension BrainflipCommand {
     _ = try await interpreter.run()
   }
   
-  /// Obtains the source code for a Brainflip program
-  /// from command-line arguments or standard input.
+  /// Obtains the source code for a Brainflip program from
+  /// command-line arguments or standard input.
   ///
-  /// - Returns: The source code for the Brainflip
-  ///  program provided by the user.
+  /// - Returns: The source code for the Brainflip program
+  ///   provided by the user.
+  /// 
+  /// - Throws: ``ValidationError`` if both the `--file-path`
+  ///   and `-p/--program` options are provided, or if a program
+  ///   read from standard input is empty.
   private func chooseProgramSource() async throws(ValidationError) -> String {
     switch (self.programPath, self.program) {
     // if they didn't provide a program or a path to one,

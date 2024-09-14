@@ -39,7 +39,10 @@ import struct Foundation.URL
     """
   )
   
+  /// The valid file extensions for Brainflip programs.
   static let validExtensions = ["b", "bf", "brainflip", "brainfuck"]
+
+  /// A formatted list of valid file extensions.
   static let formattedValidExtensions = validExtensions
     .map { "." + $0 }
     .formatted(

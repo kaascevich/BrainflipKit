@@ -9,6 +9,7 @@ private import Algorithms
 private import CasePaths
 
 internal extension Program {
+  /// Contains optimizer functions for Brainflip programs.
   enum Optimizer {
     // MARK: - Optimizations
 
@@ -110,9 +111,9 @@ internal extension Program {
     /// 
     /// In Brainflip, loops will only start (or continue) looping if
     /// the current cell is not zero. This means that, for the instruction
-    /// directly after the loop, the current cell will always be 0. If
-    /// that instruction happens to be a loop, that loop will never be
-    /// executed. So we remove those here.
+    /// directly after a loop, the current cell will always be 0. If
+    /// that instruction happens to also be a loop, that loop will never
+    /// be executed. So we remove those here.
     /// 
     /// - Parameter program: The program to optimize.
     private static func removeDeadLoops(_ program: inout Program) {

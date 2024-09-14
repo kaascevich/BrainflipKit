@@ -54,6 +54,7 @@ public enum Instruction: Equatable, Hashable, Sendable {
 }
 
 public extension Instruction {
+  /// All characters that represent Brainflip instructions.
   static let validInstructions = ["+", "-", ">", "<", "[", "]", ",", "."]
     + ExtraInstruction.allCases.map(\.rawValue)
 }

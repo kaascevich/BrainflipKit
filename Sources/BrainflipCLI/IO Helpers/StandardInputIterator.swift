@@ -5,7 +5,9 @@
 // directory of this repository for more information. If this file is missing,
 // the license can also be found at <https://opensource.org/license/mit>.
 
-import Foundation
+import class Foundation.FileHandle
+
+/// The standard input file descriptor.
 private let standardInput = FileHandle.standardInput.fileDescriptor
 
 import struct ArgumentParser.ValidationError
@@ -21,8 +23,15 @@ private import WinSDK
 #endif
 
 enum IO {
-  // TODO: Get raw mode working on Windows
-  @available(Windows, unavailable, message: "Terminal raw mode on Windows is not yet supported")
+  /// An iterator that reads characters from standard input.
+  /// 
+  /// This iterator enables raw mode for the terminal, which disables
+  /// line buffering. This allows for reading characters as they are
+  /// typed, rather than waiting for a newline.
+  @available(
+    Windows, unavailable, // TODO: Get raw mode working on Windows
+    message: "Terminal raw mode on Windows is not yet supported"
+  )
   struct StandardInputIterator: IteratorProtocol {
     /// Encapsulates the process of enabling and disabling raw mode
     /// for a terminal.
@@ -69,14 +78,18 @@ enum IO {
       }
     }
     
+    /// WWhether to echo characters as they are typed.
     let echo: Bool
+
+    /// Whether to print a bell character to standard error when
+    /// input is requested.
     let printBell: Bool
     
     func next() -> Unicode.Scalar? {
       // before any raw mode shenanigans, print a bell character to
-      // standard error so the user knows that we want inpu dt
+      // standard error so the user knows that we want input
       if printBell {
-        FileHandle.standardError.write(Data([0x07]))
+        FileHandle.standardError.write(.init([0x07]))
       }
       
       let rawMode = TerminalRawMode()
@@ -92,7 +105,7 @@ enum IO {
         return nil
       }
       
-      return Unicode.Scalar(UInt32(exactly: nextCharacter)!)
+      return Unicode.Scalar(UInt32(nextCharacter))
     }
   }
 }

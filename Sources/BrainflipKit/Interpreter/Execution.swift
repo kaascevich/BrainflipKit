@@ -8,8 +8,7 @@
 extension Interpreter {
   /// Executes the instructions stored in ``Interpreter/program``.
   ///
-  /// - Returns: A tuple containing the program's output and
-  ///   the final state of the interpreter.
+  /// - Returns: The final state of the interpreter.
   ///
   /// - Throws: An interpreter ``Error`` if an issue was
   ///   encountered during execution.

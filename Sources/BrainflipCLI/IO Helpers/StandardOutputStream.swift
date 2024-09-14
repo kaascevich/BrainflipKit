@@ -13,6 +13,8 @@ extension IO {
   struct StandardOutputStream: TextOutputStream {
     /// Appends the given string to the standard output
     /// stream.
+    /// 
+    /// - Parameter string: The string to print.
     func write(_ string: String) {
       // we can't use `print()` directly since it only
       // flushes the output stream on a newline. for some

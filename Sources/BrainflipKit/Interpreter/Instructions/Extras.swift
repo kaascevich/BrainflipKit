@@ -10,6 +10,9 @@ internal extension Interpreter {
   /// ``Instruction/extra(_:)``, if it is enabled.
   ///
   /// - Parameter instruction: The instruction to execute.
+  /// 
+  /// - Throws: ``Error/stopInstruction`` if the instruction is
+  ///   ``ExtraInstruction/stop``.
   mutating func handleExtraInstruction(
     _ instruction: ExtraInstruction
   ) throws(Self.Error) {

@@ -7,6 +7,13 @@
 
 internal extension Interpreter {
   /// Executes an ``Instruction/multiply(_:)`` instruction.
+  /// 
+  /// - Parameters:
+  ///   - factor: The factor to multiply the current cell by.
+  ///   - offset: The offset from the current cell to store the result.
+  /// 
+  /// - Throws: ``Error/cellOverflow`` if an overflow occurs and
+  ///   ``Interpreter/Options/allowCellWraparound`` is `false`.
   mutating func handleMultiplyInstruction(
     multiplyingBy factor: UInt32,
     storingAtOffset offset: Int

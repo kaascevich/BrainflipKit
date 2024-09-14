@@ -9,11 +9,14 @@ internal import Parsing
 internal typealias ParserProtocol = Parsing.Parser
 
 internal extension Program {
+  /// A parser that parses a program.
   struct Parser: ParserProtocol {
     /// Whether to optimize the parsed program.
     let optimizations: Bool
     
+    /// A parser that parses a single instruction.
     private struct InstructionParser: ParserProtocol {
+      /// Whether to optimize the parsed program.
       let optimizations: Bool
       
       var body: some ParserProtocol<Substring.UTF8View, Instruction> {

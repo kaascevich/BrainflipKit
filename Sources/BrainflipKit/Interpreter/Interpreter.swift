@@ -105,14 +105,14 @@
 /// ## Options
 /// - ``Options``
 @dynamicMemberLookup public struct Interpreter {
-  /// The Brainflip program containing a list of instructions
+  /// A Brainflip program containing a list of instructions
   /// to execute.
   public let program: Program
   
-  /// The configurable options for this instance.
+  /// The configurable options for this interpreter.
   public let options: Options
   
-  /// This instance's internal state.
+  /// This interpreter's internal state.
   public private(set) var state: State
   
   // MARK: - Initializers
@@ -127,9 +127,6 @@
   ///     to.
   ///   - options: Configurable options to be used for this
   ///     instance.
-  ///
-  /// - Complexity: O(_n_), where _n_ is the length of
-  ///   `input.unicodeScalars`.
   public init(
     _ program: Program,
     inputIterator: InputIterator,
@@ -159,9 +156,6 @@
   /// - Throws: An `Error` if `source` cannot be parsed
   ///   into a valid program (that is, if it contains
   ///   unmatched brackets).
-  ///
-  /// - Complexity: O(_n_), where _n_ is the number of Unicode
-  ///   scalars in `inputIterator`.
   @inlinable public init(
     _ source: String,
     inputIterator: InputIterator,
@@ -210,7 +204,8 @@
   
   // MARK: - Dynamic Member Lookup
   
-  /// Accesses this instance's state at the specified key path.
+  /// Accesses this interpreter's state at the specified key
+  /// path.
   ///
   /// Do not call this subscript directly. It is used by the
   /// compiler when you use dot syntax on an `Interpreter`
@@ -219,7 +214,7 @@
   /// - Parameter member: A key path to a property of
   ///   `Interpreter.State`.
   ///
-  /// - Returns: The value of this instance's state at
+  /// - Returns: The value of this interpreter's state at
   ///   the specified key path.
   public internal(set) subscript<Value>(
     dynamicMember member: WritableKeyPath<State, Value>

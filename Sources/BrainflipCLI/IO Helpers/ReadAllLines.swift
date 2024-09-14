@@ -11,9 +11,6 @@ extension IO {
   /// Reads text from standard input until EOF is reached.
   ///
   /// - Returns: Text read from standard input.
-  ///
-  /// - Throws: `ValidationError` if standard input only
-  ///   contains whitespace.
   static func readAllLines() async -> String {
     var input = ""
     while let nextLine = readLine() {

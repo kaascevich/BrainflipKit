@@ -9,6 +9,9 @@ import protocol ArgumentParser.ExpressibleByArgument
 import enum BrainflipKit.ExtraInstruction
 
 extension ExtraInstruction: ExpressibleByArgument {
+  /// Parses an `ExtraInstruction` from an argument.
+  /// 
+  /// - Parameter argument: The argument to parse.
   public init?(argument: String) {
     let `case` = Self.allCases.first { String(describing: $0) == argument }
     guard let `case` else { return nil }
@@ -16,8 +19,10 @@ extension ExtraInstruction: ExpressibleByArgument {
     self = `case`
   }
   
+  /// Every case of `ExtraInstruction`, represented as strings.
   public static let allValueStrings = allCases.map(String.init(describing:))
   
+  /// A detailed description of this instruction.
   public var details: String {
     switch self {
     case .stop: "Immediately ends the program."

@@ -28,8 +28,8 @@ public extension Interpreter {
     
     // MARK: - Properties
     
-    /// The array of cells -- also referred to as the _tape_
-    /// -- that all Brainflip programs manipulate.
+    /// The array of cells that all Brainflip programs
+    /// manipulate.
     ///
     /// # See Also
     /// - ``Interpreter/State/currentCellValue``
