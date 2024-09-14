@@ -71,10 +71,6 @@ enum IO {
     
     let echo: Bool
     let printBell: Bool
-    init(echo: Bool, printBell: Bool) {
-      self.echo = echo
-      self.printBell = printBell
-    }
     
     func next() -> Unicode.Scalar? {
       // before any raw mode shenanigans, print a bell character so
