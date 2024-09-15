@@ -15,7 +15,7 @@ extension IO {
     var input = ""
     while let nextLine = readLine() {
       input += nextLine
-      await Task.yield()
+      await Task.yield() // yield to allow other tasks to run
     }
     return input
   }

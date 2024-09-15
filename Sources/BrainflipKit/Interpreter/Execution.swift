@@ -36,7 +36,7 @@ extension Interpreter {
   internal mutating func execute(_ instructions: [Instruction]) async throws(Self.Error) {
     for instruction in instructions {
       try await handleInstruction(instruction)
-      await Task.yield()
+      await Task.yield() // yield to allow other tasks to run
     }
   }
   
