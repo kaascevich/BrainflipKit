@@ -29,6 +29,26 @@ public extension Interpreter {
     
     /// The array of cells that all Brainflip programs
     /// manipulate.
+    /// 
+    /// Most brainf\*\*k interpreters have a fixed-size tape,
+    /// but Brainflip's tape is dynamically sized (or, in
+    /// layman's terms, infinite). While it _would_ be possible
+    /// to implement this using a standard Swift `Array`, it's
+    /// not very ergonomic, requiring a whole lot of computed
+    /// property shenanigans to abstract away the rather
+    /// `fatalError`-y subscript.
+    /// 
+    /// It's a lot easier to use a `Dictionary` instead, with the
+    /// key representing the cell's index (and the value, of course,
+    /// representing the value). This also provides the benefits
+    /// of being able to use negative indices -- allowing for an
+    /// infinite tape in _both_ directions, which _also_ eliminates
+    /// the need to handle out-of-bounds errors -- and of using a
+    /// whole lot less memory than a standard 30,000-cell `Array`
+    /// in the vast majority of use cases.
+    /// 
+    /// More details on how this works can be found in the
+    /// documentation for ``currentCellValue``.
     ///
     /// # See Also
     /// - ``Interpreter/State/currentCellValue``
@@ -68,11 +88,22 @@ public extension Interpreter {
     // MARK: - Computed State
     
     /// The value of the current cell.
-    ///
-    /// This property is equivalent to calling
-    /// `tape[cellPointer, default: 0]`.
+    /// 
+    /// As explained in the documentation for ``tape``, using a
+    /// `Dictionary` is much more ergonomic than using an `Array`.
+    /// This is primarily because `Dictionary` provides a subscript
+    /// that returns a default value if the key is not present --
+    /// in stark contrast to `Array`, which traps if the index is
+    /// out of bounds (albeit for good reason -- most out-of-bounds
+    /// accesses are a programmer error). In addition, assigning to
+    /// a nonexistent key will simply _create_ the key before
+    /// assigning to it.
+    /// 
+    /// All of this means that the getter and setter for
+    /// `currentCellValue` are simple one-liners.
     ///
     /// # See Also
+    /// - ``Interpreter/State/tape``
     /// - ``Interpreter/State/cellPointer``
     public internal(set) var currentCellValue: CellValue {
       @inlinable get { tape[cellPointer, default: 0] }
