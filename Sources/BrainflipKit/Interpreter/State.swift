@@ -17,7 +17,6 @@ public extension Interpreter {
     ///     provided to the program.
     ///   - outputStream: The stream to write outputted characters
     ///     to.
-    ///   - options: Configurable options for this instance.
     internal init(
       inputIterator: InputIterator,
       outputStream: OutputStream = ""
