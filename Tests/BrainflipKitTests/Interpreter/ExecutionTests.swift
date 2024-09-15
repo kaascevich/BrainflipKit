@@ -65,13 +65,13 @@ extension InterpreterTests {
       #expect(output as? String == "Hello World!")
     }
     
-    @Test("Comprehensive test")
+    @Test("Comprehensive test", .timeLimit(.minutes(1)))
     func comprehensiveTest() async throws {
       let program = try String(contentsOfFile: "Resources/Examples/comprehensive.bf", encoding: .utf8)
       let interpreter = try Interpreter(program)
       
       let output = try await interpreter.run()
-      #expect(output as? String == "Hello, world!")
+      #expect(output as? String == "Hello, world!\n")
     }
   }
 }

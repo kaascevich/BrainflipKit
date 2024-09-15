@@ -26,7 +26,7 @@ extension Program {
       program.replace([.loop([.add(-1)])], with: [.setTo(0)])
       
       let windows = [_](program.enumerated()).windows(ofCount: 2)
-      var instructionsToCondense: [Int: UInt32] = [:]
+      var instructionsToCondense: [ClosedRange<Int>: UInt32] = [:]
       for window in windows {
         // check if the first instruction is a clear loop
         // and the second is an `add` instruction
@@ -37,16 +37,16 @@ extension Program {
           case .add(let value) = second.element
         else { continue }
 
-        // add this instruction's offset and the value of the following
-        // `add` instruction to the dictionary
-        instructionsToCondense[first.offset] = UInt32(bitPattern: value)
+        // add these instructions' range and the value of the `add`
+        // instruction to the dictionary
+        instructionsToCondense[first.offset...second.offset] = UInt32(bitPattern: value)
       }
 
       // condense instructions from last to first, so as not
       // to invalidate indices before we've used them
-      for (offset, value) in instructionsToCondense.reversed() {
+      for (range, value) in instructionsToCondense.reversed() {
         // condense the instructions
-        program.replaceSubrange(offset...(offset + 1), with: [.setTo(value)])
+        program.replaceSubrange(range, with: [.setTo(value)])
       }
     }
     
@@ -144,18 +144,8 @@ extension Program {
     /// that instruction happens to also be a loop, that loop will never
     /// be executed. So we remove those here.
     /// 
-    /// We also remove loops that occur as the first instruction
-    /// in the program, since all cells start at 0, meaning those
-    /// loops will never be executed either.
-    /// 
     /// - Parameter program: The program to optimize.
     private static func removeDeadLoops(_ program: inout Program) {
-      // if the first instruction is a loop, get that out of
-      // the way
-      // if case .loop = program.first {
-      //   program.removeFirst()
-      // }
-
       let windows = [_](program.enumerated()).windows(ofCount: 2)
       var indicesToRemove: [Int] = []
       for window in windows {
@@ -182,19 +172,22 @@ extension Program {
     /// 
     /// - Returns: The optimized program.
     static func optimizingWithoutNesting(_ program: Program) -> Program {
+      // TODO: This method is _extremely_ sensitive to the order
+      // of the optimizations. We should find a way to reliably
+      // determine the proper order.
+
       var program = program
-      
-      removeDeadLoops(&program)
-      
+            
       var previousOptimization: Program
       repeat {
         previousOptimization = program
+        removeDeadLoops(&program)
+        optimizeClearLoops(&program)
         removeAdjacentInstructions(&program)
         removeUselessInstructions(&program)
         optimizeScanLoops(&program)
       } while program != previousOptimization
-      
-      optimizeClearLoops(&program)
+
       optimizeMultiplyLoops(&program)
       
       return program
