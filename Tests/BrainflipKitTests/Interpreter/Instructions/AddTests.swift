@@ -23,7 +23,7 @@ extension InterpreterTests.InstructionTests {
       interpreter.currentCellValue = .max
       try await interpreter.handleInstruction(.add(1))
       #expect(
-        interpreter.tape.first?.value == .min,
+        interpreter.tape.first?.value == 0,
         "increment instruction should wrap around"
       )
     }
