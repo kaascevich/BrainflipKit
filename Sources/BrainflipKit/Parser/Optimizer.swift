@@ -24,29 +24,19 @@ extension Program {
     /// - Parameter program: The program to optimize.
     private static func optimizeClearLoops(_ program: inout Program) {
       program.replace([.loop([.add(-1)])], with: [.setTo(0)])
-      
-      let windows = [_](program.enumerated()).windows(ofCount: 2)
-      var instructionsToCondense: [ClosedRange<Int>: UInt32] = [:]
+
+      let windows = program.windows(ofCount: 2)
+      var addedValues: [Int32] = []
       for window in windows {
         // check if the first instruction is a clear loop
         // and the second is an `add` instruction
-        guard
-          let first = window.first,
-          let second = window.last,
-          first.element == .setTo(0),
-          case .add(let value) = second.element
-        else { continue }
-
-        // add these instructions' range and the value of the `add`
-        // instruction to the dictionary
-        instructionsToCondense[first.offset...second.offset] = UInt32(bitPattern: value)
+        if window.first == .setTo(0), case .add(let value) = window.last {
+          addedValues.append(value)
+        }
       }
 
-      // condense instructions from last to first, so as not
-      // to invalidate indices before we've used them
-      for (range, value) in instructionsToCondense.reversed() {
-        // condense the instructions
-        program.replaceSubrange(range, with: [.setTo(value)])
+      for i in addedValues.uniqued() {
+        program.replace([.setTo(0), .add(i)], with: [.setTo(.init(bitPattern: i))])
       }
     }
     
@@ -77,6 +67,7 @@ extension Program {
           return chunk
         }
         
+        // condense all the values into a single instruction
         let values = chunk.map { casePath.extract(from: $0)! }
         let sum = values.reduce(0, +)
         return [casePath.embed(sum)]
@@ -175,21 +166,22 @@ extension Program {
     static func optimizingWithoutNesting(_ program: Program) -> Program {
       // FIXME: This method is _extremely_ sensitive to the order of
       // the optimizations -- if the order isn't correct, all sorts
-      // of icky stuff can happen, including nondeterminisic builds.
-      // We should find a way to reliably determine the proper order.
+      // of icky stuff can happen. We should find a way to reliably
+      // determine the proper order.
 
       var program = program
             
+      // loop until no more optimizations are possible
       var previousOptimization: Program
       repeat {
         previousOptimization = program
         removeDeadLoops(&program)
-        optimizeClearLoops(&program)
         removeAdjacentInstructions(&program)
         removeUselessInstructions(&program)
         optimizeScanLoops(&program)
       } while program != previousOptimization
 
+      optimizeClearLoops(&program)
       optimizeMultiplyLoops(&program)
       
       return program
