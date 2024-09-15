@@ -18,21 +18,26 @@ internal extension Interpreter {
     multiplyingBy factor: UInt32,
     storingAtOffset offset: Int
   ) throws(Self.Error) {
-    let multiplicationResult = self.currentCellValue
+    let (multiplyResult, multiplyOverflow) = self.currentCellValue
       .multipliedReportingOverflow(by: factor)
     
-    let additionResult = self.tape[self.cellPointer + offset, default: 0]
-      .addingReportingOverflow(multiplicationResult.partialValue)
+    let (additionResult, additionOverflow) = self.tape[
+      self.cellPointer + offset, default: 0
+    ].addingReportingOverflow(multiplyResult)
     
     // check for wraparound
-    if multiplicationResult.overflow || additionResult.overflow {
+    if multiplyOverflow || additionOverflow {
       // check whether it's allowed
       guard options.allowCellWraparound else {
         throw Error.cellOverflow(position: self.cellPointer)
       }
     }
     
-    self.tape[self.cellPointer + offset] = additionResult.partialValue
+    self.tape[self.cellPointer + offset] = additionResult
+
+    // as a side effect of the standard multiply loop, the
+    // current cell is set to 0, so we need to replicate this
+    // behavior here
     self.currentCellValue = 0
   }
 }
