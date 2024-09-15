@@ -13,11 +13,7 @@ extension Interpreter {
   /// - Throws: An interpreter ``Error`` if an issue was
   ///   encountered during execution.
   public consuming func runReturningFinalState() async throws(Self.Error) -> State {
-    for instruction in program {
-      try await handleInstruction(instruction)
-      await Task.yield()
-    }
-    
+    try await execute(program)
     return state
   }
   
@@ -29,6 +25,13 @@ extension Interpreter {
   ///   encountered during execution.
   public consuming func run() async throws(Self.Error) -> OutputStream {
     try await self.runReturningFinalState().outputStream
+  }
+
+  internal mutating func execute(_ instructions: [Instruction]) async throws(Self.Error) {
+    for instruction in instructions {
+      try await handleInstruction(instruction)
+      await Task.yield()
+    }
   }
   
   /// Executes an individual ``Instruction``.

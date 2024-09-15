@@ -1,6 +1,7 @@
 {
   "conventionalCommits.scopes": [
     "types",
-    "imports"
+    "imports",
+    "interpreter"
   ]
 }

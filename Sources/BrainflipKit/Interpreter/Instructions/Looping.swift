@@ -14,10 +14,7 @@ internal extension Interpreter {
   ///   instructions.
   mutating func handleLoop(_ instructions: [Instruction]) async throws(Self.Error) {
     while self.currentCellValue != 0 {
-      for instruction in instructions {
-        try await handleInstruction(instruction)
-        await Task.yield()
-      }
+      try await execute(instructions)
     }
   }
 }
