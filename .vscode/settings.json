@@ -2,6 +2,7 @@
   "conventionalCommits.scopes": [
     "types",
     "imports",
-    "interpreter"
+    "interpreter",
+    "gitignore"
   ]
 }
