@@ -27,7 +27,7 @@ extension Interpreter {
 
     if multiplyOverflow {
       guard options.allowCellWraparound else {
-        throw Error.cellOverflow(position: self.cellPointer)
+        throw .cellOverflow(position: self.cellPointer)
       }
     }
 
@@ -39,7 +39,7 @@ extension Interpreter {
     
     if additionOverflow {
       guard options.allowCellWraparound else {
-        throw Error.cellOverflow(position: offsettedPointer)
+        throw .cellOverflow(position: offsettedPointer)
       }
     }
 

@@ -16,7 +16,7 @@ extension Interpreter {
     guard let nextInputScalar = self.inputIterator.next() else {
       switch options.endOfInputBehavior {
       case .setTo(let value): self.currentCellValue = value
-      case .throwError: throw Error.endOfInput
+      case .throwError: throw .endOfInput
       case nil: break
       }
       

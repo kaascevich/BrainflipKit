@@ -24,7 +24,7 @@ extension Interpreter {
     // FIXME: this is a fairly simply way to implement this
     // instruction, but it won't let us resume execution if we
     // wanted to add that in the future
-    case .stop: throw Error.stopInstruction
+    case .stop: throw .stopInstruction
     
     case .bitwiseNot: self.currentCellValue = ~self.currentCellValue
       
