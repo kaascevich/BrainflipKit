@@ -27,6 +27,12 @@ extension Interpreter {
     try await self.runReturningFinalState().outputStream
   }
 
+  /// Executes the provided instructions.
+  /// 
+  /// - Parameter instructions: The instructions to execute.
+  /// 
+  /// - Throws: An interpreter ``Error`` if an issue was
+  ///   encountered during execution.
   internal mutating func execute(_ instructions: [Instruction]) async throws(Self.Error) {
     for instruction in instructions {
       try await handleInstruction(instruction)
