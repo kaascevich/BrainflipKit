@@ -6,7 +6,7 @@
 // the license can also be found at <https://opensource.org/license/mit>.
 
 private import Algorithms
-private import CasePaths
+import CasePaths
 
 extension Program {
   /// Contains optimizer functions for Brainflip programs.
@@ -56,8 +56,8 @@ extension Program {
         // we only need to check the first value, since all others
         // should match it
         let casePath: _? = switch chunk.first {
-        case .add:  /Instruction.add
-        case .move: /Instruction.move
+        case .add:  \Instruction.Cases.add
+        case .move: \Instruction.Cases.move
         default: nil
         }
         
@@ -68,9 +68,9 @@ extension Program {
         }
         
         // condense all the values into a single instruction
-        let values = chunk.map { casePath.extract(from: $0)! }
+        let values = chunk.map { $0[case: casePath]! }
         let sum = values.reduce(0, +)
-        return [casePath.embed(sum)]
+        return [casePath(sum)]
       }
     }
     

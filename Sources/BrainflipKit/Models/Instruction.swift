@@ -5,9 +5,11 @@
 // directory of this repository for more information. If this file is missing,
 // the license can also be found at <https://opensource.org/license/mit>.
 
+import CasePaths
+
 /// An individual instruction, performing a specific action
 /// when executed by an ``Interpreter``.
-public enum Instruction: Equatable, Hashable, Sendable {
+@CasePathable public enum Instruction: Equatable, Hashable, Sendable {
   /// Increments (or decrements) the current cell by a
   /// value.
   ///
