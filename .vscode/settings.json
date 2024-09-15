@@ -3,6 +3,7 @@
     "types",
     "imports",
     "interpreter",
-    "gitignore"
+    "gitignore",
+    "swiftlint"
   ]
 }
