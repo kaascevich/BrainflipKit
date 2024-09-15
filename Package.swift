@@ -9,11 +9,11 @@
 
 import PackageDescription
 
-/// Creates a `Package.Dependency` from a GitHub repository path.
+/// Creates a ``Package/Dependency`` from a GitHub repository path.
 ///
 /// - Parameter repoPath: A path to a GitHub repository.
 /// 
-/// - Returns: A `Package.Dependency` for the given repository.
+/// - Returns: A `Dependency` for the given repository.
 func dependency(fromRepo repoPath: String) -> Package.Dependency {
   .package(url: "https://github.com/\(repoPath).git", branch: "main")
 }

@@ -34,7 +34,7 @@ extension Program {
           addedValues.append(value)
         }
       }
-
+      
       for i in addedValues.uniqued() {
         program.replace([.setTo(0), .add(i)], with: [.setTo(.init(bitPattern: i))])
       }
