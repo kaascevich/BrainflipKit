@@ -4,6 +4,7 @@
     "imports",
     "interpreter",
     "gitignore",
-    "swiftlint"
+    "swiftlint",
+    "optimizations"
   ]
 }

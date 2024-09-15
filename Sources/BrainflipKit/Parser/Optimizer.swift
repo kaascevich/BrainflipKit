@@ -13,12 +13,41 @@ extension Program {
   enum Optimizer {
     // MARK: - Optimizations
 
-    /// Removes empty loops.
+    /// Condenses clear loops.
+    /// 
+    /// This optimization condenses clear loops into a single
+    /// `setTo(0)` instruction. If there's an `add` instruction
+    /// following the clear loop, the value of that instruction
+    /// is used in the `setTo` instruction instead of 0, and the
+    /// `add` instruction is removed.
     ///
     /// - Parameter program: The program to optimize.
     private static func optimizeClearLoops(_ program: inout Program) {
-      let clearOperation = [Instruction.setTo(0)]
-      program.replace([.loop([.add(-1)])], with: clearOperation)
+      program.replace([.loop([.add(-1)])], with: [.setTo(0)])
+      
+      let windows = [_](program.enumerated()).windows(ofCount: 2)
+      var instructionsToCondense: [Int: UInt32] = [:]
+      for window in windows {
+        // check if the first instruction is a clear loop
+        // and the second is an `add` instruction
+        guard
+          let first = window.first,
+          let second = window.last,
+          first.element == .setTo(0),
+          case .add(let value) = second.element
+        else { continue }
+
+        // add this instruction's offset and the value of the following
+        // `add` instruction to the dictionary
+        instructionsToCondense[first.offset] = UInt32(bitPattern: value)
+      }
+
+      // condense instructions from last to first, so as not
+      // to invalidate indices before we've used them
+      for (offset, value) in instructionsToCondense.reversed() {
+        // condense the instructions
+        program.replaceSubrange(offset...(offset + 1), with: [.setTo(value)])
+      }
     }
     
     /// Removes adjacent instructions of the same type.
@@ -115,8 +144,18 @@ extension Program {
     /// that instruction happens to also be a loop, that loop will never
     /// be executed. So we remove those here.
     /// 
+    /// We also remove loops that occur as the first instruction
+    /// in the program, since all cells start at 0, meaning those
+    /// loops will never be executed either.
+    /// 
     /// - Parameter program: The program to optimize.
     private static func removeDeadLoops(_ program: inout Program) {
+      // if the first instruction is a loop, get that out of
+      // the way
+      // if case .loop = program.first {
+      //   program.removeFirst()
+      // }
+
       let windows = [_](program.enumerated()).windows(ofCount: 2)
       var indicesToRemove: [Int] = []
       for window in windows {
