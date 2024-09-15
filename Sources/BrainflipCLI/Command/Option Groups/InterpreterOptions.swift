@@ -6,7 +6,7 @@
 // the license can also be found at <https://opensource.org/license/mit>.
 
 import ArgumentParser
-import BrainflipKit
+import enum BrainflipKit.ExtraInstruction
 
 extension BrainflipCommand {
   /// Options related to the interpreter.

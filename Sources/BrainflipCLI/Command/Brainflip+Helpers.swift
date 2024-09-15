@@ -6,7 +6,7 @@
 // the license can also be found at <https://opensource.org/license/mit>.
 
 import struct ArgumentParser.ValidationError
-import BrainflipKit
+import typealias BrainflipKit.Program
 
 extension BrainflipCommand {
   /// Formats the given program, indenting loops.
