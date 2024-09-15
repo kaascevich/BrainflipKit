@@ -8,7 +8,7 @@
 private import Algorithms
 private import CasePaths
 
-internal extension Program {
+extension Program {
   /// Contains optimizer functions for Brainflip programs.
   enum Optimizer {
     // MARK: - Optimizations

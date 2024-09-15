@@ -33,7 +33,7 @@ extension Interpreter {
   /// 
   /// - Throws: An interpreter ``Error`` if an issue was
   ///   encountered during execution.
-  internal mutating func execute(_ instructions: [Instruction]) async throws(Self.Error) {
+  mutating func execute(_ instructions: [Instruction]) async throws(Self.Error) {
     for instruction in instructions {
       try await handleInstruction(instruction)
       await Task.yield() // yield to allow other tasks to run
@@ -46,7 +46,7 @@ extension Interpreter {
   ///
   /// - Throws: An interpreter ``Error`` if an issue was
   ///  encountered during execution.
-  internal mutating func handleInstruction(
+  mutating func handleInstruction(
     _ instruction: Instruction
   ) async throws(Self.Error) {
     switch instruction {

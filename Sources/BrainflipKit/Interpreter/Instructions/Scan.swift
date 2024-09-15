@@ -5,7 +5,7 @@
 // directory of this repository for more information. If this file is missing,
 // the license can also be found at <https://opensource.org/license/mit>.
 
-internal extension Interpreter {
+extension Interpreter {
   /// Executes an ``Instruction/scan(_:)`` instruction.
   /// 
   /// - Parameter increment: The value to increment the cell

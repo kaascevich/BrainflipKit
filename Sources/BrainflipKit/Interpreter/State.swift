@@ -5,9 +5,9 @@
 // directory of this repository for more information. If this file is missing,
 // the license can also be found at <https://opensource.org/license/mit>.
 
-public extension Interpreter {
+extension Interpreter {
   /// Represents an interpreter's internal state.
-  struct State {
+  public struct State {
     // MARK: - Initializers
     
     /// Creates a `State` instance.

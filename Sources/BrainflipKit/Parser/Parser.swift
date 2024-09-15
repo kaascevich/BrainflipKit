@@ -5,10 +5,10 @@
 // directory of this repository for more information. If this file is missing,
 // the license can also be found at <https://opensource.org/license/mit>.
 
-internal import Parsing
-internal typealias ParserProtocol = Parsing.Parser
+import Parsing
+typealias ParserProtocol = Parsing.Parser
 
-internal extension Program {
+extension Program {
   /// A parser that parses a program.
   struct Parser: ParserProtocol {
     /// Whether to optimize the parsed program.

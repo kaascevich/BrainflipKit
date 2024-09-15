@@ -5,7 +5,7 @@
 // directory of this repository for more information. If this file is missing,
 // the license can also be found at <https://opensource.org/license/mit>.
 
-internal extension Interpreter {
+extension Interpreter {
   /// Executes an ``Instruction/output`` instruction.
   mutating func handleOutputInstruction() {
     // if this cell's value doesn't correspond to a valid
