@@ -22,6 +22,7 @@ private import WinSDK
 #error("Unsupported platform")
 #endif
 
+/// A collection of types for interacting with IO.
 enum IO {
   /// An iterator that reads characters from standard input.
   /// 
