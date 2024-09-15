@@ -31,9 +31,7 @@ internal extension Interpreter {
     // the original value was negative
     let valueAsUnsignedInt = CellValue(bitPattern: value)
     
-    // check for wraparound
     if overflowCheck(valueAsUnsignedInt).overflow {
-      // check whether it's allowed
       guard options.allowCellWraparound else {
         throw errorType(self.cellPointer)
       }
