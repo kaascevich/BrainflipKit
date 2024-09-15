@@ -15,7 +15,7 @@ struct OptimizerTests {
     let program = try Program("+[-]")
     #expect(program == [
       .add(1),
-      .setTo(0)
+      .setTo(0),
     ])
   }
   
@@ -24,7 +24,7 @@ struct OptimizerTests {
     let program = try Program(">>><<+---")
     #expect(program == [
       .move(1),
-      .add(-2)
+      .add(-2),
     ])
   }
   
@@ -41,7 +41,7 @@ struct OptimizerTests {
       .add(1),
       .scan(3),
       .add(1),
-      .scan(-2)
+      .scan(-2),
     ])
   }
   
@@ -50,7 +50,7 @@ struct OptimizerTests {
     let program = try Program("+[- >> ++++ <<]")
     #expect(program == [
       .add(1),
-      .multiply(factor: 4, offset: 2)
+      .multiply(factor: 4, offset: 2),
     ])
   }
   
@@ -60,14 +60,14 @@ struct OptimizerTests {
       let program = try Program("+[-][][->+<]")
       #expect(program == [
         .add(1),
-        .setTo(0)
+        .setTo(0),
       ])
     }
     
     do {
       let program = try Program("[->+<][-]")
       #expect(program == [
-        .multiply(factor: 1, offset: 1)
+        .multiply(factor: 1, offset: 1),
       ])
     }
   }

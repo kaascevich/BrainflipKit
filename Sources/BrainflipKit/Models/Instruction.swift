@@ -19,7 +19,7 @@ public enum Instruction: Equatable, Hashable, Sendable {
   case move(Int32)
   
   /// Loops over the contained instructions.
-  case loop([Instruction])
+  case loop([Self])
   
   /// Finds the character whose Unicode value equals
   /// the current cell and writes it to the output

@@ -27,7 +27,7 @@ extension BrainflipCommand {
         indent + "loop(",
         // don't apply any indent here, because that'll be redundant
         formatProgram(instructions, indentLevel: indentLevel + 1),
-        indent + ")"
+        indent + ")",
       ]
       
       // output the instruction's details

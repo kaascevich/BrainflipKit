@@ -11,7 +11,6 @@ opt_in_rules:
   - closure_spacing
   - collection_alignment
   - comma_inheritance
-  - conditional_returns_on_newline
   - contains_over_filter_count
   - contains_over_filter_is_empty
   - contains_over_first_not_nil
@@ -33,7 +32,6 @@ opt_in_rules:
   - file_name_no_space
   - first_where
   - flatmap_over_map_reduce
-  - force_unwrapping
   - identical_operands
   - implicit_return
   - implicitly_unwrapped_optional
@@ -72,7 +70,6 @@ opt_in_rules:
   - shorthand_argument
   - shorthand_optional_binding
   - sorted_first_last
-  - switch_case_on_newline
   - toggle_bool
   - trailing_closure
   - unavailable_function
@@ -94,7 +91,10 @@ analyzer_rules:
   - typesafe_array_init
   - unused_declaration
   - unused_import
-     
+
+trailing_comma:
+  mandatory_comma: true
+
 # Trailing whitespace on empty lines lets my tab key live
 # just a little bit longer.
 trailing_whitespace:
@@ -113,7 +113,8 @@ colon:
 nesting:
   type_level: 2
 
-indentation_width: 2
+indentation_width:
+  indentation_width: 2
 
 file_header:
   required_pattern: |

@@ -24,7 +24,7 @@ let package = Package(
   platforms: [.macOS(.v15)],
   products: [
     .library(name: "BrainflipKit", targets: ["BrainflipKit"]),
-    .executable(name: "brainflip", targets: ["BrainflipCLI"])
+    .executable(name: "brainflip", targets: ["BrainflipCLI"]),
   ],
   dependencies: [
     "apple/swift-algorithms",
@@ -36,19 +36,19 @@ let package = Package(
       name: "BrainflipCLI",
       dependencies: [
         "BrainflipKit",
-        .product(name: "ArgumentParser", package: "swift-argument-parser")
+        .product(name: "ArgumentParser", package: "swift-argument-parser"),
       ]
     ),
     .target(
       name: "BrainflipKit",
       dependencies: [
         .product(name: "Parsing", package: "swift-parsing"),
-        .product(name: "Algorithms", package: "swift-algorithms")
+        .product(name: "Algorithms", package: "swift-algorithms"),
       ]
     ),
     .testTarget(
       name: "BrainflipKitTests",
       dependencies: ["BrainflipKit"]
-    )
+    ),
   ]
 )

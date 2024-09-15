@@ -7,7 +7,7 @@
 
 import class Foundation.FileHandle
 
-extension IO {
+extension IOHelpers {
   /// An output stream that prints to standard output
   /// immediately.
   struct StandardOutputStream: TextOutputStream {

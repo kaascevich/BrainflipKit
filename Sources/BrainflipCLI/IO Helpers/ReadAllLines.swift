@@ -7,7 +7,7 @@
 
 import struct ArgumentParser.ValidationError
 
-extension IO {
+extension IOHelpers {
   /// Reads text from standard input until EOF is reached.
   ///
   /// - Returns: Text read from standard input.

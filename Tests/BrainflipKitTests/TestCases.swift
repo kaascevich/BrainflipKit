@@ -8,7 +8,7 @@
 import Testing
 
 @Suite("Interpreter")
-struct InterpreterTests {
+enum InterpreterTests {
   @Suite("Instructions")
-  struct InstructionTests { }
+  enum InstructionTests { }
 }

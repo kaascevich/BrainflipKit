@@ -23,7 +23,7 @@ private import WinSDK
 #endif
 
 /// A collection of types for interacting with IO.
-enum IO {
+enum IOHelpers {
   /// An iterator that reads characters from standard input.
   /// 
   /// This iterator enables raw mode for the terminal, which disables

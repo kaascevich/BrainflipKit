@@ -65,14 +65,14 @@ extension Program {
     /// 
     /// - Parameter program: The program to optimize.
     private static func optimizeScanLoops(_ program: inout Program) {
-      program = program.map {
+      program = program.map { instruction in
         // Swift doesn't have pattern matching for arrays, so we
         // have to do this the hard way.
         guard
-          case let .loop(instructions) = $0,
+          case let .loop(instructions) = instruction,
           instructions.count == 1,
           case let .move(increment) = instructions[0]
-        else { return $0 }
+        else { return instruction }
         
         return .scan(increment)
       }
@@ -82,13 +82,13 @@ extension Program {
     /// 
     /// - Parameter program: The program to optimize.
     private static func optimizeMultiplyLoops(_ program: inout Program) {
-      program = program.map {
+      program = program.map { instruction in
         // Swift doesn't have pattern matching for arrays, so we
         // have to do this the hard way.
         guard
-          case let .loop(instructions) = $0,
+          case let .loop(instructions) = instruction,
           instructions.count == 4
-        else { return $0 }
+        else { return instruction }
         
         // check if the loop's instructions match what
         // we're looking for
@@ -98,7 +98,7 @@ extension Program {
           case .add(let factor)  = instructions[2],
           case .move(-offset)    = instructions[3],
           factor >= 0
-        else { return $0 }
+        else { return instruction }
         
         return .multiply(
           factor: .init(factor),
@@ -120,10 +120,7 @@ extension Program {
       let windows = [_](program.enumerated()).windows(ofCount: 2)
       var indicesToRemove: [Int] = []
       for window in windows {
-        if
-          case .loop = window.first?.element,
-          case .loop = window.last?.element
-        {
+        if case .loop = window.first?.element, case .loop = window.last?.element {
           // there's a loop immediately after another loop, so the second
           // loop will never be executed (because the current cell is
           // always 0 immediately after a loop)

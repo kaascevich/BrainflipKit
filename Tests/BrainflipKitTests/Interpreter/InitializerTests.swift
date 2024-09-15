@@ -17,7 +17,7 @@ extension InterpreterTests {
       
       #expect(interpreter.tape.isEmpty)
       #expect(interpreter.cellPointer == 0)
-      #expect((interpreter.outputStream as! String).isEmpty)
+      #expect(interpreter.outputStream as? String == "") // swiftlint:disable:this empty_string
       
       #expect(interpreter.program.isEmpty)
     }
@@ -30,7 +30,7 @@ extension InterpreterTests {
         options: .init(endOfInputBehavior: .setTo(0))
       )
       let output = try await interpreter.run()
-      #expect(output as! String == "→")
+      #expect(output as? String == "→")
     }
   }
 }

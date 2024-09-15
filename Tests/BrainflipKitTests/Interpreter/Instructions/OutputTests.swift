@@ -17,7 +17,7 @@ extension InterpreterTests.InstructionTests {
 
       interpreter.currentCellValue = 0x42 // ASCII code for "B"
       try await interpreter.handleInstruction(.output)
-      #expect(interpreter.outputStream as! String == "B")
+      #expect(interpreter.outputStream as? String == "B")
     }
     
     @Test("Output instruction with Unicode characters")
@@ -26,7 +26,7 @@ extension InterpreterTests.InstructionTests {
       
       interpreter.currentCellValue = 0x2192 // Unicode value for "→"
       try await interpreter.handleInstruction(.output)
-      #expect(interpreter.outputStream as! String == "→")
+      #expect(interpreter.outputStream as? String == "→")
     }
   }
 }

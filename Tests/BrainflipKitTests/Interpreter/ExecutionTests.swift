@@ -20,7 +20,7 @@ extension InterpreterTests {
       
       #expect(state.tape == [
         0: 1,
-        1: .max
+        1: .max,
       ])
       #expect(state.cellPointer == 0)
     }
@@ -50,7 +50,7 @@ extension InterpreterTests {
       let interpreter = try Interpreter(",..,,.", input: "hello")
       
       let output = try await interpreter.run()
-      #expect(output as! String == "hhl")
+      #expect(output as? String == "hhl")
     }
     
     @Test("'Hello World!' program")
@@ -62,7 +62,7 @@ extension InterpreterTests {
       let interpreter = try Interpreter(program)
       
       let output = try await interpreter.run()
-      #expect(output as! String == "Hello World!")
+      #expect(output as? String == "Hello World!")
     }
   }
 }

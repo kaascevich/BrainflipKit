@@ -20,8 +20,8 @@ struct ParsingTests {
         .add(1),
         .move(-1),
         .add(-1),
-        .output
-      ])
+        .output,
+      ]),
     ])
   }
   
@@ -31,7 +31,7 @@ struct ParsingTests {
     #expect(program == [
       .input,
       .add(4),
-      .output
+      .output,
     ])
   }
   
@@ -52,11 +52,11 @@ struct ParsingTests {
         .add(-1),
         .loop([
           .add(-1),
-          .move(-1)
+          .move(-1),
         ]),
-        .move(2)
+        .move(2),
       ]),
-      .move(1)
+      .move(1),
     ])
   }
   
@@ -68,7 +68,7 @@ struct ParsingTests {
       .extra(.bitwiseNot),
       .extra(.leftShift),
       .extra(.rightShift),
-      .extra(.random)
+      .extra(.random),
     ])
   }
   
@@ -97,17 +97,17 @@ struct ParsingTests {
           .move(-1),
           .add(3),
           .move(3),
-          .add(-1)
+          .add(-1),
         ]),
         .move(-4),
-        .add(-1)
+        .add(-1),
       ]),
       .extra(.random),
       .extra(.stop),
       .loop([
         .move(2),
         .add(1),
-        .move(-2)
+        .move(-2),
       ]),
       .move(1),
       .scan(2),
@@ -116,17 +116,17 @@ struct ParsingTests {
         .move(1),
         .add(2),
         .move(-1),
-        .setTo(0)
+        .setTo(0),
       ]),
       .move(1),
       .output,
       .move(1),
-      .output
+      .output,
     ])
   }
   
   @Test("Optimizations disabled")
-  func optimizationsDisabled() throws {
+  func optimizationsDisabled() throws { // swiftlint:disable:this function_body_length
     let program = try Program("""
     This program tests for several obscure interpreter problems;
     it should output an H
@@ -152,33 +152,31 @@ struct ParsingTests {
           .move(-1),
           .add(1), .add(1), .add(1),
           .move(1), .move(1), .move(1),
-          .add(-1)
+          .add(-1),
         ]),
         .move(-1), .move(-1), .move(-1), .move(-1),
-        .add(-1)
+        .add(-1),
       ]),
       .extra(.random),
       .extra(.stop),
       .loop([
         .move(1), .move(1),
         .add(1),
-        .move(-1), .move(-1)
+        .move(-1), .move(-1),
       ]),
       .move(1),
-      .loop([
-        .move(1), .move(1)
-      ]),
+      .loop([.move(1), .move(1)]),
       .move(-1), .move(-1), .move(-1), .move(-1),
       .loop([
         .move(1),
         .add(1), .add(1),
         .move(-1),
-        .loop([.add(-1)])
+        .loop([.add(-1)]),
       ]),
       .move(1),
       .output,
       .move(1),
-      .output
+      .output,
     ])
   }
 }

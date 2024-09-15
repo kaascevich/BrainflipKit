@@ -57,7 +57,7 @@ extension BrainflipCommand {
       if let input = self.inputOptions.input {
         input.unicodeScalars.makeIterator()
       } else {
-        IO.StandardInputIterator(
+        IOHelpers.StandardInputIterator(
           echo: self.inputOptions.inputEchoing,
           printBell: self.inputOptions.bellOnInputRequest
         )
@@ -66,7 +66,7 @@ extension BrainflipCommand {
     let interpreter = Interpreter(
       parsedProgram,
       inputIterator: inputIterator,
-      outputStream: IO.StandardOutputStream(),
+      outputStream: IOHelpers.StandardOutputStream(),
       options: options
     )
     
@@ -91,7 +91,7 @@ extension BrainflipCommand {
     // if they didn't provide a program or a path to one,
     // read from standard input
     case (nil, nil):
-      let input = await IO.readAllLines()
+      let input = await IOHelpers.readAllLines()
       guard !input.allSatisfy(\.isWhitespace) else {
         // if they didn't type anything meaningful, just
         // print usage info and exit
@@ -103,8 +103,7 @@ extension BrainflipCommand {
     case (let programPath?, nil):
       // we already checked that this path is valid, so don't bother
       // throwing out
-      return try! String(contentsOfFile: programPath, encoding: .unicode)
-      
+      return try! String(contentsOfFile: programPath, encoding: .unicode) // swiftlint:disable:this force_try
 
     // if they provided a program, just use that
     case (nil, let program?):
