@@ -6,7 +6,7 @@
 // the license can also be found at <https://opensource.org/license/mit>.
 
 import ArgumentParser
-import struct Foundation.URL
+import Foundation
 
 @main struct BrainflipCommand: AsyncParsableCommand {
   // MARK: - Command Configuration
@@ -68,10 +68,12 @@ import struct Foundation.URL
     ),
     completion: .file(extensions: validExtensions),
     transform: { filePath in
-      guard let url = URL(string: filePath) else {
+      guard
+        let url = URL(string: filePath),
+        FileManager.default.fileExists(atPath: url.path)
+      else {
         throw ValidationError("That file doesn't exist.")
       }
-      
       guard validExtensions.contains(url.pathExtension) else {
         throw ValidationError(
           "Invalid file type -- must be one of \(formattedValidExtensions)."

@@ -103,7 +103,7 @@ extension BrainflipCommand {
     case (let programPath?, nil):
       // we already checked that this path is valid, so don't bother
       // throwing out
-      return try! String(contentsOfFile: programPath, encoding: .unicode) // swiftlint:disable:this force_try
+      return try! String(contentsOfFile: programPath, encoding: .utf8) // swiftlint:disable:this force_try
 
     // if they provided a program, just use that
     case (nil, let program?):
