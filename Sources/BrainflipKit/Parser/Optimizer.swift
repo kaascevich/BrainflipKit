@@ -166,15 +166,17 @@ extension Program {
     
     // MARK: - Main Optimizer
     
-    /// Optimizes a program, ignoring instructions within loops.
+    /// Optimizes a program, ignoring instructions within loops (unless
+    /// those loops can be optimized away entirely).
     /// 
     /// - Parameter program: The program to optimize.
     /// 
     /// - Returns: The optimized program.
     static func optimizingWithoutNesting(_ program: Program) -> Program {
-      // TODO: This method is _extremely_ sensitive to the order
-      // of the optimizations. We should find a way to reliably
-      // determine the proper order.
+      // FIXME: This method is _extremely_ sensitive to the order of
+      // the optimizations -- if the order isn't correct, all sorts
+      // of icky stuff can happen, including nondeterminisic builds.
+      // We should find a way to reliably determine the proper order.
 
       var program = program
             
