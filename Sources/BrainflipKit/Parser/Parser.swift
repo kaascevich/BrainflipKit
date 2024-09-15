@@ -19,38 +19,37 @@ internal extension Program {
       /// Whether to optimize the parsed program.
       let optimizations: Bool
       
-      var body: some ParserProtocol<Substring.UTF8View, Instruction> {
+      var body: some ParserProtocol<Substring, Instruction> {
         OneOf {
           // MARK: Simple
           
-          "+".utf8.map { Instruction.add(+1) }
-          "-".utf8.map { Instruction.add(-1) }
+          "+".map { Instruction.add(+1) }
+          "-".map { Instruction.add(-1) }
           
-          ">".utf8.map { Instruction.move(+1) }
-          "<".utf8.map { Instruction.move(-1) }
+          ">".map { Instruction.move(+1) }
+          "<".map { Instruction.move(-1) }
           
-          ",".utf8.map { Instruction.input }
-          ".".utf8.map { Instruction.output }
+          ",".map { Instruction.input }
+          ".".map { Instruction.output }
           
           // MARK: Extras
           
-          From(.substring) {
-            First().map(.representing(ExtraInstruction.self))
-          }
-          .map(Instruction.extra)
+          First()
+            .map(.representing(ExtraInstruction.self))
+            .map(Instruction.extra)
           
           // MARK: Loops
           
           Parse(Instruction.loop) {
-            "[".utf8
+            "["
             Program.Parser(optimizations: optimizations)
-            "]".utf8
+            "]"
           }
         }
       }
     }
     
-    var body: some ParserProtocol<Substring.UTF8View, Program> {
+    var body: some ParserProtocol<Substring, Program> {
       let programParser = Many {
         InstructionParser(optimizations: optimizations)
       }
