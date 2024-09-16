@@ -21,7 +21,7 @@ func dependency(fromRepo repoPath: String) -> Package.Dependency {
 /// The package manifest.
 let package = Package(
   name: "BrainflipKit",
-  platforms: [.macOS(.v15)],
+  platforms: [.macOS(.v13)],
   products: [
     .library(name: "BrainflipKit", targets: ["BrainflipKit"]),
     .executable(name: "brainflip", targets: ["BrainflipCLI"]),
