@@ -8,6 +8,7 @@
 import ArgumentParser
 import Foundation
 
+/// The main command for the Brainflip CLI.
 @main struct BrainflipCommand: AsyncParsableCommand {
   // MARK: - Command Configuration
   

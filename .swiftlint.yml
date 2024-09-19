@@ -121,6 +121,6 @@ file_header:
                     \/\/ SWIFTLINT_CURRENT_FILENAME
                     \/\/ Copyright © \d{4} .+
                     \/\/
-                    \/\/ This project is licensed under the MIT license; see `License.md` in the root
-                    \/\/ directory of this repository for more information. If this file is missing,
-                    \/\/ the license can also be found at <https://opensource.org/license/mit>.
+                    \/\/ This project is licensed under the MIT license; see `License\.md` in the root
+                    \/\/ directory of this repository for more information\. If this file is missing,
+                    \/\/ the license can also be found at <https://opensource\.org/license/mit>.
