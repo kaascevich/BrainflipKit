@@ -10,32 +10,17 @@ import BrainflipKit
 
 extension BrainflipCommand {
   func run() async throws {
-    // MARK: - Setup
-    
-    let endOfInputBehavior: Interpreter.Options.EndOfInputBehavior? =
-      switch self.interpreterOptions.endOfInputBehavior {
-      case .zero:  .setTo(0)
-      case .max:   .setTo(.max)
-      case .error: .throwError
-      case  nil:   nil
-      }
-    
-    let options = Interpreter.Options(
-      allowCellWraparound:      self.interpreterOptions.wraparound,
-      endOfInputBehavior:       endOfInputBehavior,
-      enabledExtraInstructions: Set(self.interpreterOptions.extraInstructions)
-    )
-        
     // MARK: - Obtaining Source
     
     let programSource = try await chooseProgramSource()
     
+    // strip out all comment characters and print the result
+    // of that
     if self.printFiltered {
       let filteredSource = programSource.filter(
         Instruction.validInstructions.contains
       )
       print(filteredSource)
-      
       return
     }
     
@@ -46,31 +31,26 @@ extension BrainflipCommand {
       optimizations: self.optimizations
     )
     
+    // pretty-print the parsed program
     if self.printParsed {
       let formattedProgram = Self.formatProgram(parsedProgram)
       print(formattedProgram)
-      
       return
     }
+
+    // MARK: - Input
+
+    IOHelpers.TerminalRawMode.enable(echoing: self.inputOptions.inputEchoing)
+    defer { IOHelpers.TerminalRawMode.disable() }
+
+    // MARK: Interpreting
     
-    let inputIterator: any IteratorProtocol<_> =
-      if let input = self.inputOptions.input {
-        input.unicodeScalars.makeIterator()
-      } else {
-        IOHelpers.StandardInputIterator(
-          echo: self.inputOptions.inputEchoing,
-          printBell: self.inputOptions.bellOnInputRequest
-        )
-      }
-        
     let interpreter = Interpreter(
       parsedProgram,
-      inputIterator: inputIterator,
+      inputIterator: makeInputIterator(),
       outputStream: IOHelpers.StandardOutputStream(),
-      options: options
+      options: makeInterpreterOptions()
     )
-    
-    // MARK: Interpreting
     
     // StandardOutputStream prints the output for us, so
     // we don't need to do it ourselves
@@ -112,6 +92,40 @@ extension BrainflipCommand {
     case (_?, _?):
       throw ValidationError(
         "Only one of 'file-path' or '-p/--program' (or neither) must be provided."
+      )
+    }
+  }
+
+  /// Creates an ``Interpreter/Options`` struct from the
+  /// command-line options.
+  /// 
+  /// - Returns: An ``Interpreter/Options`` struct.
+  private func makeInterpreterOptions() -> Interpreter.Options {
+    let endOfInputBehavior: Interpreter.Options.EndOfInputBehavior? =
+      switch self.interpreterOptions.endOfInputBehavior {
+      case .zero:  .setTo(0)
+      case .max:   .setTo(.max)
+      case .error: .throwError
+      case  nil:   nil
+      }
+    
+    return Interpreter.Options(
+      allowCellWraparound:      self.interpreterOptions.wraparound,
+      endOfInputBehavior:       endOfInputBehavior,
+      enabledExtraInstructions: Set(self.interpreterOptions.extraInstructions)
+    )
+  }
+
+  /// Creates an iterator for the interpreter input from
+  /// the command-line options.
+  /// 
+  /// - Returns: An iterator for the interpreter input.
+  private func makeInputIterator() -> any IteratorProtocol<Unicode.Scalar> {
+    if let input = self.inputOptions.input {
+      input.unicodeScalars.makeIterator()
+    } else {
+      IOHelpers.StandardInputIterator(
+        printBell: self.inputOptions.bellOnInputRequest
       )
     }
   }
