@@ -52,7 +52,9 @@ public extension Program {
   ///
   /// ### Clear Loops
   /// The `[-]` construct is replaced with a `setTo(0)`
-  /// instruction.
+  /// instruction. If an `add` instruction follows a `setTo(0)`
+  /// instruction, the value of the `add` instruction is used
+  /// in the `setTo` instruction instead of 0.
   ///
   /// ### Scan Loops
   /// A `loop` instruction containing only `move` instructions

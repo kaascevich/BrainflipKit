@@ -45,8 +45,8 @@ public extension Interpreter {
     ///   - endOfInputBehavior: The action to take when an
     ///     input instruction is executed with an empty input
     ///     iterator.
-    ///   - enabledExtraInstructions: Contains extra instructions
-    ///     that an interpreter should recognize and execute.
+    ///   - enabledExtraInstructions: Extra instructions that
+    ///     an interpreter should recognize and execute.
     public init(
       allowCellWraparound: Bool = true,
       endOfInputBehavior: EndOfInputBehavior? = nil,

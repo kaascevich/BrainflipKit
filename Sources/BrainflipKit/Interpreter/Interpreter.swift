@@ -39,7 +39,7 @@
 ///     Writes the character whose Unicode value is the current
 ///     cell's value to the output stream. If the current cell's
 ///     value does not correspond to a valid Unicode code point,
-///    this instruction does nothing.
+///     this instruction does nothing.
 ///
 /// - term ``Instruction/input``:
 ///     Takes the next character of the input and stores its Unicode
