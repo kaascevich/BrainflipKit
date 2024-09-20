@@ -6,7 +6,7 @@
 // the license can also be found at <https://opensource.org/license/mit>.
 
 import Testing
-@testable import struct BrainflipKit.Interpreter
+@testable import BrainflipKit
 
 extension InterpreterTests {
   @Suite("Interpreter options")
@@ -17,12 +17,12 @@ extension InterpreterTests {
         allowCellWraparound: false
       ))
       
-      await #expect(throws: Interpreter.Error.cellUnderflow(position: 0)) {
+      await #expect(throws: InterpreterError.cellUnderflow(position: 0)) {
         try await interpreter.handleInstruction(.add(-1))
       }
       
       interpreter.currentCellValue = .max
-      await #expect(throws: Interpreter.Error.cellOverflow(position: 0)) {
+      await #expect(throws: InterpreterError.cellOverflow(position: 0)) {
         try await interpreter.handleInstruction(.add(1))
       }
     }
@@ -57,7 +57,7 @@ extension InterpreterTests {
           endOfInputBehavior: .throwError
         ))
         
-        await #expect(throws: Interpreter.Error.endOfInput) {
+        await #expect(throws: InterpreterError.endOfInput) {
           try await interpreter.handleInstruction(.input)
         }
       }

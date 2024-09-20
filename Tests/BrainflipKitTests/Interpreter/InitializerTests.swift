@@ -6,7 +6,7 @@
 // the license can also be found at <https://opensource.org/license/mit>.
 
 import Testing
-@testable import struct BrainflipKit.Interpreter
+@testable import BrainflipKit
 
 extension InterpreterTests {
   @Suite("Interpreter initialization")

@@ -6,7 +6,7 @@
 // the license can also be found at <https://opensource.org/license/mit>.
 
 import Testing
-@testable import struct BrainflipKit.Interpreter
+@testable import BrainflipKit
 
 extension InterpreterTests.InstructionTests {
   @Suite("Extra instructions")
@@ -33,7 +33,7 @@ extension InterpreterTests.InstructionTests {
       ))
       
       await #expect(
-        throws: Interpreter.Error.stopInstruction,
+        throws: InterpreterError.stopInstruction,
         "stop instruction halts the program by throwing an error"
       ) {
         try await interpreter.handleInstruction(.extra(.stop))

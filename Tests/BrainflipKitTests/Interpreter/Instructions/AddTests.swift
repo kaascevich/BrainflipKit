@@ -6,7 +6,7 @@
 // the license can also be found at <https://opensource.org/license/mit>.
 
 import Testing
-@testable import struct BrainflipKit.Interpreter
+@testable import BrainflipKit
 
 extension InterpreterTests.InstructionTests {
   @Suite("Add instruction")
@@ -17,7 +17,7 @@ extension InterpreterTests.InstructionTests {
       
       for i in 1...500 {
         try await interpreter.handleInstruction(.add(1))
-        #expect(interpreter.tape.first?.value == UInt32(i))
+        #expect(interpreter.tape.first?.value == CellValue(i))
       }
       
       interpreter.currentCellValue = .max
@@ -41,7 +41,7 @@ extension InterpreterTests.InstructionTests {
       interpreter.currentCellValue = 500
       for i in (0..<500).reversed() {
         try await interpreter.handleInstruction(.add(-1))
-        #expect(interpreter.tape.first?.value == UInt32(i))
+        #expect(interpreter.tape.first?.value == CellValue(i))
       }
     }
   }
