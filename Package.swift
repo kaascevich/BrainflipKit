@@ -11,11 +11,16 @@ import PackageDescription
 
 /// Creates a ``Package/Dependency`` from a GitHub repository path.
 ///
-/// - Parameter repoPath: A path to a GitHub repository.
+/// - Parameters:
+///   - repoPath: A path to a GitHub repository.
+///   - version: The version of the dependency to use.
 /// 
 /// - Returns: A `Dependency` for the given repository.
-func dependency(fromRepo repoPath: String) -> Package.Dependency {
-  .package(url: "https://github.com/\(repoPath).git", branch: "main")
+func dependency(
+  fromRepo repoPath: String,
+  version: Version
+) -> Package.Dependency {
+  .package(url: "https://github.com/\(repoPath).git", from: version)
 }
 
 /// The package manifest.
@@ -27,10 +32,10 @@ let package = Package(
     .executable(name: "brainflip", targets: ["BrainflipCLI"]),
   ],
   dependencies: [
-    "apple/swift-algorithms",
-    "apple/swift-argument-parser",
-    "pointfreeco/swift-parsing",
-  ].map(dependency(fromRepo:)),
+    "apple/swift-algorithms":      .init(1, 2, 0),
+    "apple/swift-argument-parser": .init(1, 5, 0),
+    "pointfreeco/swift-parsing":   .init(0, 13, 0),
+  ].map(dependency),
   targets: [
     .executableTarget(
       name: "BrainflipCLI",
