@@ -10,14 +10,10 @@ import Foundation
 /// The standard input file descriptor.
 private let standardInput = FileHandle.standardInput.fileDescriptor
 
-import struct ArgumentParser.ValidationError
-
 #if canImport(Glibc)
 private import Glibc
 #elseif canImport(Darwin.C)
 private import Darwin.C
-#elseif canImport(WinSDK)
-private import WinSDK
 #else
 #error("Unsupported platform")
 #endif
@@ -29,10 +25,6 @@ enum IOHelpers {
   /// This iterator enables raw mode for the terminal, which disables
   /// line buffering. This allows for reading characters as they are
   /// typed, rather than waiting for a newline.
-  @available(
-    Windows, unavailable, // TODO: Get raw mode working on Windows
-    message: "Terminal raw mode on Windows is not yet supported"
-  )
   struct StandardInputIterator: IteratorProtocol {
     /// Encapsulates the process of enabling and disabling raw mode
     /// for a terminal.
