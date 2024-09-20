@@ -18,8 +18,21 @@ enum IOHelpers {
     /// Whether to print a bell character to standard error when
     /// input is requested.
     let printBell: Bool
+
+    /// Creates a new instance of this iterator.
+    /// 
+    /// - Parameter printBell: Whether to print a bell character
+    ///   to standard error when input is requested.
+    init(printBell: Bool) {
+      self.printBell = printBell
+    }
+
+    /// Whether the end of input has been reached.
+    private var endOfInput = false
     
-    func next() -> Unicode.Scalar? {
+    mutating func next() -> Unicode.Scalar? {
+      guard !endOfInput else { return nil }
+
       // before any raw mode shenanigans, print a bell character to
       // standard error so the user knows that we want input
       if printBell {
@@ -31,10 +44,11 @@ enum IOHelpers {
         FileHandle.standardInput.fileDescriptor,
         &nextCharacter, 1
       )
-      
+
       // make sure the input request succeeded, and that the character
       // isn't an EOF indicator (0x04)
       guard readResult == 1, nextCharacter != 0x04 else {
+        endOfInput = true
         return nil
       }
       

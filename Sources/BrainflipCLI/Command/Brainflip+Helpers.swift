@@ -5,7 +5,6 @@
 // directory of this repository for more information. If this file is missing,
 // the license can also be found at <https://opensource.org/license/mit>.
 
-import struct ArgumentParser.ValidationError
 import typealias BrainflipKit.Program
 
 extension BrainflipCommand {
