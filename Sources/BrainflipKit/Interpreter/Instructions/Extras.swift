@@ -15,7 +15,7 @@ extension Interpreter {
   ///   ``ExtraInstruction/stop``.
   mutating func handleExtraInstruction(
     _ instruction: ExtraInstruction
-  ) throws(Self.Error) {
+  ) throws(InterpreterError) {
     guard options.enabledExtraInstructions.contains(instruction) else {
       return
     }

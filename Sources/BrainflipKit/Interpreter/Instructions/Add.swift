@@ -13,14 +13,14 @@ extension Interpreter {
   /// - Throws: ``Error/cellOverflow`` or ``Error/cellUnderflow``
   ///   if an overflow/underflow occurs and ``Options/allowCellWraparound``
   ///   is `false`.
-  mutating func handleAddInstruction(_ value: Int32) throws(Self.Error) {
+  mutating func handleAddInstruction(_ value: Int32) throws(InterpreterError) {
     // depending on the value's sign, we'll use a specific method
     // to update the current cell while checking for wraparound, and
     // we'll also throw a specific error if it occurs
     let (overflowCheck, errorType) = if value < 0 {
-      (self.currentCellValue.subtractingReportingOverflow, Error.cellUnderflow)
+      (self.currentCellValue.subtractingReportingOverflow, InterpreterError.cellUnderflow)
     } else {
-      (self.currentCellValue.addingReportingOverflow, Error.cellOverflow)
+      (self.currentCellValue.addingReportingOverflow, InterpreterError.cellOverflow)
     }
     
     // this basically does a C-style cast to the cell type, which
