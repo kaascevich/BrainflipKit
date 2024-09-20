@@ -68,17 +68,6 @@ extension BrainflipCommand {
   ///   read from standard input is empty.
   private func chooseProgramSource() async throws(ValidationError) -> String {
     switch (self.programPath, self.program) {
-    // if they didn't provide a program or a path to one,
-    // read from standard input
-    case (nil, nil):
-      let input = await IOHelpers.readAllLines()
-      guard !input.allSatisfy(\.isWhitespace) else {
-        // if they didn't type anything meaningful, just
-        // print usage info and exit
-        throw ValidationError("")
-      }
-      return input
-      
     // if they provided a program path, read from that
     case (let programPath?, nil):
       // we already checked that this path is valid, so don't bother
@@ -89,9 +78,9 @@ extension BrainflipCommand {
     case (nil, let program?):
       return program
     
-    case (_?, _?):
+    case (_?, _?), (nil, nil):
       throw ValidationError(
-        "Only one of 'file-path' or '-p/--program' (or neither) must be provided."
+        "Exactly one of 'file-path' or '-p/--program' must be specified."
       )
     }
   }

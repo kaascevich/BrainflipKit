@@ -33,9 +33,8 @@ extension Interpreter {
 
     // MARK: Adding
     
-    let (additionResult, additionOverflow) = self.tape[
-      offsettedPointer, default: 0
-    ].addingReportingOverflow(multiplyResult)
+    let (additionResult, additionOverflow) = self.tape[offsettedPointer, default: 0]
+      .addingReportingOverflow(multiplyResult)
     
     if additionOverflow {
       guard options.allowCellWraparound else {

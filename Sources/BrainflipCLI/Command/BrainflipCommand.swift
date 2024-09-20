@@ -57,13 +57,10 @@ import Foundation
     help: .init(
       "The path to a Brainflip program to execute.",
       discussion: """
-      The file extension must be one of \(formattedValidExtensions). If \
-      neither this argument nor the '-p/--program' option is provided, the \
-      program will be read from standard input; in this case, to indicate \
-      you're done inputting the program, type ^D (control-D).
+      The file extension must be one of \(formattedValidExtensions).
       
       This argument is mutually exclusive with the '-p/--program' option. \
-      Only one should be specified.
+      Exactly one should be specified.
       """,
       valueName: "file-path"
     ),
@@ -91,7 +88,7 @@ import Foundation
       "A Brainflip program to execute.",
       discussion: """
       This argument is mutually exclusive with the 'file-path' argument. \
-      Only one should be specified.
+      Exactly one should be specified.
       """
     )
   ) var program: String?
