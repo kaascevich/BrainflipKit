@@ -60,7 +60,7 @@ import Foundation
       The file extension must be one of \(formattedValidExtensions). If \
       neither this argument nor the '-p/--program' option is provided, the \
       program will be read from standard input; in this case, to indicate \
-      you're done inputting the program, press ^D (control-D).
+      you're done inputting the program, type ^D (control-D).
       
       This argument is mutually exclusive with the '-p/--program' option. \
       Only one should be specified.
@@ -90,9 +90,6 @@ import Foundation
     help: .init(
       "A Brainflip program to execute.",
       discussion: """
-      If neither this option nor the 'file-path' argument is provided, the \
-      program will be read from standard input.
-      
       This argument is mutually exclusive with the 'file-path' argument. \
       Only one should be specified.
       """

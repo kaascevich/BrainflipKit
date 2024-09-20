@@ -35,7 +35,10 @@ extension BrainflipCommand {
         is executed, but there are no characters remaining in the input \
         iterator.
         """,
-        discussion: "No action is taken if this option is not specified.",
+        discussion: """
+        No action is taken if this option is not specified. To signal \
+        end-of-input, type ^D (control-D).
+        """,
         valueName: "behavior"
       )
     ) var endOfInputBehavior: EndOfInputBehavior?
