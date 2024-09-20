@@ -5,7 +5,7 @@
 // directory of this repository for more information. If this file is missing,
 // the license can also be found at <https://opensource.org/license/mit>.
 
-import class Foundation.FileHandle
+import Foundation
 
 /// The standard input file descriptor.
 private let standardInput = FileHandle.standardInput.fileDescriptor
@@ -37,24 +37,55 @@ enum IOHelpers {
     /// Encapsulates the process of enabling and disabling raw mode
     /// for a terminal.
     private struct TerminalRawMode: ~Copyable {
+      /// Returns a `termios` struct representing the current
+      /// state of the terminal.
+      /// 
+      /// - Returns: A `termios` struct representing the current
+      ///   state of the terminal.
+      /// 
+      /// - Throws: An error if the terminal state could not
+      ///   be retrieved.
+      private static func getTerminalState() throws -> termios {
+        var currentTerminalState = termios()
+
+        let error = tcgetattr(standardInput, &currentTerminalState)
+        guard error == 0 else { throw POSIXError(.EIO) }
+
+        return currentTerminalState
+      }
+
+      /// Sets the terminal state to the given `termios` struct.
+      /// 
+      /// - Parameter state: A `termios` struct to set the terminal
+      ///   state to.
+      /// 
+      /// - Throws: An error if the terminal state could not
+      ///   be set properly.
+      private static func setTerminalState(_ state: termios) throws {
+        try withUnsafePointer(to: state) {
+          let error = tcsetattr(standardInput, TCSAFLUSH, $0)
+          guard error == 0 else { throw POSIXError(.EIO) }
+        }
+      }
+
       /// The original state of the terminal.
       private let originalTerminalState: termios
       
       /// Creates a new instance.
-      init() {
-        var currentTerminalState = termios()
-        _ = tcgetattr(standardInput, &currentTerminalState)
-        
-        self.originalTerminalState = currentTerminalState
+      init() throws {
+        self.originalTerminalState = try Self.getTerminalState()
       }
       
-      deinit { self.disable() }
+      deinit { try? self.disable() }
       
       /// Enables raw mode.
       ///
       /// - Parameter enableEcho: Whether to echo characters as they are
       ///   typed.
-      func enable(echoing enableEcho: Bool) {
+      /// 
+      /// - Throws: An error if the terminal state could not
+      ///   be set properly.
+      func enable(echoing enableEcho: Bool) throws {
         var rawTerminalState = self.originalTerminalState
         
         // enable raw mode by disabling line buffering
@@ -66,16 +97,15 @@ enum IOHelpers {
         }
         
         // apply the new settings
-        withUnsafePointer(to: rawTerminalState) {
-          _ = tcsetattr(standardInput, TCSAFLUSH, $0)
-        }
+        try Self.setTerminalState(rawTerminalState)
       }
       
       /// Disables raw mode.
-      func disable() {
-        withUnsafePointer(to: self.originalTerminalState) {
-          _ = tcsetattr(standardInput, TCSAFLUSH, $0)
-        }
+      /// 
+      /// - Throws: An error if the terminal state could not
+      ///   be set properly.
+      func disable() throws {
+        try Self.setTerminalState(self.originalTerminalState)
       }
     }
     
@@ -93,9 +123,10 @@ enum IOHelpers {
         FileHandle.standardError.write(.init([0x07]))
       }
       
-      let rawMode = TerminalRawMode()
-      rawMode.enable(echoing: echo)
-      defer { rawMode.disable() }
+      do {
+        let rawMode = try TerminalRawMode()
+        try rawMode.enable(echoing: echo)
+      } catch { return nil }
       
       var nextCharacter: UInt8 = 0
       let readResult = read(standardInput, &nextCharacter, 1)
