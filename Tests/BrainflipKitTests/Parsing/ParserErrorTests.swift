@@ -14,6 +14,7 @@
 // not, see <https://www.gnu.org/licenses/>.
 
 import Testing
+
 @testable import typealias BrainflipKit.Program
 
 extension ParsingTests {

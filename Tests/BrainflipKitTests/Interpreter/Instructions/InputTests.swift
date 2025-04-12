@@ -14,6 +14,7 @@
 // not, see <https://www.gnu.org/licenses/>.
 
 import Testing
+
 @testable import BrainflipKit
 
 extension InterpreterTests.InstructionTests {
@@ -24,7 +25,7 @@ extension InterpreterTests.InstructionTests {
       var interpreter = try Interpreter("", input: "&")
 
       try await interpreter.handleInstruction(.input)
-      #expect(interpreter.currentCellValue == 0x26) // ASCII code for "&"
+      #expect(interpreter.currentCellValue == 0x26)  // ASCII code for "&"
     }
   }
 }

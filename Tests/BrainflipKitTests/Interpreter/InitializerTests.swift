@@ -14,6 +14,7 @@
 // not, see <https://www.gnu.org/licenses/>.
 
 import Testing
+
 @testable import BrainflipKit
 
 extension InterpreterTests {
@@ -25,7 +26,7 @@ extension InterpreterTests {
 
       #expect(interpreter.tape.isEmpty)
       #expect(interpreter.cellPointer == 0)
-      #expect(interpreter.outputStream as? String == "") // swiftlint:disable:this empty_string
+      #expect(interpreter.outputStream as? String == "")  // swiftlint:disable:this empty_string
 
       #expect(interpreter.program.isEmpty)
     }

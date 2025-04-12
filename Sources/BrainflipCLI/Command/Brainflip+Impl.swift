@@ -97,15 +97,15 @@ extension BrainflipCommand {
   private func makeInterpreterOptions() -> Interpreter.Options {
     let endOfInputBehavior: Interpreter.Options.EndOfInputBehavior? =
       switch self.interpreterOptions.endOfInputBehavior {
-      case .zero:  .setTo(0)
-      case .max:   .setTo(.max)
+      case .zero: .setTo(0)
+      case .max: .setTo(.max)
       case .error: .throwError
-      case  nil:   nil
+      case nil: nil
       }
 
     return Interpreter.Options(
-      allowCellWraparound:      self.interpreterOptions.wraparound,
-      endOfInputBehavior:       endOfInputBehavior,
+      allowCellWraparound: self.interpreterOptions.wraparound,
+      endOfInputBehavior: endOfInputBehavior,
       enabledExtraInstructions: Set(self.interpreterOptions.extraInstructions),
     )
   }

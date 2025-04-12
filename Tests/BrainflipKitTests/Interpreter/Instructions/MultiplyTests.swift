@@ -14,6 +14,7 @@
 // not, see <https://www.gnu.org/licenses/>.
 
 import Testing
+
 @testable import BrainflipKit
 
 extension InterpreterTests.InstructionTests {
@@ -28,7 +29,7 @@ extension InterpreterTests.InstructionTests {
       try await interpreter.handleInstruction(
         .multiply(factor: 4, offset: 2),
       )
-      #expect(interpreter.tape[2] == 17) // (3*4) + 5
+      #expect(interpreter.tape[2] == 17)  // (3*4) + 5
       #expect(interpreter.currentCellValue == 0)
     }
   }

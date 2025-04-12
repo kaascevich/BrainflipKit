@@ -14,6 +14,7 @@
 // not, see <https://www.gnu.org/licenses/>.
 
 import Testing
+
 @testable import BrainflipKit
 
 extension InterpreterTests {
@@ -26,10 +27,12 @@ extension InterpreterTests {
 
       let state = try await interpreter.runReturningFinalState()
 
-      #expect(state.tape == [
-        0: 1,
-        1: .max,
-      ])
+      #expect(
+        state.tape == [
+          0: 1,
+          1: .max,
+        ],
+      )
       #expect(state.cellPointer == 0)
     }
 
@@ -64,9 +67,9 @@ extension InterpreterTests {
     @Test("'Hello World!' program")
     func helloWorldProgram() async throws {
       let program = """
-      ++++++++[>++++[>++>+++>+++>+<<<<-]>+>+>->>+[<]<-]>>
-      .>---.+++++++..+++.>>.<-.<.+++.------.--------.>>+.
-      """
+        ++++++++[>++++[>++>+++>+++>+<<<<-]>+>+>->>+[<]<-]>>
+        .>---.+++++++..+++.>>.<-.<.+++.------.--------.>>+.
+        """
       let interpreter = try Interpreter(program)
 
       let output = try await interpreter.run()

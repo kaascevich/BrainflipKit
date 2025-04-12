@@ -14,6 +14,7 @@
 // not, see <https://www.gnu.org/licenses/>.
 
 import Testing
+
 @testable import BrainflipKit
 
 extension InterpreterTests.InstructionTests {
@@ -23,7 +24,7 @@ extension InterpreterTests.InstructionTests {
     func outputInstruction() async throws {
       var interpreter = try Interpreter("")
 
-      interpreter.currentCellValue = 0x42 // ASCII code for "B"
+      interpreter.currentCellValue = 0x42  // ASCII code for "B"
       try await interpreter.handleInstruction(.output)
       #expect(interpreter.outputStream as? String == "B")
     }
@@ -32,7 +33,7 @@ extension InterpreterTests.InstructionTests {
     func outputInstruction_unicode() async throws {
       var interpreter = try Interpreter("")
 
-      interpreter.currentCellValue = 0x2192 // Unicode value for "→"
+      interpreter.currentCellValue = 0x2192  // Unicode value for "→"
       try await interpreter.handleInstruction(.output)
       #expect(interpreter.outputStream as? String == "→")
     }

@@ -14,27 +14,34 @@
 // not, see <https://www.gnu.org/licenses/>.
 
 import Testing
+
 @testable import typealias BrainflipKit.Program
 
 @Suite("Program optimization")
 struct OptimizerTests {
   @Test("Clear-loop optimization")
   func clearLoopOptimization() throws {
-    let program = try Program("+[-]+++[+]----")
-    #expect(program == [
-      .add(1),
-      .setTo(3),
-      .setTo(.init(bitPattern: -4)),
-    ])
+    let program = try Program("++[-]-- > -[+]++++ > [+][-]")
+    #expect(
+      program == [
+        .setTo(.init(bitPattern: -2)),
+        .move(1),
+        .setTo(4),
+        .move(1),
+        .setTo(0),
+      ],
+    )
   }
 
   @Test("Adjacent instruction optimization")
   func adjacentInstructionOptimization() throws {
     let program = try Program(">>><<+---")
-    #expect(program == [
-      .move(1),
-      .add(-2),
-    ])
+    #expect(
+      program == [
+        .move(1),
+        .add(-2),
+      ],
+    )
   }
 
   @Test("Useless instruction optimization")
@@ -46,38 +53,46 @@ struct OptimizerTests {
   @Test("Scan-loop optimization")
   func scanLoopOptimization() throws {
     let program = try Program("+[>>>]+[<<]")
-    #expect(program == [
-      .add(1),
-      .scan(3),
-      .add(1),
-      .scan(-2),
-    ])
+    #expect(
+      program == [
+        .add(1),
+        .scan(3),
+        .add(1),
+        .scan(-2),
+      ],
+    )
   }
 
   @Test("Multiply-loop optimization")
   func multiplyLoopOptimization() throws {
     let program = try Program("+[- >> ++++ <<]")
-    #expect(program == [
-      .add(1),
-      .multiply(factor: 4, offset: 2),
-    ])
+    #expect(
+      program == [
+        .add(1),
+        .multiply(factor: 4, offset: 2),
+      ],
+    )
   }
 
   @Test("Dead loops optimization")
   func deadLoopsOptimization() throws {
     do {
-      let program = try Program("+[-][][->+<]")
-      #expect(program == [
-        .add(1),
-        .setTo(0),
-      ])
+      let program = try Program(">[-][][+][->+<]")
+      #expect(
+        program == [
+          .move(1),
+          .setTo(0),
+        ],
+      )
     }
 
     do {
       let program = try Program("[->+<][-]")
-      #expect(program == [
-        .multiply(factor: 1, offset: 1),
-      ])
+      #expect(
+        program == [
+          .multiply(factor: 1, offset: 1)
+        ],
+      )
     }
   }
 }

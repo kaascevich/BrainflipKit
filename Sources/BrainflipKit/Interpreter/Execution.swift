@@ -46,7 +46,7 @@ extension Interpreter {
   ) async throws(InterpreterError) {
     for instruction in instructions {
       try await handleInstruction(instruction)
-      await Task.yield() // yield to allow other tasks to run
+      await Task.yield()  // yield to allow other tasks to run
     }
   }
 

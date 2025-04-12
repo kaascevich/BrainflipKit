@@ -14,6 +14,7 @@
 // not, see <https://www.gnu.org/licenses/>.
 
 import Testing
+
 @testable import BrainflipKit
 
 extension InterpreterTests.InstructionTests {
@@ -27,10 +28,10 @@ extension InterpreterTests.InstructionTests {
         0: 1,
         1: 2,
         2: 3,
-        3: 0, // this cell is zero, but at an odd index
+        3: 0,  // this cell is zero, but at an odd index
         4: 5,
         5: 6,
-        6: 0, // this cell is zero, and at an even index
+        6: 0,  // this cell is zero, and at an even index
       ]
 
       try await interpreter.handleInstruction(.scan(2))

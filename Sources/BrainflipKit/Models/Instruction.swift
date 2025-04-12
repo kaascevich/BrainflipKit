@@ -59,6 +59,7 @@ import CasePaths
 
 public extension Instruction {
   /// All characters that represent Brainflip instructions.
-  static let validInstructions = ["+", "-", ">", "<", "[", "]", ",", "."]
+  static let validInstructions =
+    ["+", "-", ">", "<", "[", "]", ",", "."]
     + ExtraInstruction.allCases.map(\.rawValue)
 }

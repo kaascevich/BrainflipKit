@@ -14,6 +14,7 @@
 // not, see <https://www.gnu.org/licenses/>.
 
 import Parsing
+
 typealias ParserProtocol = Parsing.Parser
 
 extension Program {

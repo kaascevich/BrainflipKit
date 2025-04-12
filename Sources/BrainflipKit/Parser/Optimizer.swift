@@ -49,6 +49,15 @@ extension Program {
           with: [.setTo(.init(bitPattern: i))],
         )
       }
+
+      // MARK: add setTo -> setTo
+      for index in program.indices.dropLast().reversed() {
+        let first = program[index]
+        let next = program[index + 1]
+        if (first.is(\.add) || first.is(\.setTo)) && next.is(\.setTo) {
+          program.remove(at: index)
+        }
+      }
     }
 
     /// Removes adjacent instructions of the same type.
@@ -66,11 +75,12 @@ extension Program {
       program = chunks.flatMap { chunk -> Array.SubSequence in
         // we only need to check the first value, since all others should
         // match it
-        let casePath: _? = switch chunk.first {
-        case .add:  \Instruction.Cases.add
-        case .move: \Instruction.Cases.move
-        default: nil
-        }
+        let casePath: _? =
+          switch chunk.first {
+          case .add: \Instruction.Cases.add
+          case .move: \Instruction.Cases.move
+          default: nil
+          }
 
         // make sure we're actually dealing with one of the cases we're
         // interested in optimizing
@@ -124,10 +134,10 @@ extension Program {
         // check if the loop's instructions match what
         // we're looking for
         guard
-          case .add(-1)          = instructions[0],
+          case .add(-1) = instructions[0],
           case .move(let offset) = instructions[1],
-          case .add(let factor)  = instructions[2],
-          case .move(-offset)    = instructions[3],
+          case .add(let factor) = instructions[2],
+          case .move(-offset) = instructions[3],
           factor >= 0
         else { return instruction }
 
@@ -151,7 +161,11 @@ extension Program {
       let windows = [_](program.enumerated()).windows(ofCount: 2)
       var indicesToRemove: [Int] = []
       for window in windows {
-        if case .loop = window.first?.element, case .loop = window.last?.element {
+        if let first = window.first,
+          let last = window.last,
+          first.element.is(\.loop) || first.element.is(\.setTo),
+          last.element.is(\.loop)
+        {
           // there's a loop immediately after another loop, so the second loop
           // will never be executed (because the current cell is always 0
           // immediately after a loop)
@@ -190,9 +204,9 @@ extension Program {
         removeAdjacentInstructions(&program)
         removeUselessInstructions(&program)
         optimizeScanLoops(&program)
+        optimizeClearLoops(&program)
       } while program != previousOptimization
 
-      optimizeClearLoops(&program)
       optimizeMultiplyLoops(&program)
 
       return program

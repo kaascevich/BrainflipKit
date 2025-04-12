@@ -14,6 +14,7 @@
 // not, see <https://www.gnu.org/licenses/>.
 
 import ArgumentParser
+
 import enum BrainflipKit.ExtraInstruction
 
 extension BrainflipCommand {
@@ -30,9 +31,9 @@ extension BrainflipCommand {
       name: [.customLong("wrap"), .long],
       inversion: .prefixedNo,
       help: """
-      Whether to allow cell values to wrap around when they overflow or \
-      underflow.
-      """,
+        Whether to allow cell values to wrap around when they overflow or \
+        underflow.
+        """,
     ) var wraparound: Bool = true
 
     @Option(
@@ -43,9 +44,9 @@ extension BrainflipCommand {
         executed, but there are no characters remaining in the input iterator.
         """,
         discussion: """
-        No action is taken if this option is not specified. To signal \
-        end-of-input, type ^D (control-D).
-        """,
+          No action is taken if this option is not specified. To signal \
+          end-of-input, type ^D (control-D).
+          """,
         valueName: "behavior",
       ),
     ) var endOfInputBehavior: EndOfInputBehavior?

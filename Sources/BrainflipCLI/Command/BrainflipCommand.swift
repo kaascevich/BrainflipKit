@@ -24,39 +24,40 @@ import Foundation
     commandName: "brainflip",
     abstract: "Run brainf**k programs with a configurable interpreter.",
     discussion: """
-    Brainflip is an optimizing Swift interpreter for the brainf**k programming \
-    language -- an incredibly simple language that only has 8 instructions. \
-    This interpreter features full Unicode support, as well as languange \
-    extensions in the form of extra instructions (which can be enabled or \
-    disabled at will).
+      Brainflip is an optimizing Swift interpreter for the brainf**k \
+      programming language -- an incredibly simple language that only has 8 \
+      instructions. This interpreter features full Unicode support, as well as \
+      languange extensions in the form of extra instructions (which can be \
+      enabled or disabled at will).
 
-    Here's a list of all the differences between Brainflip and a standard, \
-    run-of-the-mill brainf**k interpreter:
-    - Full Unicode support
-    - 32-bit cells instead of 8-bit cells ('cuz Unicode)
-    - Infinite tape in both directions
-    - Customizable end-of-input behavior
-    - Cell wrapping can be disabled
-    - Optional extra instructions
-    - Relatively basic optimizations, including:
-      - Condensing repeated instructions
-      - Merging `+`/`-` and `<`/`>` instructions
-      - Removing instructions that cancel each other out
-      - Replacing `[-]` with a dedicated instruction
-      - Replacing copy/multiplication loops with a dedicated instruction
-      - Replacing scan loops (such as `[>>]`) with a dedicated instruction
-    """,
+      Here's a list of all the differences between Brainflip and a standard, \
+      run-of-the-mill brainf**k interpreter:
+      - Full Unicode support
+      - 32-bit cells instead of 8-bit cells ('cuz Unicode)
+      - Infinite tape in both directions
+      - Customizable end-of-input behavior
+      - Cell wrapping can be disabled
+      - Optional extra instructions
+      - Relatively basic optimizations, including:
+        - Condensing repeated instructions
+        - Merging `+`/`-` and `<`/`>` instructions
+        - Removing instructions that cancel each other out
+        - Replacing `[-]` with a dedicated instruction
+        - Replacing copy/multiplication loops with a dedicated instruction
+        - Replacing scan loops (such as `[>>]`) with a dedicated instruction
+      """,
   )
 
   /// The valid file extensions for Brainflip programs.
   static let validExtensions = ["b", "bf", "brainflip", "brainfuck"]
 
   /// A formatted list of valid file extensions.
-  static let formattedValidExtensions = validExtensions
+  static let formattedValidExtensions =
+    validExtensions
     .map { "." + $0 }
     .formatted(
       .list(type: .or)
-      .locale(.init(identifier: "en-us"))
+        .locale(.init(identifier: "en-us"))
     )
 
   // MARK: - Arguments
@@ -65,11 +66,11 @@ import Foundation
     help: .init(
       "The path to a Brainflip program to execute.",
       discussion: """
-      The file extension must be one of \(formattedValidExtensions).
+        The file extension must be one of \(formattedValidExtensions).
 
-      This argument is mutually exclusive with the '-p/--program' option. \
-      Exactly one should be specified.
-      """,
+        This argument is mutually exclusive with the '-p/--program' option. \
+        Exactly one should be specified.
+        """,
       valueName: "file-path",
     ),
     completion: .file(extensions: validExtensions),
@@ -96,9 +97,9 @@ import Foundation
     help: .init(
       "A Brainflip program to execute.",
       discussion: """
-      This argument is mutually exclusive with the 'file-path' argument. \
-      Exactly one should be specified.
-      """,
+        This argument is mutually exclusive with the 'file-path' argument. \
+        Exactly one should be specified.
+        """,
     ),
   ) var program: String?
 

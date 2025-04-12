@@ -25,11 +25,12 @@ extension Interpreter {
     // depending on the value's sign, we'll use a specific method to update the
     // current cell while checking for wraparound, and we'll also throw a
     // specific error if it occurs
-    let (overflowCheck, errorType) = if value < 0 {
-      (self.currentCellValue.subtractingReportingOverflow, InterpreterError.cellUnderflow)
-    } else {
-      (self.currentCellValue.addingReportingOverflow, InterpreterError.cellOverflow)
-    }
+    let (overflowCheck, errorType) =
+      if value < 0 {
+        (self.currentCellValue.subtractingReportingOverflow, InterpreterError.cellUnderflow)
+      } else {
+        (self.currentCellValue.addingReportingOverflow, InterpreterError.cellOverflow)
+      }
 
     // this basically does a C-style cast to the cell type, which is unsigned
     // -- since the only difference between signed and unsigned integers is the

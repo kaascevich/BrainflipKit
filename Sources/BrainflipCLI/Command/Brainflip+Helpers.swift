@@ -32,17 +32,19 @@ extension BrainflipCommand {
     let indent = String(repeating: "  ", count: indentLevel)
 
     for instruction in program {
-      let linesToAppend = switch instruction {
-      case .loop(let instructions): [
-        indent + "loop(",
-        // don't apply any indent here, because that'll be redundant
-        formatProgram(instructions, indentLevel: indentLevel + 1),
-        indent + ")",
-      ]
+      let linesToAppend =
+        switch instruction {
+        case .loop(let instructions):
+          [
+            indent + "loop(",
+            // don't apply any indent here, because that'll be redundant
+            formatProgram(instructions, indentLevel: indentLevel + 1),
+            indent + ")",
+          ]
 
-      // output the instruction's details
-      default: [indent + String(describing: instruction)]
-      }
+        // output the instruction's details
+        default: [indent + String(describing: instruction)]
+        }
 
       lines += linesToAppend
     }

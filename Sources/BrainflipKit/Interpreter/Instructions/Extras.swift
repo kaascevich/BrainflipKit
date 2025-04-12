@@ -35,7 +35,7 @@ extension Interpreter {
 
     case .bitwiseNot: self.currentCellValue = ~self.currentCellValue
 
-    case .leftShift:  self.currentCellValue <<= 1
+    case .leftShift: self.currentCellValue <<= 1
     case .rightShift: self.currentCellValue >>= 1
 
     case .random:

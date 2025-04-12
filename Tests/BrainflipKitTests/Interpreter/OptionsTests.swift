@@ -14,6 +14,7 @@
 // not, see <https://www.gnu.org/licenses/>.
 
 import Testing
+
 @testable import BrainflipKit
 
 extension InterpreterTests {
@@ -21,9 +22,10 @@ extension InterpreterTests {
   struct OptionsTests {
     @Test("allowCellWraparound option")
     func allowWraparoundOption() async throws {
-      var interpreter = try Interpreter("", options: .init(
-        allowCellWraparound: false,
-      ))
+      var interpreter = try Interpreter(
+        "",
+        options: .init(allowCellWraparound: false),
+      )
 
       await #expect(throws: InterpreterError.cellUnderflow(position: 0)) {
         try await interpreter.handleInstruction(.add(-1))
@@ -39,9 +41,10 @@ extension InterpreterTests {
     struct EndOfInputBehaviorTests {
       @Test("Do nothing on end of input")
       func doNothingOption() async throws {
-        var interpreter = try Interpreter("", options: .init(
-          endOfInputBehavior: nil,
-        ))
+        var interpreter = try Interpreter(
+          "",
+          options: .init(endOfInputBehavior: nil),
+        )
 
         interpreter.currentCellValue = 42
         try await interpreter.handleInstruction(.input)
@@ -50,9 +53,10 @@ extension InterpreterTests {
 
       @Test("Set the current cell to a value on end of input")
       func setToValueOption() async throws {
-        var interpreter = try Interpreter("", options: .init(
-          endOfInputBehavior: .setTo(0),
-        ))
+        var interpreter = try Interpreter(
+          "",
+          options: .init(endOfInputBehavior: .setTo(0)),
+        )
 
         interpreter.currentCellValue = 42
         try await interpreter.handleInstruction(.input)
@@ -61,9 +65,10 @@ extension InterpreterTests {
 
       @Test("Throw an error on end of input")
       func throwErrorOption() async throws {
-        var interpreter = try Interpreter("", options: .init(
-          endOfInputBehavior: .throwError,
-        ))
+        var interpreter = try Interpreter(
+          "",
+          options: .init(endOfInputBehavior: .throwError),
+        )
 
         await #expect(throws: InterpreterError.endOfInput) {
           try await interpreter.handleInstruction(.input)

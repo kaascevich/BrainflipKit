@@ -13,10 +13,15 @@
 # You should have received a copy of the GNU AGPL along with Haven. If not, see
 # <https://www.gnu.org/licenses/>.
 
+excluded:
+  - .build
+  - .swiftpm
+
 disabled_rules:
   - comma # more annoying than helpful when aligning code
   - identifier_name # doesn't play well with custom operators
   - line_length
+  - open_brace
   - todo # annoying
   - vertical_parameter_alignment_on_call # doesn't play well with trailing closures
 
@@ -131,11 +136,23 @@ nesting:
 indentation_width:
   indentation_width: 2
 
+opening_brace:
+  ignore_multiline_statement_conditions: true
+  ignore_multiline_function_signatures: true
+
 file_header:
   required_pattern: |
-                    \/\/ SWIFTLINT_CURRENT_FILENAME
-                    \/\/ Copyright © \d{4} .+
+                    \/\/ This file is part of (\w+)\.
+                    \/\/ Copyright © \d{4}-\d{4} .+
                     \/\/
-                    \/\/ This project is licensed under the MIT license; see `License\.md` in the root
-                    \/\/ directory of this repository for more information\. If this file is missing,
-                    \/\/ the license can also be found at <https://opensource\.org/license/mit>.
+                    \/\/ \1 is free software: you can redistribute it and\/or modify it under
+                    \/\/ the terms of the GNU Affero General Public License \(GNU AGPL\) as published by
+                    \/\/ the Free Software Foundation, either version 3 of the License, or \(at your
+                    \/\/ option\) any later version\.
+                    \/\/
+                    \/\/ \1 is distributed in the hope that it will be useful, but WITHOUT
+                    \/\/ ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+                    \/\/ FOR A PARTICULAR PURPOSE\. See the GNU AGPL for more details\.
+                    \/\/
+                    \/\/ You should have received a copy of the GNU AGPL along with \1\. If
+                    \/\/ not, see <https://www.gnu.org/licenses/>\.
