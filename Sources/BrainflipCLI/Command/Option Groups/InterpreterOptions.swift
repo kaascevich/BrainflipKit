@@ -19,8 +19,8 @@ import enum BrainflipKit.ExtraInstruction
 extension BrainflipCommand {
   /// Options related to the interpreter.
   struct InterpreterOptions: ParsableArguments {
-    /// The action to take on the current cell when an input instruction
-    /// is executed, but there are no characters remaining in the input.
+    /// The action to take on the current cell when an input instruction is
+    /// executed, but there are no characters remaining in the input.
     enum EndOfInputBehavior: String, CaseIterable, ExpressibleByArgument {
       case zero, max
       case error
@@ -32,23 +32,22 @@ extension BrainflipCommand {
       help: """
       Whether to allow cell values to wrap around when they overflow or \
       underflow.
-      """
+      """,
     ) var wraparound: Bool = true
 
     @Option(
       name: [.customLong("eoi"), .customLong("end-of-input")],
       help: .init(
         """
-        The action to take on the current cell when an input instruction \
-        is executed, but there are no characters remaining in the input \
-        iterator.
+        The action to take on the current cell when an input instruction is \
+        executed, but there are no characters remaining in the input iterator.
         """,
         discussion: """
         No action is taken if this option is not specified. To signal \
         end-of-input, type ^D (control-D).
         """,
-        valueName: "behavior"
-      )
+        valueName: "behavior",
+      ),
     ) var endOfInputBehavior: EndOfInputBehavior?
 
     @Option(
@@ -59,8 +58,8 @@ extension BrainflipCommand {
         discussion: ExtraInstruction.allCases
           .map { "(\($0.rawValue)) \($0): \($0.details)" }
           .joined(separator: "\n"),
-        valueName: "instructions"
-      )
+        valueName: "instructions",
+      ),
     ) var extraInstructions: [ExtraInstruction] = []
   }
 }

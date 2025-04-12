@@ -24,7 +24,7 @@ extension Interpreter {
   ///   ``Interpreter/Options/allowCellWraparound`` is `false`.
   mutating func handleMultiplyInstruction(
     multiplyingBy factor: CellValue,
-    storingAtOffset offset: Int
+    storingAtOffset offset: Int,
   ) throws(InterpreterError) {
     let offsettedPointer = self.cellPointer + offset
 
@@ -54,9 +54,8 @@ extension Interpreter {
 
     self.tape[offsettedPointer] = additionResult
 
-    // as a side effect of the standard multiply loop, the
-    // current cell is set to 0, so we need to replicate that
-    // behavior here
+    // as a side effect of the standard multiply loop, the current cell is set
+    // to 0, so we need to replicate that behavior here
     self.currentCellValue = 0
   }
 }

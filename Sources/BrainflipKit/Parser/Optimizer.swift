@@ -23,15 +23,17 @@ extension Program {
 
     /// Condenses clear loops.
     ///
-    /// This optimization condenses clear loops into a single
-    /// `setTo(0)` instruction. If there's an `add` instruction
-    /// following the clear loop, the value of that instruction
-    /// is used in the `setTo` instruction instead of 0, and the
-    /// `add` instruction is removed.
+    /// This optimization condenses clear loops into a single `setTo(0)`
+    /// instruction. If there's an `add` instruction following the clear loop,
+    /// the value of that instruction is used in the `setTo` instruction instead
+    /// of 0, and the `add` instruction is removed.
     ///
     /// - Parameter program: The program to optimize.
     private static func optimizeClearLoops(_ program: inout Program) {
-      program.replace([.loop([.add(-1)])], with: [.setTo(0)])
+      program.replace(
+        [.loop([.add(-1)])],
+        with: [.setTo(0)],
+      )
 
       let windows = program.windows(ofCount: 2)
       var addedValues: [Int32] = []
@@ -44,7 +46,10 @@ extension Program {
       }
 
       for i in addedValues.uniqued() {
-        program.replace([.setTo(0), .add(i)], with: [.setTo(.init(bitPattern: i))])
+        program.replace(
+          [.setTo(0), .add(i)],
+          with: [.setTo(.init(bitPattern: i))],
+        )
       }
     }
 
@@ -61,16 +66,16 @@ extension Program {
       }
 
       program = chunks.flatMap { chunk -> Array.SubSequence in
-        // we only need to check the first value, since all others
-        // should match it
+        // we only need to check the first value, since all others should
+        // match it
         let casePath: _? = switch chunk.first {
         case .add:  \Instruction.Cases.add
         case .move: \Instruction.Cases.move
         default: nil
         }
 
-        // make sure we're actually dealing with one of the
-        // cases we're interested in optimizing
+        // make sure we're actually dealing with one of the cases we're
+        // interested in optimizing
         guard let casePath else {
           return chunk
         }
@@ -94,8 +99,8 @@ extension Program {
     /// - Parameter program: The program to optimize.
     private static func optimizeScanLoops(_ program: inout Program) {
       program = program.map { instruction in
-        // Swift doesn't have pattern matching for arrays, so we
-        // have to do this the hard way.
+        // Swift doesn't have pattern matching for arrays, so we have to do this
+        // the hard way.
         guard
           case let .loop(instructions) = instruction,
           instructions.count == 1,
@@ -111,8 +116,8 @@ extension Program {
     /// - Parameter program: The program to optimize.
     private static func optimizeMultiplyLoops(_ program: inout Program) {
       program = program.map { instruction in
-        // Swift doesn't have pattern matching for arrays, so we
-        // have to do this the hard way.
+        // Swift doesn't have pattern matching for arrays, so we have to do this
+        // the hard way.
         guard
           case let .loop(instructions) = instruction,
           instructions.count == 4
@@ -130,18 +135,18 @@ extension Program {
 
         return .multiply(
           factor: .init(factor),
-          offset: Int(offset)
+          offset: Int(offset),
         )
       }
     }
 
     /// Removes loops that will never be executed.
     ///
-    /// In Brainflip, loops will only start (or continue) looping if
-    /// the current cell is not zero. This means that, for the instruction
-    /// directly after a loop, the current cell will always be 0. If
-    /// that instruction happens to also be a loop, that loop will never
-    /// be executed. So we remove those here.
+    /// In Brainflip, loops will only start (or continue) looping if the current
+    /// cell is not zero. This means that, for the instruction directly after a
+    /// loop, the current cell will always be 0. If that instruction happens to
+    /// also be a loop, that loop will never be executed. So we remove those
+    /// loops here.
     ///
     /// - Parameter program: The program to optimize.
     private static func removeDeadLoops(_ program: inout Program) {
@@ -149,15 +154,15 @@ extension Program {
       var indicesToRemove: [Int] = []
       for window in windows {
         if case .loop = window.first?.element, case .loop = window.last?.element {
-          // there's a loop immediately after another loop, so the second
-          // loop will never be executed (because the current cell is
-          // always 0 immediately after a loop)
+          // there's a loop immediately after another loop, so the second loop
+          // will never be executed (because the current cell is always 0
+          // immediately after a loop)
           indicesToRemove.append(window.last!.offset)
         }
       }
 
-      // remove indices from last to first, so as not
-      // to invalidate indices before we've used them
+      // remove indices from last to first, so as not to invalidate indices
+      // before we've used them
       for index in indicesToRemove.reversed() {
         program.remove(at: index)
       }
@@ -165,17 +170,17 @@ extension Program {
 
     // MARK: - Main Optimizer
 
-    /// Optimizes a program, ignoring instructions within loops (unless
-    /// those loops can be optimized away entirely).
+    /// Optimizes a program, ignoring instructions within loops (unless those
+    /// loops can be optimized away entirely).
     ///
     /// - Parameter program: The program to optimize.
     ///
     /// - Returns: The optimized program.
     static func optimizingWithoutNesting(_ program: Program) -> Program {
-      // FIXME: This method is _extremely_ sensitive to the order of
-      // the optimizations -- if the order isn't correct, all sorts
-      // of icky stuff can happen. We should find a way to reliably
-      // determine the proper order.
+      // FIXME: This method is _extremely_ sensitive to the order of the
+      // optimizations -- if the order isn't correct, all sorts of icky stuff
+      // can happen. We should find a way to reliably determine the proper
+      // order.
 
       var program = program
 

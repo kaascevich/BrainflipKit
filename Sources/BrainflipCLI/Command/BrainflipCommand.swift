@@ -24,11 +24,11 @@ import Foundation
     commandName: "brainflip",
     abstract: "Run brainf**k programs with a configurable interpreter.",
     discussion: """
-    Brainflip is an optimizing Swift interpreter for the brainf**k \
-    programming language -- an incredibly simple language that only has 8 \
-    instructions. This interpreter features full Unicode support, as well as \
-    languange extensions in the form of extra instructions (which can be \
-    enabled or disabled at will).
+    Brainflip is an optimizing Swift interpreter for the brainf**k programming \
+    language -- an incredibly simple language that only has 8 instructions. \
+    This interpreter features full Unicode support, as well as languange \
+    extensions in the form of extra instructions (which can be enabled or \
+    disabled at will).
 
     Here's a list of all the differences between Brainflip and a standard, \
     run-of-the-mill brainf**k interpreter:
@@ -45,7 +45,7 @@ import Foundation
       - Replacing `[-]` with a dedicated instruction
       - Replacing copy/multiplication loops with a dedicated instruction
       - Replacing scan loops (such as `[>>]`) with a dedicated instruction
-    """
+    """,
   )
 
   /// The valid file extensions for Brainflip programs.
@@ -70,7 +70,7 @@ import Foundation
       This argument is mutually exclusive with the '-p/--program' option. \
       Exactly one should be specified.
       """,
-      valueName: "file-path"
+      valueName: "file-path",
     ),
     completion: .file(extensions: validExtensions),
     transform: { filePath in
@@ -80,14 +80,15 @@ import Foundation
       else {
         throw ValidationError("That file doesn't exist.")
       }
+
       guard validExtensions.contains(url.pathExtension) else {
         throw ValidationError(
-          "Invalid file type -- must be one of \(formattedValidExtensions)."
+          "Invalid file type -- must be one of \(formattedValidExtensions).",
         )
       }
 
       return filePath
-    }
+    },
   ) var programPath: String?
 
   @Option(
@@ -97,17 +98,17 @@ import Foundation
       discussion: """
       This argument is mutually exclusive with the 'file-path' argument. \
       Exactly one should be specified.
-      """
-    )
+      """,
+    ),
   ) var program: String?
 
   @Flag(
     inversion: .prefixedEnableDisable,
-    help: "Whether to optimize the program before interpreting it."
+    help: "Whether to optimize the program before interpreting it.",
   ) var optimizations: Bool = true
 
   @Flag(
-    help: "Prints the result of parsing the program and exits."
+    help: "Prints the result of parsing the program and exits.",
   ) var printParsed: Bool = false
 
   @Flag(
@@ -116,8 +117,8 @@ import Foundation
       Prints the result of filtering non-instruction characters from the \
       program and exits.
       """,
-      discussion: "This flag overrides the '--print-parsed' flag."
-    )
+      discussion: "This flag overrides the '--print-parsed' flag.",
+    ),
   ) var printFiltered: Bool = false
 
   // MARK: - Option Groups

@@ -22,7 +22,7 @@ extension ParsingTests {
     @Test("Unpaired loops")
     func unpairedLoops() {
       let invalidPrograms = [
-        "[", "]", "][", "]][", "][[", "[][", "][]", "[[]", "[]]"
+        "[", "]", "][", "]][", "][[", "[][", "][]", "[[]", "[]]",
       ]
       for program in invalidPrograms {
         #expect(throws: Error.self) {

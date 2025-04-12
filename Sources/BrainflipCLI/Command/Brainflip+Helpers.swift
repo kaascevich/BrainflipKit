@@ -23,7 +23,10 @@ extension BrainflipCommand {
   ///   - indentLevel: The level of indentation to apply.
   ///
   /// - Returns: A formatted program.
-  static func formatProgram(_ program: Program, indentLevel: Int = 0) -> String {
+  static func formatProgram(
+    _ program: Program,
+    indentLevel: Int = 0,
+  ) -> String {
     var lines: [String] = []
 
     let indent = String(repeating: "  ", count: indentLevel)

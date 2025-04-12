@@ -16,19 +16,16 @@
 import class Foundation.FileHandle
 
 extension IOHelpers {
-  /// An output stream that prints to standard output
-  /// immediately.
+  /// An output stream that prints to standard output immediately.
   struct StandardOutputStream: TextOutputStream {
-    /// Appends the given string to the standard output
-    /// stream.
+    /// Appends the given string to the standard output stream.
     ///
     /// - Parameter string: The string to print.
     func write(_ string: String) {
-      // we can't use `print()` directly since it only
-      // flushes the output stream on a newline. for some
-      // reason, using the `standardOutput` file handle
-      // provided by Foundation _does_ flush the stream, so
-      // we'll just use that instead.
+      // we can't use `print()` directly since it only flushes the output stream
+      // on a newline. for some reason, using the `standardOutput` file handle
+      // provided by Foundation _does_ flush the stream, so we'll just use that
+      // instead.
       FileHandle.standardOutput.write(string.data(using: .utf8)!)
     }
   }

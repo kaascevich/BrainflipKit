@@ -16,8 +16,8 @@
 extension Interpreter {
   /// Executes an ``Instruction/scan(_:)`` instruction.
   ///
-  /// - Parameter increment: The value to increment the cell
-  ///   pointer by on each iteration.
+  /// - Parameter increment: The value to increment the cell pointer by on each
+  ///   iteration.
   mutating func handleScanInstruction(_ increment: Int32) {
     while self.currentCellValue != 0 {
       self.cellPointer += Int(increment)

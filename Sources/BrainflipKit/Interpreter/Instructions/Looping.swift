@@ -20,7 +20,9 @@ extension Interpreter {
   ///
   /// - Throws: An ``Error`` if an error occurs while executing the
   ///   instructions.
-  mutating func handleLoop(_ instructions: [Instruction]) async throws(InterpreterError) {
+  mutating func handleLoop(
+    _ instructions: [Instruction],
+  ) async throws(InterpreterError) {
     while self.currentCellValue != 0 {
       try await execute(instructions)
     }

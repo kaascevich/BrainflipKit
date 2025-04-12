@@ -16,7 +16,7 @@
 import protocol ArgumentParser.ExpressibleByArgument
 import enum BrainflipKit.ExtraInstruction
 
-extension ExtraInstruction: @retroactive ExpressibleByArgument {
+extension ExtraInstruction: ExpressibleByArgument {
   /// Parses an `ExtraInstruction` from an argument.
   ///
   /// - Parameter argument: The argument to parse.

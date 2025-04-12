@@ -16,8 +16,8 @@
 extension Interpreter {
   /// Executes an ``Instruction/input`` instruction.
   ///
-  /// - Throws: ``Error/endOfInput`` if the input iterator is empty
-  ///   and ``Options/endOfInputBehavior`` is set to
+  /// - Throws: ``Error/endOfInput`` if the input iterator is empty and
+  ///   ``Options/endOfInputBehavior`` is set to
   ///   ``Options/EndOfInputBehavior/throwError``.
   mutating func handleInputInstruction() throws(InterpreterError) {
     // make sure we actually have some input to work with

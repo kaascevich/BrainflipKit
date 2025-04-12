@@ -18,8 +18,8 @@ extension Interpreter {
   ///
   /// - Returns: The final state of the interpreter.
   ///
-  /// - Throws: An interpreter ``Error`` if an issue was
-  ///   encountered during execution.
+  /// - Throws: An interpreter ``Error`` if an issue was encountered during
+  ///   execution.
   public consuming func runReturningFinalState() async throws(InterpreterError) -> State {
     try await execute(program)
     return state
@@ -29,8 +29,8 @@ extension Interpreter {
   ///
   /// - Returns: The program's output.
   ///
-  /// - Throws: An interpreter ``Error`` if an issue was
-  ///   encountered during execution.
+  /// - Throws: An interpreter ``Error`` if an issue was encountered during
+  ///   execution.
   public consuming func run() async throws(InterpreterError) -> OutputStream {
     try await self.runReturningFinalState().outputStream
   }
@@ -39,9 +39,11 @@ extension Interpreter {
   ///
   /// - Parameter instructions: The instructions to execute.
   ///
-  /// - Throws: An interpreter ``Error`` if an issue was
-  ///   encountered during execution.
-  mutating func execute(_ instructions: [Instruction]) async throws(InterpreterError) {
+  /// - Throws: An interpreter ``Error`` if an issue was encountered during
+  ///   execution.
+  mutating func execute(
+    _ instructions: [Instruction],
+  ) async throws(InterpreterError) {
     for instruction in instructions {
       try await handleInstruction(instruction)
       await Task.yield() // yield to allow other tasks to run
@@ -52,10 +54,10 @@ extension Interpreter {
   ///
   /// - Parameter instruction: The instruction to execute.
   ///
-  /// - Throws: An interpreter ``Error`` if an issue was
-  ///  encountered during execution.
+  /// - Throws: An interpreter ``Error`` if an issue was encountered during
+  ///   execution.
   mutating func handleInstruction(
-    _ instruction: Instruction
+    _ instruction: Instruction,
   ) async throws(InterpreterError) {
     switch instruction {
     // MARK: Core

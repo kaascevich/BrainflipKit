@@ -22,11 +22,10 @@ extension BrainflipCommand {
 
     let programSource = try await chooseProgramSource()
 
-    // strip out all comment characters and print the result
-    // of that
+    // strip out all comment characters and print the result of that
     if self.printFiltered {
       let filteredSource = programSource.filter(
-        Instruction.validInstructions.contains
+        Instruction.validInstructions.contains,
       )
       print(filteredSource)
       return
@@ -36,7 +35,7 @@ extension BrainflipCommand {
 
     let parsedProgram = try Program(
       programSource,
-      optimizations: self.optimizations
+      optimizations: self.optimizations,
     )
 
     // pretty-print the parsed program
@@ -51,36 +50,35 @@ extension BrainflipCommand {
     IOHelpers.TerminalRawMode.enable(echoing: self.inputOptions.inputEchoing)
     defer { IOHelpers.TerminalRawMode.disable() }
 
-    // MARK: Interpreting
+    // MARK: - Interpreting
 
     let interpreter = Interpreter(
       parsedProgram,
       inputIterator: makeInputIterator(),
       outputStream: IOHelpers.StandardOutputStream(),
-      options: makeInterpreterOptions()
+      options: makeInterpreterOptions(),
     )
 
-    // StandardOutputStream prints the output for us, so
-    // we don't need to do it ourselves
+    // StandardOutputStream prints the output for us, so we don't need to do it
+    // ourselves
     _ = try await interpreter.run()
   }
 
-  /// Obtains the source code for a Brainflip program from
-  /// command-line arguments or standard input.
+  /// Obtains the source code for a Brainflip program from command-line
+  /// arguments or standard input.
   ///
-  /// - Returns: The source code for the Brainflip program
-  ///   provided by the user.
+  /// - Returns: The source code for the Brainflip program provided by the user.
   ///
-  /// - Throws: ``ValidationError`` if both the `--file-path`
-  ///   and `-p/--program` options are provided, or if a program
-  ///   read from standard input is empty.
+  /// - Throws: ``ValidationError`` if both the `--file-path` and `-p/--program`
+  ///   options are provided, or if a program read from standard input is empty.
   private func chooseProgramSource() async throws(ValidationError) -> String {
     switch (self.programPath, self.program) {
     // if they provided a program path, read from that
     case (let programPath?, nil):
-      // we already checked that this path is valid, so don't bother
-      // throwing out
-      return try! String(contentsOfFile: programPath, encoding: .utf8) // swiftlint:disable:this force_try
+      // we already checked that this path is valid, so don't bother throwing
+      // out
+      // swiftlint:disable:next force_try
+      return try! String(contentsOfFile: programPath, encoding: .utf8)
 
     // if they provided a program, just use that
     case (nil, let program?):
@@ -88,13 +86,12 @@ extension BrainflipCommand {
 
     case (_?, _?), (nil, nil):
       throw ValidationError(
-        "Exactly one of 'file-path' or '-p/--program' must be specified."
+        "Exactly one of 'file-path' or '-p/--program' must be specified.",
       )
     }
   }
 
-  /// Creates an ``Interpreter/Options`` struct from the
-  /// command-line options.
+  /// Creates an ``Interpreter/Options`` struct from the command-line options.
   ///
   /// - Returns: An ``Interpreter/Options`` struct.
   private func makeInterpreterOptions() -> Interpreter.Options {
@@ -109,12 +106,12 @@ extension BrainflipCommand {
     return Interpreter.Options(
       allowCellWraparound:      self.interpreterOptions.wraparound,
       endOfInputBehavior:       endOfInputBehavior,
-      enabledExtraInstructions: Set(self.interpreterOptions.extraInstructions)
+      enabledExtraInstructions: Set(self.interpreterOptions.extraInstructions),
     )
   }
 
-  /// Creates an iterator for the interpreter input from
-  /// the command-line options.
+  /// Creates an iterator for the interpreter input from the command-line
+  /// options.
   ///
   /// - Returns: An iterator for the interpreter input.
   private func makeInputIterator() -> any IteratorProtocol<Unicode.Scalar> {
@@ -122,7 +119,7 @@ extension BrainflipCommand {
       input.unicodeScalars.makeIterator()
     } else {
       IOHelpers.StandardInputIterator(
-        printBell: self.inputOptions.bellOnInputRequest
+        printBell: self.inputOptions.bellOnInputRequest,
       )
     }
   }

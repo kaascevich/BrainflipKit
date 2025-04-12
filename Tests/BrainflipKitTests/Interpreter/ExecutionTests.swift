@@ -75,7 +75,10 @@ extension InterpreterTests {
 
     @Test("Comprehensive test", .timeLimit(.minutes(1)))
     func comprehensiveTest() async throws {
-      let program = try String(contentsOfFile: "Resources/Examples/comprehensive.bf", encoding: .utf8)
+      let program = try String(
+        contentsOfFile: "Resources/Examples/comprehensive.bf",
+        encoding: .utf8,
+      )
       let interpreter = try Interpreter(program)
 
       let output = try await interpreter.run()

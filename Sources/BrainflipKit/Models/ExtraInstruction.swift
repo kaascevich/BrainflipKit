@@ -13,8 +13,7 @@
 // You should have received a copy of the GNU AGPL along with Haven. If not, see
 // <https://www.gnu.org/licenses/>.
 
-/// An instruction that can be enabled or disabled
-/// per-``Interpreter``.
+/// An instruction that can be enabled or disabled per-``Interpreter``.
 public enum ExtraInstruction:
   Character, Equatable, Hashable, CaseIterable, Sendable {
   /// Immediately ends the program.

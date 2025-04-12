@@ -50,7 +50,7 @@ enum IOHelpers {
       var nextCharacter: UInt8 = 0
       let readResult = read(
         FileHandle.standardInput.fileDescriptor,
-        &nextCharacter, 1
+        &nextCharacter, 1,
       )
 
       // make sure the input request succeeded, and that the character

@@ -23,7 +23,7 @@ extension InterpreterTests.InstructionTests {
     func disabledInstructions() async throws {
       await #expect(
         throws: Never.self,
-        "stop insrtuction does nothing when not enabled"
+        "stop insrtuction does nothing when not enabled",
       ) {
         let interpreter = try Interpreter("!")
 
@@ -37,12 +37,12 @@ extension InterpreterTests.InstructionTests {
     @Test("Stop instruction")
     func stopInstruction() async throws {
       var interpreter = try Interpreter("", options: .init(
-        enabledExtraInstructions: [.stop]
+        enabledExtraInstructions: [.stop],
       ))
 
       await #expect(
         throws: InterpreterError.stopInstruction,
-        "stop instruction halts the program by throwing an error"
+        "stop instruction halts the program by throwing an error",
       ) {
         try await interpreter.handleInstruction(.extra(.stop))
       }
@@ -51,42 +51,42 @@ extension InterpreterTests.InstructionTests {
     @Test("Bitwise NOT instruction")
     func bitwiseNotInstruction() async throws {
       var interpreter = try Interpreter("", options: .init(
-        enabledExtraInstructions: [.bitwiseNot]
+        enabledExtraInstructions: [.bitwiseNot],
       ))
 
       interpreter.currentCellValue = 42
       try await interpreter.handleInstruction(.extra(.bitwiseNot))
       #expect(
         interpreter.currentCellValue == 4294967253, // UInt32 bitwise NOT of 42
-        "bitwise NOT instruction sets the current cell to its own bitwise NOT"
+        "bitwise NOT instruction sets the current cell to its own bitwise NOT",
       )
     }
 
     @Test("Left shift instruction")
     func leftShiftInstruction() async throws {
       var interpreter = try Interpreter("", options: .init(
-        enabledExtraInstructions: [.leftShift]
+        enabledExtraInstructions: [.leftShift],
       ))
 
       interpreter.currentCellValue = 42
       try await interpreter.handleInstruction(.extra(.leftShift))
       #expect(
         interpreter.currentCellValue == 84, // 42 left-shifted 1
-        "left shift instruction left shifts the current cell by 1"
+        "left shift instruction left shifts the current cell by 1",
       )
     }
 
     @Test("Right shift instruction")
     func rightShiftInstruction() async throws {
       var interpreter = try Interpreter("", options: .init(
-        enabledExtraInstructions: [.rightShift]
+        enabledExtraInstructions: [.rightShift],
       ))
 
       interpreter.currentCellValue = 42
       try await interpreter.handleInstruction(.extra(.rightShift))
       #expect(
         interpreter.currentCellValue == 21, // 42 right-shifted 1
-        "right shift instruction right shifts the current cell by 1"
+        "right shift instruction right shifts the current cell by 1",
       )
     }
   }

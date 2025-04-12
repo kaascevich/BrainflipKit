@@ -19,14 +19,14 @@ import Foundation
 private let standardInput = FileHandle.standardInput.fileDescriptor
 
 extension IOHelpers {
-  /// Encapsulates the process of enabling and disabling raw mode
-  /// for a terminal.
+  /// Encapsulates the process of enabling and disabling raw mode for a
+  /// terminal.
   enum TerminalRawMode {
-    /// Returns a `termios` struct representing the current
-    /// state of the terminal.
+    /// Returns a `termios` struct representing the current state of the
+    /// terminal.
     ///
-    /// - Returns: A `termios` struct representing the current
-    ///   state of the terminal.
+    /// - Returns: A `termios` struct representing the current state of the
+    ///   terminal.
     private static func getTerminalState() -> termios {
       var currentTerminalState = termios()
       _ = tcgetattr(standardInput, &currentTerminalState)
@@ -35,8 +35,7 @@ extension IOHelpers {
 
     /// Sets the terminal state to the given `termios` struct.
     ///
-    /// - Parameter state: A `termios` struct to set the terminal
-    ///   state to.
+    /// - Parameter state: A `termios` struct to set the terminal state to.
     private static func setTerminalState(_ state: termios) {
       withUnsafePointer(to: state) {
         _ = tcsetattr(standardInput, TCSAFLUSH, $0)
@@ -48,8 +47,7 @@ extension IOHelpers {
 
     /// Enables raw mode.
     ///
-    /// - Parameter enableEcho: Whether to echo characters as they are
-    ///   typed.
+    /// - Parameter enableEcho: Whether to echo characters as they are typed.
     static func enable(echoing enableEcho: Bool) {
       var rawTerminalState = self.originalTerminalState
 

@@ -13,22 +13,20 @@
 // You should have received a copy of the GNU AGPL along with Haven. If not, see
 // <https://www.gnu.org/licenses/>.
 
-/// Represents an error that can happen during the
-/// lifetime of an ``Interpreter`` instance.
+/// Represents an error that can happen during the lifetime of an
+/// ``Interpreter`` instance.
 public enum InterpreterError: Error, Equatable, Hashable {
-  /// Indicates that the cell value at the specified
-  /// `position` overflowed.
+  /// Indicates that the cell value at the specified `position` overflowed.
   case cellOverflow(position: Int)
 
-  /// Indicates that the cell value at the specified
-  /// `position` underflowed.
+  /// Indicates that the cell value at the specified `position` underflowed.
   case cellUnderflow(position: Int)
 
   /// Indicates that the input iterator was exhausted.
   case endOfInput
 
-  /// Indicates that the program was ended by a
-  /// ``ExtraInstruction/stop`` instruction.
+  /// Indicates that the program was ended by a ``ExtraInstruction/stop``
+  /// instruction.
   case stopInstruction
 }
 
