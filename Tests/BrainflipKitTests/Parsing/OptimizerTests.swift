@@ -20,10 +20,11 @@ import Testing
 struct OptimizerTests {
   @Test("Clear-loop optimization")
   func clearLoopOptimization() throws {
-    let program = try Program("+[-]")
+    let program = try Program("+[-]+++[+]----")
     #expect(program == [
       .add(1),
-      .setTo(0),
+      .setTo(3),
+      .setTo(.init(bitPattern: -4)),
     ])
   }
 

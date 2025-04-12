@@ -30,10 +30,8 @@ extension Program {
     ///
     /// - Parameter program: The program to optimize.
     private static func optimizeClearLoops(_ program: inout Program) {
-      program.replace(
-        [.loop([.add(-1)])],
-        with: [.setTo(0)],
-      )
+      program.replace([.loop([.add(-1)])], with: [.setTo(0)])
+      program.replace([.loop([.add(+1)])], with: [.setTo(0)])
 
       let windows = program.windows(ofCount: 2)
       var addedValues: [Int32] = []
