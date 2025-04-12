@@ -1,27 +1,35 @@
-// ExtraInstruction+Argument.swift
-// Copyright © 2024 Kaleb A. Ascevich
+// This file is part of BrainflipKit.
+// Copyright © 2024-2025 Kaleb A. Ascevich
 //
-// This project is licensed under the MIT license; see `License.md` in the root
-// directory of this repository for more information. If this file is missing,
-// the license can also be found at <https://opensource.org/license/mit>.
+// Haven is free software: you can redistribute it and/or modify it under the
+// terms of the GNU Affero General Public License (GNU AGPL) as published by the
+// Free Software Foundation, either version 3 of the License, or (at your
+// option) any later version.
+//
+// Haven is distributed in the hope that it will be useful, but WITHOUT ANY
+// WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+// A PARTICULAR PURPOSE. See the GNU AGPL for more details.
+//
+// You should have received a copy of the GNU AGPL along with Haven. If not, see
+// <https://www.gnu.org/licenses/>.
 
 import protocol ArgumentParser.ExpressibleByArgument
 import enum BrainflipKit.ExtraInstruction
 
 extension ExtraInstruction: @retroactive ExpressibleByArgument {
   /// Parses an `ExtraInstruction` from an argument.
-  /// 
+  ///
   /// - Parameter argument: The argument to parse.
   public init?(argument: String) {
     let `case` = Self.allCases.first { String(describing: $0) == argument }
     guard let `case` else { return nil }
-    
+
     self = `case`
   }
-  
+
   /// Every case of `ExtraInstruction`, represented as strings.
   public static let allValueStrings = allCases.map(String.init(describing:))
-  
+
   /// A detailed description of this instruction.
   public var details: String {
     switch self {

@@ -1,9 +1,17 @@
-// BrainflipCommand.swift
-// Copyright © 2024 Kaleb A. Ascevich
+// This file is part of BrainflipKit.
+// Copyright © 2024-2025 Kaleb A. Ascevich
 //
-// This project is licensed under the MIT license; see `License.md` in the root
-// directory of this repository for more information. If this file is missing,
-// the license can also be found at <https://opensource.org/license/mit>.
+// Haven is free software: you can redistribute it and/or modify it under the
+// terms of the GNU Affero General Public License (GNU AGPL) as published by the
+// Free Software Foundation, either version 3 of the License, or (at your
+// option) any later version.
+//
+// Haven is distributed in the hope that it will be useful, but WITHOUT ANY
+// WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+// A PARTICULAR PURPOSE. See the GNU AGPL for more details.
+//
+// You should have received a copy of the GNU AGPL along with Haven. If not, see
+// <https://www.gnu.org/licenses/>.
 
 import ArgumentParser
 import Foundation
@@ -11,7 +19,7 @@ import Foundation
 /// The main command for the Brainflip CLI.
 @main struct BrainflipCommand: AsyncParsableCommand {
   // MARK: - Command Configuration
-  
+
   static let configuration = CommandConfiguration(
     commandName: "brainflip",
     abstract: "Run brainf**k programs with a configurable interpreter.",
@@ -21,7 +29,7 @@ import Foundation
     instructions. This interpreter features full Unicode support, as well as \
     languange extensions in the form of extra instructions (which can be \
     enabled or disabled at will).
-    
+
     Here's a list of all the differences between Brainflip and a standard, \
     run-of-the-mill brainf**k interpreter:
     - Full Unicode support
@@ -39,7 +47,7 @@ import Foundation
       - Replacing scan loops (such as `[>>]`) with a dedicated instruction
     """
   )
-  
+
   /// The valid file extensions for Brainflip programs.
   static let validExtensions = ["b", "bf", "brainflip", "brainfuck"]
 
@@ -50,15 +58,15 @@ import Foundation
       .list(type: .or)
       .locale(.init(identifier: "en-us"))
     )
-  
+
   // MARK: - Arguments
-  
+
   @Argument(
     help: .init(
       "The path to a Brainflip program to execute.",
       discussion: """
       The file extension must be one of \(formattedValidExtensions).
-      
+
       This argument is mutually exclusive with the '-p/--program' option. \
       Exactly one should be specified.
       """,
@@ -77,11 +85,11 @@ import Foundation
           "Invalid file type -- must be one of \(formattedValidExtensions)."
         )
       }
-      
+
       return filePath
     }
   ) var programPath: String?
-    
+
   @Option(
     name: [.short, .customLong("program")],
     help: .init(
@@ -92,16 +100,16 @@ import Foundation
       """
     )
   ) var program: String?
-  
+
   @Flag(
     inversion: .prefixedEnableDisable,
     help: "Whether to optimize the program before interpreting it."
   ) var optimizations: Bool = true
-    
+
   @Flag(
     help: "Prints the result of parsing the program and exits."
   ) var printParsed: Bool = false
-  
+
   @Flag(
     help: .init(
       """
@@ -111,12 +119,12 @@ import Foundation
       discussion: "This flag overrides the '--print-parsed' flag."
     )
   ) var printFiltered: Bool = false
-  
+
   // MARK: - Option Groups
-  
+
   @OptionGroup(title: "Interpreter Options")
   var interpreterOptions: InterpreterOptions
-  
+
   @OptionGroup(title: "Input Options")
   var inputOptions: InputOptions
 }

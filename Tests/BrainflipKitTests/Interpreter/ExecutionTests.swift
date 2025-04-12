@@ -1,9 +1,17 @@
-// ExecutionTests.swift
-// Copyright © 2024 Kaleb A. Ascevich
+// This file is part of BrainflipKit.
+// Copyright © 2024-2025 Kaleb A. Ascevich
 //
-// This project is licensed under the MIT license; see `License.md` in the root
-// directory of this repository for more information. If this file is missing,
-// the license can also be found at <https://opensource.org/license/mit>.
+// Haven is free software: you can redistribute it and/or modify it under the
+// terms of the GNU Affero General Public License (GNU AGPL) as published by the
+// Free Software Foundation, either version 3 of the License, or (at your
+// option) any later version.
+//
+// Haven is distributed in the hope that it will be useful, but WITHOUT ANY
+// WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+// A PARTICULAR PURPOSE. See the GNU AGPL for more details.
+//
+// You should have received a copy of the GNU AGPL along with Haven. If not, see
+// <https://www.gnu.org/licenses/>.
 
 import Testing
 @testable import BrainflipKit
@@ -15,44 +23,44 @@ extension InterpreterTests {
     func basicProgram() async throws {
       // increments cell 1 and decrements cell 2
       let interpreter = try Interpreter("+>-<")
-      
+
       let state = try await interpreter.runReturningFinalState()
-      
+
       #expect(state.tape == [
         0: 1,
         1: .max,
       ])
       #expect(state.cellPointer == 0)
     }
-    
+
     @Test("Simple loops")
     func simpleLoops() async throws {
       // sets cell 2 to 9
       let interpreter = try Interpreter("+++[>+++<-]")
-      
+
       let state = try await interpreter.runReturningFinalState()
       #expect(state.tape[1] == 9)
     }
-    
+
     @Test("Nested loops")
     func nestedLoops() async throws {
       // sets cell 3 to 27
       let interpreter = try Interpreter("+++[>+++[>+++<-]<-]")
-      
+
       let state = try await interpreter.runReturningFinalState()
       #expect(state.tape[2] == 27)
     }
-    
+
     @Test("Running with input")
     func runningWithInput() async throws {
       // outputs the first input character twice, then the
       // third character once
       let interpreter = try Interpreter(",..,,.", input: "hello")
-      
+
       let output = try await interpreter.run()
       #expect(output as? String == "hhl")
     }
-    
+
     @Test("'Hello World!' program")
     func helloWorldProgram() async throws {
       let program = """
@@ -60,16 +68,16 @@ extension InterpreterTests {
       .>---.+++++++..+++.>>.<-.<.+++.------.--------.>>+.
       """
       let interpreter = try Interpreter(program)
-      
+
       let output = try await interpreter.run()
       #expect(output as? String == "Hello World!")
     }
-    
+
     @Test("Comprehensive test", .timeLimit(.minutes(1)))
     func comprehensiveTest() async throws {
       let program = try String(contentsOfFile: "Resources/Examples/comprehensive.bf", encoding: .utf8)
       let interpreter = try Interpreter(program)
-      
+
       let output = try await interpreter.run()
       #expect(output as? String == "Hello, world!\n")
     }

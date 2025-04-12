@@ -1,9 +1,17 @@
-// Optimizer.swift
-// Copyright © 2024 Kaleb A. Ascevich
+// This file is part of BrainflipKit.
+// Copyright © 2024-2025 Kaleb A. Ascevich
 //
-// This project is licensed under the MIT license; see `License.md` in the root
-// directory of this repository for more information. If this file is missing,
-// the license can also be found at <https://opensource.org/license/mit>.
+// Haven is free software: you can redistribute it and/or modify it under the
+// terms of the GNU Affero General Public License (GNU AGPL) as published by the
+// Free Software Foundation, either version 3 of the License, or (at your
+// option) any later version.
+//
+// Haven is distributed in the hope that it will be useful, but WITHOUT ANY
+// WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+// A PARTICULAR PURPOSE. See the GNU AGPL for more details.
+//
+// You should have received a copy of the GNU AGPL along with Haven. If not, see
+// <https://www.gnu.org/licenses/>.
 
 private import Algorithms
 import CasePaths
@@ -14,7 +22,7 @@ extension Program {
     // MARK: - Optimizations
 
     /// Condenses clear loops.
-    /// 
+    ///
     /// This optimization condenses clear loops into a single
     /// `setTo(0)` instruction. If there's an `add` instruction
     /// following the clear loop, the value of that instruction
@@ -34,12 +42,12 @@ extension Program {
           addedValues.append(value)
         }
       }
-      
+
       for i in addedValues.uniqued() {
         program.replace([.setTo(0), .add(i)], with: [.setTo(.init(bitPattern: i))])
       }
     }
-    
+
     /// Removes adjacent instructions of the same type.
     ///
     /// - Parameter program: The program to optimize.
@@ -51,7 +59,7 @@ extension Program {
         default: false
         }
       }
-      
+
       program = chunks.flatMap { chunk -> Array.SubSequence in
         // we only need to check the first value, since all others
         // should match it
@@ -60,29 +68,29 @@ extension Program {
         case .move: \Instruction.Cases.move
         default: nil
         }
-        
+
         // make sure we're actually dealing with one of the
         // cases we're interested in optimizing
         guard let casePath else {
           return chunk
         }
-        
+
         // condense all the values into a single instruction
         let values = chunk.map { $0[case: casePath]! }
         let sum = values.reduce(0, +)
         return [casePath(sum)]
       }
     }
-    
+
     /// Removes useless instructions from the program.
-    /// 
+    ///
     /// - Parameter program: The program to optimize.
     private static func removeUselessInstructions(_ program: inout Program) {
       program.removeAll { $0 == .add(0) || $0 == .move(0) }
     }
-    
+
     /// Optimizes scan loops.
-    /// 
+    ///
     /// - Parameter program: The program to optimize.
     private static func optimizeScanLoops(_ program: inout Program) {
       program = program.map { instruction in
@@ -93,13 +101,13 @@ extension Program {
           instructions.count == 1,
           case let .move(increment) = instructions[0]
         else { return instruction }
-        
+
         return .scan(increment)
       }
     }
-    
+
     /// Optimizes multiplication loops.
-    /// 
+    ///
     /// - Parameter program: The program to optimize.
     private static func optimizeMultiplyLoops(_ program: inout Program) {
       program = program.map { instruction in
@@ -109,7 +117,7 @@ extension Program {
           case let .loop(instructions) = instruction,
           instructions.count == 4
         else { return instruction }
-        
+
         // check if the loop's instructions match what
         // we're looking for
         guard
@@ -119,22 +127,22 @@ extension Program {
           case .move(-offset)    = instructions[3],
           factor >= 0
         else { return instruction }
-        
+
         return .multiply(
           factor: .init(factor),
           offset: Int(offset)
         )
       }
     }
-    
+
     /// Removes loops that will never be executed.
-    /// 
+    ///
     /// In Brainflip, loops will only start (or continue) looping if
     /// the current cell is not zero. This means that, for the instruction
     /// directly after a loop, the current cell will always be 0. If
     /// that instruction happens to also be a loop, that loop will never
     /// be executed. So we remove those here.
-    /// 
+    ///
     /// - Parameter program: The program to optimize.
     private static func removeDeadLoops(_ program: inout Program) {
       let windows = [_](program.enumerated()).windows(ofCount: 2)
@@ -147,21 +155,21 @@ extension Program {
           indicesToRemove.append(window.last!.offset)
         }
       }
-      
+
       // remove indices from last to first, so as not
       // to invalidate indices before we've used them
       for index in indicesToRemove.reversed() {
         program.remove(at: index)
       }
     }
-    
+
     // MARK: - Main Optimizer
-    
+
     /// Optimizes a program, ignoring instructions within loops (unless
     /// those loops can be optimized away entirely).
-    /// 
+    ///
     /// - Parameter program: The program to optimize.
-    /// 
+    ///
     /// - Returns: The optimized program.
     static func optimizingWithoutNesting(_ program: Program) -> Program {
       // FIXME: This method is _extremely_ sensitive to the order of
@@ -170,7 +178,7 @@ extension Program {
       // determine the proper order.
 
       var program = program
-            
+
       // loop until no more optimizations are possible
       var previousOptimization: Program
       repeat {
@@ -183,7 +191,7 @@ extension Program {
 
       optimizeClearLoops(&program)
       optimizeMultiplyLoops(&program)
-      
+
       return program
     }
   }

@@ -1,15 +1,23 @@
-// State.swift
-// Copyright © 2024 Kaleb A. Ascevich
+// This file is part of BrainflipKit.
+// Copyright © 2024-2025 Kaleb A. Ascevich
 //
-// This project is licensed under the MIT license; see `License.md` in the root
-// directory of this repository for more information. If this file is missing,
-// the license can also be found at <https://opensource.org/license/mit>.
+// Haven is free software: you can redistribute it and/or modify it under the
+// terms of the GNU Affero General Public License (GNU AGPL) as published by the
+// Free Software Foundation, either version 3 of the License, or (at your
+// option) any later version.
+//
+// Haven is distributed in the hope that it will be useful, but WITHOUT ANY
+// WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+// A PARTICULAR PURPOSE. See the GNU AGPL for more details.
+//
+// You should have received a copy of the GNU AGPL along with Haven. If not, see
+// <https://www.gnu.org/licenses/>.
 
 public extension Interpreter {
   /// Represents an interpreter's internal state.
   struct State {
     // MARK: - Initializers
-    
+
     /// Creates a `State` instance.
     ///
     /// - Parameters:
@@ -24,12 +32,12 @@ public extension Interpreter {
       self.inputIterator = inputIterator
       self.outputStream = outputStream
     }
-    
+
     // MARK: - Properties
-    
+
     /// The array of cells that all Brainflip programs
     /// manipulate.
-    /// 
+    ///
     /// Most brainf\*\*k interpreters have a fixed-size tape,
     /// but Brainflip's tape is dynamically sized (or, in
     /// layman's terms, infinite). While it _would_ be possible
@@ -37,7 +45,7 @@ public extension Interpreter {
     /// not very ergonomic, requiring a whole lot of computed
     /// property shenanigans to abstract away the rather
     /// `fatalError`-y subscript.
-    /// 
+    ///
     /// It's a lot easier to use a `Dictionary` instead, with the
     /// key representing the cell's index (and the value, of course,
     /// representing the value). This also provides the benefits
@@ -46,21 +54,21 @@ public extension Interpreter {
     /// the need to handle out-of-bounds errors -- and of using a
     /// whole lot less memory than a standard 30,000-cell `Array`
     /// in the vast majority of use cases.
-    /// 
+    ///
     /// More details on how this works can be found in the
     /// documentation for ``currentCellValue``.
     ///
     /// # See Also
     /// - ``Interpreter/State/currentCellValue``
     public internal(set) var tape: [Int: CellValue] = [:]
-    
+
     /// The index of the cell currently being used by the
     /// program.
     ///
     /// # See Also
     /// - ``Interpreter/State/currentCellValue``
     public internal(set) var cellPointer: Int = 0
-    
+
     /// An iterator that provides input to a program.
     ///
     /// Each time an ``Instruction/input`` instruction is
@@ -74,7 +82,7 @@ public extension Interpreter {
     /// # See Also
     /// - ``Instruction/input``
     public internal(set) var inputIterator: InputIterator
-    
+
     /// The output stream.
     ///
     /// Each time an ``Instruction/output`` instruction is
@@ -84,11 +92,11 @@ public extension Interpreter {
     /// # See Also
     /// - ``Instruction/output``
     public internal(set) var outputStream: OutputStream
-    
+
     // MARK: - Computed State
-    
+
     /// The value of the current cell.
-    /// 
+    ///
     /// As explained in the documentation for ``tape``, using a
     /// `Dictionary` is much more ergonomic than using an `Array`.
     /// This is primarily because `Dictionary` provides a subscript
@@ -98,7 +106,7 @@ public extension Interpreter {
     /// accesses are a programmer error). In addition, assigning to
     /// a nonexistent key will simply _create_ the key before
     /// assigning to it.
-    /// 
+    ///
     /// All of this means that the getter and setter for
     /// `currentCellValue` are simple one-liners.
     ///

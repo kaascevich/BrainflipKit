@@ -1,15 +1,23 @@
-// Add.swift
-// Copyright © 2024 Kaleb A. Ascevich
+// This file is part of BrainflipKit.
+// Copyright © 2024-2025 Kaleb A. Ascevich
 //
-// This project is licensed under the MIT license; see `License.md` in the root
-// directory of this repository for more information. If this file is missing,
-// the license can also be found at <https://opensource.org/license/mit>.
+// Haven is free software: you can redistribute it and/or modify it under the
+// terms of the GNU Affero General Public License (GNU AGPL) as published by the
+// Free Software Foundation, either version 3 of the License, or (at your
+// option) any later version.
+//
+// Haven is distributed in the hope that it will be useful, but WITHOUT ANY
+// WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+// A PARTICULAR PURPOSE. See the GNU AGPL for more details.
+//
+// You should have received a copy of the GNU AGPL along with Haven. If not, see
+// <https://www.gnu.org/licenses/>.
 
 extension Interpreter {
   /// Executes an ``Instruction/add(_:)`` instruction.
-  /// 
+  ///
   /// - Parameter value: The value to add to the current cell value.
-  /// 
+  ///
   /// - Throws: ``Error/cellOverflow`` or ``Error/cellUnderflow``
   ///   if an overflow/underflow occurs and ``Options/allowCellWraparound``
   ///   is `false`.
@@ -22,7 +30,7 @@ extension Interpreter {
     } else {
       (self.currentCellValue.addingReportingOverflow, InterpreterError.cellOverflow)
     }
-    
+
     // this basically does a C-style cast to the cell type, which
     // is unsigned -- since the only difference between signed and
     // unsigned integers is the way they're interpreted, adding this
@@ -30,13 +38,13 @@ extension Interpreter {
     // as if we added the original value to a signed integer, even if
     // the original value was negative
     let valueAsUnsignedInt = CellValue(bitPattern: value)
-    
+
     if overflowCheck(valueAsUnsignedInt).overflow {
       guard options.allowCellWraparound else {
         throw errorType(self.cellPointer)
       }
     }
-    
+
     // the `&+=` operator is similar to `+=`, but it doesn't
     // trap on overflow -- it just lets it happen
     self.currentCellValue &+= valueAsUnsignedInt

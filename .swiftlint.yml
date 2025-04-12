@@ -1,10 +1,25 @@
+# This file is part of BrainflipKit.
+# Copyright © 2024-2025 Kaleb A. Ascevich
+#
+# Haven is free software: you can redistribute it and/or modify it under the
+# terms of the GNU Affero General Public License (GNU AGPL) as published by the
+# Free Software Foundation, either version 3 of the License, or (at your
+# option) any later version.
+#
+# Haven is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+# A PARTICULAR PURPOSE. See the GNU AGPL for more details.
+#
+# You should have received a copy of the GNU AGPL along with Haven. If not, see
+# <https://www.gnu.org/licenses/>.
+
 disabled_rules:
   - comma # more annoying than helpful when aligning code
   - identifier_name # doesn't play well with custom operators
   - line_length
   - todo # annoying
   - vertical_parameter_alignment_on_call # doesn't play well with trailing closures
-    
+
 opt_in_rules:
   - array_init
   - closure_end_indentation
@@ -104,7 +119,7 @@ trailing_whitespace:
 # their intended purposes.
 force_cast: warning
 force_try: warning
-    
+
 # Whitespace to the right of colons is used constantly for
 # alignment.
 colon:

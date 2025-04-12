@@ -1,9 +1,17 @@
-// TerminalRawMode.swift
-// Copyright © 2024 Kaleb A. Ascevich
+// This file is part of BrainflipKit.
+// Copyright © 2024-2025 Kaleb A. Ascevich
 //
-// This project is licensed under the MIT license; see `License.md` in the root
-// directory of this repository for more information. If this file is missing,
-// the license can also be found at <https://opensource.org/license/mit>.
+// Haven is free software: you can redistribute it and/or modify it under the
+// terms of the GNU Affero General Public License (GNU AGPL) as published by the
+// Free Software Foundation, either version 3 of the License, or (at your
+// option) any later version.
+//
+// Haven is distributed in the hope that it will be useful, but WITHOUT ANY
+// WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+// A PARTICULAR PURPOSE. See the GNU AGPL for more details.
+//
+// You should have received a copy of the GNU AGPL along with Haven. If not, see
+// <https://www.gnu.org/licenses/>.
 
 import Foundation
 
@@ -16,7 +24,7 @@ extension IOHelpers {
   enum TerminalRawMode {
     /// Returns a `termios` struct representing the current
     /// state of the terminal.
-    /// 
+    ///
     /// - Returns: A `termios` struct representing the current
     ///   state of the terminal.
     private static func getTerminalState() -> termios {
@@ -26,7 +34,7 @@ extension IOHelpers {
     }
 
     /// Sets the terminal state to the given `termios` struct.
-    /// 
+    ///
     /// - Parameter state: A `termios` struct to set the terminal
     ///   state to.
     private static func setTerminalState(_ state: termios) {
@@ -37,26 +45,26 @@ extension IOHelpers {
 
     /// The original state of the terminal.
     private static let originalTerminalState = getTerminalState()
-    
+
     /// Enables raw mode.
     ///
     /// - Parameter enableEcho: Whether to echo characters as they are
     ///   typed.
     static func enable(echoing enableEcho: Bool) {
       var rawTerminalState = self.originalTerminalState
-      
+
       // enable raw mode by disabling line buffering
       rawTerminalState.c_lflag &= ~UInt(ICANON)
-      
+
       if !enableEcho {
         // disable echoing
         rawTerminalState.c_lflag &= ~UInt(ECHO)
       }
-      
+
       // apply the new settings
       setTerminalState(rawTerminalState)
     }
-    
+
     /// Disables raw mode.
     static func disable() {
       setTerminalState(self.originalTerminalState)
