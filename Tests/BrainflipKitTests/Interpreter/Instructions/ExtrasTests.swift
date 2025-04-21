@@ -21,7 +21,7 @@ extension InterpreterTests.InstructionTests {
   @Suite("Extra instructions")
   struct ExtrasTests {
     @Test("No instructions enabled")
-    func disabledInstructions() async throws {
+    func disabledInstructions() async {
       await #expect(
         throws: Never.self,
         "stop insrtuction does nothing when not enabled",

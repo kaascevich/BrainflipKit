@@ -26,7 +26,7 @@ extension InterpreterTests {
 
       #expect(interpreter.tape.isEmpty)
       #expect(interpreter.cellPointer == 0)
-      #expect(interpreter.outputStream as? String == "")  // swiftlint:disable:this empty_string
+      #expect((interpreter.outputStream as? String)?.isEmpty == true)
 
       #expect(interpreter.program.isEmpty)
     }

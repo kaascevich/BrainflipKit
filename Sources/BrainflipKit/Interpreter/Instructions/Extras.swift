@@ -35,11 +35,11 @@ extension Interpreter {
 
     case .bitwiseNot: self.currentCellValue = ~self.currentCellValue
 
-    case .leftShift: self.currentCellValue <<= 1
+    case .leftShift:  self.currentCellValue <<= 1
     case .rightShift: self.currentCellValue >>= 1
 
     case .random:
-      self.currentCellValue = CellValue.random(in: 0...(.max))
+      self.currentCellValue = .random(in: 0...(.max))
     }
   }
 }

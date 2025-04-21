@@ -30,7 +30,7 @@ extension InterpreterTests.InstructionTests {
     }
 
     @Test("Output instruction with Unicode characters")
-    func outputInstruction_unicode() async throws {
+    func outputInstructionUnicode() async throws {
       var interpreter = try Interpreter("")
 
       interpreter.currentCellValue = 0x2192  // Unicode value for "→"

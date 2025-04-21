@@ -19,7 +19,7 @@ import Testing
 
 extension InterpreterTests.InstructionTests {
   @Suite("Mutliply instruction")
-  struct MultiplyTestsTests {
+  struct MultiplyTests {
     @Test("Multiply instruction")
     func multiplyInstruction() async throws {
       var interpreter = try Interpreter("")

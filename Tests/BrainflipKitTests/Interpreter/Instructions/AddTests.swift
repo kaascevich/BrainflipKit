@@ -20,10 +20,13 @@ import Testing
 extension InterpreterTests.InstructionTests {
   @Suite("Add instruction")
   struct AddTests {
-    @Test("Add instruction")
-    func addInstruction() async throws {
-      var interpreter = try Interpreter("")
+    var interpreter: Interpreter
+    init() throws {
+      self.interpreter = try .init("")
+    }
 
+    @Test("Add instruction")
+    mutating func addInstruction() async throws {
       for i in 1...500 {
         try await interpreter.handleInstruction(.add(1))
         #expect(interpreter.tape.first?.value == CellValue(i))
@@ -38,9 +41,7 @@ extension InterpreterTests.InstructionTests {
     }
 
     @Test("Add instruction - negative")
-    func addInstruction_negative() async throws {
-      var interpreter = try Interpreter("")
-
+    mutating func addInstructionNegative() async throws {
       try await interpreter.handleInstruction(.add(-1))
       #expect(
         interpreter.tape.first?.value == .max,

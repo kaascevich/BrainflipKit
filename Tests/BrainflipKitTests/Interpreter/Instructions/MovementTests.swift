@@ -20,15 +20,21 @@ import Testing
 extension InterpreterTests.InstructionTests {
   @Suite("Move instruction")
   struct MovementTests {
-    @Test("Move instruction")
-    func moveRightInstruction() async throws {
+    @Test("Move instruction - right")
+    func moveInstructionRight() async throws {
       var interpreter = try Interpreter("")
+
       for i in 1...10 {
         try await interpreter.handleInstruction(.move(1))
         #expect(interpreter.cellPointer == i)
       }
+    }
 
-      for i in (0..<10).reversed() {
+    @Test("Move instruction - left")
+    func moveInstructionLeft() async throws {
+      var interpreter = try Interpreter("")
+
+      for i in (1...10).map(-) {
         try await interpreter.handleInstruction(.move(-1))
         #expect(interpreter.cellPointer == i)
       }

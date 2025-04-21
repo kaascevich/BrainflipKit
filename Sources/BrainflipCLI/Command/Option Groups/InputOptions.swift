@@ -23,9 +23,9 @@ extension BrainflipCommand {
       help: .init(
         "The input to pass to the program.",
         discussion: """
-          If this option is not specified, the input will be read from \
-          standard input as the program requests it.
-          """,
+        If this option is not specified, the input will be read from standard \
+        input as the program requests it.
+        """,
       ),
     ) var input: String?
 
@@ -34,8 +34,8 @@ extension BrainflipCommand {
       help: .init(
         "Whether to echo input characters as they are being typed.",
         discussion: """
-          This flag has no effect if the '-i/--input' option is specified.
-          """,
+        This flag has no effect if the '-i/--input' option is specified.
+        """,
       ),
     ) var inputEchoing: Bool = true
 
@@ -45,8 +45,8 @@ extension BrainflipCommand {
       help: .init(
         "Whether to print a bell character when the program requests input.",
         discussion: """
-          This flag has no effect if the '-i/--input' option is specified.
-          """,
+        This flag has no effect if the '-i/--input' option is specified.
+        """,
       ),
     ) var bellOnInputRequest: Bool = true
   }

@@ -78,7 +78,7 @@ extension Interpreter {
     case let .multiply(factor, offset):
       try handleMultiplyInstruction(
         multiplyingBy: factor,
-        storingAtOffset: offset
+        storingAtOffset: offset,
       )
 
     case .scan(let increment): handleScanInstruction(increment)

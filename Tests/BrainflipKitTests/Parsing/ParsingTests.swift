@@ -20,12 +20,12 @@ import Testing
 @Suite("Program parsing")
 struct ParsingTests {
   let hTest = """
-    This program tests for several obscure interpreter problems;
-    it should output an H
+  This program tests for several obscure interpreter problems;
+  it should output an H
 
-    []++++++++++[>>+>+>++++++[<<+<+++>>>-]<<<<-]
-    "A*$";?@![#>>+<<]>[>>]<<<<[>++<[-]]>.>.
-    """
+  []++++++++++[>>+>+>++++++[<<+<+++>>>-]<<<<-]
+  "A*$";?@![#>>+<<]>[>>]<<<<[>++<[-]]>.>.
+  """
 
   @Test("Basic parsing")
   func basicParsing() throws {
