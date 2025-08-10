@@ -57,6 +57,9 @@ let package = Package(
     .testTarget(
       name: "BrainflipKitTests",
       dependencies: ["BrainflipKit"],
+      resources: [
+        .copy("Resources/")
+      ]
     ),
   ],
 )

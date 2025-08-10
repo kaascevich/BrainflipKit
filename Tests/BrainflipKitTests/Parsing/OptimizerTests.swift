@@ -29,7 +29,7 @@ struct OptimizerTests {
         .setTo(4),
         .move(1),
         .setTo(0),
-      ],
+      ]
     )
   }
 
@@ -40,7 +40,7 @@ struct OptimizerTests {
       program == [
         .move(1),
         .add(-2),
-      ],
+      ]
     )
   }
 
@@ -59,7 +59,7 @@ struct OptimizerTests {
         .scan(3),
         .add(1),
         .scan(-2),
-      ],
+      ]
     )
   }
 
@@ -70,7 +70,7 @@ struct OptimizerTests {
       program == [
         .add(1),
         .multiply(factor: 4, offset: 2),
-      ],
+      ]
     )
   }
 
@@ -82,17 +82,18 @@ struct OptimizerTests {
         program == [
           .move(1),
           .setTo(0),
-        ],
+        ]
       )
     }
 
     do {
       let program = try Program("[->+<][-]")
-      #expect(
-        program == [
-          .multiply(factor: 1, offset: 1)
-        ],
-      )
+      #expect(program.isEmpty)
+    }
+
+    do {
+      let program = try Program("[-]")
+      #expect(program.isEmpty)
     }
   }
 }

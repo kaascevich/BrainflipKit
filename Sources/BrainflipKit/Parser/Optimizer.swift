@@ -46,7 +46,7 @@ extension Program {
       for i in addedValues.uniqued() {
         program.replace(
           [.setTo(0), .add(i)],
-          with: [.setTo(.init(bitPattern: i))],
+          with: [.setTo(.init(bitPattern: i))]
         )
       }
 
@@ -131,8 +131,7 @@ extension Program {
           instructions.count == 4
         else { return instruction }
 
-        // check if the loop's instructions match what
-        // we're looking for
+        // check if the loop's instructions match what we're looking for
         guard
           case .add(-1) = instructions[0],
           case .move(let offset) = instructions[1],
@@ -143,7 +142,7 @@ extension Program {
 
         return .multiply(
           factor: .init(factor),
-          offset: Int(offset),
+          offset: Int(offset)
         )
       }
     }
@@ -158,6 +157,10 @@ extension Program {
     ///
     /// - Parameter program: The program to optimize.
     private static func removeDeadLoops(_ program: inout Program) {
+      // remove loops at the start -- these won't be executed either, since all
+      // cells start at 0
+      program = Program(program.drop { $0.is(\.loop) })
+
       let windows = [_](program.enumerated()).windows(ofCount: 2)
       var indicesToRemove: [Int] = []
       for window in windows {

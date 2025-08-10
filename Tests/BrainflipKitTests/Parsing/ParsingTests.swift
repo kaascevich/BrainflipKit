@@ -102,7 +102,6 @@ struct ParsingTests {
     let program = try Program(hTest)
     #expect(
       program == [
-        .loop([]),
         .add(10),
         .loop([
           .move(2),

@@ -13,6 +13,7 @@
 // You should have received a copy of the GNU AGPL along with BrainflipKit. If
 // not, see <https://www.gnu.org/licenses/>.
 
+import Foundation
 import Testing
 
 @testable import BrainflipKit
@@ -67,9 +68,9 @@ extension InterpreterTests {
     @Test("'Hello World!' program")
     func helloWorldProgram() async throws {
       let program = """
-      ++++++++[>++++[>++>+++>+++>+<<<<-]>+>+>->>+[<]<-]>>
-      .>---.+++++++..+++.>>.<-.<.+++.------.--------.>>+.
-      """
+        ++++++++[>++++[>++>+++>+++>+<<<<-]>+>+>->>+[<]<-]>>
+        .>---.+++++++..+++.>>.<-.<.+++.------.--------.>>+.
+        """
       let interpreter = try Interpreter(program)
 
       let output = try await interpreter.run()
@@ -79,7 +80,10 @@ extension InterpreterTests {
     @Test("Comprehensive test", .timeLimit(.minutes(1)))
     func comprehensiveTest() async throws {
       let program = try String(
-        contentsOfFile: "Resources/Examples/comprehensive.bf",
+        contentsOf: Bundle.module.url(
+          forResource: "Resources/Examples/comprehensive",
+          withExtension: "bf"
+        )!,
         encoding: .utf8,
       )
       let interpreter = try Interpreter(program)
