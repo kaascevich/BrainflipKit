@@ -16,7 +16,7 @@
 /// A list of instructions to be executed by an ``Interpreter``.
 public typealias Program = [Instruction]
 
-public extension Program {
+extension Program {
   /// Parses the given string into a `Program` instance.
   ///
   /// The following mappings are used to convert a `Character`  into an
@@ -95,8 +95,8 @@ public extension Program {
   ///
   /// - Throws: An `Error` if `source` is not a valid program (that is, if it
   ///   contains unmatched brackets).
-  init(_ source: String, optimizations: Bool = true) throws {
-    self = try Parser(optimizations: optimizations)
+  public init(_ source: String, optimizations: Bool = true) throws {
+    self = try ProgramParser(optimizations: optimizations)
       .parse(source.filter(Instruction.validInstructions.contains))
   }
 }

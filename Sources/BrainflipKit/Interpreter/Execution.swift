@@ -42,7 +42,7 @@ extension Interpreter {
   /// - Throws: An interpreter ``Error`` if an issue was encountered during
   ///   execution.
   mutating func execute(
-    _ instructions: [Instruction],
+    _ instructions: [Instruction]
   ) async throws(InterpreterError) {
     for instruction in instructions {
       try await handleInstruction(instruction)
@@ -57,7 +57,7 @@ extension Interpreter {
   /// - Throws: An interpreter ``Error`` if an issue was encountered during
   ///   execution.
   mutating func handleInstruction(
-    _ instruction: Instruction,
+    _ instruction: Instruction
   ) async throws(InterpreterError) {
     switch instruction {
     // MARK: Core
@@ -78,7 +78,7 @@ extension Interpreter {
     case let .multiply(factor, offset):
       try handleMultiplyInstruction(
         multiplyingBy: factor,
-        storingAtOffset: offset,
+        storingAtOffset: offset
       )
 
     case .scan(let increment): handleScanInstruction(increment)

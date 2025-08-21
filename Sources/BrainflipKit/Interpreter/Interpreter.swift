@@ -136,13 +136,13 @@
     _ program: Program,
     inputIterator: InputIterator,
     outputStream: OutputStream = "",
-    options: Options = .init(),
+    options: Options = .init()
   ) {
     self.program = program
     self.options = options
     self.state = State(
       inputIterator: inputIterator,
-      outputStream: outputStream,
+      outputStream: outputStream
     )
   }
 
@@ -161,14 +161,14 @@
     _ source: String,
     inputIterator: InputIterator,
     outputStream: OutputStream = "",
-    options: Options = .init(),
+    options: Options = .init()
   ) throws {
     let program = try Program(source)
     self.init(
       program,
       inputIterator: inputIterator,
       outputStream: outputStream,
-      options: options,
+      options: options
     )
   }
 
@@ -189,13 +189,13 @@
     _ source: String,
     input: String = "",
     outputStream: OutputStream = "",
-    options: Options = .init(),
+    options: Options = .init()
   ) throws {
     try self.init(
       source,
       inputIterator: input.unicodeScalars.makeIterator(),
       outputStream: outputStream,
-      options: options,
+      options: options
     )
   }
 
@@ -212,7 +212,7 @@
   /// - Returns: The value of this interpreter's state at the specified key
   ///   path.
   public internal(set) subscript<Value>(
-    dynamicMember member: WritableKeyPath<State, Value>,
+    dynamicMember member: WritableKeyPath<State, Value>
   ) -> Value {
     @inlinable get { state[keyPath: member] }
     @usableFromInline set { state[keyPath: member] = newValue }

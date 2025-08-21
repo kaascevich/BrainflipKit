@@ -22,7 +22,7 @@ extension Interpreter {
   /// - Throws: ``Error/stopInstruction`` if the instruction is
   ///   ``ExtraInstruction/stop``.
   mutating func handleExtraInstruction(
-    _ instruction: ExtraInstruction,
+    _ instruction: ExtraInstruction
   ) throws(InterpreterError) {
     guard options.enabledExtraInstructions.contains(instruction) else {
       return
@@ -35,11 +35,10 @@ extension Interpreter {
 
     case .bitwiseNot: self.currentCellValue = ~self.currentCellValue
 
-    case .leftShift:  self.currentCellValue <<= 1
+    case .leftShift: self.currentCellValue <<= 1
     case .rightShift: self.currentCellValue >>= 1
 
-    case .random:
-      self.currentCellValue = .random(in: 0...(.max))
+    case .random: self.currentCellValue = .random(in: 0...(.max))
     }
   }
 }

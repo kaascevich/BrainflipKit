@@ -21,10 +21,10 @@ extension ExtraInstruction: ExpressibleByArgument {
   ///
   /// - Parameter argument: The argument to parse.
   public init?(argument: String) {
-    let `case` = Self.allCases.first { String(describing: $0) == argument }
-    guard let `case` else { return nil }
+    let instruction = Self.allCases.first { String(describing: $0) == argument }
+    guard let instruction else { return nil }
 
-    self = `case`
+    self = instruction
   }
 
   /// Every case of `ExtraInstruction`, represented as strings.

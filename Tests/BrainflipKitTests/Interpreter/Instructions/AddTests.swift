@@ -36,7 +36,7 @@ extension InterpreterTests.InstructionTests {
       try await interpreter.handleInstruction(.add(1))
       #expect(
         interpreter.tape.first?.value == 0,
-        "increment instruction should wrap around",
+        "increment instruction should wrap around"
       )
     }
 
@@ -45,7 +45,7 @@ extension InterpreterTests.InstructionTests {
       try await interpreter.handleInstruction(.add(-1))
       #expect(
         interpreter.tape.first?.value == .max,
-        "decrement instruction should wrap around",
+        "decrement instruction should wrap around"
       )
 
       interpreter.currentCellValue = 500

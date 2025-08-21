@@ -13,9 +13,9 @@
 // You should have received a copy of the GNU AGPL along with BrainflipKit. If
 // not, see <https://www.gnu.org/licenses/>.
 
-public extension Interpreter {
+extension Interpreter {
   /// Represents an interpreter's internal state.
-  struct State {
+  public struct State {
     // MARK: - Initializers
 
     /// Creates a `State` instance.
@@ -26,7 +26,7 @@ public extension Interpreter {
     ///   - outputStream: The stream to write outputted characters to.
     internal init(
       inputIterator: InputIterator,
-      outputStream: OutputStream = "",
+      outputStream: OutputStream = ""
     ) {
       self.inputIterator = inputIterator
       self.outputStream = outputStream

@@ -13,9 +13,9 @@
 // You should have received a copy of the GNU AGPL along with BrainflipKit. If
 // not, see <https://www.gnu.org/licenses/>.
 
-public extension Interpreter {
+extension Interpreter {
   /// Configurable options for an ``Interpreter`` instance.
-  struct Options: Sendable {
+  public struct Options: Sendable {
     /// Whether or not to allow cell overflow and underflow. Defaults to `true`.
     public let allowCellWraparound: Bool
 
@@ -52,7 +52,7 @@ public extension Interpreter {
     public init(
       allowCellWraparound: Bool = true,
       endOfInputBehavior: EndOfInputBehavior? = nil,
-      enabledExtraInstructions: Set<ExtraInstruction> = [],
+      enabledExtraInstructions: Set<ExtraInstruction> = []
     ) {
       self.allowCellWraparound = allowCellWraparound
       self.enabledExtraInstructions = enabledExtraInstructions

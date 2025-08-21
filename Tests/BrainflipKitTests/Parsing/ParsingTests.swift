@@ -20,12 +20,12 @@ import Testing
 @Suite("Program parsing")
 struct ParsingTests {
   let hTest = """
-  This program tests for several obscure interpreter problems;
-  it should output an H
+    This program tests for several obscure interpreter problems;
+    it should output an H
 
-  []++++++++++[>>+>+>++++++[<<+<+++>>>-]<<<<-]
-  "A*$";?@![#>>+<<]>[>>]<<<<[>++<[-]]>.>.
-  """
+    []++++++++++[>>+>+>++++++[<<+<+++>>>-]<<<<-]
+    "A*$";?@![#>>+<<]>[>>]<<<<[>++<[-]]>.>.
+    """
 
   @Test("Basic parsing")
   func basicParsing() throws {
@@ -40,7 +40,7 @@ struct ParsingTests {
           .add(-1),
           .output,
         ]),
-      ],
+      ]
     )
   }
 
@@ -52,7 +52,7 @@ struct ParsingTests {
         .input,
         .add(4),
         .output,
-      ],
+      ]
     )
   }
 
@@ -79,7 +79,7 @@ struct ParsingTests {
           .move(2),
         ]),
         .move(1),
-      ],
+      ]
     )
   }
 
@@ -93,7 +93,7 @@ struct ParsingTests {
         .extra(.leftShift),
         .extra(.rightShift),
         .extra(.random),
-      ],
+      ]
     )
   }
 
@@ -141,7 +141,7 @@ struct ParsingTests {
         .output,
         .move(1),
         .output,
-      ],
+      ]
     )
   }
 
@@ -192,7 +192,7 @@ struct ParsingTests {
         .output,
         .move(1),
         .output,
-      ],
+      ]
     )
   }
 }

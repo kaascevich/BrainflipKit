@@ -24,7 +24,7 @@ extension InterpreterTests {
     func allowWraparoundOption() async throws {
       var interpreter = try Interpreter(
         "",
-        options: .init(allowCellWraparound: false),
+        options: .init(allowCellWraparound: false)
       )
 
       await #expect(throws: InterpreterError.cellUnderflow(position: 0)) {
@@ -43,7 +43,7 @@ extension InterpreterTests {
       func doNothingOption() async throws {
         var interpreter = try Interpreter(
           "",
-          options: .init(endOfInputBehavior: nil),
+          options: .init(endOfInputBehavior: nil)
         )
 
         interpreter.currentCellValue = 42
@@ -55,7 +55,7 @@ extension InterpreterTests {
       func setToValueOption() async throws {
         var interpreter = try Interpreter(
           "",
-          options: .init(endOfInputBehavior: .setTo(0)),
+          options: .init(endOfInputBehavior: .setTo(0))
         )
 
         interpreter.currentCellValue = 42
@@ -67,7 +67,7 @@ extension InterpreterTests {
       func throwErrorOption() async throws {
         var interpreter = try Interpreter(
           "",
-          options: .init(endOfInputBehavior: .throwError),
+          options: .init(endOfInputBehavior: .throwError)
         )
 
         await #expect(throws: InterpreterError.endOfInput) {

@@ -40,7 +40,7 @@ extension InterpreterTests.InstructionTests {
         """
         scan instruction repeatedly moves the cell pointer by the \
         specified amount until it lands on a zero cell
-        """,
+        """
       )
     }
   }

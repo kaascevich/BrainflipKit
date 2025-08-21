@@ -25,7 +25,7 @@ extension BrainflipCommand {
     // strip out all comment characters and print the result of that
     if self.printFiltered {
       let filteredSource = programSource.filter(
-        Instruction.validInstructions.contains,
+        Instruction.validInstructions.contains
       )
       print(filteredSource)
       return
@@ -35,7 +35,7 @@ extension BrainflipCommand {
 
     let parsedProgram = try Program(
       programSource,
-      optimizations: self.optimizations,
+      optimizations: self.optimizations
     )
 
     // pretty-print the parsed program
@@ -56,7 +56,7 @@ extension BrainflipCommand {
       parsedProgram,
       inputIterator: makeInputIterator(),
       outputStream: IOHelpers.StandardOutputStream(),
-      options: makeInterpreterOptions(),
+      options: makeInterpreterOptions()
     )
 
     // StandardOutputStream prints the output for us, so we don't need to do it
@@ -86,7 +86,7 @@ extension BrainflipCommand {
 
     case (_?, _?), (nil, nil):
       throw ValidationError(
-        "Exactly one of 'file-path' or '-p/--program' must be specified.",
+        "Exactly one of 'file-path' or '-p/--program' must be specified."
       )
     }
   }
@@ -106,7 +106,7 @@ extension BrainflipCommand {
     return Interpreter.Options(
       allowCellWraparound: self.interpreterOptions.wraparound,
       endOfInputBehavior: endOfInputBehavior,
-      enabledExtraInstructions: Set(self.interpreterOptions.extraInstructions),
+      enabledExtraInstructions: Set(self.interpreterOptions.extraInstructions)
     )
   }
 
@@ -114,12 +114,12 @@ extension BrainflipCommand {
   /// options.
   ///
   /// - Returns: An iterator for the interpreter input.
-  private func makeInputIterator() -> any IteratorProtocol<Unicode.Scalar> {
+  private func makeInputIterator() -> Interpreter.InputIterator {
     if let input = self.inputOptions.input {
       input.unicodeScalars.makeIterator()
     } else {
       IOHelpers.StandardInputIterator(
-        printBell: self.inputOptions.bellOnInputRequest,
+        printBell: self.inputOptions.bellOnInputRequest 
       )
     }
   }

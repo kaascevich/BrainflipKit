@@ -25,7 +25,7 @@ extension BrainflipCommand {
   /// - Returns: A formatted program.
   static func formatProgram(
     _ program: Program,
-    indentLevel: Int = 0,
+    indentLevel: Int = 0
   ) -> String {
     var lines: [String] = []
 
@@ -33,17 +33,16 @@ extension BrainflipCommand {
 
     for instruction in program {
       let linesToAppend =
-        switch instruction {
-        case .loop(let instructions):
+        if case .loop(let instructions) = instruction {
           [
             indent + "loop(",
             // don't apply any indent here, because that'll be redundant
             formatProgram(instructions, indentLevel: indentLevel + 1),
             indent + ")",
           ]
-
-        // output the instruction's details
-        default: [indent + String(describing: instruction)]
+        } else {
+          // output the instruction's details
+          [indent + String(describing: instruction)]
         }
 
       lines += linesToAppend

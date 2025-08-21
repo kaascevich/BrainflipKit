@@ -15,59 +15,55 @@
 
 import Parsing
 
-typealias ParserProtocol = Parsing.Parser
+/// A parser that parses a single instruction.
+private struct InstructionParser: Parser {
+  /// Whether to optimize the parsed program.
+  let optimizations: Bool
 
-extension Program {
-  /// A parser that parses a program.
-  struct Parser: ParserProtocol {
-    /// Whether to optimize the parsed program.
-    let optimizations: Bool
+  var body: some Parser<Substring, Instruction> {
+    OneOf {
+      // MARK: Simple
 
-    /// A parser that parses a single instruction.
-    private struct InstructionParser: ParserProtocol {
-      /// Whether to optimize the parsed program.
-      let optimizations: Bool
+      "+".map { Instruction.add(+1) }
+      "-".map { Instruction.add(-1) }
 
-      var body: some ParserProtocol<Substring, Instruction> {
-        OneOf {
-          // MARK: Simple
+      ">".map { Instruction.move(+1) }
+      "<".map { Instruction.move(-1) }
 
-          "+".map { Instruction.add(+1) }
-          "-".map { Instruction.add(-1) }
+      ",".map { Instruction.input }
+      ".".map { Instruction.output }
 
-          ">".map { Instruction.move(+1) }
-          "<".map { Instruction.move(-1) }
+      // MARK: Extras
 
-          ",".map { Instruction.input }
-          ".".map { Instruction.output }
+      First()
+        .map(.representing(ExtraInstruction.self))
+        .map(Instruction.extra)
 
-          // MARK: Extras
+      // MARK: Loops
 
-          First()
-            .map(.representing(ExtraInstruction.self))
-            .map(Instruction.extra)
-
-          // MARK: Loops
-
-          Parse(Instruction.loop) {
-            "["
-            Program.Parser(optimizations: optimizations)
-            "]"
-          }
-        }
+      Parse(Instruction.loop) {
+        "["
+        ProgramParser(optimizations: optimizations)
+        "]"
       }
     }
+  }
+}
 
-    var body: some ParserProtocol<Substring, Program> {
-      let programParser = Many {
-        InstructionParser(optimizations: optimizations)
-      }
+/// A parser that parses a program.
+struct ProgramParser: Parser {
+  /// Whether to optimize the parsed program.
+  let optimizations: Bool
 
-      if optimizations {
-        programParser.map(Optimizer.optimizingWithoutNesting)
-      } else {
-        programParser
-      }
+  var body: some Parser<Substring, Program> {
+    let programParser = Many {
+      InstructionParser(optimizations: optimizations)
+    }
+
+    if optimizations {
+      programParser.map(Program.Optimizer.optimizingWithoutNesting)
+    } else {
+      programParser
     }
   }
 }

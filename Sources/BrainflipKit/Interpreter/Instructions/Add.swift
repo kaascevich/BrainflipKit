@@ -27,9 +27,15 @@ extension Interpreter {
     // specific error if it occurs
     let (overflowCheck, errorType) =
       if value < 0 {
-        (self.currentCellValue.subtractingReportingOverflow, InterpreterError.cellUnderflow)
+        (
+          self.currentCellValue.subtractingReportingOverflow,
+          InterpreterError.cellUnderflow
+        )
       } else {
-        (self.currentCellValue.addingReportingOverflow, InterpreterError.cellOverflow)
+        (
+          self.currentCellValue.addingReportingOverflow,
+          InterpreterError.cellOverflow
+        )
       }
 
     // this basically does a C-style cast to the cell type, which is unsigned

@@ -36,7 +36,7 @@ extension InterpreterTests {
       let interpreter = try Interpreter(
         ",[.,]",
         input: "→",
-        options: .init(endOfInputBehavior: .setTo(0)),
+        options: .init(endOfInputBehavior: .setTo(0))
       )
       let output = try await interpreter.run()
       #expect(output as? String == "→")

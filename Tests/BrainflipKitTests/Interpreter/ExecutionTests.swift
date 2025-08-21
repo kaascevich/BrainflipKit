@@ -32,7 +32,7 @@ extension InterpreterTests {
         state.tape == [
           0: 1,
           1: .max,
-        ],
+        ]
       )
       #expect(state.cellPointer == 0)
     }
@@ -84,7 +84,7 @@ extension InterpreterTests {
           forResource: "Resources/Examples/comprehensive",
           withExtension: "bf"
         )!,
-        encoding: .utf8,
+        encoding: .utf8
       )
       let interpreter = try Interpreter(program)
 
