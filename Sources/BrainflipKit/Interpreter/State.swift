@@ -26,7 +26,7 @@ extension Interpreter {
     ///   - outputStream: The stream to write outputted characters to.
     internal init(
       inputSequence: Input,
-      outputStream: OutputStream = ""
+      outputStream: Output = ""
     ) {
       self.inputIterator = inputSequence.makeIterator()
       self.outputStream = outputStream
@@ -82,7 +82,7 @@ extension Interpreter {
     ///
     /// # See Also
     /// - ``Instruction/output``
-    public internal(set) var outputStream: OutputStream
+    public internal(set) var outputStream: Output
 
     // MARK: - Computed State
 

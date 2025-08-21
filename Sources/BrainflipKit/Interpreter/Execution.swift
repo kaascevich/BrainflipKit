@@ -31,7 +31,7 @@ extension Interpreter {
   ///
   /// - Throws: An interpreter ``Error`` if an issue was encountered during
   ///   execution.
-  public consuming func run() async throws(InterpreterError) -> OutputStream {
+  public consuming func run() async throws(InterpreterError) -> Output {
     try await self.runReturningFinalState().outputStream
   }
 

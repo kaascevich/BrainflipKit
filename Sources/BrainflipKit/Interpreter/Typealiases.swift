@@ -15,8 +15,3 @@
 
 /// The type of a single Brainflip cell.
 public typealias CellValue = UInt32
-
-public extension Interpreter {
-  /// A type that can be used as an output stream.
-  typealias OutputStream = any TextOutputStream
-}

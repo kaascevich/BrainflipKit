@@ -114,7 +114,10 @@
 /// ## Options
 /// - ``Options``
 @dynamicMemberLookup
-public struct Interpreter<Input: Sequence<Unicode.Scalar>> {
+public struct Interpreter<
+  Input: Sequence<Unicode.Scalar>,
+  Output: TextOutputStream
+> {
   /// A Brainflip program containing a list of instructions to execute.
   public let program: Program
 
@@ -136,7 +139,7 @@ public struct Interpreter<Input: Sequence<Unicode.Scalar>> {
   public init(
     _ program: Program,
     inputSequence: Input,
-    outputStream: OutputStream = "",
+    outputStream: Output = "",
     options: InterpreterOptions = .init()
   ) {
     self.program = program
@@ -161,7 +164,7 @@ public struct Interpreter<Input: Sequence<Unicode.Scalar>> {
   @inlinable public init(
     _ source: String,
     inputSequence: Input,
-    outputStream: OutputStream = "",
+    outputStream: Output = "",
     options: InterpreterOptions = .init()
   ) throws {
     let program = try Program(source)
@@ -189,7 +192,7 @@ public struct Interpreter<Input: Sequence<Unicode.Scalar>> {
   public init(
     _ source: String,
     input: String = "",
-    outputStream: OutputStream = "",
+    outputStream: Output = "",
     options: InterpreterOptions = .init()
   ) throws where Input == String.UnicodeScalarView {
     try self.init(

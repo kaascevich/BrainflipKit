@@ -62,7 +62,7 @@ extension InterpreterTests {
       let interpreter = try Interpreter(",..,,.", input: "hello")
 
       let output = try await interpreter.run()
-      #expect(output as? String == "hhl")
+      #expect(output == "hhl")
     }
 
     @Test("'Hello World!' program")
@@ -74,7 +74,7 @@ extension InterpreterTests {
       let interpreter = try Interpreter(program)
 
       let output = try await interpreter.run()
-      #expect(output as? String == "Hello World!")
+      #expect(output == "Hello World!")
     }
 
     // FIXME: Times out
@@ -90,7 +90,7 @@ extension InterpreterTests {
       let interpreter = try Interpreter(program)
 
       let output = try await interpreter.run()
-      #expect(output as? String == "Hello, world!\n")
+      #expect(output == "Hello, world!\n")
     }
   }
 }

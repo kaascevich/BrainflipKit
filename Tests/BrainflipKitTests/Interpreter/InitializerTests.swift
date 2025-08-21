@@ -26,7 +26,7 @@ extension InterpreterTests {
 
       #expect(interpreter.tape.isEmpty)
       #expect(interpreter.cellPointer == 0)
-      #expect((interpreter.outputStream as? String)?.isEmpty == true)
+      #expect(interpreter.outputStream.isEmpty == true)
 
       #expect(interpreter.program.isEmpty)
     }
@@ -39,7 +39,7 @@ extension InterpreterTests {
         options: .init(endOfInputBehavior: .setTo(0))
       )
       let output = try await interpreter.run()
-      #expect(output as? String == "→")
+      #expect(output == "→")
     }
   }
 }
