@@ -129,19 +129,19 @@
   ///
   /// - Parameters:
   ///   - program: A ``Program`` instance.
-  ///   - inputIterator: The input to pass to the program.
+  ///   - inputSequence: The input to pass to the program.
   ///   - outputStream: The stream to write outputted characters to.
   ///   - options: Configurable options to be used for this instance.
   public init(
     _ program: Program,
-    inputIterator: InputIterator,
+    inputSequence: InputSequence,
     outputStream: OutputStream = "",
     options: Options = .init()
   ) {
     self.program = program
     self.options = options
     self.state = State(
-      inputIterator: inputIterator,
+      inputSequence: inputSequence,
       outputStream: outputStream
     )
   }
@@ -151,7 +151,7 @@
   ///
   /// - Parameters:
   ///   - source: A string to parse into a `Program`.
-  ///   - inputIterator: An iterator over the input to pass to the program.
+  ///   - inputSequence: The input to pass to the program.
   ///   - outputStream: The stream to write outputted characters to.
   ///   - options: Configurable options to be used for this instance.
   ///
@@ -159,14 +159,14 @@
   ///   (that is, if it contains unmatched brackets).
   @inlinable public init(
     _ source: String,
-    inputIterator: InputIterator,
+    inputSequence: InputSequence,
     outputStream: OutputStream = "",
     options: Options = .init()
   ) throws {
     let program = try Program(source)
     self.init(
       program,
-      inputIterator: inputIterator,
+      inputSequence: inputSequence,
       outputStream: outputStream,
       options: options
     )
@@ -193,7 +193,7 @@
   ) throws {
     try self.init(
       source,
-      inputIterator: input.unicodeScalars.makeIterator(),
+      inputSequence: input.unicodeScalars,
       outputStream: outputStream,
       options: options
     )

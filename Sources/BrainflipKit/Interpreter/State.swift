@@ -25,10 +25,10 @@ extension Interpreter {
     ///     the program.
     ///   - outputStream: The stream to write outputted characters to.
     internal init(
-      inputIterator: InputIterator,
+      inputSequence: InputSequence,
       outputStream: OutputStream = ""
     ) {
-      self.inputIterator = inputIterator
+      self.inputIterator = inputSequence.makeIterator()
       self.outputStream = outputStream
     }
 
@@ -73,7 +73,7 @@ extension Interpreter {
     ///
     /// # See Also
     /// - ``Instruction/input``
-    public internal(set) var inputIterator: InputIterator
+    public internal(set) var inputIterator: any IteratorProtocol<Unicode.Scalar>
 
     /// The output stream.
     ///

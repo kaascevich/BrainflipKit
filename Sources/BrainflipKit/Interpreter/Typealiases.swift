@@ -18,7 +18,7 @@ public typealias CellValue = UInt32
 
 public extension Interpreter {
   /// A type that can be used as an input iterator.
-  typealias InputIterator = any IteratorProtocol<Unicode.Scalar>
+  typealias InputSequence = any Sequence<Unicode.Scalar>
 
   /// A type that can be used as an output stream.
   typealias OutputStream = any TextOutputStream

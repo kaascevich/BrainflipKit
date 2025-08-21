@@ -54,7 +54,7 @@ extension BrainflipCommand {
 
     let interpreter = Interpreter(
       parsedProgram,
-      inputIterator: makeInputIterator(),
+      inputSequence: makeInputSequence(),
       outputStream: IOHelpers.StandardOutputStream(),
       options: makeInterpreterOptions()
     )
@@ -114,12 +114,12 @@ extension BrainflipCommand {
   /// options.
   ///
   /// - Returns: An iterator for the interpreter input.
-  private func makeInputIterator() -> Interpreter.InputIterator {
+  private func makeInputSequence() -> Interpreter.InputSequence {
     if let input = self.inputOptions.input {
-      input.unicodeScalars.makeIterator()
+      input.unicodeScalars
     } else {
-      IOHelpers.StandardInputIterator(
-        printBell: self.inputOptions.bellOnInputRequest 
+      IOHelpers.StandardInput(
+        printBell: self.inputOptions.bellOnInputRequest
       )
     }
   }
