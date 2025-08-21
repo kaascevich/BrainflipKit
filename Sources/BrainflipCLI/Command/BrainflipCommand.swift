@@ -122,8 +122,8 @@ import Foundation
   // MARK: - Option Groups
 
   @OptionGroup(title: "Interpreter Options")
-  var interpreterOptions: InterpreterOptions
+  var interpreterOptions: InterpreterOptionGroup
 
   @OptionGroup(title: "Input Options")
-  var inputOptions: InputOptions
+  var inputOptions: InputOptionGroup
 }

@@ -52,16 +52,31 @@ extension BrainflipCommand {
 
     // MARK: - Interpreting
 
-    let interpreter = Interpreter(
-      parsedProgram,
-      inputSequence: makeInputSequence(),
-      outputStream: IOHelpers.StandardOutputStream(),
-      options: makeInterpreterOptions()
-    )
+    if let input = self.inputOptions.input {
+      let interpreter = Interpreter(
+        parsedProgram,
+        inputSequence: input.unicodeScalars,
+        outputStream: IOHelpers.StandardOutputStream(),
+        options: makeInterpreterOptions()
+      )
 
-    // StandardOutputStream prints the output for us, so we don't need to do it
-    // ourselves
-    _ = try await interpreter.run()
+      // StandardOutputStream prints the output for us, so we don't need to do it
+      // ourselves
+      _ = try await interpreter.run()
+    } else {
+      let interpreter = Interpreter(
+        parsedProgram,
+        inputSequence: IOHelpers.StandardInput(
+          printBell: self.inputOptions.bellOnInputRequest
+        ),
+        outputStream: IOHelpers.StandardOutputStream(),
+        options: makeInterpreterOptions()
+      )
+
+      // StandardOutputStream prints the output for us, so we don't need to do it
+      // ourselves
+      _ = try await interpreter.run()
+    }
   }
 
   /// Obtains the source code for a Brainflip program from command-line
@@ -94,8 +109,8 @@ extension BrainflipCommand {
   /// Creates an ``Interpreter/Options`` struct from the command-line options.
   ///
   /// - Returns: An ``Interpreter/Options`` struct.
-  private func makeInterpreterOptions() -> Interpreter.Options {
-    let endOfInputBehavior: Interpreter.Options.EndOfInputBehavior? =
+  private func makeInterpreterOptions() -> InterpreterOptions {
+    let endOfInputBehavior: InterpreterOptions.EndOfInputBehavior? =
       switch self.interpreterOptions.endOfInputBehavior {
       case .zero: .setTo(0)
       case .max: .setTo(.max)
@@ -103,24 +118,10 @@ extension BrainflipCommand {
       case nil: nil
       }
 
-    return Interpreter.Options(
+    return InterpreterOptions(
       allowCellWraparound: self.interpreterOptions.wraparound,
       endOfInputBehavior: endOfInputBehavior,
       enabledExtraInstructions: Set(self.interpreterOptions.extraInstructions)
     )
-  }
-
-  /// Creates an iterator for the interpreter input from the command-line
-  /// options.
-  ///
-  /// - Returns: An iterator for the interpreter input.
-  private func makeInputSequence() -> Interpreter.InputSequence {
-    if let input = self.inputOptions.input {
-      input.unicodeScalars
-    } else {
-      IOHelpers.StandardInput(
-        printBell: self.inputOptions.bellOnInputRequest
-      )
-    }
   }
 }

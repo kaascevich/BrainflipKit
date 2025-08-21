@@ -17,7 +17,7 @@ import ArgumentParser
 
 extension BrainflipCommand {
   /// Options related to input.
-  struct InputOptions: ParsableArguments {
+  struct InputOptionGroup: ParsableArguments {
     @Option(
       name: .shortAndLong,
       help: .init(

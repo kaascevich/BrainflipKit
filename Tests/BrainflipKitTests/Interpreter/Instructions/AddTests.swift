@@ -20,7 +20,7 @@ import Testing
 extension InterpreterTests.InstructionTests {
   @Suite("Add instruction")
   struct AddTests {
-    var interpreter: Interpreter
+    var interpreter: Interpreter<String.UnicodeScalarView>
     init() throws {
       self.interpreter = try .init("")
     }

@@ -25,7 +25,7 @@ extension Interpreter {
     ///     the program.
     ///   - outputStream: The stream to write outputted characters to.
     internal init(
-      inputSequence: InputSequence,
+      inputSequence: Input,
       outputStream: OutputStream = ""
     ) {
       self.inputIterator = inputSequence.makeIterator()

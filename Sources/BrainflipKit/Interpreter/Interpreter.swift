@@ -113,12 +113,13 @@
 ///
 /// ## Options
 /// - ``Options``
-@dynamicMemberLookup public struct Interpreter {
+@dynamicMemberLookup
+public struct Interpreter<Input: Sequence<Unicode.Scalar>> {
   /// A Brainflip program containing a list of instructions to execute.
   public let program: Program
 
   /// The configurable options for this interpreter.
-  public let options: Options
+  public let options: InterpreterOptions
 
   /// This interpreter's internal state.
   public private(set) var state: State
@@ -134,9 +135,9 @@
   ///   - options: Configurable options to be used for this instance.
   public init(
     _ program: Program,
-    inputSequence: InputSequence,
+    inputSequence: Input,
     outputStream: OutputStream = "",
-    options: Options = .init()
+    options: InterpreterOptions = .init()
   ) {
     self.program = program
     self.options = options
@@ -159,9 +160,9 @@
   ///   (that is, if it contains unmatched brackets).
   @inlinable public init(
     _ source: String,
-    inputSequence: InputSequence,
+    inputSequence: Input,
     outputStream: OutputStream = "",
-    options: Options = .init()
+    options: InterpreterOptions = .init()
   ) throws {
     let program = try Program(source)
     self.init(
@@ -189,8 +190,8 @@
     _ source: String,
     input: String = "",
     outputStream: OutputStream = "",
-    options: Options = .init()
-  ) throws {
+    options: InterpreterOptions = .init()
+  ) throws where Input == String.UnicodeScalarView {
     try self.init(
       source,
       inputSequence: input.unicodeScalars,

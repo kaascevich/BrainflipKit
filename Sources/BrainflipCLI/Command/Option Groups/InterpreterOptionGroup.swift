@@ -19,7 +19,7 @@ import enum BrainflipKit.ExtraInstruction
 
 extension BrainflipCommand {
   /// Options related to the interpreter.
-  struct InterpreterOptions: ParsableArguments {
+  struct InterpreterOptionGroup: ParsableArguments {
     /// The action to take on the current cell when an input instruction is
     /// executed, but there are no characters remaining in the input.
     enum EndOfInputBehavior: String, CaseIterable, ExpressibleByArgument {
