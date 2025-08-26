@@ -157,10 +157,6 @@ extension Program {
     ///
     /// - Parameter program: The program to optimize.
     private static func removeDeadLoops(_ program: inout Program) {
-      // remove loops at the start -- these won't be executed either, since all
-      // cells start at 0
-      program = Program(program.drop { $0.is(\.loop) })
-
       let windows = [_](program.enumerated()).windows(ofCount: 2)
       var indicesToRemove: [Int] = []
       for window in windows {
@@ -207,9 +203,9 @@ extension Program {
         removeAdjacentInstructions(&program)
         removeUselessInstructions(&program)
         optimizeScanLoops(&program)
-        optimizeClearLoops(&program)
       } while program != previousOptimization
 
+      optimizeClearLoops(&program)
       optimizeMultiplyLoops(&program)
 
       return program

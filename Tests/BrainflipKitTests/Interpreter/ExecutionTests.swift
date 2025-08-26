@@ -78,7 +78,7 @@ extension InterpreterTests {
     }
 
     // FIXME: Times out
-    @Test("Comprehensive test", .timeLimit(.minutes(1)), .disabled())
+    @Test("Comprehensive test", .timeLimit(.minutes(1)))
     func comprehensiveTest() async throws {
       let program = try String(
         contentsOf: Bundle.module.url(
