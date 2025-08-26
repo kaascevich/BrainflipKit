@@ -35,10 +35,6 @@ public struct InterpreterOptions: Sendable {
     case throwError
   }
 
-  /// Contains extra instructions that an interpreter should recognize and
-  /// execute. Defaults to none (`[]`).
-  public let enabledExtraInstructions: Set<ExtraInstruction>
-
   /// Creates an `Options` instance to configure an ``Interpreter`` with.
   ///
   /// - Parameters:
@@ -46,15 +42,11 @@ public struct InterpreterOptions: Sendable {
   ///     underflow.
   ///   - endOfInputBehavior: The action to take when an input instruction is
   ///     executed with an empty input iterator.
-  ///   - enabledExtraInstructions: Extra instructions that an interpreter
-  ///     should recognize and execute.
   public init(
     allowCellWraparound: Bool = true,
-    endOfInputBehavior: EndOfInputBehavior? = nil,
-    enabledExtraInstructions: Set<ExtraInstruction> = []
+    endOfInputBehavior: EndOfInputBehavior? = nil
   ) {
     self.allowCellWraparound = allowCellWraparound
-    self.enabledExtraInstructions = enabledExtraInstructions
     self.endOfInputBehavior = endOfInputBehavior
   }
 }

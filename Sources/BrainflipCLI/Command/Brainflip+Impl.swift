@@ -23,7 +23,7 @@ extension BrainflipCommand {
     let programSource = try await chooseProgramSource()
 
     // strip out all comment characters and print the result of that
-    if self.printFiltered {
+    if printFiltered {
       let filteredSource = programSource.filter(
         Instruction.validInstructions.contains
       )
@@ -35,11 +35,11 @@ extension BrainflipCommand {
 
     let parsedProgram = try Program(
       programSource,
-      optimizations: self.optimizations
+      optimizations: optimizations
     )
 
     // pretty-print the parsed program
-    if self.printParsed {
+    if printParsed {
       let formattedProgram = Self.formatProgram(parsedProgram)
       print(formattedProgram)
       return
@@ -47,12 +47,12 @@ extension BrainflipCommand {
 
     // MARK: - Input
 
-    IOHelpers.TerminalRawMode.enable(echoing: self.inputOptions.inputEchoing)
+    IOHelpers.TerminalRawMode.enable(echoing: inputOptions.inputEchoing)
     defer { IOHelpers.TerminalRawMode.disable() }
 
     // MARK: - Interpreting
 
-    if let input = self.inputOptions.input {
+    if let input = inputOptions.input {
       let interpreter = Interpreter(
         parsedProgram,
         inputSequence: input.unicodeScalars,
@@ -67,7 +67,7 @@ extension BrainflipCommand {
       let interpreter = Interpreter(
         parsedProgram,
         inputSequence: IOHelpers.StandardInput(
-          printBell: self.inputOptions.bellOnInputRequest
+          printBell: inputOptions.bellOnInputRequest
         ),
         outputStream: IOHelpers.StandardOutputStream(),
         options: makeInterpreterOptions()
@@ -87,17 +87,17 @@ extension BrainflipCommand {
   /// - Throws: ``ValidationError`` if both the `--file-path` and `-p/--program`
   ///   options are provided, or if a program read from standard input is empty.
   private func chooseProgramSource() async throws(ValidationError) -> String {
-    switch (self.programPath, self.program) {
+    switch (programPath, program) {
     // if they provided a program path, read from that
     case (let programPath?, nil):
       // we already checked that this path is valid, so don't bother throwing
       // out
       // swiftlint:disable:next force_try
-      return try! String(contentsOfFile: programPath, encoding: .utf8)
+      try! String(contentsOfFile: programPath, encoding: .utf8)
 
     // if they provided a program, just use that
     case (nil, let program?):
-      return program
+      program
 
     case (_?, _?), (nil, nil):
       throw ValidationError(
@@ -111,7 +111,7 @@ extension BrainflipCommand {
   /// - Returns: An ``Interpreter/Options`` struct.
   private func makeInterpreterOptions() -> InterpreterOptions {
     let endOfInputBehavior: InterpreterOptions.EndOfInputBehavior? =
-      switch self.interpreterOptions.endOfInputBehavior {
+      switch interpreterOptions.endOfInputBehavior {
       case .zero: .setTo(0)
       case .max: .setTo(.max)
       case .error: .throwError
@@ -119,9 +119,8 @@ extension BrainflipCommand {
       }
 
     return InterpreterOptions(
-      allowCellWraparound: self.interpreterOptions.wraparound,
-      endOfInputBehavior: endOfInputBehavior,
-      enabledExtraInstructions: Set(self.interpreterOptions.extraInstructions)
+      allowCellWraparound: interpreterOptions.wraparound,
+      endOfInputBehavior: endOfInputBehavior
     )
   }
 }

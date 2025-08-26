@@ -24,10 +24,6 @@ public enum InterpreterError: Error, Equatable, Hashable {
 
   /// Indicates that the input iterator was exhausted.
   case endOfInput
-
-  /// Indicates that the program was ended by a ``ExtraInstruction/stop``
-  /// instruction.
-  case stopInstruction
 }
 
 extension InterpreterError: CustomStringConvertible {
@@ -42,9 +38,6 @@ extension InterpreterError: CustomStringConvertible {
 
     case .endOfInput:
       "Executed an input instruction after end-of-input was reached."
-
-    case .stopInstruction:
-      "Encountered a stop instruction."
     }
   }
 }

@@ -36,6 +36,8 @@ extension Interpreter {
 
     /// The array of cells that all Brainflip programs manipulate.
     ///
+    /// # Implementation Notes
+    ///
     /// Most brainf\*\*k interpreters have a fixed-size tape, but Brainflip's
     /// tape is dynamically sized (i.e. infinite). While it _would_ be possible
     /// to implement this using a standard Swift `Array`, it's not very
@@ -87,6 +89,8 @@ extension Interpreter {
     // MARK: - Computed State
 
     /// The value of the current cell.
+    ///
+    /// # Implementation Notes
     ///
     /// As explained in the documentation for ``tape``, using a `Dictionary` is
     /// much more ergonomic than using an `Array`. This is primarily because

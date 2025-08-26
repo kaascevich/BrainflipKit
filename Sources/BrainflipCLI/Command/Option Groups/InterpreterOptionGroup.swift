@@ -15,8 +15,6 @@
 
 import ArgumentParser
 
-import enum BrainflipKit.ExtraInstruction
-
 extension BrainflipCommand {
   /// Options related to the interpreter.
   struct InterpreterOptionGroup: ParsableArguments {
@@ -50,17 +48,5 @@ extension BrainflipCommand {
         valueName: "behavior"
       )
     ) var endOfInputBehavior: EndOfInputBehavior?
-
-    @Option(
-      name: [.customShort("x"), .customLong("extras"), .long],
-      parsing: .upToNextOption,
-      help: .init(
-        "A list of optional, extra instructions to enable.",
-        discussion: ExtraInstruction.allCases
-          .map { "(\($0.rawValue)) \($0): \($0.details)" }
-          .joined(separator: "\n"),
-        valueName: "instructions"
-      )
-    ) var extraInstructions: [ExtraInstruction] = []
   }
 }

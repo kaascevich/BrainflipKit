@@ -83,20 +83,6 @@ struct ParsingTests {
     )
   }
 
-  @Test("Extra instructions parsing")
-  func extraInstructions() throws {
-    let program = try Program("!~«»?")
-    #expect(
-      program == [
-        .extra(.stop),
-        .extra(.bitwiseNot),
-        .extra(.leftShift),
-        .extra(.rightShift),
-        .extra(.random),
-      ]
-    )
-  }
-
   @Test("'Obscure Problem Tester'")
   func obscureProblemTester() throws {
     let program = try Program(hTest)
@@ -121,13 +107,6 @@ struct ParsingTests {
           ]),
           .move(-4),
           .add(-1),
-        ]),
-        .extra(.random),
-        .extra(.stop),
-        .loop([
-          .move(2),
-          .add(1),
-          .move(-2),
         ]),
         .move(1),
         .scan(2),
@@ -173,8 +152,6 @@ struct ParsingTests {
           .move(-1), .move(-1), .move(-1), .move(-1),
           .add(-1),
         ]),
-        .extra(.random),
-        .extra(.stop),
         .loop([
           .move(1), .move(1),
           .add(1),

@@ -23,6 +23,6 @@ extension Interpreter {
     }
 
     let character = Character(unicodeScalar)
-    self.outputStream.write(.init(character))
+    self.outputStream.write(String(character))
   }
 }

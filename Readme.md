@@ -26,4 +26,3 @@ _marginally_ unique.
   - Replacing `[-]` with an instruction that directly clears the cell
   - Replacing copy loops and multiplication loops with a dedicated instruction
   - Replacing scan loops (`[>]`, `[<<<]`, etc.) with a dedicated instruction
-- There are some extra instructions that can be enabled if you wish.

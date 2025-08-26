@@ -51,15 +51,11 @@ import CasePaths
   /// Repeatedly moves the cell pointer by the specified amount until it lands
   /// on a zero cell.
   case scan(Int32)
-
-  /// Performs an action corresponding to the wrapped ``ExtraInstruction``, or
-  /// does nothing if that instruction is not enabled.
-  case extra(ExtraInstruction)
 }
 
 extension Instruction {
   /// All characters that represent Brainflip instructions.
-  public static let validInstructions =
-    ["+", "-", ">", "<", "[", "]", ",", "."]
-    + ExtraInstruction.allCases.map(\.rawValue)
+  public static let validInstructions: [Character] = [
+    "+", "-", ">", "<", "[", "]", ",", ".",
+  ]
 }

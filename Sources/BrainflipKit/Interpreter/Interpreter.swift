@@ -64,27 +64,6 @@
 /// - term ``Instruction/scan(_:)``:
 ///     Moves the pointer to the next (or previous) zero cell.
 ///
-/// ### Extra Instructions
-///
-/// These instructions are disabled by default. They can be enabled via the
-/// `options` parameter to an initializer.
-///
-/// - term ``ExtraInstruction/stop``:
-///     Immediately ends the program by throwing a
-///     ``Interpreter/Error/stopInstruction`` error.
-///
-/// - term ``ExtraInstruction/bitwiseNot``:
-///     Performs a bitwise NOT on the current cell.
-///
-/// - term ``ExtraInstruction/leftShift``:
-///     Performs a lossy left bit-shift on the current cell.
-///
-/// - term ``ExtraInstruction/rightShift``:
-///     Performs a lossy right bit-shift on the current cell.
-///
-/// - term ``ExtraInstruction/random``:
-///     Sets the current cell to a random value.
-///
 /// All characters other than the ones listed above are treated as comments and
 /// ignored.
 ///
@@ -104,7 +83,6 @@
 ///
 /// ## Programs
 /// - ``Instruction``
-/// - ``ExtraInstruction``
 /// - ``Program``
 ///
 /// ## Running

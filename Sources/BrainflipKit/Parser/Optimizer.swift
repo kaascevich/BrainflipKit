@@ -46,7 +46,7 @@ extension Program {
       for i in addedValues.uniqued() {
         program.replace(
           [.setTo(0), .add(i)],
-          with: [.setTo(.init(bitPattern: i))]
+          with: [.setTo(CellValue(bitPattern: i))]
         )
       }
 
@@ -141,7 +141,7 @@ extension Program {
         else { return instruction }
 
         return .multiply(
-          factor: .init(factor),
+          factor: CellValue(factor),
           offset: Int(offset)
         )
       }

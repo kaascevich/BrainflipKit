@@ -33,12 +33,6 @@ private struct InstructionParser: Parser {
       ",".map { Instruction.input }
       ".".map { Instruction.output }
 
-      // MARK: Extras
-
-      First()
-        .map(.representing(ExtraInstruction.self))
-        .map(Instruction.extra)
-
       // MARK: Loops
 
       Parse(Instruction.loop) {

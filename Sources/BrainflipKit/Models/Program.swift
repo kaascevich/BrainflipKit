@@ -30,17 +30,6 @@ extension Program {
   /// |    `.`    | ``Instruction/output``   |
   /// |    `,`    | ``Instruction/input``    |
   ///
-  /// Additionally, the following instructions are also recognized (although
-  /// they are disabled by default):
-  ///
-  /// | Character |           Instruction           | Key Combo |
-  /// |-----------|---------------------------------|-----------|
-  /// |    `!`    | ``ExtraInstruction/stop``       |           |
-  /// |    `~`    | ``ExtraInstruction/bitwiseNot`` |           |
-  /// |    `»`    | ``ExtraInstruction/leftShift``  | ⌥ ⇧ \\    |
-  /// |    `«`    | ``ExtraInstruction/rightShift`` | ⌥ \\      |
-  /// |    `?`    | ``ExtraInstruction/random``     |           |
-  ///
   /// All other characters are ignored.
   ///
   /// ## Optimizations

@@ -26,9 +26,7 @@ import Foundation
     discussion: """
       Brainflip is an optimizing Swift interpreter for the brainfuck \
       programming language -- an incredibly simple language that only has 8 \
-      instructions. This interpreter features full Unicode support, as well as \
-      languange extensions in the form of extra instructions (which can be \
-      enabled or disabled at will).
+      instructions. This interpreter features full Unicode support.
 
       Here's a list of all the differences between Brainflip and a standard, \
       run-of-the-mill brainf**k interpreter:
@@ -37,7 +35,6 @@ import Foundation
       - Infinite tape in both directions
       - Customizable end-of-input behavior
       - Cell wrapping can be disabled
-      - Optional extra instructions
       - Relatively basic optimizations, including:
         - Condensing repeated instructions
         - Merging `+`/`-` and `<`/`>` instructions

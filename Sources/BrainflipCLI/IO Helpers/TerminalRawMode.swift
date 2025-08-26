@@ -49,7 +49,7 @@ extension IOHelpers {
     ///
     /// - Parameter enableEcho: Whether to echo characters as they are typed.
     static func enable(echoing enableEcho: Bool) {
-      var rawTerminalState = self.originalTerminalState
+      var rawTerminalState = originalTerminalState
 
       // enable raw mode by disabling line buffering
       rawTerminalState.c_lflag &= ~UInt(ICANON)
@@ -65,7 +65,7 @@ extension IOHelpers {
 
     /// Disables raw mode.
     static func disable() {
-      setTerminalState(self.originalTerminalState)
+      setTerminalState(originalTerminalState)
     }
   }
 }

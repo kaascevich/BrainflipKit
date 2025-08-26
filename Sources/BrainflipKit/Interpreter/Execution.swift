@@ -32,7 +32,7 @@ extension Interpreter {
   /// - Throws: An interpreter ``Error`` if an issue was encountered during
   ///   execution.
   public consuming func run() async throws(InterpreterError) -> Output {
-    try await self.runReturningFinalState().outputStream
+    try await runReturningFinalState().outputStream
   }
 
   /// Executes the provided instructions.
@@ -82,9 +82,6 @@ extension Interpreter {
       )
 
     case .scan(let increment): handleScanInstruction(increment)
-
-    case .extra(let instruction):
-      try handleExtraInstruction(instruction)
     }
   }
 }
