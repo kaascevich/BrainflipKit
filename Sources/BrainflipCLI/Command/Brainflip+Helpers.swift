@@ -35,10 +35,10 @@ extension BrainflipCommand {
       let linesToAppend =
         if case .loop(let instructions) = instruction {
           [
-            indent + "loop(",
+            indent + "loop {",
             // don't apply any indent here, because that'll be redundant
             formatProgram(instructions, indentLevel: indentLevel + 1),
-            indent + ")",
+            indent + "}",
           ]
         } else {
           // output the instruction's details

@@ -24,7 +24,7 @@ struct OptimizerTests {
     let program = try Program("+[-]+++[+]----")
     #expect(
       program == [
-        .setTo(.init(bitPattern: -4)),
+        .setTo(.init(bitPattern: -4))
       ]
     )
   }
@@ -72,21 +72,11 @@ struct OptimizerTests {
 
   @Test("Dead loops optimization")
   func deadLoopsOptimization() throws {
-    do {
-      let program = try Program("+[-][][->+<]")
-      #expect(program == [
-        .setTo(0),
-      ])
-    }
-
-//    do {
-//      let program = try Program("[->+<][-]")
-//      #expect(program.isEmpty)
-//    }
-//
-//    do {
-//      let program = try Program("[-]")
-//      #expect(program.isEmpty)
-//    }
+    let program = try Program("+[-][][->+<]")
+    #expect(
+      program == [
+        .setTo(0)
+      ]
+    )
   }
 }
