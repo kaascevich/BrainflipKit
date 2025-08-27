@@ -23,7 +23,8 @@ public struct InterpreterOptions: Sendable {
     case throwError
   }
 
-  /// Creates an `Options` instance to configure an ``Interpreter`` with.
+  /// Creates an `InterpreterOptions` instance to configure an ``Interpreter``
+  /// with.
   ///
   /// - Parameters:
   ///   - allowCellWraparound: Whether or not to allow cell overflow and

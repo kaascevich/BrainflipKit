@@ -17,10 +17,10 @@ extension InterpreterTests.InstructionTests {
     }
 
     @Test("Multiply instruction")
-    mutating func multiplyInstruction() async throws {
+    mutating func multiplyInstruction() throws {
       interpreter.currentCellValue = 3
       interpreter.tape[2] = 5
-      try await interpreter.handleInstruction(
+      try interpreter.handleInstruction(
         .multiply(factor: 4, offset: 2)
       )
       #expect(interpreter.tape[2] == 17)  // (3*4) + 5
@@ -28,22 +28,22 @@ extension InterpreterTests.InstructionTests {
     }
 
     @Test("Multiply overflow (multiplication)")
-    mutating func multiplyOverflowMultiplication() async throws {
+    mutating func multiplyOverflowMultiplication() throws {
       interpreter.currentCellValue = .max
       interpreter.tape[2] = 5
-      await #expect(throws: InterpreterError.cellOverflow(position: 0)) {
-        try await interpreter.handleInstruction(
+      #expect(throws: InterpreterError.cellOverflow(position: 0)) {
+        try interpreter.handleInstruction(
           .multiply(factor: 4, offset: 2)
         )
       }
     }
 
     @Test("Multiply overflow (addition)")
-    mutating func multiplyOverflowAddition() async throws {
+    mutating func multiplyOverflowAddition() throws {
       interpreter.currentCellValue = 3
       interpreter.tape[2] = .max
-      await #expect(throws: InterpreterError.cellOverflow(position: 2)) {
-        try await interpreter.handleInstruction(
+      #expect(throws: InterpreterError.cellOverflow(position: 2)) {
+        try interpreter.handleInstruction(
           .multiply(factor: 4, offset: 2)
         )
       }

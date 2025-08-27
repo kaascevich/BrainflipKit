@@ -63,7 +63,7 @@
 /// .>---.+++++++..+++.>>.<-.<.+++.------.--------.>>+.
 /// """
 /// let interpreter = try Interpreter(program)
-/// let output = try await interpreter.run()
+/// let output = try interpreter.run()
 /// print(output) // Hello World!
 /// ```
 ///
@@ -78,7 +78,7 @@
 /// - ``runReturningFinalState()``
 ///
 /// ## Options
-/// - ``Options``
+/// - ``InterpreterOptions``
 @dynamicMemberLookup
 public struct Interpreter<
   Input: Sequence<Unicode.Scalar>,
@@ -91,7 +91,7 @@ public struct Interpreter<
   public let options: InterpreterOptions
 
   /// This interpreter's internal state.
-  public private(set) var state: State
+  @usableFromInline private(set) var state: State
 
   // MARK: - Initializers
 

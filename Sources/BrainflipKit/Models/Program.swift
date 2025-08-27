@@ -7,7 +7,7 @@ public typealias Program = [Instruction]
 extension Program {
   /// Parses the given string into a `Program` instance.
   ///
-  /// The following mappings are used to convert a `Character`  into an
+  /// The following mappings are used to convert a `Character` into an
   /// ``Instruction``:
   ///
   /// | Character |       Instruction        |
@@ -55,12 +55,12 @@ extension Program {
   /// `multiply(factor, offset)` instructions.
   ///
   /// ```
-  /// loop (
+  /// loop {
   ///   add(-1)
   ///   move(offset)
   ///   add(factor)
   ///   move(-offset)
-  /// )
+  /// }
   /// ```
   ///
   /// For example, `[-<<<++>>>]` would be reduced to

@@ -14,7 +14,7 @@ extension InterpreterTests.InstructionTests {
     }
 
     @Test("Scan instruction")
-    mutating func scanInstruction() async throws {
+    mutating func scanInstruction() throws {
       interpreter.tape = [
         0: 1,
         1: 2,
@@ -25,7 +25,7 @@ extension InterpreterTests.InstructionTests {
         6: 0,  // this cell is zero, and at an even index
       ]
 
-      try await interpreter.handleInstruction(.scan(2))
+      try interpreter.handleInstruction(.scan(2))
       #expect(
         interpreter.cellPointer == 6,
         """

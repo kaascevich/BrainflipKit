@@ -3,10 +3,9 @@
 
 import ArgumentParser
 import BrainflipKit
-import Foundation
 
 extension Brainflip {
-  struct Parse: AsyncParsableCommand {
+  struct Parse: ParsableCommand {
     // MARK: - Command Configuration
 
     static let configuration = CommandConfiguration(
@@ -18,7 +17,7 @@ extension Brainflip {
     @OptionGroup(title: "Program Options")
     var programOptions: ProgramOptionGroup
 
-    func run() async throws {
+    func run() throws {
       let parsedProgram = try programOptions.parseProgram()
       print(parsedProgram.formatted())
     }

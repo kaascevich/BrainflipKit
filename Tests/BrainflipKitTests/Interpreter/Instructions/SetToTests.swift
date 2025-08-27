@@ -14,9 +14,9 @@ extension InterpreterTests.InstructionTests {
     }
 
     @Test("Set-to instruction")
-    mutating func setToInstruction() async throws {
+    mutating func setToInstruction() throws {
       interpreter.currentCellValue = 69
-      try await interpreter.handleInstruction(.setTo(42))
+      try interpreter.handleInstruction(.setTo(42))
       #expect(interpreter.currentCellValue == 42)
     }
   }

@@ -14,23 +14,23 @@ extension InterpreterTests.InstructionTests {
     }
 
     @Test("Output instruction")
-    mutating func outputInstruction() async throws {
+    mutating func outputInstruction() throws {
       interpreter.currentCellValue = 0x42  // ASCII code for "B"
-      try await interpreter.handleInstruction(.output)
+      try interpreter.handleInstruction(.output)
       #expect(interpreter.outputStream == "B")
     }
 
     @Test("Output instruction with Unicode characters")
-    mutating func outputInstructionUnicode() async throws {
+    mutating func outputInstructionUnicode() throws {
       interpreter.currentCellValue = 0x2192  // Unicode value for "→"
-      try await interpreter.handleInstruction(.output)
+      try interpreter.handleInstruction(.output)
       #expect(interpreter.outputStream == "→")
     }
 
     @Test("Output instruction with invalid Unicode characters")
-    mutating func outputInstructionInvalidUnicode() async throws {
+    mutating func outputInstructionInvalidUnicode() throws {
       interpreter.currentCellValue = 0x110000  // max Unicode value is 0x10FFFF
-      try await interpreter.handleInstruction(.output)
+      try interpreter.handleInstruction(.output)
       #expect(interpreter.outputStream.isEmpty)
     }
   }

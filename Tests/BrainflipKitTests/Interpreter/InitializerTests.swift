@@ -20,13 +20,13 @@ extension InterpreterTests {
     }
 
     @Test("Unicode input")
-    func unicodeInput() async throws {
+    func unicodeInput() throws {
       let interpreter = try Interpreter(
         ",[.,]",
         input: "→",
         options: .init(endOfInputBehavior: .setTo(0))
       )
-      let output = try await interpreter.run()
+      let output = try interpreter.run()
       #expect(output == "→")
     }
   }

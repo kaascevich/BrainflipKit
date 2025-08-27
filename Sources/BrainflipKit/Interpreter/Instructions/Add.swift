@@ -6,10 +6,10 @@ extension Interpreter {
   ///
   /// - Parameter value: The value to add to the current cell value.
   ///
-  /// - Throws: ``Error/cellOverflow`` or ``Error/cellUnderflow`` if an
-  ///   overflow/underflow occurs and ``Options/allowCellWraparound`` is
-  ///   `false`.
-  mutating func handleAddInstruction(_ value: Int32) throws(InterpreterError) {
+  /// - Throws: ``InterpreterError/cellOverflow`` or
+  ///   ``InterpreterError/cellUnderflow`` if an overflow/underflow occurs and
+  ///   ``InterpreterOptions/allowCellWraparound`` is `false`.
+  mutating func handleAddInstruction(_ value: Int32) throws {
     // depending on the value's sign, we'll use a specific method to update the
     // current cell while checking for wraparound, and we'll also throw a
     // specific error if it occurs

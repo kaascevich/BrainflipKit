@@ -10,11 +10,11 @@ extension InterpreterTests {
   @Suite("Program execution")
   struct ExecutionTests {
     @Test("Basic program")
-    func basicProgram() async throws {
+    func basicProgram() throws {
       // increments cell 1 and decrements cell 2
       let interpreter = try Interpreter("+>-<")
 
-      let state = try await interpreter.runReturningFinalState()
+      let state = try interpreter.runReturningFinalState()
 
       #expect(
         state.tape == [
@@ -26,47 +26,47 @@ extension InterpreterTests {
     }
 
     @Test("Simple loops")
-    func simpleLoops() async throws {
+    func simpleLoops() throws {
       // sets cell 2 to 9
       let interpreter = try Interpreter("+++[>+++<-]")
 
-      let state = try await interpreter.runReturningFinalState()
+      let state = try interpreter.runReturningFinalState()
       #expect(state.tape[1] == 9)
     }
 
     @Test("Nested loops")
-    func nestedLoops() async throws {
+    func nestedLoops() throws {
       // sets cell 3 to 27
       let interpreter = try Interpreter("+++[>+++[>+++<-]<-]")
 
-      let state = try await interpreter.runReturningFinalState()
+      let state = try interpreter.runReturningFinalState()
       #expect(state.tape[2] == 27)
     }
 
     @Test("Running with input")
-    func runningWithInput() async throws {
+    func runningWithInput() throws {
       // outputs the first input character twice, then the
       // third character once
       let interpreter = try Interpreter(",..,,.", input: "hello")
 
-      let output = try await interpreter.run()
+      let output = try interpreter.run()
       #expect(output == "hhl")
     }
 
     @Test("'Hello World!' program")
-    func helloWorldProgram() async throws {
+    func helloWorldProgram() throws {
       let program = """
         ++++++++[>++++[>++>+++>+++>+<<<<-]>+>+>->>+[<]<-]>>
         .>---.+++++++..+++.>>.<-.<.+++.------.--------.>>+.
         """
       let interpreter = try Interpreter(program)
 
-      let output = try await interpreter.run()
+      let output = try interpreter.run()
       #expect(output == "Hello World!")
     }
 
     @Test("Comprehensive test", .timeLimit(.minutes(1)))
-    func comprehensiveTest() async throws {
+    func comprehensiveTest() throws {
       let program = try String(
         contentsOf: Bundle.module.url(
           forResource: "Resources/Examples/comprehensive",
@@ -76,12 +76,12 @@ extension InterpreterTests {
       )
       let interpreter = try Interpreter(program)
 
-      let output = try await interpreter.run()
+      let output = try interpreter.run()
       #expect(output == "Hello, world!\n")
     }
 
     @Test("Factorization test", .timeLimit(.minutes(1)))
-    func factorizationTest() async throws {
+    func factorizationTest() throws {
       let program = try String(
         contentsOf: Bundle.module.url(
           forResource: "Resources/Examples/Factor",
@@ -91,7 +91,7 @@ extension InterpreterTests {
       )
       let interpreter = try Interpreter(program, input: "2346\n")
 
-      let output = try await interpreter.run()
+      let output = try interpreter.run()
       #expect(output == "2346: 2 3 17 23\n")
     }
   }

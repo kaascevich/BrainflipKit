@@ -14,17 +14,17 @@ extension InterpreterTests.InstructionTests {
     }
 
     @Test("Move instruction - right")
-    mutating func moveInstructionRight() async throws {
+    mutating func moveInstructionRight() throws {
       for i in 1...10 {
-        try await interpreter.handleInstruction(.move(1))
+        try interpreter.handleInstruction(.move(1))
         #expect(interpreter.cellPointer == i)
       }
     }
 
     @Test("Move instruction - left")
-    mutating func moveInstructionLeft() async throws {
+    mutating func moveInstructionLeft() throws {
       for i in (1...10).map(-) {
-        try await interpreter.handleInstruction(.move(-1))
+        try interpreter.handleInstruction(.move(-1))
         #expect(interpreter.cellPointer == i)
       }
     }

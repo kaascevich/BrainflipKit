@@ -3,10 +3,9 @@
 
 import ArgumentParser
 import BrainflipKit
-import Foundation
 
 extension Brainflip {
-  struct Run: AsyncParsableCommand {
+  struct Run: ParsableCommand {
     // MARK: - Command Configuration
 
     static let configuration = CommandConfiguration(
@@ -26,9 +25,9 @@ extension Brainflip {
 
     // MARK: - Implementation
 
-    /// Creates an ``Interpreter/Options`` struct from the command-line options.
+    /// Creates an ``InterpreterOptions`` struct from the command-line options.
     ///
-    /// - Returns: An ``Interpreter/Options`` struct.
+    /// - Returns: An ``InterpreterOptions`` struct.
     private func makeInterpreterOptions() -> InterpreterOptions {
       let endOfInputBehavior: InterpreterOptions.EndOfInputBehavior? =
         switch interpreterOptions.endOfInputBehavior {
@@ -44,7 +43,7 @@ extension Brainflip {
       )
     }
 
-    func run() async throws {
+    func run() throws {
       let parsedProgram = try programOptions.parseProgram()
 
       IOHelpers.TerminalRawMode.enable(echoing: inputOptions.inputEchoing)
@@ -68,7 +67,7 @@ extension Brainflip {
 
       // StandardOutputStream prints the output for us, so we don't need to do
       // it ourselves
-      _ = try await interpreter.run()
+      _ = try interpreter.run()
     }
   }
 }

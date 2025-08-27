@@ -6,13 +6,11 @@ extension Interpreter {
   ///
   /// - Parameter instructions: The instructions to loop over.
   ///
-  /// - Throws: An ``Error`` if an error occurs while executing the
+  /// - Throws: An ``InterpreterError`` if an error occurs while executing the
   ///   instructions.
-  mutating func handleLoop(
-    _ instructions: [Instruction]
-  ) async throws(InterpreterError) {
+  mutating func handleLoop(_ instructions: [Instruction]) throws {
     while self.currentCellValue != 0 {
-      try await execute(instructions)
+      try execute(instructions)
     }
   }
 }

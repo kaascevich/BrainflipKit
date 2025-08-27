@@ -8,12 +8,12 @@ extension Interpreter {
   ///   - factor: The factor to multiply the current cell by.
   ///   - offset: The offset from the current cell to store the result.
   ///
-  /// - Throws: ``Error/cellOverflow`` if an overflow occurs and
-  ///   ``Interpreter/Options/allowCellWraparound`` is `false`.
+  /// - Throws: ``InterpreterError/cellOverflow`` if an overflow occurs and
+  ///   ``InterpreterOptions/allowCellWraparound`` is `false`.
   mutating func handleMultiplyInstruction(
     multiplyingBy factor: CellValue,
     storingAtOffset offset: Int
-  ) throws(InterpreterError) {
+  ) throws {
     let offsettedPointer = self.cellPointer + offset
 
     // MARK: Multiplying
@@ -23,7 +23,7 @@ extension Interpreter {
 
     if multiplyOverflow {
       guard options.allowCellWraparound else {
-        throw .cellOverflow(position: self.cellPointer)
+        throw InterpreterError.cellOverflow(position: self.cellPointer)
       }
     }
 
@@ -36,7 +36,7 @@ extension Interpreter {
 
     if additionOverflow {
       guard options.allowCellWraparound else {
-        throw .cellOverflow(position: offsettedPointer)
+        throw InterpreterError.cellOverflow(position: offsettedPointer)
       }
     }
 

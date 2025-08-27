@@ -48,8 +48,7 @@ extension Brainflip {
     /// - Throws:
     ///   - ``ValidationError`` if both the `<file-path>` and `-p/--program`
     ///     options are provided (or if neither is).
-    ///   - ``ValidationError`` if a file path can't be opened for whatever
-    ///     reason.
+    ///   - ``Error`` if a file path can't be opened for whatever reason.
     private var programSource: String {
       get throws {
         switch (path, program) {

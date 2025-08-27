@@ -6,10 +6,10 @@ extension Interpreter {
   ///
   /// - Returns: The final state of the interpreter.
   ///
-  /// - Throws: An interpreter ``Error`` if an issue was encountered during
+  /// - Throws: ``InterpreterError`` if an issue was encountered during
   ///   execution.
-  public consuming func runReturningFinalState() async throws(InterpreterError) -> State {
-    try await execute(program)
+  public consuming func runReturningFinalState() throws -> State {
+    try execute(program)
     return state
   }
 
@@ -17,24 +17,21 @@ extension Interpreter {
   ///
   /// - Returns: The program's output.
   ///
-  /// - Throws: An interpreter ``Error`` if an issue was encountered during
+  /// - Throws: ``InterpreterError`` if an issue was encountered during
   ///   execution.
-  public consuming func run() async throws(InterpreterError) -> Output {
-    try await runReturningFinalState().outputStream
+  public consuming func run() throws -> Output {
+    try runReturningFinalState().outputStream
   }
 
   /// Executes the provided instructions.
   ///
   /// - Parameter instructions: The instructions to execute.
   ///
-  /// - Throws: An interpreter ``Error`` if an issue was encountered during
+  /// - Throws: ``InterpreterError`` if an issue was encountered during
   ///   execution.
-  mutating func execute(
-    _ instructions: [Instruction]
-  ) async throws(InterpreterError) {
+  mutating func execute(_ instructions: [Instruction]) throws {
     for instruction in instructions {
-      try await handleInstruction(instruction)
-      await Task.yield()  // yield to allow other tasks to run
+      try handleInstruction(instruction)
     }
   }
 
@@ -42,11 +39,9 @@ extension Interpreter {
   ///
   /// - Parameter instruction: The instruction to execute.
   ///
-  /// - Throws: An interpreter ``Error`` if an issue was encountered during
+  /// - Throws: ``InterpreterError`` if an issue was encountered during
   ///   execution.
-  mutating func handleInstruction(
-    _ instruction: Instruction
-  ) async throws(InterpreterError) {
+  mutating func handleInstruction(_ instruction: Instruction) throws {
     switch instruction {
     // MARK: Core
 
@@ -54,7 +49,7 @@ extension Interpreter {
 
     case let .move(count): handleMoveInstruction(count)
 
-    case let .loop(instructions): try await handleLoop(instructions)
+    case let .loop(instructions): try handleLoop(instructions)
 
     case .output: handleOutputInstruction()
     case .input: try handleInputInstruction()

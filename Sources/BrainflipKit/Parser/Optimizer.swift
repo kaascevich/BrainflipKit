@@ -2,7 +2,6 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
 private import Algorithms
-import CasePaths
 
 extension Program {
   /// Contains optimizer functions for Brainflip programs.

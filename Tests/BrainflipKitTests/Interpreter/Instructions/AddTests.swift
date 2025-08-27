@@ -14,14 +14,14 @@ extension InterpreterTests.InstructionTests {
     }
 
     @Test("Add instruction")
-    mutating func addInstruction() async throws {
+    mutating func addInstruction() throws {
       for i in 1...500 {
-        try await interpreter.handleInstruction(.add(1))
+        try interpreter.handleInstruction(.add(1))
         #expect(interpreter.tape.first?.value == CellValue(i))
       }
 
       interpreter.currentCellValue = .max
-      try await interpreter.handleInstruction(.add(1))
+      try interpreter.handleInstruction(.add(1))
       #expect(
         interpreter.tape.first?.value == 0,
         "increment instruction should wrap around"
@@ -29,8 +29,8 @@ extension InterpreterTests.InstructionTests {
     }
 
     @Test("Add instruction - negative")
-    mutating func addInstructionNegative() async throws {
-      try await interpreter.handleInstruction(.add(-1))
+    mutating func addInstructionNegative() throws {
+      try interpreter.handleInstruction(.add(-1))
       #expect(
         interpreter.tape.first?.value == .max,
         "decrement instruction should wrap around"
@@ -38,7 +38,7 @@ extension InterpreterTests.InstructionTests {
 
       interpreter.currentCellValue = 500
       for i in (0..<500).reversed() {
-        try await interpreter.handleInstruction(.add(-1))
+        try interpreter.handleInstruction(.add(-1))
         #expect(interpreter.tape.first?.value == CellValue(i))
       }
     }

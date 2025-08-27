@@ -9,10 +9,10 @@ extension InterpreterTests.InstructionTests {
   @Suite("Input instruction")
   struct InputTests {
     @Test("Input instruction")
-    func inputInstruction() async throws {
+    func inputInstruction() throws {
       var interpreter = try Interpreter("", input: "&")
 
-      try await interpreter.handleInstruction(.input)
+      try interpreter.handleInstruction(.input)
       #expect(interpreter.currentCellValue == 0x26)  // ASCII code for "&"
     }
   }

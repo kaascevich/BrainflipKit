@@ -12,10 +12,7 @@ extension Interpreter {
     ///   - inputIterator: An iterator over the input that will be provided to
     ///     the program.
     ///   - outputStream: The stream to write outputted characters to.
-    internal init(
-      inputSequence: Input,
-      outputStream: Output = ""
-    ) {
+    internal init(inputSequence: Input, outputStream: Output = "") {
       self.inputIterator = inputSequence.makeIterator()
       self.outputStream = outputStream
     }
@@ -63,7 +60,7 @@ extension Interpreter {
     ///
     /// # See Also
     /// - ``Instruction/input``
-    public internal(set) var inputIterator: any IteratorProtocol<Unicode.Scalar>
+    public internal(set) var inputIterator: Input.Iterator
 
     /// The output stream.
     ///

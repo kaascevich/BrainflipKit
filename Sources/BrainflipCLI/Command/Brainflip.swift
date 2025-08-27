@@ -2,10 +2,9 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
 import ArgumentParser
-import Foundation
 
 /// The main command for the Brainflip CLI.
-@main struct Brainflip: AsyncParsableCommand {
+@main struct Brainflip: ParsableCommand {
   // MARK: - Command Configuration
 
   static let configuration = CommandConfiguration(
