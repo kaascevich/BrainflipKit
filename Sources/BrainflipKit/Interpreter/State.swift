@@ -94,5 +94,8 @@ extension Interpreter {
       @inlinable get { tape[cellPointer, default: 0] }
       @usableFromInline set { tape[cellPointer] = newValue }
     }
+
+    /// The total number of instructions that have been executed.
+    public internal(set) var totalInstructionsExecuted: Int = 0
   }
 }

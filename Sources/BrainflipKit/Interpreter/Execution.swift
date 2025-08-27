@@ -66,5 +66,7 @@ extension Interpreter {
 
     case let .scan(increment): handleScanInstruction(increment)
     }
+
+    self.totalInstructionsExecuted += 1
   }
 }

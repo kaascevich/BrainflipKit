@@ -54,5 +54,12 @@ extension Brainflip {
         valueName: "behavior"
       ),
     ) var endOfInputBehavior: EndOfInputBehavior?
+
+    @Flag(
+      name: .long,
+      help: """
+        Whether to show some statistics when the program finishes running.
+        """
+    ) var stats = false
   }
 }

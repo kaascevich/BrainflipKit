@@ -181,7 +181,7 @@ public struct Interpreter<
   ///
   /// - Returns: The value of this interpreter's state at the specified key
   ///   path.
-  public internal(set) subscript<Value>(
+  @inline(__always) public internal(set) subscript<Value>(
     dynamicMember member: WritableKeyPath<State, Value>
   ) -> Value {
     @inlinable get { state[keyPath: member] }
