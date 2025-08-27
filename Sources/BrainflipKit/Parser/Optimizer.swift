@@ -1,17 +1,5 @@
-// This file is part of BrainflipKit.
-// Copyright © 2024-2025 Kaleb A. Ascevich
-//
-// BrainflipKit is free software: you can redistribute it and/or modify it under
-// the terms of the GNU Affero General Public License (GNU AGPL) as published by
-// the Free Software Foundation, either version 3 of the License, or (at your
-// option) any later version.
-//
-// BrainflipKit is distributed in the hope that it will be useful, but WITHOUT
-// ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
-// FOR A PARTICULAR PURPOSE. See the GNU AGPL for more details.
-//
-// You should have received a copy of the GNU AGPL along with BrainflipKit. If
-// not, see <https://www.gnu.org/licenses/>.
+// SPDX-FileCopyrightText: 2024 Kaleb A. Ascevich
+// SPDX-License-Identifier: AGPL-3.0-or-later
 
 private import Algorithms
 import CasePaths
@@ -30,27 +18,33 @@ extension Program {
     ///
     /// - Parameter program: The program to optimize.
     private static func optimizeClearLoops(_ program: inout Program) {
-      program.replace([.loop([.add(-1)])], with: [.setTo(0)])
-      program.replace([.loop([.add(+1)])], with: [.setTo(0)])
+      // MARK: [-]/[+] -> setTo(0)
+      program = program.map { instruction in
+        guard
+          case let .loop(instructions) = instruction,
+          instructions == [.add(1)] || instructions == [.add(-1)]
+        else {
+          return instruction
+        }
 
-      let windows = program.windows(ofCount: 2)
-      var addedValues: [Int32] = []
-      for window in windows {
+        return .setTo(0)
+      }
+
+      // MARK: setTo(lhs) add(rhs) -> setTo(lhs + rhs)
+      let windows = [_](program.enumerated()).windows(ofCount: 2)
+      for window in windows.reversed() {
+        let (firstIndex, first) = window.first!
+        let (secondIndex, second) = window.last!
+
         // check if the first instruction is a clear loop
         // and the second is an `add` instruction
-        if window.first == .setTo(0), case .add(let value) = window.last {
-          addedValues.append(value)
+        if case let .setTo(lhs) = first, case let .add(rhs) = second {
+          program[firstIndex] = .setTo(CellValue(bitPattern: Int32(lhs) + rhs))
+          program.remove(at: secondIndex)
         }
       }
 
-      for i in addedValues.uniqued() {
-        program.replace(
-          [.setTo(0), .add(i)],
-          with: [.setTo(CellValue(bitPattern: i))]
-        )
-      }
-
-      // MARK: add setTo -> setTo
+      // MARK: add(_) setTo(rhs) -> setTo(rhs)
       for index in program.indices.dropLast().reversed() {
         let first = program[index]
         let next = program[index + 1]
@@ -134,8 +128,8 @@ extension Program {
         // check if the loop's instructions match what we're looking for
         guard
           case .add(-1) = instructions[0],
-          case .move(let offset) = instructions[1],
-          case .add(let factor) = instructions[2],
+          case let .move(offset) = instructions[1],
+          case let .add(factor) = instructions[2],
           case .move(-offset) = instructions[3],
           factor >= 0
         else { return instruction }
@@ -158,24 +152,15 @@ extension Program {
     /// - Parameter program: The program to optimize.
     private static func removeDeadLoops(_ program: inout Program) {
       let windows = [_](program.enumerated()).windows(ofCount: 2)
-      var indicesToRemove: [Int] = []
-      for window in windows {
-        if let first = window.first,
-          let last = window.last,
-          first.element.is(\.loop) || first.element.is(\.setTo),
-          last.element.is(\.loop)
-        {
+      for window in windows.reversed() {
+        let (_, first) = window.first!
+        let (secondIndex, second) = window.last!
+        if first.is(\.loop) || first.is(\.setTo), second.is(\.loop) {
           // there's a loop immediately after another loop, so the second loop
           // will never be executed (because the current cell is always 0
           // immediately after a loop)
-          indicesToRemove.append(window.last!.offset)
+          program.remove(at: secondIndex)
         }
-      }
-
-      // remove indices from last to first, so as not to invalidate indices
-      // before we've used them
-      for index in indicesToRemove.reversed() {
-        program.remove(at: index)
       }
     }
 

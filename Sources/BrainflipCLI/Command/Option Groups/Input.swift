@@ -1,23 +1,13 @@
-// This file is part of BrainflipKit.
-// Copyright © 2024-2025 Kaleb A. Ascevich
-//
-// BrainflipKit is free software: you can redistribute it and/or modify it under
-// the terms of the GNU Affero General Public License (GNU AGPL) as published by
-// the Free Software Foundation, either version 3 of the License, or (at your
-// option) any later version.
-//
-// BrainflipKit is distributed in the hope that it will be useful, but WITHOUT
-// ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
-// FOR A PARTICULAR PURPOSE. See the GNU AGPL for more details.
-//
-// You should have received a copy of the GNU AGPL along with BrainflipKit. If
-// not, see <https://www.gnu.org/licenses/>.
+// SPDX-FileCopyrightText: 2024 Kaleb A. Ascevich
+// SPDX-License-Identifier: AGPL-3.0-or-later
 
 import ArgumentParser
 
-extension BrainflipCommand {
+extension Brainflip {
   /// Options related to input.
   struct InputOptionGroup: ParsableArguments {
+    // MARK: - Options and Flags
+
     @Option(
       name: .shortAndLong,
       help: .init(
@@ -37,7 +27,7 @@ extension BrainflipCommand {
           This flag has no effect if the '-i/--input' option is specified.
           """
       )
-    ) var inputEchoing: Bool = true
+    ) var inputEchoing = true
 
     @Flag(
       name: .customLong("bell"),
@@ -48,6 +38,6 @@ extension BrainflipCommand {
           This flag has no effect if the '-i/--input' option is specified.
           """
       )
-    ) var bellOnInputRequest: Bool = true
+    ) var bellOnInputRequest = true
   }
 }

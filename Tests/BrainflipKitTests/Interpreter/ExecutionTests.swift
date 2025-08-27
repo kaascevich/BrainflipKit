@@ -1,17 +1,5 @@
-// This file is part of BrainflipKit.
-// Copyright © 2024-2025 Kaleb A. Ascevich
-//
-// BrainflipKit is free software: you can redistribute it and/or modify it under
-// the terms of the GNU Affero General Public License (GNU AGPL) as published by
-// the Free Software Foundation, either version 3 of the License, or (at your
-// option) any later version.
-//
-// BrainflipKit is distributed in the hope that it will be useful, but WITHOUT
-// ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
-// FOR A PARTICULAR PURPOSE. See the GNU AGPL for more details.
-//
-// You should have received a copy of the GNU AGPL along with BrainflipKit. If
-// not, see <https://www.gnu.org/licenses/>.
+// SPDX-FileCopyrightText: 2024 Kaleb A. Ascevich
+// SPDX-License-Identifier: AGPL-3.0-or-later
 
 import Foundation
 import Testing
@@ -77,7 +65,6 @@ extension InterpreterTests {
       #expect(output == "Hello World!")
     }
 
-    // FIXME: Times out
     @Test("Comprehensive test", .timeLimit(.minutes(1)))
     func comprehensiveTest() async throws {
       let program = try String(
@@ -91,6 +78,21 @@ extension InterpreterTests {
 
       let output = try await interpreter.run()
       #expect(output == "Hello, world!\n")
+    }
+
+    @Test("Factorization test", .timeLimit(.minutes(1)))
+    func factorizationTest() async throws {
+      let program = try String(
+        contentsOf: Bundle.module.url(
+          forResource: "Resources/Examples/Factor",
+          withExtension: "bf"
+        )!,
+        encoding: .utf8
+      )
+      let interpreter = try Interpreter(program, input: "2346\n")
+
+      let output = try await interpreter.run()
+      #expect(output == "2346: 2 3 17 23\n")
     }
   }
 }
