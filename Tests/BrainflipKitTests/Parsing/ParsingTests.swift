@@ -5,8 +5,7 @@ import Testing
 
 @testable import typealias BrainflipKit.Program
 
-@Suite("Program parsing")
-struct ParsingTests {
+@Suite("Program parsing") struct ParsingTests {
   let hTest = """
     This program tests for several obscure interpreter problems;
     it should output an H

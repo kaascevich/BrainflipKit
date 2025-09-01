@@ -9,10 +9,10 @@ import CasePaths
   /// Increments (or decrements) the current cell by a value.
   ///
   /// The default behavior on overflow is to wrap around.
-  case add(Int32)
+  case add(CellValue)
 
   /// Increments (or decrements) the cell pointer by a value.
-  case move(Int32)
+  case move(CellPointer)
 
   /// Loops over the contained instructions.
   case loop([Self])
@@ -34,11 +34,11 @@ import CasePaths
 
   /// Multiplies the current cell by `value`, then adds the result to the cell
   /// `offset` cells away from the current one.
-  case multiply(factor: CellValue, offset: Int)
+  case multiply(factor: CellValue, offset: CellPointer)
 
   /// Repeatedly moves the cell pointer by the specified amount until it lands
   /// on a zero cell.
-  case scan(Int32)
+  case scan(CellPointer)
 }
 
 extension Instruction {

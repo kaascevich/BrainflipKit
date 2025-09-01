@@ -6,26 +6,17 @@ import Testing
 @testable import BrainflipKit
 
 extension InterpreterTests.InstructionTests {
-  @Suite("Move instruction")
-  struct MovementTests {
+  @Suite("Move instruction") struct MovementTests {
     var interpreter: Interpreter<String.UnicodeScalarView, String>
     init() throws {
       self.interpreter = try .init("")
     }
 
-    @Test("Move instruction - right")
-    mutating func moveInstructionRight() throws {
+    @Test("Move instruction", arguments: -5...5)
+    mutating func moveInstruction(offset: CellPointer) throws {
       for i in 1...10 {
-        try interpreter.handleInstruction(.move(1))
-        #expect(interpreter.cellPointer == i)
-      }
-    }
-
-    @Test("Move instruction - left")
-    mutating func moveInstructionLeft() throws {
-      for i in (1...10).map(-) {
-        try interpreter.handleInstruction(.move(-1))
-        #expect(interpreter.cellPointer == i)
+        try interpreter.handleInstruction(.move(offset))
+        #expect(interpreter.cellPointer == i * offset)
       }
     }
   }

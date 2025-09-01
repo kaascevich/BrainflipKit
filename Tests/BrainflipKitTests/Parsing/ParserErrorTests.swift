@@ -6,17 +6,15 @@ import Testing
 @testable import typealias BrainflipKit.Program
 
 extension ParsingTests {
-  @Suite("Parsing errors")
-  struct ParserErrorTests {
-    @Test("Unpaired loops")
-    func unpairedLoops() {
-      let invalidPrograms = [
-        "[", "]", "][", "]][", "][[", "[][", "][]", "[[]", "[]]",
-      ]
-      for program in invalidPrograms {
-        #expect(throws: Error.self) {
-          try Program(program)
-        }
+  @Suite("Parsing errors") struct ParserErrorTests {
+    @Test("Unpaired loops", arguments: [
+      "[", "]", "][", "]][", "][[", "[][", "][]", "[[]", "[]]",
+      try #require(exampleProgram(named: "unmatchedleft")),
+      try #require(exampleProgram(named: "unmatchedright")),
+    ])
+    func unpairedLoops(_ program: String) {
+      #expect(throws: (any Error).self) {
+        try Program(program)
       }
     }
   }

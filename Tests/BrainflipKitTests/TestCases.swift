@@ -3,8 +3,6 @@
 
 import Testing
 
-@Suite("Interpreter")
-enum InterpreterTests {
-  @Suite("Instructions")
-  enum InstructionTests {}
+@Suite("Interpreter") struct InterpreterTests {
+  @Suite("Instructions") struct InstructionTests {}
 }

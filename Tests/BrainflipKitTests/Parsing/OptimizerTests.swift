@@ -5,16 +5,11 @@ import Testing
 
 @testable import typealias BrainflipKit.Program
 
-@Suite("Program optimization")
-struct OptimizerTests {
+@Suite("Program optimization") struct OptimizerTests {
   @Test("Clear-loop optimization")
   func clearLoopOptimization() throws {
     let program = try Program("+[-]+++[+]----")
-    #expect(
-      program == [
-        .setTo(.init(bitPattern: -4))
-      ]
-    )
+    #expect(program == [.setTo(-4)])
   }
 
   @Test("Adjacent instruction optimization")
@@ -61,10 +56,6 @@ struct OptimizerTests {
   @Test("Dead loops optimization")
   func deadLoopsOptimization() throws {
     let program = try Program("+[-][][->+<]")
-    #expect(
-      program == [
-        .setTo(0)
-      ]
-    )
+    #expect(program == [.setTo(0)])
   }
 }

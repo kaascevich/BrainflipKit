@@ -43,7 +43,7 @@ struct ProgramParser: Parser {
     }
 
     if optimizations {
-      programParser.map(Program.Optimizer.optimizingWithoutNesting)
+      programParser.map(Optimizer.optimizingWithoutNesting)
     } else {
       programParser
     }

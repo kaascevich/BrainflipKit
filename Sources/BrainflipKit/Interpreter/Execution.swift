@@ -8,7 +8,9 @@ extension Interpreter {
   ///
   /// - Throws: ``InterpreterError`` if an issue was encountered during
   ///   execution.
-  public consuming func runReturningFinalState() throws -> State {
+  public consuming func runReturningFinalState()
+    throws(InterpreterError) -> State
+  {
     try execute(program)
     return state
   }
@@ -19,7 +21,7 @@ extension Interpreter {
   ///
   /// - Throws: ``InterpreterError`` if an issue was encountered during
   ///   execution.
-  public consuming func run() throws -> Output {
+  public consuming func run() throws(InterpreterError) -> Output {
     try runReturningFinalState().outputStream
   }
 
@@ -29,7 +31,9 @@ extension Interpreter {
   ///
   /// - Throws: ``InterpreterError`` if an issue was encountered during
   ///   execution.
-  mutating func execute(_ instructions: [Instruction]) throws {
+  mutating func execute(_ instructions: [Instruction])
+    throws(InterpreterError)
+  {
     for instruction in instructions {
       try handleInstruction(instruction)
     }
@@ -41,7 +45,9 @@ extension Interpreter {
   ///
   /// - Throws: ``InterpreterError`` if an issue was encountered during
   ///   execution.
-  mutating func handleInstruction(_ instruction: Instruction) throws {
+  mutating func handleInstruction(_ instruction: Instruction)
+    throws(InterpreterError)
+  {
     switch instruction {
     // MARK: Core
 

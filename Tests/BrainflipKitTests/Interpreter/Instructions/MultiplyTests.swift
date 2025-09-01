@@ -6,8 +6,7 @@ import Testing
 @testable import BrainflipKit
 
 extension InterpreterTests.InstructionTests {
-  @Suite("Mutliply instruction")
-  struct MultiplyTests {
+  @Suite("Mutliply instruction") struct MultiplyTests {
     var interpreter: Interpreter<String.UnicodeScalarView, String>
     init() throws {
       self.interpreter = try .init(
@@ -18,8 +17,10 @@ extension InterpreterTests.InstructionTests {
 
     @Test("Multiply instruction")
     mutating func multiplyInstruction() throws {
-      interpreter.currentCellValue = 3
+      interpreter.cellPointer = 0
+      interpreter.tape[0] = 3
       interpreter.tape[2] = 5
+
       try interpreter.handleInstruction(
         .multiply(factor: 4, offset: 2)
       )
@@ -29,7 +30,8 @@ extension InterpreterTests.InstructionTests {
 
     @Test("Multiply overflow (multiplication)")
     mutating func multiplyOverflowMultiplication() throws {
-      interpreter.currentCellValue = .max
+      interpreter.cellPointer = 0
+      interpreter.tape[0] = .max
       interpreter.tape[2] = 5
       #expect(throws: InterpreterError.cellOverflow(position: 0)) {
         try interpreter.handleInstruction(
@@ -40,7 +42,8 @@ extension InterpreterTests.InstructionTests {
 
     @Test("Multiply overflow (addition)")
     mutating func multiplyOverflowAddition() throws {
-      interpreter.currentCellValue = 3
+      interpreter.cellPointer = 0
+      interpreter.tape[0] = 3
       interpreter.tape[2] = .max
       #expect(throws: InterpreterError.cellOverflow(position: 2)) {
         try interpreter.handleInstruction(

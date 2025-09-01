@@ -5,10 +5,10 @@
 /// ``Interpreter`` instance.
 public enum InterpreterError: Error, Equatable, Hashable {
   /// Indicates that the cell value at the specified `position` overflowed.
-  case cellOverflow(position: Int)
+  case cellOverflow(position: CellPointer)
 
   /// Indicates that the cell value at the specified `position` underflowed.
-  case cellUnderflow(position: Int)
+  case cellUnderflow(position: CellPointer)
 
   /// Indicates that the input iterator was exhausted.
   case endOfInput

@@ -84,6 +84,8 @@ public struct Interpreter<
   Input: Sequence<Unicode.Scalar>,
   Output: TextOutputStream
 > {
+  // MARK: - Properties
+
   /// A Brainflip program containing a list of instructions to execute.
   public let program: Program
 
@@ -91,7 +93,7 @@ public struct Interpreter<
   public let options: InterpreterOptions
 
   /// This interpreter's internal state.
-  @usableFromInline private(set) var state: State
+  internal private(set) var state: State
 
   // MARK: - Initializers
 
@@ -113,6 +115,27 @@ public struct Interpreter<
     self.state = State(
       inputSequence: inputSequence,
       outputStream: outputStream
+    )
+  }
+
+  /// Creates an `Interpreter` instance from the given `program`.
+  ///
+  /// - Parameters:
+  ///   - program: A ``Program`` instance.
+  ///   - input: The input to pass to the program.
+  ///   - outputStream: The stream to write outputted characters to.
+  ///   - options: Configurable options to be used for this instance.
+  public init(
+    _ program: Program,
+    input: String = "",
+    outputStream: Output = "",
+    options: InterpreterOptions = .init()
+  ) where Input == String.UnicodeScalarView {
+    self.init(
+      program,
+      inputSequence: input.unicodeScalars,
+      outputStream: outputStream,
+      options: options
     )
   }
 
@@ -153,8 +176,6 @@ public struct Interpreter<
   ///
   /// - Throws: An `Error` if `source` cannot be parsed into a valid program
   ///   (that is, if it contains unmatched brackets).
-  ///
-  /// - Complexity: O(_n_), where _n_ is the length of `input.unicodeScalars`.
   public init(
     _ source: String,
     input: String = "",
@@ -181,10 +202,10 @@ public struct Interpreter<
   ///
   /// - Returns: The value of this interpreter's state at the specified key
   ///   path.
-  @inline(__always) public internal(set) subscript<Value>(
+  public internal(set) subscript<Value>(
     dynamicMember member: WritableKeyPath<State, Value>
   ) -> Value {
-    @inlinable get { state[keyPath: member] }
-    @usableFromInline set { state[keyPath: member] = newValue }
+    get { state[keyPath: member] }
+    set { state[keyPath: member] = newValue }
   }
 }

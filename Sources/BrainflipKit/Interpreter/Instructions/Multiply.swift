@@ -12,8 +12,8 @@ extension Interpreter {
   ///   ``InterpreterOptions/allowCellWraparound`` is `false`.
   mutating func handleMultiplyInstruction(
     multiplyingBy factor: CellValue,
-    storingAtOffset offset: Int
-  ) throws {
+    storingAtOffset offset: CellPointer
+  ) throws(InterpreterError) {
     let offsettedPointer = self.cellPointer + offset
 
     // MARK: Multiplying
@@ -23,7 +23,7 @@ extension Interpreter {
 
     if multiplyOverflow {
       guard options.allowCellWraparound else {
-        throw InterpreterError.cellOverflow(position: self.cellPointer)
+        throw .cellOverflow(position: self.cellPointer)
       }
     }
 
@@ -36,7 +36,7 @@ extension Interpreter {
 
     if additionOverflow {
       guard options.allowCellWraparound else {
-        throw InterpreterError.cellOverflow(position: offsettedPointer)
+        throw .cellOverflow(position: offsettedPointer)
       }
     }
 

@@ -6,41 +6,40 @@ import Testing
 @testable import BrainflipKit
 
 extension InterpreterTests.InstructionTests {
-  @Suite("Add instruction")
-  struct AddTests {
+  @Suite("Add instruction") struct AddTests {
     var interpreter: Interpreter<String.UnicodeScalarView, String>
     init() throws {
       self.interpreter = try .init("")
     }
 
-    @Test("Add instruction")
-    mutating func addInstruction() throws {
-      for i in 1...500 {
-        try interpreter.handleInstruction(.add(1))
-        #expect(interpreter.tape.first?.value == CellValue(i))
+    @Test("Add instruction", arguments: -5...5)
+    mutating func addInstruction(offset: CellValue) throws {
+      for i in 1...10 {
+        try interpreter.handleInstruction(.add(offset))
+        #expect(interpreter.currentCellValue == i * offset)
       }
+    }
 
+    @Test("Add instruction - wraparound")
+    mutating func addInstructionWraparound() throws {
       interpreter.currentCellValue = .max
       try interpreter.handleInstruction(.add(1))
+      
       #expect(
-        interpreter.tape.first?.value == 0,
+        interpreter.currentCellValue == .min,
         "increment instruction should wrap around"
       )
     }
 
-    @Test("Add instruction - negative")
-    mutating func addInstructionNegative() throws {
+    @Test("Add instruction - negative wraparound")
+    mutating func addInstructionNegativeWraparound() throws {
+      interpreter.currentCellValue = .min
       try interpreter.handleInstruction(.add(-1))
+
       #expect(
-        interpreter.tape.first?.value == .max,
+        interpreter.currentCellValue == .max,
         "decrement instruction should wrap around"
       )
-
-      interpreter.currentCellValue = 500
-      for i in (0..<500).reversed() {
-        try interpreter.handleInstruction(.add(-1))
-        #expect(interpreter.tape.first?.value == CellValue(i))
-      }
     }
   }
 }

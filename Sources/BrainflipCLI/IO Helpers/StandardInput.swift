@@ -47,6 +47,6 @@ struct StandardInput: Sequence, IteratorProtocol {
       return nil
     }
 
-    return Unicode.Scalar(UInt32(nextCharacter))
+    return Unicode.Scalar(nextCharacter)
   }
 }
