@@ -18,10 +18,10 @@ extension InterpreterError: CustomStringConvertible {
   /// A description of this error.
   public var description: String {
     switch self {
-    case let .cellOverflow(position):
+    case .cellOverflow(let position):
       "The cell at position \(position) overflowed."
 
-    case let .cellUnderflow(position):
+    case .cellUnderflow(let position):
       "The cell at position \(position) underflowed."
 
     case .endOfInput:

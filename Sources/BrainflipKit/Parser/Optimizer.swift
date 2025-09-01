@@ -3,8 +3,7 @@
 
 private import Algorithms
 
-/// Contains optimizer functions for Brainflip programs.
-enum Optimizer {
+extension Program {
   // MARK: - Optimizations
 
   /// Condenses clear loops.
@@ -13,41 +12,37 @@ enum Optimizer {
   /// instruction. If there's an `add` instruction following the clear loop, the
   /// value of that instruction is used in the `setTo` instruction instead of 0,
   /// and the `add` instruction is removed.
-  ///
-  /// - Parameter program: The program to optimize.
-  private static func optimizeClearLoops(_ program: inout Program) {
+  private mutating func optimizeClearLoops() {
     // MARK: [-]/[+] -> setTo(0)
-    for case let (index, .loop(instructions)) in program.indexed()
+    for case (let index, .loop(let instructions)) in indexed()
     where instructions == [.add(1)] || instructions == [.add(-1)] {
-      program[index] = .setTo(0)
+      self[index] = .setTo(0)
     }
 
     // MARK: setTo(lhs) add(rhs) -> setTo(lhs + rhs)
     // check if the first instruction is a clear loop
     // and the second is an `add` instruction
-    for case let (
-      (firstIndex, .setTo(lhs)),
-      (secondIndex, .add(rhs))
-    ) in program.indexed().adjacentPairs().reversed() {
-      program[firstIndex] = .setTo(lhs + rhs)
-      program.remove(at: secondIndex)
+    for case (
+      (let firstIndex, .setTo(let lhs)),
+      (let secondIndex, .add(let rhs))
+    ) in indexed().adjacentPairs().reversed() {
+      remove(at: secondIndex)
+      self[firstIndex] = .setTo(lhs + rhs)
     }
 
     // MARK: add(_) setTo(rhs) -> setTo(rhs)
     for (
       (index, first),
       (_, second)
-    ) in program.indexed().adjacentPairs().reversed()
+    ) in indexed().adjacentPairs().reversed()
     where (first.is(\.add) || first.is(\.setTo)) && second.is(\.setTo) {
-      program.remove(at: index)
+      remove(at: index)
     }
   }
 
   /// Removes adjacent instructions of the same type.
-  ///
-  /// - Parameter program: The program to optimize.
-  private static func removeAdjacentInstructions(_ program: inout Program) {
-    let chunks = program.chunked {
+  private mutating func removeAdjacentInstructions() {
+    let chunks = chunked {
       switch ($0, $1) {
       // we only care about these two instruction types
       case (.add, .add), (.move, .move): true
@@ -55,7 +50,7 @@ enum Optimizer {
       }
     }
 
-    program = chunks.flatMap { chunk in
+    self = chunks.flatMap { chunk in
       // we only need to check the first value, since all others should
       // match it
       let casePath: _? =
@@ -79,46 +74,38 @@ enum Optimizer {
   }
 
   /// Removes useless instructions from the program.
-  ///
-  /// - Parameter program: The program to optimize.
-  private static func removeUselessInstructions(_ program: inout Program) {
-    program.removeAll { $0 == .add(0) || $0 == .move(0) }
+  private mutating func removeUselessInstructions() {
+    removeAll { $0 == .add(0) || $0 == .move(0) }
   }
 
   /// Optimizes scan loops.
-  ///
-  /// - Parameter program: The program to optimize.
-  private static func optimizeScanLoops(_ program: inout Program) {
-    for case let (index, .loop(instructions)) in program.indexed()
+  private mutating func optimizeScanLoops() {
+    for case (let index, .loop(let instructions)) in indexed()
     where instructions.count == 1 {
-      guard case let .move(increment) = instructions[0]
+      guard case .move(let increment) = instructions[0]
       else { continue }
 
-      program[index] = .scan(increment)
+      self[index] = .scan(increment)
     }
   }
 
   /// Optimizes multiplication loops.
-  ///
-  /// - Parameter program: The program to optimize.
-  private static func optimizeMultiplyLoops(_ program: inout Program) {
-    for case let (index, .loop(instructions)) in program.indexed()
+  private mutating func optimizeMultiplyLoops() {
+    for case (let index, .loop(let instructions)) in indexed()
     where instructions.count == 4 {
       // check if the loop's instructions match what we're looking for
-      if
-        case .add(-1) = instructions[0],
-        case let .move(offset) = instructions[1],
-        case let .add(factor) = instructions[2],
+      if case .add(-1) = instructions[0],
+        case .move(let offset) = instructions[1],
+        case .add(let factor) = instructions[2],
         case .move(-offset) = instructions[3]
       {
-        program[index] = .multiply(factor: factor, offset: offset)
-      } else if
-        case let .move(offset) = instructions[0],
-        case let .add(factor) = instructions[1],
+        self[index] = .multiply(factor: factor, offset: offset)
+      } else if case .move(let offset) = instructions[0],
+        case .add(let factor) = instructions[1],
         case .move(-offset) = instructions[2],
         case .add(-1) = instructions[3]
       {
-        program[index] = .multiply(factor: factor, offset: offset)
+        self[index] = .multiply(factor: factor, offset: offset)
       }
     }
   }
@@ -130,52 +117,48 @@ enum Optimizer {
   /// loop, the current cell will always be 0. If that instruction happens to
   /// also be a loop, that loop will never be executed. So we remove those loops
   /// here.
-  ///
-  /// - Parameter program: The program to optimize.
-  private static func removeDeadLoops(_ program: inout Program) {
-    let pairs = program.indexed().adjacentPairs()
-    for case let ((_, .loop), (index, .loop)) in pairs.reversed() {
+  private mutating func removeDeadLoops() {
+    let pairs = indexed().adjacentPairs()
+    for case ((_, .loop), (let index, .loop)) in pairs.reversed() {
       // there's a loop immediately after another loop, so the second loop will
       // never be executed (because the current cell is always 0 immediately
       // after a loop)
-      program.remove(at: index)
+      remove(at: index)
     }
+  }
+
+  // MARK: - Root Optimizations
+
+  /// Removes loops from the start of the program.
+  private mutating func removeInitialLoops() {
+    self = Program(self.drop { $0.is(\.loop) })
   }
 
   // MARK: - Main Optimizer
 
-  /// Optimizes a program, ignoring instructions within loops (unless those
-  /// loops can be optimized away entirely).
-  ///
-  /// - Parameter program: The program to optimize.
-  ///
-  /// - Returns: The optimized program.
-  static func optimizingWithoutNesting(_ program: Program) -> Program {
-    var program = program
-
-    // loop until no more optimizations are possible
+  /// Optimizes this program.
+  private mutating func optimizeNested() {
+    for case (let index, .loop(var instructions)) in indexed() {
+      instructions.optimizeNested()
+      self[index] = .loop(instructions)
+    }
 
     var previousOptimization: Program
-
     repeat {
-      previousOptimization = program
-      removeAdjacentInstructions(&program)
-      removeUselessInstructions(&program)
-    } while program != previousOptimization
+      previousOptimization = self
+      removeAdjacentInstructions()
+      removeUselessInstructions()
+      removeDeadLoops()
+    } while self != previousOptimization
 
-    repeat {
-      previousOptimization = program
-      removeDeadLoops(&program)
-    } while program != previousOptimization
+    optimizeScanLoops()
+    optimizeClearLoops()
+    optimizeMultiplyLoops()
+  }
 
-    repeat {
-      previousOptimization = program
-      optimizeScanLoops(&program)
-      optimizeClearLoops(&program)
-    } while program != previousOptimization
-
-    optimizeMultiplyLoops(&program)
-
-    return program
+  /// Optimizes this program.
+  mutating func optimize() {
+    removeInitialLoops()
+    optimizeNested()
   }
 }

@@ -49,7 +49,7 @@ extension InterpreterTests {
 
     @Test("'Hello World!' program")
     func helloWorldProgram() throws {
-      let program = try #require(exampleProgram(named: "helloworld"))
+      let program = try #require(getProgram(named: "helloworld"))
       let interpreter = try Interpreter(program)
 
       let output = try interpreter.run()
@@ -58,7 +58,7 @@ extension InterpreterTests {
 
     @Test("Comprehensive test", .timeLimit(.minutes(1)))
     func comprehensiveTest() throws {
-      let program = try #require(exampleProgram(named: "comprehensive"))
+      let program = try #require(getProgram(named: "comprehensive"))
       let interpreter = try Interpreter(program)
 
       let output = try interpreter.run()
@@ -67,7 +67,7 @@ extension InterpreterTests {
 
     @Test("Factorization test", .timeLimit(.minutes(1)))
     func factorizationTest() throws {
-      let program = try #require(exampleProgram(named: "factor"))
+      let program = try #require(getProgram(named: "factor"))
       let interpreter = try Interpreter(program, input: "2346\n")
 
       let output = try interpreter.run()

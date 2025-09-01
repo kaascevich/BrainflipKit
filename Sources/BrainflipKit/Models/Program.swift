@@ -73,7 +73,11 @@ extension Program {
   /// - Throws: An `Error` if `source` is not a valid program (that is, if it
   ///   contains unmatched brackets).
   public init(_ source: String, optimizations: Bool = true) throws {
-    self = try ProgramParser(optimizations: optimizations)
+    self = try ProgramParser()
       .parse(source.filter(Instruction.validInstructions.contains))
+
+    if optimizations {
+      self.optimize()
+    }
   }
 }

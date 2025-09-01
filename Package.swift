@@ -5,7 +5,6 @@
 
 import PackageDescription
 
-/// The package manifest.
 let package = Package(
   name: "BrainflipKit",
   platforms: [.macOS(.v13)],
@@ -26,6 +25,10 @@ let package = Package(
       url: "https://github.com/pointfreeco/swift-parsing.git",
       from: "0.14.1"
     ),
+    .package(
+      url: "https://github.com/ordo-one/package-benchmark",
+      from: "1.0.0"
+    ),
   ],
   targets: [
     .executableTarget(
@@ -42,9 +45,21 @@ let package = Package(
         .product(name: "Algorithms", package: "swift-algorithms"),
       ]
     ),
+
     .testTarget(
       name: "BrainflipKitTests",
       dependencies: ["BrainflipKit"],
+      resources: [.process("Resources/")]
+    ),
+
+    .executableTarget(
+      name: "BrainflipKitBenchmarks",
+      dependencies: [
+        "BrainflipKit",
+        .product(name: "Benchmark", package: "package-benchmark"),
+        .product(name: "BenchmarkPlugin", package: "package-benchmark"),
+      ],
+      path: "Benchmarks/BrainflipKitBenchmarks",
       resources: [.process("Resources/")]
     ),
   ]

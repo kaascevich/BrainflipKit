@@ -36,7 +36,7 @@ extension Program {
 
     return self.flatMap { instruction in
       switch instruction {
-      case let .loop(instructions):
+      case .loop(let instructions):
         [
           indent + "loop {",
 

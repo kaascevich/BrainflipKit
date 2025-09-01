@@ -9,8 +9,8 @@ extension ParsingTests {
   @Suite("Parsing errors") struct ParserErrorTests {
     @Test("Unpaired loops", arguments: [
       "[", "]", "][", "]][", "][[", "[][", "][]", "[[]", "[]]",
-      try #require(exampleProgram(named: "unmatchedleft")),
-      try #require(exampleProgram(named: "unmatchedright")),
+      try #require(getProgram(named: "unmatchedleft")),
+      try #require(getProgram(named: "unmatchedright")),
     ])
     func unpairedLoops(_ program: String) {
       #expect(throws: (any Error).self) {
