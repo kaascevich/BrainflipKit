@@ -21,10 +21,8 @@ extension Interpreter {
     let (multiplyResult, multiplyOverflow) = self.currentCellValue
       .multipliedReportingOverflow(by: factor)
 
-    if multiplyOverflow {
-      guard options.allowCellWraparound else {
-        throw .cellOverflow(position: self.cellPointer)
-      }
+    if multiplyOverflow && !options.allowCellWraparound {
+      throw .cellOverflow(position: self.cellPointer)
     }
 
     // MARK: Adding
@@ -34,10 +32,8 @@ extension Interpreter {
       default: 0
     ].addingReportingOverflow(multiplyResult)
 
-    if additionOverflow {
-      guard options.allowCellWraparound else {
-        throw .cellOverflow(position: offsettedPointer)
-      }
+    if additionOverflow && !options.allowCellWraparound {
+      throw .cellOverflow(position: offsettedPointer)
     }
 
     // MARK: Setting

@@ -9,20 +9,17 @@ extension Interpreter {
   /// - Throws: ``InterpreterError/cellOverflow`` or
   ///   ``InterpreterError/cellUnderflow`` if an overflow/underflow occurs and
   ///   ``InterpreterOptions/allowCellWraparound`` is `false`.
-  mutating func handleAddInstruction(_ value: CellValue) throws(InterpreterError) {
-    let errorType =
-      if value < 0 {
-        InterpreterError.cellUnderflow
-      } else {
-        InterpreterError.cellOverflow
-      }
-
+  mutating func handleAddInstruction(
+    _ value: CellValue
+  ) throws(InterpreterError) {
     let (result, overflow) =
       self.currentCellValue.addingReportingOverflow(value)
 
-    if overflow {
-      guard options.allowCellWraparound else {
-        throw errorType(self.cellPointer)
+    if overflow && !options.allowCellWraparound {
+      throw if value < 0 {
+        .cellUnderflow(position: self.cellPointer)
+      } else {
+        .cellOverflow(position: self.cellPointer)
       }
     }
 
