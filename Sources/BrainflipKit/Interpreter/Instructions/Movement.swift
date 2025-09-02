@@ -6,6 +6,6 @@ extension Interpreter {
   ///
   /// - Parameter count: The number of cells to move.
   mutating func handleMoveInstruction(_ count: CellValue) {
-    self.cellPointer += count
+    state.cellPointer += count
   }
 }

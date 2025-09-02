@@ -15,23 +15,23 @@ extension InterpreterTests.InstructionTests {
 
     @Test("Output instruction")
     mutating func outputInstruction() throws {
-      interpreter.currentCellValue = 0x42  // ASCII code for "B"
+      interpreter.state.currentCellValue = 0x42  // ASCII code for "B"
       try interpreter.handleInstruction(.output)
-      #expect(interpreter.output == "B")
+      #expect(interpreter.state.output == "B")
     }
 
     @Test("Output instruction with Unicode characters")
     mutating func outputInstructionUnicode() throws {
-      interpreter.currentCellValue = 0x2192  // Unicode value for "→"
+      interpreter.state.currentCellValue = 0x2192  // Unicode value for "→"
       try interpreter.handleInstruction(.output)
-      #expect(interpreter.output == "→")
+      #expect(interpreter.state.output == "→")
     }
 
     @Test("Output instruction with invalid Unicode characters")
     mutating func outputInstructionInvalidUnicode() throws {
-      interpreter.currentCellValue = 0x110000  // max Unicode value is 0x10FFFF
+      interpreter.state.currentCellValue = 0x110000  // max Unicode value is 0x10FFFF
       try interpreter.handleInstruction(.output)
-      #expect(interpreter.output.isEmpty)
+      #expect(interpreter.state.output.isEmpty)
     }
   }
 }

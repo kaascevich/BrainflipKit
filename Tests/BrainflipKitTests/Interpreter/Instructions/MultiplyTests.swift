@@ -18,22 +18,22 @@ extension InterpreterTests.InstructionTests {
 
     @Test("Multiply instruction")
     mutating func multiplyInstruction() throws {
-      interpreter.cellPointer = 0
-      interpreter.tape[0] = 3
-      interpreter.tape[2] = 5
+      interpreter.state.cellPointer = 0
+      interpreter.state.tape[0] = 3
+      interpreter.state.tape[2] = 5
 
       try interpreter.handleInstruction(
         .multiply(factor: 4, offset: 2)
       )
-      #expect(interpreter.tape[2] == 17)  // (3*4) + 5
-      #expect(interpreter.currentCellValue == 0)
+      #expect(interpreter.state.tape[2] == 17)  // (3*4) + 5
+      #expect(interpreter.state.currentCellValue == 0)
     }
 
     @Test("Multiply overflow (multiplication)")
     mutating func multiplyOverflowMultiplication() throws {
-      interpreter.cellPointer = 0
-      interpreter.tape[0] = .max
-      interpreter.tape[2] = 5
+      interpreter.state.cellPointer = 0
+      interpreter.state.tape[0] = .max
+      interpreter.state.tape[2] = 5
       #expect(throws: InterpreterError.cellOverflow(position: 0)) {
         try interpreter.handleInstruction(
           .multiply(factor: 4, offset: 2)
@@ -43,9 +43,9 @@ extension InterpreterTests.InstructionTests {
 
     @Test("Multiply overflow (addition)")
     mutating func multiplyOverflowAddition() throws {
-      interpreter.cellPointer = 0
-      interpreter.tape[0] = 3
-      interpreter.tape[2] = .max
+      interpreter.state.cellPointer = 0
+      interpreter.state.tape[0] = 3
+      interpreter.state.tape[2] = .max
       #expect(throws: InterpreterError.cellOverflow(position: 2)) {
         try interpreter.handleInstruction(
           .multiply(factor: 4, offset: 2)

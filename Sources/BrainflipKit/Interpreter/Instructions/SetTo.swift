@@ -6,6 +6,6 @@ extension Interpreter {
   ///
   /// - Parameter value: The value to set the current cell to.
   mutating func handleSetToInstruction(_ value: CellValue) {
-    self.currentCellValue = value
+    state.currentCellValue = value
   }
 }

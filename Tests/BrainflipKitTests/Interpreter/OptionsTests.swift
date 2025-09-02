@@ -15,12 +15,12 @@ extension InterpreterTests {
         options: .init(allowCellWraparound: false)
       )
 
-      interpreter.currentCellValue = .min
+      interpreter.state.currentCellValue = .min
       #expect(throws: InterpreterError.cellUnderflow(position: 0)) {
         try interpreter.handleInstruction(.add(-1))
       }
 
-      interpreter.currentCellValue = .max
+      interpreter.state.currentCellValue = .max
       #expect(throws: InterpreterError.cellOverflow(position: 0)) {
         try interpreter.handleInstruction(.add(1))
       }
@@ -35,9 +35,9 @@ extension InterpreterTests {
           options: .init(endOfInputBehavior: nil)
         )
 
-        interpreter.currentCellValue = 42
+        interpreter.state.currentCellValue = 42
         try interpreter.handleInstruction(.input)
-        #expect(interpreter.currentCellValue == 42)
+        #expect(interpreter.state.currentCellValue == 42)
       }
 
       @Test("Set the current cell to a value on end of input")
@@ -47,9 +47,9 @@ extension InterpreterTests {
           options: .init(endOfInputBehavior: .setTo(0))
         )
 
-        interpreter.currentCellValue = 42
+        interpreter.state.currentCellValue = 42
         try interpreter.handleInstruction(.input)
-        #expect(interpreter.currentCellValue == 0)
+        #expect(interpreter.state.currentCellValue == 0)
       }
 
       @Test("Throw an error on end of input")

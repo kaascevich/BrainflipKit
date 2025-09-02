@@ -9,9 +9,9 @@ extension Interpreter {
   ///   ``InterpreterOptions/EndOfInputBehavior/throwError``.
   mutating func handleInputInstruction() throws {
     // make sure we actually have some input to work with
-    guard let nextInputScalar = self.inputIterator.next() else {
+    guard let nextInputScalar = state.inputIterator.next() else {
       switch options.endOfInputBehavior {
-      case let .setTo(value): self.currentCellValue = value
+      case let .setTo(value): state.currentCellValue = value
       case .throwError: throw InterpreterError.endOfInput
       case nil: break
       }
@@ -19,6 +19,6 @@ extension Interpreter {
       return
     }
 
-    self.currentCellValue = CellValue(nextInputScalar.value)
+    state.currentCellValue = CellValue(nextInputScalar.value)
   }
 }

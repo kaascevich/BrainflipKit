@@ -12,16 +12,16 @@ extension InterpreterTests {
     @Test("Current cell value")
     func currentCellValue() throws {
       var interpreter = try Interpreter("")
-      interpreter.tape = [0: 237, 1: 29, 2: 74]
+      interpreter.state.tape = [0: 237, 1: 29, 2: 74]
 
-      try #require(interpreter.cellPointer == 0)
-      #expect(interpreter.currentCellValue == 237)
+      try #require(interpreter.state.cellPointer == 0)
+      #expect(interpreter.state.currentCellValue == 237)
 
-      interpreter.cellPointer = 1
-      #expect(interpreter.currentCellValue == 29)
+      interpreter.state.cellPointer = 1
+      #expect(interpreter.state.currentCellValue == 29)
 
-      interpreter.cellPointer = 2
-      #expect(interpreter.currentCellValue == 74)
+      interpreter.state.cellPointer = 2
+      #expect(interpreter.state.currentCellValue == 74)
     }
   }
 }

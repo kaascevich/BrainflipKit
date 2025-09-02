@@ -12,10 +12,10 @@ extension InterpreterTests {
     func defaultInitializer() throws {
       let interpreter = try Interpreter("")
 
-      #expect(interpreter.tape.isEmpty)
-      #expect(interpreter.cellPointer == 0)
-      #expect(interpreter.currentCellValue == 0)
-      #expect(interpreter.output.isEmpty == true)
+      #expect(interpreter.state.tape.isEmpty)
+      #expect(interpreter.state.cellPointer == 0)
+      #expect(interpreter.state.currentCellValue == 0)
+      #expect(interpreter.state.output.isEmpty == true)
 
       #expect(interpreter.program.isEmpty)
     }

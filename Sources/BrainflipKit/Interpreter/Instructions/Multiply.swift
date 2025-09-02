@@ -14,20 +14,20 @@ extension Interpreter {
     factor: CellValue,
     offset: CellPointer
   ) throws {
-    let offsettedPointer = self.cellPointer + offset
+    let offsettedPointer = state.cellPointer + offset
 
     // MARK: Multiplying
 
-    let (multiplyResult, multiplyOverflow) = self.currentCellValue
+    let (multiplyResult, multiplyOverflow) = state.currentCellValue
       .multipliedReportingOverflow(by: factor)
 
     if !options.allowCellWraparound && multiplyOverflow {
-      throw InterpreterError.cellOverflow(position: self.cellPointer)
+      throw InterpreterError.cellOverflow(position: state.cellPointer)
     }
 
     // MARK: Adding
 
-    let (additionResult, additionOverflow) = self.tape[
+    let (additionResult, additionOverflow) = state.tape[
       offsettedPointer,
       default: 0
     ].addingReportingOverflow(multiplyResult)
@@ -38,10 +38,10 @@ extension Interpreter {
 
     // MARK: Setting
 
-    self.tape[offsettedPointer] = additionResult
+    state.tape[offsettedPointer] = additionResult
 
     // as a side effect of the standard multiply loop, the current cell is set
     // to 0, so we need to replicate that behavior here
-    self.currentCellValue = 0
+    state.currentCellValue = 0
   }
 }

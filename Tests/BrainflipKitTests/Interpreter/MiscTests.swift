@@ -13,11 +13,11 @@ extension InterpreterTests {
   func cellSizes() throws {
     var interpreter = try Interpreter("")
 
-    interpreter.currentCellValue = .min
-    #expect(interpreter.currentCellValue <= UInt32.min)
+    interpreter.state.currentCellValue = .min
+    #expect(interpreter.state.currentCellValue <= UInt32.min)
 
-    interpreter.currentCellValue = .max
-    #expect(interpreter.currentCellValue >= UInt32.max)
+    interpreter.state.currentCellValue = .max
+    #expect(interpreter.state.currentCellValue >= UInt32.max)
   }
 
   /// Verifies that the tape is at least 30,000 cells long.

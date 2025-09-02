@@ -17,7 +17,7 @@ extension InterpreterTests.InstructionTests {
     mutating func moveInstruction(offset: CellPointer) throws {
       for i in 1...10 {
         try interpreter.handleInstruction(.move(offset))
-        #expect(interpreter.cellPointer == i * offset)
+        #expect(interpreter.state.cellPointer == i * offset)
       }
     }
   }

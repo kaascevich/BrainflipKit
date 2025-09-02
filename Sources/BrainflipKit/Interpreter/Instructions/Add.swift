@@ -11,16 +11,16 @@ extension Interpreter {
   ///   ``InterpreterOptions/allowCellWraparound`` is `false`.
   mutating func handleAddInstruction(_ value: CellValue) throws {
     let (result, overflow) =
-      self.currentCellValue.addingReportingOverflow(value)
+    state.currentCellValue.addingReportingOverflow(value)
 
     if !options.allowCellWraparound && overflow {
       throw if value < 0 {
-        InterpreterError.cellUnderflow(position: self.cellPointer)
+        InterpreterError.cellUnderflow(position: state.cellPointer)
       } else {
-        InterpreterError.cellOverflow(position: self.cellPointer)
+        InterpreterError.cellOverflow(position: state.cellPointer)
       }
     }
 
-    self.currentCellValue = result
+    state.currentCellValue = result
   }
 }

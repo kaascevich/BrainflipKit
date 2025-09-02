@@ -15,7 +15,7 @@ extension InterpreterTests.InstructionTests {
 
     @Test("Scan instruction")
     mutating func scanInstruction() throws {
-      interpreter.tape = [
+      interpreter.state.tape = [
         0: 1,
         1: 2,
         2: 3,
@@ -27,7 +27,7 @@ extension InterpreterTests.InstructionTests {
 
       try interpreter.handleInstruction(.scan(2))
       #expect(
-        interpreter.cellPointer == 6,
+        interpreter.state.cellPointer == 6,
         """
         scan instruction repeatedly moves the cell pointer by the \
         specified amount until it lands on a zero cell

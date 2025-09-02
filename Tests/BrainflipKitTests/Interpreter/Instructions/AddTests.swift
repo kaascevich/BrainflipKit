@@ -17,28 +17,28 @@ extension InterpreterTests.InstructionTests {
     mutating func addInstruction(offset: CellValue) throws {
       for i in 1...10 {
         try interpreter.handleInstruction(.add(offset))
-        #expect(interpreter.currentCellValue == i * offset)
+        #expect(interpreter.state.currentCellValue == i * offset)
       }
     }
 
     @Test("Add instruction - wraparound")
     mutating func addInstructionWraparound() throws {
-      interpreter.currentCellValue = .max
+      interpreter.state.currentCellValue = .max
       try interpreter.handleInstruction(.add(1))
       
       #expect(
-        interpreter.currentCellValue == .min,
+        interpreter.state.currentCellValue == .min,
         "increment instruction should wrap around"
       )
     }
 
     @Test("Add instruction - negative wraparound")
     mutating func addInstructionNegativeWraparound() throws {
-      interpreter.currentCellValue = .min
+      interpreter.state.currentCellValue = .min
       try interpreter.handleInstruction(.add(-1))
 
       #expect(
-        interpreter.currentCellValue == .max,
+        interpreter.state.currentCellValue == .max,
         "decrement instruction should wrap around"
       )
     }

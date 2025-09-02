@@ -79,7 +79,6 @@
 ///
 /// ## Options
 /// - ``InterpreterOptions``
-@dynamicMemberLookup
 public struct Interpreter<
   Input: Sequence<Unicode.Scalar>,
   Output: TextOutputStream
@@ -93,7 +92,7 @@ public struct Interpreter<
   public let options: InterpreterOptions
 
   /// This interpreter's internal state.
-  internal private(set) var state: State
+  var state: State
 
   // MARK: - Initializers
 
@@ -180,25 +179,5 @@ public struct Interpreter<
       output: output,
       options: options
     )
-  }
-
-  // MARK: - Dynamic Member Lookup
-
-  /// Accesses this interpreter's state at the specified key path.
-  ///
-  /// Do not call this subscript directly. It is used by the compiler when you
-  /// use dot syntax on an `Interpreter` instance to access properties of its
-  /// ``State``.
-  ///
-  /// - Parameter member: A key path to a property of `Interpreter.State`.
-  ///
-  /// - Returns: The value of this interpreter's state at the specified key
-  ///   path.
-  @inline(__always)
-  public internal(set) subscript<Value>(
-    dynamicMember member: WritableKeyPath<State, Value>
-  ) -> Value {
-    get { state[keyPath: member] }
-    set { state[keyPath: member] = newValue }
   }
 }

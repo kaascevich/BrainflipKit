@@ -7,12 +7,12 @@ extension Interpreter {
     // if this cell's value doesn't correspond to a valid Unicode character, do
     // nothing
     guard
-      let codePoint = UInt32(exactly: self.currentCellValue),
+      let codePoint = UInt32(exactly: state.currentCellValue),
       let scalar = Unicode.Scalar(codePoint)
     else {
       return
     }
 
-    self.output.write(String(scalar))
+    state.output.write(String(scalar))
   }
 }

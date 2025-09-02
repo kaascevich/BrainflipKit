@@ -13,7 +13,7 @@ extension InterpreterTests.InstructionTests {
       var interpreter = try Interpreter("", input: "&")
 
       try interpreter.handleInstruction(.input)
-      #expect(interpreter.currentCellValue == 0x26)  // ASCII code for "&"
+      #expect(interpreter.state.currentCellValue == 0x26)  // ASCII code for "&"
     }
   }
 }
