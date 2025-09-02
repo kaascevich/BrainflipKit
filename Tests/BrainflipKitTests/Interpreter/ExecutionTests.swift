@@ -7,13 +7,14 @@ import Testing
 @testable import BrainflipKit
 
 extension InterpreterTests {
-  @Suite("Program execution") struct ExecutionTests {
+  @Suite("Program execution")
+  struct ExecutionTests {
     @Test("Basic program")
     func basicProgram() throws {
       // increments cell 1 and decrements cell 2
       let interpreter = try Interpreter("+>-<")
 
-      let state = try interpreter.runReturningFinalState()
+      let state = try interpreter.run()
 
       #expect(state.tape == [0: 1, 1: -1])
       #expect(state.cellPointer == 0)
@@ -24,7 +25,7 @@ extension InterpreterTests {
       // sets cell 2 to 9
       let interpreter = try Interpreter("+++[>+++<-]")
 
-      let state = try interpreter.runReturningFinalState()
+      let state = try interpreter.run()
       #expect(state.tape[1] == 9)
     }
 
@@ -33,7 +34,7 @@ extension InterpreterTests {
       // sets cell 3 to 27
       let interpreter = try Interpreter("+++[>+++[>+++<-]<-]")
 
-      let state = try interpreter.runReturningFinalState()
+      let state = try interpreter.run()
       #expect(state.tape[2] == 27)
     }
 
@@ -43,7 +44,7 @@ extension InterpreterTests {
       // third character once
       let interpreter = try Interpreter(",..,,.", input: "hello")
 
-      let output = try interpreter.run()
+      let output = try interpreter.run().outputStream
       #expect(output == "hhl")
     }
 
@@ -52,7 +53,7 @@ extension InterpreterTests {
       let program = try #require(getProgram(named: "helloworld"))
       let interpreter = try Interpreter(program)
 
-      let output = try interpreter.run()
+      let output = try interpreter.run().outputStream
       #expect(output == "Hello World!")
     }
 
@@ -61,7 +62,7 @@ extension InterpreterTests {
       let program = try #require(getProgram(named: "comprehensive"))
       let interpreter = try Interpreter(program)
 
-      let output = try interpreter.run()
+      let output = try interpreter.run().outputStream
       #expect(output == "Hello, world!\n")
     }
 
@@ -70,7 +71,7 @@ extension InterpreterTests {
       let program = try #require(getProgram(named: "factor"))
       let interpreter = try Interpreter(program, input: "2346\n")
 
-      let output = try interpreter.run()
+      let output = try interpreter.run().outputStream
       #expect(output == "2346: 2 3 17 23\n")
     }
   }

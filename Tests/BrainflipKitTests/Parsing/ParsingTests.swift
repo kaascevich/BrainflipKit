@@ -5,7 +5,8 @@ import Testing
 
 @testable import typealias BrainflipKit.Program
 
-@Suite("Program parsing") struct ParsingTests {
+@Suite("Program parsing")
+struct ParsingTests {
   let hTest = """
     This program tests for several obscure interpreter problems;
     it should output an H
@@ -16,9 +17,8 @@ import Testing
 
   @Test("Basic parsing")
   func basicParsing() throws {
-    let program = try Program(",[>+<-.]")
     #expect(
-      program == [
+      try Program(",[>+<-.]") == [
         .input,
         .loop([
           .move(1),
@@ -33,27 +33,21 @@ import Testing
 
   @Test("Parsing instructions and comments")
   func instructionsAndComments() throws {
-    let program = try Program(",++ a comment ++.")
     #expect(
-      program == [
+      try Program(",++ a comment ++.") == [
         .input,
         .add(4),
         .output,
       ]
     )
-  }
 
-  @Test("Parsing only comments")
-  func commentsOnly() throws {
-    let program = try Program("the whole thing is just a comment")
-    #expect(program.isEmpty)
+    #expect(try Program("the whole thing is just a comment").isEmpty)
   }
 
   @Test("Parsing nested loops")
   func nestedLoops() throws {
-    let program = try Program(">+[>-[-<]>>]>")
     #expect(
-      program == [
+      try Program(">+[>-[-<]>>]>") == [
         .move(1),
         .add(1),
         .loop([
@@ -72,9 +66,8 @@ import Testing
 
   @Test("'Obscure Problem Tester'")
   func obscureProblemTester() throws {
-    let program = try Program(hTest)
     #expect(
-      program == [
+      try Program(hTest) == [
         .add(10),
         .loop([
           .move(2),
@@ -113,9 +106,8 @@ import Testing
 
   @Test("Optimizations disabled")
   func optimizationsDisabled() throws {
-    let program = try Program(hTest, optimizations: false)
     #expect(
-      program == [
+      try Program(hTest, optimizations: false) == [
         .loop([]),
         .add(1), .add(1), .add(1), .add(1), .add(1),
         .add(1), .add(1), .add(1), .add(1), .add(1),

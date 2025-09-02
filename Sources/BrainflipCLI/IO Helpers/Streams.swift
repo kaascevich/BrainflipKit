@@ -15,12 +15,3 @@ struct StandardOutputStream: TextOutputStream {
     FileHandle.standardOutput.write(string.data(using: .utf8)!)
   }
 }
-
-struct StandardErrorStream: TextOutputStream {
-  /// Appends the given string to the standard error stream.
-  ///
-  /// - Parameter string: The string to print.
-  func write(_ string: String) {
-    FileHandle.standardError.write(string.data(using: .utf8)!)
-  }
-}

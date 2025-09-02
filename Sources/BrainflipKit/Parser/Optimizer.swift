@@ -1,7 +1,8 @@
 // SPDX-FileCopyrightText: 2024 Kaleb A. Ascevich
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
-private import Algorithms
+import Algorithms
+import CasePaths
 
 extension Program {
   // MARK: - Optimizations
@@ -14,7 +15,7 @@ extension Program {
   /// and the `add` instruction is removed.
   private mutating func optimizeClearLoops() {
     // MARK: [-]/[+] -> setTo(0)
-    for case (let index, .loop(let instructions)) in indexed()
+    for case let (index, .loop(instructions)) in indexed()
     where instructions == [.add(1)] || instructions == [.add(-1)] {
       self[index] = .setTo(0)
     }
@@ -22,20 +23,20 @@ extension Program {
     // MARK: setTo(lhs) add(rhs) -> setTo(lhs + rhs)
     // check if the first instruction is a clear loop
     // and the second is an `add` instruction
-    for case (
-      (let firstIndex, .setTo(let lhs)),
-      (let secondIndex, .add(let rhs))
+    for case let (
+      (firstIndex, .setTo(lhs)),
+      (secondIndex, .add(rhs))
     ) in indexed().adjacentPairs().reversed() {
       remove(at: secondIndex)
       self[firstIndex] = .setTo(lhs + rhs)
     }
 
     // MARK: add(_) setTo(rhs) -> setTo(rhs)
-    for (
+    for case let (
       (index, first),
-      (_, second)
+      (_, .setTo)
     ) in indexed().adjacentPairs().reversed()
-    where (first.is(\.add) || first.is(\.setTo)) && second.is(\.setTo) {
+    where first.is(\.add) || first.is(\.setTo) {
       remove(at: index)
     }
   }
@@ -43,20 +44,16 @@ extension Program {
   /// Removes adjacent instructions of the same type.
   private mutating func removeAdjacentInstructions() {
     let chunks = chunked {
-      switch ($0, $1) {
-      // we only care about these two instruction types
-      case (.add, .add), (.move, .move): true
-      default: false
-      }
+      ($0.is(\.add) && $1.is(\.add)) || ($0.is(\.move) && $1.is(\.move))
     }
 
     self = chunks.flatMap { chunk in
       // we only need to check the first value, since all others should
       // match it
-      let casePath: _? =
+      let casePath: CaseKeyPath<Instruction, CellValue>? =
         switch chunk.first {
-        case .add: \Instruction.Cases.add
-        case .move: \Instruction.Cases.move
+        case .add: \.add
+        case .move: \.move
         default: nil
         }
 
@@ -80,9 +77,9 @@ extension Program {
 
   /// Optimizes scan loops.
   private mutating func optimizeScanLoops() {
-    for case (let index, .loop(let instructions)) in indexed()
+    for case let (index, .loop(instructions)) in indexed()
     where instructions.count == 1 {
-      guard case .move(let increment) = instructions[0]
+      guard case let .move(increment) = instructions[0]
       else { continue }
 
       self[index] = .scan(increment)
@@ -91,19 +88,19 @@ extension Program {
 
   /// Optimizes multiplication loops.
   private mutating func optimizeMultiplyLoops() {
-    for case (let index, .loop(let instructions)) in indexed()
+    for case let (index, .loop(instructions)) in indexed()
     where instructions.count == 4 {
       // check if the loop's instructions match what we're looking for
-      if case .add(-1) = instructions[0],
-        case .move(let offset) = instructions[1],
-        case .add(let factor) = instructions[2],
-        case .move(-offset) = instructions[3]
+      if instructions[0] == .add(-1),
+        case let .move(offset) = instructions[1],
+        case let .add(factor) = instructions[2],
+        instructions[3] == .move(-offset)
       {
         self[index] = .multiply(factor: factor, offset: offset)
-      } else if case .move(let offset) = instructions[0],
-        case .add(let factor) = instructions[1],
-        case .move(-offset) = instructions[2],
-        case .add(-1) = instructions[3]
+      } else if case let .move(offset) = instructions[0],
+        case let .add(factor) = instructions[1],
+        instructions[2] == .move(-offset),
+        instructions[3] == .add(-1)
       {
         self[index] = .multiply(factor: factor, offset: offset)
       }
@@ -118,8 +115,9 @@ extension Program {
   /// also be a loop, that loop will never be executed. So we remove those loops
   /// here.
   private mutating func removeDeadLoops() {
-    let pairs = indexed().adjacentPairs()
-    for case ((_, .loop), (let index, .loop)) in pairs.reversed() {
+    for case let ((_, .loop), (index, instruction))
+      in indexed().adjacentPairs().reversed()
+    where instruction.isLoopLike {
       // there's a loop immediately after another loop, so the second loop will
       // never be executed (because the current cell is always 0 immediately
       // after a loop)
@@ -131,7 +129,7 @@ extension Program {
 
   /// Removes loops from the start of the program.
   private mutating func removeInitialLoops() {
-    self = Program(self.drop { $0.is(\.loop) })
+    self = Program(self.drop(while: \.isLoopLike))
   }
 
   // MARK: - Main Optimizer
@@ -151,14 +149,26 @@ extension Program {
       removeDeadLoops()
     } while self != previousOptimization
 
-    optimizeScanLoops()
     optimizeClearLoops()
+    optimizeScanLoops()
     optimizeMultiplyLoops()
+    removeDeadLoops()
   }
 
   /// Optimizes this program.
   mutating func optimize() {
-    removeInitialLoops()
     optimizeNested()
+    removeInitialLoops()
+  }
+}
+
+// MARK: - Utilities
+
+extension Instruction {
+  var isLoopLike: Bool {
+    self.is(\.loop)
+      || self.is(\.multiply)
+      || self.is(\.scan)
+      || self == .setTo(0)
   }
 }

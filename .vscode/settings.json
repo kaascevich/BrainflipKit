@@ -1,0 +1,19 @@
+{
+  "catppuccin-icons.associations.files": {
+    "Package.resolved": "lock",
+  },
+  "catppuccin-icons.associations.extensions": {
+    "xcscheme": "xcode",
+    "xctestplan": "xcode",
+    "xcuserstate": "xcode",
+  },
+  "catppuccin-icons.associations.folders": {
+    "Resources": "folder_assets",
+    ".swiftpm": "folder_packages",
+    ".build": "folder_dist",
+    "checkouts": "folder_git",
+    "xcode": "folder_xcode",
+    "xcuserdata": "folder_xcode",
+    "package.xcworkspace": "folder_xcode",
+  },
+}

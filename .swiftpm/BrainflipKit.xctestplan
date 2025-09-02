@@ -1,0 +1,24 @@
+{
+  "configurations" : [
+    {
+      "id" : "C69E4FDE-C641-41B3-9CEE-1CE3AA97ACE8",
+      "name" : "Test Scheme Action",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "BrainflipKitTests",
+        "name" : "BrainflipKitTests"
+      }
+    }
+  ],
+  "version" : 1
+}

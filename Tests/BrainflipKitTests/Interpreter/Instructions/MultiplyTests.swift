@@ -6,7 +6,8 @@ import Testing
 @testable import BrainflipKit
 
 extension InterpreterTests.InstructionTests {
-  @Suite("Mutliply instruction") struct MultiplyTests {
+  @Suite("Mutliply instruction")
+  struct MultiplyTests {
     var interpreter: Interpreter<String.UnicodeScalarView, String>
     init() throws {
       self.interpreter = try .init(

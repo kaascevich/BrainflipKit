@@ -52,11 +52,11 @@ extension Brainflip {
     private var programSource: String {
       get throws {
         switch (path, program) {
-        case (let path?, nil):
+        case let (path?, nil):
           // if they provided a program path, read from that file
           try String(contentsOfFile: path, encoding: .utf8)
 
-        case (nil, let program?):
+        case let (nil, program?):
           // if they provided a program, just use that
           program
 

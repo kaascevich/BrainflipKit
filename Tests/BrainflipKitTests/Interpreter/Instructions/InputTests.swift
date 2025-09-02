@@ -6,7 +6,8 @@ import Testing
 @testable import BrainflipKit
 
 extension InterpreterTests.InstructionTests {
-  @Suite("Input instruction") struct InputTests {
+  @Suite("Input instruction")
+  struct InputTests {
     @Test("Input instruction")
     func inputInstruction() throws {
       var interpreter = try Interpreter("", input: "&")

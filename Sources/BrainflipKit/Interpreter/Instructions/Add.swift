@@ -15,7 +15,7 @@ extension Interpreter {
     let (result, overflow) =
       self.currentCellValue.addingReportingOverflow(value)
 
-    if overflow && !options.allowCellWraparound {
+    if !options.allowCellWraparound && overflow {
       throw if value < 0 {
         .cellUnderflow(position: self.cellPointer)
       } else {

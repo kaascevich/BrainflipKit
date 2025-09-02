@@ -6,7 +6,8 @@ import Testing
 @testable import typealias BrainflipKit.Program
 
 extension ParsingTests {
-  @Suite("Parsing errors") struct ParserErrorTests {
+  @Suite("Parsing errors")
+  struct ParserErrorTests {
     @Test("Unpaired loops", arguments: [
       "[", "]", "][", "]][", "][[", "[][", "][]", "[[]", "[]]",
       try #require(getProgram(named: "unmatchedleft")),

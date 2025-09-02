@@ -49,46 +49,23 @@ extension Brainflip {
       TerminalRawMode.enable(echoing: inputOptions.inputEchoing)
       defer { TerminalRawMode.disable() }
 
-      let inputSequence =
+      let inputSequence: any Sequence<Unicode.Scalar> =
         if let input = inputOptions.input {
-          AnySequence(input.unicodeScalars)
+          input.unicodeScalars
         } else {
-          AnySequence(
-            StandardInput(printBell: inputOptions.bellOnInputRequest)
-          )
+          StandardInput(printBell: inputOptions.bellOnInputRequest)
         }
 
       let interpreter = Interpreter(
         parsedProgram,
-        inputSequence: inputSequence,
+        inputSequence: AnySequence(inputSequence),
         outputStream: StandardOutputStream(),
         options: makeInterpreterOptions()
       )
 
-      var state:
-        Interpreter<
-          AnySequence<Unicode.Scalar>,
-          StandardOutputStream
-        >.State!
-      let time = try ContinuousClock().measure {
-        state = try interpreter.runReturningFinalState()
-      }
-
       // StandardOutputStream prints the output for us, so we don't need to do
       // it ourselves.
-
-      if interpreterOptions.stats {
-        var standardError = StandardErrorStream()
-
-        let total = state.totalInstructionsExecuted
-        let formattedTime = time.formatted(
-          .units(allowed: [.hours, .minutes, .seconds, .milliseconds])
-        )
-        print(
-          "Done executing. \(total) instructions executed, took \(formattedTime).",
-          to: &standardError
-        )
-      }
+      _ = try interpreter.run()
     }
   }
 }

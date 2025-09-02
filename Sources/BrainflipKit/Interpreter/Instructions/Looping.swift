@@ -9,7 +9,7 @@ extension Interpreter {
   /// - Throws: An ``InterpreterError`` if an error occurs while executing the
   ///   instructions.
   mutating func handleLoop(
-    _ instructions: [Instruction]
+    _ instructions: Program
   ) throws(InterpreterError) {
     while self.currentCellValue != 0 {
       try execute(instructions)

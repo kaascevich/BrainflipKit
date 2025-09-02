@@ -6,7 +6,8 @@ import Testing
 @testable import BrainflipKit
 
 extension InterpreterTests {
-  @Suite("Interpreter options") struct OptionsTests {
+  @Suite("Interpreter options")
+  struct OptionsTests {
     @Test("allowCellWraparound option")
     func allowWraparoundOption() throws {
       var interpreter = try Interpreter(
@@ -25,7 +26,8 @@ extension InterpreterTests {
       }
     }
 
-    @Suite("End of input behavior options") struct EndOfInputBehaviorTests {
+    @Suite("End of input behavior options")
+    struct EndOfInputBehaviorTests {
       @Test("Do nothing on end of input")
       func doNothingOption() throws {
         var interpreter = try Interpreter(

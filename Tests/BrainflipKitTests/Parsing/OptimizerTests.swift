@@ -5,18 +5,20 @@ import Testing
 
 @testable import typealias BrainflipKit.Program
 
-@Suite("Program optimization") struct OptimizerTests {
+@Suite("Program optimization")
+struct OptimizerTests {
   @Test("Clear-loop optimization")
   func clearLoopOptimization() throws {
-    let program = try Program("+[-]+++[+]----")
-    #expect(program == [.setTo(-4)])
+    #expect(try Program(".[-]") == [.output, .setTo(0)])
+    #expect(try Program("[-]+++") == [.setTo(3)])
+    #expect(try Program("+[-]++") == [.setTo(2)])
+    #expect(try Program("+[-]+++[+]----") == [.setTo(-4)])
   }
 
   @Test("Adjacent instruction optimization")
   func adjacentInstructionOptimization() throws {
-    let program = try Program(">>><<+---")
     #expect(
-      program == [
+      try Program(">>><<+---") == [
         .move(1),
         .add(-2),
       ]
@@ -25,15 +27,13 @@ import Testing
 
   @Test("Useless instruction optimization")
   func uselessInstructionOptimization() throws {
-    let program = try Program("+-<> +<>-")
-    #expect(program.isEmpty)
+    #expect(try Program("+-<> +<>-").isEmpty)
   }
 
   @Test("Scan-loop optimization")
   func scanLoopOptimization() throws {
-    let program = try Program("+[>>>]+[<<]")
     #expect(
-      program == [
+      try Program("+[>>>]+[<<]") == [
         .add(1),
         .scan(3),
         .add(1),
@@ -44,9 +44,8 @@ import Testing
 
   @Test("Multiply-loop optimization")
   func multiplyLoopOptimization() throws {
-    let program = try Program("+[- >> ++++ <<]")
     #expect(
-      program == [
+      try Program("+[- >> ++++ <<]") == [
         .add(1),
         .multiply(factor: 4, offset: 2),
       ]
@@ -55,7 +54,6 @@ import Testing
 
   @Test("Dead loops optimization")
   func deadLoopsOptimization() throws {
-    let program = try Program("+[-][][->+<]")
-    #expect(program == [.setTo(0)])
+    #expect(try Program("+[-][][->+<]").isEmpty)
   }
 }
