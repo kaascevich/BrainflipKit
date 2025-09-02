@@ -9,25 +9,23 @@ extension InterpreterTests {
   @Suite("Interpreter initialization")
   struct InitializerTests {
     @Test("Default initializer")
-    func defaultInitializer() throws {
-      let interpreter = try Interpreter("")
+    func defaultInitializer() {
+      let interpreter = Interpreter()
 
       #expect(interpreter.state.tape.isEmpty)
       #expect(interpreter.state.cellPointer == 0)
       #expect(interpreter.state.currentCellValue == 0)
       #expect(interpreter.state.output.isEmpty == true)
-
-      #expect(interpreter.program.isEmpty)
     }
 
     @Test("Unicode input")
     func unicodeInput() throws {
-      let interpreter = try Interpreter(
-        ",[.,]",
+      let program = try Program(",[.,]")
+      let interpreter = Interpreter(
         input: "→",
         options: .init(endOfInputBehavior: .setTo(0))
       )
-      let output = try interpreter.run().output
+      let output = try interpreter.run(program).output
       #expect(output == "→")
     }
   }

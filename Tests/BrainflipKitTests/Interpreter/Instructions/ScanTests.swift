@@ -8,10 +8,7 @@ import Testing
 extension InterpreterTests.InstructionTests {
   @Suite("Scan instruction")
   struct ScanTests {
-    var interpreter: Interpreter<String.UnicodeScalarView, String>
-    init() throws {
-      self.interpreter = try .init("")
-    }
+    var interpreter = Interpreter()
 
     @Test("Scan instruction")
     mutating func scanInstruction() throws {

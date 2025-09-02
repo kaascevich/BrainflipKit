@@ -8,13 +8,7 @@ import Testing
 extension InterpreterTests.InstructionTests {
   @Suite("Mutliply instruction")
   struct MultiplyTests {
-    var interpreter: Interpreter<String.UnicodeScalarView, String>
-    init() throws {
-      self.interpreter = try .init(
-        "",
-        options: .init(allowCellWraparound: false)
-      )
-    }
+    var interpreter = Interpreter(options: .init(allowCellWraparound: false))
 
     @Test("Multiply instruction")
     mutating func multiplyInstruction() throws {

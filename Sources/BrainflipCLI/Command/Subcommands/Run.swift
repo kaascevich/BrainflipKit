@@ -57,7 +57,6 @@ extension Brainflip {
         }
 
       let interpreter = Interpreter(
-        parsedProgram,
         input: AnySequence(inputSequence),
         output: StandardOutputStream(),
         options: makeInterpreterOptions()
@@ -65,7 +64,7 @@ extension Brainflip {
 
       // StandardOutputStream prints the output for us, so we don't need to do
       // it ourselves.
-      _ = try interpreter.run()
+      _ = try interpreter.run(parsedProgram)
     }
   }
 }

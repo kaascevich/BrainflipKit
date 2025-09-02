@@ -138,19 +138,17 @@ extension Program {
 
   /// Optimizes this program.
   private mutating func optimizeNested() {
-    removeDeadLoops()
-
-    for case (let index, .loop(var instructions)) in indexed() {
-      instructions.optimizeNested()
-      self[index] = .loop(instructions)
-    }
-
     var previousOptimization: Program
     repeat {
       previousOptimization = self
       removeAdjacentInstructions()
       removeDeadLoops()
     } while self != previousOptimization
+
+    for case (let index, .loop(var instructions)) in indexed() {
+      instructions.optimizeNested()
+      self[index] = .loop(instructions)
+    }
 
     optimizeClearLoops()
     optimizeScanLoops()

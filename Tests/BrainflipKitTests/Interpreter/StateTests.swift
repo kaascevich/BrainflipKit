@@ -9,12 +9,12 @@ import Testing
 extension InterpreterTests {
   @Suite("State")
   struct StateTests {
+    var interpreter = Interpreter()
+
     @Test("Current cell value")
-    func currentCellValue() throws {
-      var interpreter = try Interpreter("")
+    mutating func currentCellValue() {
       interpreter.state.tape = [0: 237, 1: 29, 2: 74]
 
-      try #require(interpreter.state.cellPointer == 0)
       #expect(interpreter.state.currentCellValue == 237)
 
       interpreter.state.cellPointer = 1

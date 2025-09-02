@@ -10,7 +10,7 @@ extension InterpreterTests.InstructionTests {
   struct InputTests {
     @Test("Input instruction")
     func inputInstruction() throws {
-      var interpreter = try Interpreter("", input: "&")
+      var interpreter = Interpreter(input: "&")
 
       try interpreter.handleInstruction(.input)
       #expect(interpreter.state.currentCellValue == 0x26)  // ASCII code for "&"

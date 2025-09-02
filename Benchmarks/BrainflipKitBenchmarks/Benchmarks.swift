@@ -22,10 +22,11 @@ let benchmarks = { @Sendable in
       _ = try Program(program)
     }
 
-    Benchmark("Execution - \(name)") { benchmark, interpreter in
-      _ = try interpreter.run()
+    Benchmark("Execution - \(name)") { benchmark, program in
+      let interpreter = Interpreter(input: input)
+      _ = try interpreter.run(program)
     } setup: {
-      try Interpreter(program, input: input)
+      try Program(program)
     }
   }
 }
