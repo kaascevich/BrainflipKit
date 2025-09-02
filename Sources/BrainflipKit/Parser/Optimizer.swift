@@ -44,16 +44,19 @@ extension Program {
   /// Removes adjacent instructions of the same type.
   private mutating func removeAdjacentInstructions() {
     let chunks = chunked {
-      ($0.is(\.add) && $1.is(\.add)) || ($0.is(\.move) && $1.is(\.move))
+      switch ($0, $1) {
+      case (.add, .add), (.move, .move): true
+      default: false
+      }
     }
 
     self = chunks.flatMap { chunk in
       // we only need to check the first value, since all others should
       // match it
-      let casePath: CaseKeyPath<Instruction, CellValue>? =
+      let casePath: _? =
         switch chunk.first {
-        case .add: \.add
-        case .move: \.move
+        case .add: \Instruction.Cases.add
+        case .move: \Instruction.Cases.move
         default: nil
         }
 
@@ -66,13 +69,8 @@ extension Program {
       // condense all the values into a single instruction
       let values = chunk.map(\.[case: casePath]!)
       let sum = values.reduce(0, +)
-      return [casePath(sum)]
+      return if sum == 0 { [] } else { [casePath(sum)] }
     }
-  }
-
-  /// Removes useless instructions from the program.
-  private mutating func removeUselessInstructions() {
-    removeAll { $0 == .add(0) || $0 == .move(0) }
   }
 
   /// Optimizes scan loops.
@@ -90,16 +88,16 @@ extension Program {
     for case let (index, .loop(instructions)) in indexed()
     where instructions.count == 4 {
       // check if the loop's instructions match what we're looking for
-      if instructions[0] == .add(-1),
+      if case .add(-1) = instructions[0],
         case let .move(offset) = instructions[1],
         case let .add(factor) = instructions[2],
-        instructions[3] == .move(-offset)
+        case .move(-offset) = instructions[3]
       {
         self[index] = .multiply(factor: factor, offset: offset)
       } else if case let .move(offset) = instructions[0],
         case let .add(factor) = instructions[1],
-        instructions[2] == .move(-offset),
-        instructions[3] == .add(-1)
+        case .move(-offset) = instructions[2],
+        case .add(-1) = instructions[3]
       {
         self[index] = .multiply(factor: factor, offset: offset)
       }
@@ -126,15 +124,22 @@ extension Program {
 
   // MARK: - Root Optimizations
 
-  /// Removes loops from the start of the program.
+  /// Removes a loop from the start of the program.
+  ///
+  /// Doesn't bother removing more than 1 loop, since the others should have
+  /// already been optimized away by this point.
   private mutating func removeInitialLoops() {
-    self = Program(self.drop(while: \.isLoopLike))
+    if self.first?.isLoopLike == true {
+      self.removeFirst()
+    }
   }
 
   // MARK: - Main Optimizer
 
   /// Optimizes this program.
   private mutating func optimizeNested() {
+    removeDeadLoops()
+
     for case (let index, .loop(var instructions)) in indexed() {
       instructions.optimizeNested()
       self[index] = .loop(instructions)
@@ -144,14 +149,12 @@ extension Program {
     repeat {
       previousOptimization = self
       removeAdjacentInstructions()
-      removeUselessInstructions()
       removeDeadLoops()
     } while self != previousOptimization
 
     optimizeClearLoops()
     optimizeScanLoops()
     optimizeMultiplyLoops()
-    removeDeadLoops()
   }
 
   /// Optimizes this program.
@@ -165,9 +168,9 @@ extension Program {
 
 extension Instruction {
   fileprivate var isLoopLike: Bool {
-    self.is(\.loop)
-      || self.is(\.multiply)
-      || self.is(\.scan)
-      || self == .setTo(0)
+    switch self {
+    case .loop, .multiply, .scan, .setTo(0): true
+    default: false
+    }
   }
 }

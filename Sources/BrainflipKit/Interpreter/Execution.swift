@@ -8,7 +8,7 @@ extension Interpreter {
   ///
   /// - Throws: ``InterpreterError`` if an issue was encountered during
   ///   execution.
-  public consuming func run() throws(InterpreterError) -> State {
+  public consuming func run() throws -> State {
     try execute(program)
     return state
   }
@@ -19,9 +19,7 @@ extension Interpreter {
   ///
   /// - Throws: ``InterpreterError`` if an issue was encountered during
   ///   execution.
-  mutating func execute(_ instructions: Program)
-    throws(InterpreterError)
-  {
+  mutating func execute(_ instructions: Program) throws {
     for instruction in instructions {
       try handleInstruction(instruction)
     }
@@ -33,9 +31,7 @@ extension Interpreter {
   ///
   /// - Throws: ``InterpreterError`` if an issue was encountered during
   ///   execution.
-  mutating func handleInstruction(_ instruction: Instruction)
-    throws(InterpreterError)
-  {
+  mutating func handleInstruction(_ instruction: Instruction) throws {
     switch instruction {
     // MARK: Core
 
@@ -53,10 +49,7 @@ extension Interpreter {
     case let .setTo(value): handleSetToInstruction(value)
 
     case let .multiply(factor, offset):
-      try handleMultiplyInstruction(
-        multiplyingBy: factor,
-        storingAtOffset: offset
-      )
+      try handleMultiplyInstruction(factor: factor, offset: offset)
 
     case let .scan(increment): handleScanInstruction(increment)
     }

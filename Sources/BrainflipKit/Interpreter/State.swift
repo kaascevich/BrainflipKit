@@ -11,10 +11,10 @@ extension Interpreter {
     /// - Parameters:
     ///   - inputIterator: An iterator over the input that will be provided to
     ///     the program.
-    ///   - outputStream: The stream to write outputted characters to.
-    internal init(inputSequence: Input, outputStream: Output) {
-      self.inputIterator = inputSequence.makeIterator()
-      self.output = outputStream
+    ///   - output: The stream to write outputted characters to.
+    internal init(input: Input, output: Output) {
+      self.inputIterator = input.makeIterator()
+      self.output = output
     }
 
     // MARK: - Properties
@@ -91,8 +91,8 @@ extension Interpreter {
     /// - ``Interpreter/State/tape``
     /// - ``Interpreter/State/cellPointer``
     public internal(set) var currentCellValue: CellValue {
-      @inlinable get { tape[cellPointer, default: 0] }
-      @usableFromInline set { tape[cellPointer] = newValue }
+      get { tape[cellPointer, default: 0] }
+      set { tape[cellPointer] = newValue }
     }
   }
 }

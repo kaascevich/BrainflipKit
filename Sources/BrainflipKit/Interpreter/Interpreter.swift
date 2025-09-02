@@ -101,21 +101,18 @@ public struct Interpreter<
   ///
   /// - Parameters:
   ///   - program: A ``Program`` instance.
-  ///   - inputSequence: The input to pass to the program.
-  ///   - outputStream: The stream to write outputted characters to.
+  ///   - input: The input to pass to the program.
+  ///   - output: The stream to write outputted characters to.
   ///   - options: Configurable options to be used for this instance.
   public init(
     _ program: Program,
-    inputSequence: Input,
-    outputStream: Output = "",
+    input: Input,
+    output: Output = "",
     options: InterpreterOptions = .init()
   ) {
     self.program = program
     self.options = options
-    self.state = State(
-      inputSequence: inputSequence,
-      outputStream: outputStream
-    )
+    self.state = State(input: input, output: output)
   }
 
   /// Creates an `Interpreter` instance from the given `program`.
@@ -123,18 +120,18 @@ public struct Interpreter<
   /// - Parameters:
   ///   - program: A ``Program`` instance.
   ///   - input: The input to pass to the program.
-  ///   - outputStream: The stream to write outputted characters to.
+  ///   - output: The stream to write outputted characters to.
   ///   - options: Configurable options to be used for this instance.
   public init(
     _ program: Program,
     input: String = "",
-    outputStream: Output = "",
+    output: Output = "",
     options: InterpreterOptions = .init()
   ) where Input == String.UnicodeScalarView {
     self.init(
       program,
-      inputSequence: input.unicodeScalars,
-      outputStream: outputStream,
+      input: input.unicodeScalars,
+      output: output,
       options: options
     )
   }
@@ -145,24 +142,19 @@ public struct Interpreter<
   /// - Parameters:
   ///   - source: A string to parse into a `Program`.
   ///   - inputSequence: The input to pass to the program.
-  ///   - outputStream: The stream to write outputted characters to.
+  ///   - output: The stream to write outputted characters to.
   ///   - options: Configurable options to be used for this instance.
   ///
   /// - Throws: An `Error` if `source` cannot be parsed into a valid program
   ///   (that is, if it contains unmatched brackets).
-  @inlinable public init(
+  public init(
     _ source: String,
-    inputSequence: Input,
-    outputStream: Output = "",
+    input: Input,
+    output: Output = "",
     options: InterpreterOptions = .init()
   ) throws {
     let program = try Program(source)
-    self.init(
-      program,
-      inputSequence: inputSequence,
-      outputStream: outputStream,
-      options: options
-    )
+    self.init(program, input: input, output: output, options: options)
   }
 
   /// Parses `source` into a ``Program`` and creates an `Interpreter` instance
@@ -171,7 +163,7 @@ public struct Interpreter<
   /// - Parameters:
   ///   - source: A string to parse into a `Program`.
   ///   - input: The input to pass to the program.
-  ///   - outputStream: The stream to write outputted characters to.
+  ///   - output: The stream to write outputted characters to.
   ///   - options: Configurable options to be used for this instance.
   ///
   /// - Throws: An `Error` if `source` cannot be parsed into a valid program
@@ -179,13 +171,13 @@ public struct Interpreter<
   public init(
     _ source: String,
     input: String = "",
-    outputStream: Output = "",
+    output: Output = "",
     options: InterpreterOptions = .init()
   ) throws where Input == String.UnicodeScalarView {
     try self.init(
       source,
-      inputSequence: input.unicodeScalars,
-      outputStream: outputStream,
+      input: input.unicodeScalars,
+      output: output,
       options: options
     )
   }

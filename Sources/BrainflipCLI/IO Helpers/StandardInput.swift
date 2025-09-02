@@ -33,16 +33,20 @@ struct StandardInput: Sequence, IteratorProtocol {
       try? FileHandle.standardError.write(contentsOf: Data([0x07]))
     }
 
-    guard
-      let nextCharacterData = try? FileHandle.standardInput.read(upToCount: 1),
-      let nextCharacter = String(data: nextCharacterData, encoding: .utf8),
-      let nextScalar = Unicode.Scalar(nextCharacter),
-      nextScalar.value != 0x04 // EOF indicator
-    else {
+    var nextCharacter: UInt8 = 0
+    let readResult = read(
+      FileHandle.standardInput.fileDescriptor,
+      &nextCharacter,
+      1
+    )
+
+    // make sure the input request succeeded, and that the character
+    // isn't an EOF indicator (0x04)
+    guard readResult == 1, nextCharacter != 0x04 else {
       endOfInput = true
       return nil
     }
 
-    return nextScalar
+    return Unicode.Scalar(nextCharacter)
   }
 }

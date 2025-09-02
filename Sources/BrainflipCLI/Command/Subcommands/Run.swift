@@ -58,8 +58,8 @@ extension Brainflip {
 
       let interpreter = Interpreter(
         parsedProgram,
-        inputSequence: AnySequence(inputSequence),
-        outputStream: StandardOutputStream(),
+        input: AnySequence(inputSequence),
+        output: StandardOutputStream(),
         options: makeInterpreterOptions()
       )
 
