@@ -14,6 +14,6 @@
 # not, see <https://www.gnu.org/licenses/>.
 
 .DS_Store
-/.build
+/.build/
 /.benchmarkBaselines/
-*.xcuserstate
+/.swiftpm/
