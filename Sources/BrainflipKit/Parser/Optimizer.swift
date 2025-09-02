@@ -79,10 +79,9 @@ extension Program {
   private mutating func optimizeScanLoops() {
     for case let (index, .loop(instructions)) in indexed()
     where instructions.count == 1 {
-      guard case let .move(increment) = instructions[0]
-      else { continue }
-
-      self[index] = .scan(increment)
+      if case let .move(increment) = instructions[0] {
+        self[index] = .scan(increment)
+      }
     }
   }
 
@@ -115,13 +114,13 @@ extension Program {
   /// also be a loop, that loop will never be executed. So we remove those loops
   /// here.
   private mutating func removeDeadLoops() {
-    for case let ((_, .loop), (index, instruction))
+    for case let ((_, first), (secondIndex, second))
       in indexed().adjacentPairs().reversed()
-    where instruction.isLoopLike {
+    where first.isLoopLike && second.isLoopLike {
       // there's a loop immediately after another loop, so the second loop will
       // never be executed (because the current cell is always 0 immediately
       // after a loop)
-      remove(at: index)
+      remove(at: secondIndex)
     }
   }
 
@@ -165,7 +164,7 @@ extension Program {
 // MARK: - Utilities
 
 extension Instruction {
-  var isLoopLike: Bool {
+  fileprivate var isLoopLike: Bool {
     self.is(\.loop)
       || self.is(\.multiply)
       || self.is(\.scan)

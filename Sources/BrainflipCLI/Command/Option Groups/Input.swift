@@ -20,7 +20,8 @@ extension Brainflip {
     ) var input: String?
 
     @Flag(
-      inversion: .prefixedNo,
+      name: .customLong("echo"),
+      inversion: .prefixedEnableDisable,
       help: .init(
         "Whether to echo input characters as they are being typed.",
         discussion: """

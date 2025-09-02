@@ -13,6 +13,6 @@ extension Interpreter {
       return
     }
 
-    self.outputStream.write(String(scalar))
+    self.output.write(String(scalar))
   }
 }

@@ -44,7 +44,7 @@ extension InterpreterTests {
       // third character once
       let interpreter = try Interpreter(",..,,.", input: "hello")
 
-      let output = try interpreter.run().outputStream
+      let output = try interpreter.run().output
       #expect(output == "hhl")
     }
 
@@ -53,7 +53,7 @@ extension InterpreterTests {
       let program = try #require(getProgram(named: "helloworld"))
       let interpreter = try Interpreter(program)
 
-      let output = try interpreter.run().outputStream
+      let output = try interpreter.run().output
       #expect(output == "Hello World!")
     }
 
@@ -62,7 +62,7 @@ extension InterpreterTests {
       let program = try #require(getProgram(named: "comprehensive"))
       let interpreter = try Interpreter(program)
 
-      let output = try interpreter.run().outputStream
+      let output = try interpreter.run().output
       #expect(output == "Hello, world!\n")
     }
 
@@ -71,7 +71,7 @@ extension InterpreterTests {
       let program = try #require(getProgram(named: "factor"))
       let interpreter = try Interpreter(program, input: "2346\n")
 
-      let output = try interpreter.run().outputStream
+      let output = try interpreter.run().output
       #expect(output == "2346: 2 3 17 23\n")
     }
   }

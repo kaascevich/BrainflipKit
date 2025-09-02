@@ -9,12 +9,13 @@ let benchmarks = { @Sendable in
   let programs = [
     "comprehensive": "",
     "factor": "2346\n",
-    //"hanoi": "",
+    "hanoi": "",
     "numwarp": "()-./0123456789abcdef",
+    "sierpinski": "",
   ]
 
   for (name, input) in programs {
-    let url = Bundle.module.url(forResource: name, withExtension: "bf")!
+    let url = Bundle.module.url(forResource: name, withExtension: "b")!
     let program = try! String(contentsOf: url, encoding: .utf8)
 
     Benchmark("Parsing - \(name)") { benchmark in

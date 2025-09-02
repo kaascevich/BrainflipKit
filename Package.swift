@@ -7,7 +7,7 @@ import PackageDescription
 
 let package = Package(
   name: "BrainflipKit",
-  platforms: [.macOS(.v13)],
+  platforms: [.macOS(.v15)],
   products: [
     .library(name: "BrainflipKit", targets: ["BrainflipKit"]),
     .executable(name: "brainflip", targets: ["BrainflipCLI"]),

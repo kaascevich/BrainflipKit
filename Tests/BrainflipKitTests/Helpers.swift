@@ -4,7 +4,7 @@
 import Foundation
 
 func getProgram(named name: String) -> String? {
-  Bundle.module.url(forResource: name, withExtension: "bf")
+  Bundle.module.url(forResource: name, withExtension: "b")
     .flatMap { url in
       try? String(contentsOf: url, encoding: .utf8)
     }

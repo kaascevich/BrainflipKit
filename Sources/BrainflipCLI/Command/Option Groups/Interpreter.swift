@@ -32,7 +32,7 @@ extension Brainflip {
     // MARK: - Options and Flags
 
     @Flag(
-      name: [.customLong("wrap"), .long],
+      name: .customLong("wrap"),
       inversion: .prefixedNo,
       help: """
         Whether to allow cell values to wrap around when they overflow or \
