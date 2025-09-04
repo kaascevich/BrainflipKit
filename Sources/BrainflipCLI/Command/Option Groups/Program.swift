@@ -33,12 +33,7 @@ extension Brainflip {
           """
       )
     ) var program: String?
-
-    @Flag(
-      inversion: .prefixedEnableDisable,
-      help: "Whether to optimize the program during parsing."
-    ) var optimizations = true
-
+    
     // MARK: - Implementation
 
     /// The source code for a Brainflip program, obtained from command-line
@@ -74,8 +69,7 @@ extension Brainflip {
     /// - Returns: The result of parsing the Brainflip program provided by the
     ///   user.
     func parseProgram() throws -> Program {
-      let source = try programSource
-      return try Program(source, optimizations: optimizations)
+      try Program(try programSource)
     }
   }
 }

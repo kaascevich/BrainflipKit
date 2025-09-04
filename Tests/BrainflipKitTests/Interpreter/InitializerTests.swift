@@ -26,6 +26,7 @@ extension InterpreterTests {
         options: .init(endOfInputBehavior: .setTo(0))
       )
       let output = try interpreter.run(program).output
+      
       #expect(output == "→")
     }
   }

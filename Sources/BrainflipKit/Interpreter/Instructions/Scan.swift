@@ -6,7 +6,7 @@ extension Interpreter {
   ///
   /// - Parameter increment: The value to increment the cell pointer by on each
   ///   iteration.
-  mutating func handleScanInstruction(_ increment: CellPointer) {
+  mutating func handleScanInstruction(_ increment: CellIndex) {
     while state.currentCellValue != 0 {
       state.cellPointer += increment
     }

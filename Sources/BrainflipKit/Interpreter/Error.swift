@@ -3,12 +3,12 @@
 
 /// Represents an error that can happen during the lifetime of an
 /// ``Interpreter`` instance.
-public enum InterpreterError: Error, Equatable, Hashable {
+public enum InterpreterError: Error, Equatable, Hashable, BitwiseCopyable {
   /// Indicates that the cell value at the specified `position` overflowed.
-  case cellOverflow(position: CellPointer)
+  case cellOverflow(position: CellIndex)
 
   /// Indicates that the cell value at the specified `position` underflowed.
-  case cellUnderflow(position: CellPointer)
+  case cellUnderflow(position: CellIndex)
 
   /// Indicates that the input iterator was exhausted.
   case endOfInput

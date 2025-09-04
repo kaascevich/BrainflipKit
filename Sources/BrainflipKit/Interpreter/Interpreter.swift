@@ -9,10 +9,9 @@
 /// instructions. However, creating programs in Brainflip can be a challenge
 /// like no other due to this reduced instruction set.
 ///
-/// All Brainflip programs mutate an array of _cells_, which are 8 bits long by
-/// default. This array is referred to as the _tape_. The tape is infinite in
-/// both directions. A _pointer_ is used to keep track of the cell that is
-/// currently being mutated.
+/// All Brainflip programs mutate an array of _cells_. This array is referred to
+/// as the _tape_. The tape is infinite in both directions. A _pointer_ is used
+/// to keep track of the cell that is currently being mutated.
 ///
 /// ## Instruction Set
 ///
@@ -20,24 +19,28 @@
 ///
 /// - term ``Instruction/add(_:)``:
 ///     Increments (or decrements) the current cell by the specified amount,
-///     wrapping around if necessary.
+///     wrapping around if necessary. (Corresponds to the `+` and `-`
+///     characters.)
 ///
 /// - term ``Instruction/move(_:)``:
 ///     Moves the cell pointer by the specified amount. If the amount is
-///     negative, move the pointer backward.
+///     negative, moves the pointer backward. (Corresponds to the `<` and `>`
+///     characters.)
 ///
 /// - term ``Instruction/loop(_:)``:
 ///     If the current cell is 0, skips the contained instructions. Otherwise,
-///     executes the instructions before repeating the process.
+///     executes the instructions before repeating the process. (Corresponds to
+///     the `[` and `]` characters.)
 ///
 /// - term ``Instruction/output``:
 ///     Writes the character whose Unicode value is the current cell's value to
 ///     the output stream. If the current cell's value does not correspond to a
-///     valid Unicode code point, this instruction does nothing.
+///     valid Unicode code point, this instruction does nothing. (Corresponds to
+///     the `.` character.)
 ///
 /// - term ``Instruction/input``:
 ///     Takes the next character of the input and stores its Unicode value into
-///     the current cell.
+///     the current cell. (Corresponds to the `,` character.)
 ///
 ///     If there are no characters remaining in the input, this instruction will
 ///     do nothing by default (this behavior is configurable).
@@ -48,6 +51,10 @@
 ///
 /// - term ``Instruction/setTo(_:)``:
 ///     Sets the current cell to a specific value.
+///
+/// - term ``Instruction/multiply(factor:offset:)``:
+///     Multiplies the current cell by `factor`, stores the result `offset`
+///     cells away from the current cell, then sets the current cell to 0.
 ///
 /// - term ``Instruction/scan(_:)``:
 ///     Moves the pointer to the next (or previous) zero cell.
@@ -62,8 +69,8 @@
 /// ++++++++[>++++[>++>+++>+++>+<<<<-]>+>+>->>+[<]<-]>>
 /// .>---.+++++++..+++.>>.<-.<.+++.------.--------.>>+.
 /// """
-/// let interpreter = try Interpreter(program)
-/// let output = try interpreter.run()
+/// let interpreter = Interpreter()
+/// let output = try interpreter.run(program).output
 /// print(output) // Hello World!
 /// ```
 ///
@@ -74,8 +81,7 @@
 /// - ``Program``
 ///
 /// ## Running
-/// - ``run()``
-/// - ``runReturningFinalState()``
+/// - ``run(_:)``
 ///
 /// ## Options
 /// - ``InterpreterOptions``

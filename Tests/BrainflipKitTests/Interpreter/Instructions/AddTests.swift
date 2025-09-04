@@ -14,7 +14,13 @@ extension InterpreterTests.InstructionTests {
     mutating func addInstruction(offset: CellValue) throws {
       for i in 1...10 {
         try interpreter.handleInstruction(.add(offset))
-        #expect(interpreter.state.currentCellValue == i * offset)
+        
+        #expect(
+          interpreter.state.currentCellValue == i * offset,
+          """
+          add instruction adds the given value to the current cell
+          """
+        )
       }
     }
 
@@ -25,7 +31,9 @@ extension InterpreterTests.InstructionTests {
       
       #expect(
         interpreter.state.currentCellValue == .min,
-        "increment instruction should wrap around"
+        """
+        add instruction with positive value should wrap around
+        """
       )
     }
 
@@ -36,7 +44,9 @@ extension InterpreterTests.InstructionTests {
 
       #expect(
         interpreter.state.currentCellValue == .max,
-        "decrement instruction should wrap around"
+        """
+        add instruction with negative value should wrap around
+        """
       )
     }
   }

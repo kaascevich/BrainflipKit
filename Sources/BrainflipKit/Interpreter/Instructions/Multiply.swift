@@ -12,7 +12,7 @@ extension Interpreter {
   ///   ``InterpreterOptions/allowCellWraparound`` is `false`.
   mutating func handleMultiplyInstruction(
     factor: CellValue,
-    offset: CellPointer
+    offset: CellIndex
   ) throws {
     let offsettedPointer = state.cellPointer + offset
 

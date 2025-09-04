@@ -11,10 +11,16 @@ extension InterpreterTests.InstructionTests {
     var interpreter = Interpreter()
 
     @Test("Move instruction", arguments: -5...5)
-    mutating func moveInstruction(offset: CellPointer) throws {
+    mutating func moveInstruction(offset: CellIndex) throws {
       for i in 1...10 {
         try interpreter.handleInstruction(.move(offset))
-        #expect(interpreter.state.cellPointer == i * offset)
+        
+        #expect(
+          interpreter.state.cellPointer == i * offset,
+          """
+          move instruction should move the cell pointer by the given offset
+          """
+        )
       }
     }
   }

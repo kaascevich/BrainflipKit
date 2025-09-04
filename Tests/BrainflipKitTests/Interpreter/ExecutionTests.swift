@@ -1,7 +1,6 @@
 // SPDX-FileCopyrightText: 2024 Kaleb A. Ascevich
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
-import Foundation
 import Testing
 
 @testable import BrainflipKit
@@ -47,6 +46,7 @@ extension InterpreterTests {
       let interpreter = Interpreter(input: "hello")
 
       let output = try interpreter.run(program).output
+      
       #expect(output == "hhl")
     }
 
@@ -56,6 +56,7 @@ extension InterpreterTests {
       let program = try Program(source)
 
       let output = try interpreter.run(program).output
+
       #expect(output == "Hello World!")
     }
 
@@ -65,6 +66,7 @@ extension InterpreterTests {
       let program = try Program(source)
 
       let output = try interpreter.run(program).output
+
       #expect(output == "Hello, world!\n")
     }
 
@@ -75,6 +77,7 @@ extension InterpreterTests {
       let interpreter = Interpreter(input: "2346\n")
 
       let output = try interpreter.run(program).output
+
       #expect(output == "2346: 2 3 17 23\n")
     }
   }

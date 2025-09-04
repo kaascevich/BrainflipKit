@@ -14,6 +14,8 @@ let benchmarks = { @Sendable in
     "sierpinski": "",
   ]
 
+  Benchmark.defaultConfiguration.maxDuration = .seconds(5)
+
   for (name, input) in programs {
     let url = Bundle.module.url(forResource: name, withExtension: "b")!
     let program = try! String(contentsOf: url, encoding: .utf8)
@@ -27,6 +29,12 @@ let benchmarks = { @Sendable in
       _ = try interpreter.run(program)
     } setup: {
       try Program(program)
+    }
+
+    Benchmark("Combined - \(name)") { benchmark in
+      let program = try Program(program)
+      let interpreter = Interpreter(input: input)
+      _ = try interpreter.run(program)
     }
   }
 }

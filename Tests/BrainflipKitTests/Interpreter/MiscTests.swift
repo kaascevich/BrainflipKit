@@ -11,19 +11,50 @@ extension InterpreterTests {
   /// valid `UInt32`.
   @Test("Cell sizes")
   func cellSizes() {
-    var interpreter = Interpreter()
-
-    interpreter.state.currentCellValue = .min
-    #expect(interpreter.state.currentCellValue <= UInt32.min)
-
-    interpreter.state.currentCellValue = .max
-    #expect(interpreter.state.currentCellValue >= UInt32.max)
+    #expect(
+      CellValue.min <= UInt32.min,
+      """
+      minimum cell value should be at least \(UInt32.min)
+      """
+    )
+    #expect(
+      CellValue.max >= UInt32.max,
+      """
+      maximum cell value should be at least \(UInt32.max)
+      """
+    )
   }
 
-  /// Verifies that the tape is at least 30,000 cells long.
-  @Test("Tape length")
-  func tapeLength() throws {
-    var interpreter = Interpreter()
-    try interpreter.handleInstruction(.move(30_000))
+  @Suite("Tape")
+  struct TapeTests {
+    /// Verifies that the tape is at least 30,000 cells long.
+    @Test("Tape length")
+    func tapeLength() {
+      var interpreter = Interpreter()
+
+      #expect(
+        throws: Never.self,
+        """
+        tape length should be at least 30_000 cells long
+        """
+      ) {
+        try interpreter.handleInstruction(.move(29_999))
+      }
+    }
+
+    @Test("Negative cell pointers")
+    func negativeCellPointers() throws {
+      var interpreter = Interpreter()
+      try #require(interpreter.state.cellPointer == 0)
+
+      #expect(
+        throws: Never.self,
+        """
+        tape should allow negative cell pointers
+        """
+      ) {
+        try interpreter.handleInstruction(.move(-5))
+      }
+    }
   }
 }

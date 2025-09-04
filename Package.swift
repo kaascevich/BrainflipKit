@@ -26,7 +26,11 @@ let package = Package(
       from: "0.14.1"
     ),
     .package(
-      url: "https://github.com/ordo-one/package-benchmark",
+      url: "https://github.com/pointfreeco/swift-custom-dump.git",
+      from: "1.3.3"
+    ),
+    .package(
+      url: "https://github.com/ordo-one/package-benchmark.git",
       from: "1.0.0"
     ),
   ],
@@ -36,6 +40,7 @@ let package = Package(
       dependencies: [
         "BrainflipKit",
         .product(name: "ArgumentParser", package: "swift-argument-parser"),
+        .product(name: "CustomDump", package: "swift-custom-dump"),
       ]
     ),
     .target(
@@ -48,7 +53,10 @@ let package = Package(
 
     .testTarget(
       name: "BrainflipKitTests",
-      dependencies: ["BrainflipKit"],
+      dependencies: [
+        "BrainflipKit",
+        .product(name: "CustomDump", package: "swift-custom-dump"),
+      ],
       resources: [.process("Resources/")]
     ),
 

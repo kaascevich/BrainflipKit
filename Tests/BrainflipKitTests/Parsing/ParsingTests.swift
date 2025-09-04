@@ -1,24 +1,26 @@
 // SPDX-FileCopyrightText: 2024 Kaleb A. Ascevich
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
+import CustomDump
 import Testing
 
-@testable import typealias BrainflipKit.Program
+@testable import BrainflipKit
 
 @Suite("Program parsing")
 struct ParsingTests {
   let hTest = """
     This program tests for several obscure interpreter problems;
     it should output an H
-
+    
     []++++++++++[>>+>+>++++++[<<+<+++>>>-]<<<<-]
     "A*$";?@![#>>+<<]>[>>]<<<<[>++<[-]]>.>.
     """
 
   @Test("Basic parsing")
   func basicParsing() throws {
-    #expect(
-      try Program(",[>+<-.]") == [
+    expectNoDifference(
+      try Program(",[>+<-.]"),
+      [
         .input,
         .loop([
           .move(1),
@@ -33,21 +35,23 @@ struct ParsingTests {
 
   @Test("Parsing instructions and comments")
   func instructionsAndComments() throws {
-    #expect(
-      try Program(",++ a comment ++.") == [
+    expectNoDifference(
+      try Program(",++ a comment ++."),
+      [
         .input,
         .add(4),
         .output,
       ]
     )
 
-    #expect(try Program("the whole thing is just a comment").isEmpty)
+    expectNoDifference(try Program("the whole thing is just a comment"), [])
   }
 
   @Test("Parsing nested loops")
   func nestedLoops() throws {
-    #expect(
-      try Program(">+[>-[-<]>>]>") == [
+    expectNoDifference(
+      try Program(">+[>-[-<]>>]>"),
+      [
         .move(1),
         .add(1),
         .loop([
@@ -66,8 +70,9 @@ struct ParsingTests {
 
   @Test("'Obscure Problem Tester'")
   func obscureProblemTester() throws {
-    #expect(
-      try Program(hTest) == [
+    expectNoDifference(
+      try Program(hTest),
+      [
         .add(10),
         .loop([
           .move(2),
@@ -95,54 +100,6 @@ struct ParsingTests {
           .add(2),
           .move(-1),
           .setTo(0),
-        ]),
-        .move(1),
-        .output,
-        .move(1),
-        .output,
-      ]
-    )
-  }
-
-  @Test("Optimizations disabled")
-  func optimizationsDisabled() throws {
-    #expect(
-      try Program(hTest, optimizations: false) == [
-        .loop([]),
-        .add(1), .add(1), .add(1), .add(1), .add(1),
-        .add(1), .add(1), .add(1), .add(1), .add(1),
-        .loop([
-          .move(1), .move(1),
-          .add(1),
-          .move(1),
-          .add(1),
-          .move(1),
-          .add(1), .add(1), .add(1),
-          .add(1), .add(1), .add(1),
-          .loop([
-            .move(-1), .move(-1),
-            .add(1),
-            .move(-1),
-            .add(1), .add(1), .add(1),
-            .move(1), .move(1), .move(1),
-            .add(-1),
-          ]),
-          .move(-1), .move(-1), .move(-1), .move(-1),
-          .add(-1),
-        ]),
-        .loop([
-          .move(1), .move(1),
-          .add(1),
-          .move(-1), .move(-1),
-        ]),
-        .move(1),
-        .loop([.move(1), .move(1)]),
-        .move(-1), .move(-1), .move(-1), .move(-1),
-        .loop([
-          .move(1),
-          .add(1), .add(1),
-          .move(-1),
-          .loop([.add(-1)]),
         ]),
         .move(1),
         .output,

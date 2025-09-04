@@ -13,7 +13,13 @@ extension InterpreterTests.InstructionTests {
     @Test("Set-to instruction")
     mutating func setToInstruction() throws {
       try interpreter.handleInstruction(.setTo(42))
-      #expect(interpreter.state.currentCellValue == 42)
+
+      #expect(
+        interpreter.state.currentCellValue == 42,
+        """
+        set-to instruction should set the current cell to the given value 
+        """
+      )
     }
   }
 }

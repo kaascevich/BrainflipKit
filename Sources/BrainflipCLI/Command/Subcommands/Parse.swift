@@ -3,6 +3,7 @@
 
 import ArgumentParser
 import BrainflipKit
+import CustomDump
 
 extension Brainflip {
   struct Parse: ParsableCommand {
@@ -19,35 +20,7 @@ extension Brainflip {
 
     func run() throws {
       let parsedProgram = try programOptions.parseProgram()
-      print(parsedProgram.formatted())
+      customDump(parsedProgram)
     }
-  }
-}
-
-extension Program {
-  /// Formats this program, indenting loops.
-  ///
-  /// - Parameters:
-  ///   - indentLevel: The level of indentation to apply.
-  ///
-  /// - Returns: The formatted program.
-  func formatted(indentLevel: Int = 0) -> String {
-    let indent = String(repeating: "  ", count: indentLevel)
-
-    return self.flatMap { instruction in
-      switch instruction {
-      case let .loop(instructions):
-        [
-          indent + "loop {",
-
-          // don't apply any indent here, because that'll be redundant
-          instructions.formatted(indentLevel: indentLevel + 1),
-
-          indent + "}",
-        ]
-      default:
-        [indent + String(describing: instruction)]
-      }
-    }.joined(separator: "\n")
   }
 }

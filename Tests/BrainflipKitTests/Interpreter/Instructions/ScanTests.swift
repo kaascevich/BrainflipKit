@@ -23,6 +23,7 @@ extension InterpreterTests.InstructionTests {
       ]
 
       try interpreter.handleInstruction(.scan(2))
+      
       #expect(
         interpreter.state.cellPointer == 6,
         """

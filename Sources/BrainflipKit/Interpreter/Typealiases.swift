@@ -5,4 +5,4 @@
 public typealias CellValue = Int
 
 /// The type of the Brainflip cell pointer.
-public typealias CellPointer = Int
+public typealias CellIndex = Int

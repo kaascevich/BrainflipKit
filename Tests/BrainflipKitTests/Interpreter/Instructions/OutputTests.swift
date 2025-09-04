@@ -14,21 +14,50 @@ extension InterpreterTests.InstructionTests {
     mutating func outputInstruction() throws {
       interpreter.state.currentCellValue = 0x42  // ASCII code for "B"
       try interpreter.handleInstruction(.output)
-      #expect(interpreter.state.output == "B")
+
+      #expect(
+        interpreter.state.output == "B",
+        """
+        output instruction should output the Unicode character corresponding \
+        to the current cell value
+        """
+      )
+
+      try interpreter.handleInstruction(.output)
+
+      #expect(
+        interpreter.state.output == "BB",
+        """
+        output instruction should append the character to the existing output
+        """
+      )
     }
 
     @Test("Output instruction with Unicode characters")
     mutating func outputInstructionUnicode() throws {
       interpreter.state.currentCellValue = 0x2192  // Unicode value for "→"
       try interpreter.handleInstruction(.output)
-      #expect(interpreter.state.output == "→")
+
+      #expect(
+        interpreter.state.output == "→",
+        """
+        output instruction should correctly output Unicode characters
+        """
+      )
     }
 
     @Test("Output instruction with invalid Unicode characters")
     mutating func outputInstructionInvalidUnicode() throws {
       interpreter.state.currentCellValue = 0x110000  // max Unicode value is 0x10FFFF
       try interpreter.handleInstruction(.output)
-      #expect(interpreter.state.output.isEmpty)
+
+      #expect(
+        interpreter.state.output.isEmpty,
+        """
+        output instruction should do nothing when the current cell value \
+        doesn't correspond to a valid Unicode character
+        """
+      )
     }
   }
 }

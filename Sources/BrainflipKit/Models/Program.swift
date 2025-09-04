@@ -2,7 +2,17 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
 /// A list of instructions to be executed by an ``Interpreter``.
-public typealias Program = [Instruction]
+public struct Program: Equatable, Hashable, Sendable {
+  /// The instructions that make up this program.
+  var instructions: [Instruction]
+
+  /// Creates a program from a list of instructions.
+  ///
+  /// - Parameter instructions: A list of instructions.
+  init(_ instructions: [Instruction]) {
+    self.instructions = instructions
+  }
+}
 
 extension Program {
   /// Parses the given string into a `Program` instance.
@@ -68,16 +78,21 @@ extension Program {
   ///
   /// - Parameters:
   ///   - source: The original source code for a Brainflip program.
-  ///   - optimizations: Whether to optimize the program.
   ///
   /// - Throws: An `Error` if `source` is not a valid program (that is, if it
   ///   contains unmatched brackets).
-  public init(_ source: String, optimizations: Bool = true) throws {
-    self = try ProgramParser()
+  public init(_ source: String) throws {
+    self.instructions = try ProgramParser()
       .parse(source.filter(Instruction.validInstructions.contains))
 
-    if optimizations {
-      self.optimize()
-    }
+    optimize()
+  }
+}
+
+// MARK: Debugging
+
+extension Program: CustomReflectable {
+  public var customMirror: Mirror {
+    Mirror(reflecting: instructions)
   }
 }
