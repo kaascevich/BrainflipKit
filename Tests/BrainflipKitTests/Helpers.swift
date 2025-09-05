@@ -5,11 +5,10 @@ import Foundation
 
 @testable import BrainflipKit
 
-func getProgram(named name: String) -> String? {
-  Bundle.module.url(forResource: name, withExtension: "b")
-    .flatMap { url in
-      try? String(contentsOf: url, encoding: .utf8)
-    }
+func getProgram(named name: String) throws -> Program {
+  let url = Bundle.module.url(forResource: name, withExtension: "b")!
+  let source = try! String(contentsOf: url, encoding: .utf8)
+  return try Program(source)
 }
 
 extension Program: ExpressibleByArrayLiteral {

@@ -96,3 +96,17 @@ extension Program: CustomReflectable {
     Mirror(reflecting: instructions)
   }
 }
+
+// MARK: Codable
+
+extension Program: Codable {
+  public func encode(to encoder: Encoder) throws {
+    var container = encoder.unkeyedContainer()
+    try container.encode(contentsOf: instructions)
+  }
+
+  public init(from decoder: Decoder) throws {
+    var container = try decoder.unkeyedContainer()
+    self.instructions = try container.decode([Instruction].self)
+  }
+}

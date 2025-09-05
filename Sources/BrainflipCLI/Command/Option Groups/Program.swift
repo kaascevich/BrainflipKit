@@ -25,6 +25,7 @@ extension Brainflip {
     // MARK: - Options and Flags
 
     @Option(
+      name: .shortAndLong,
       help: .init(
         "A Brainflip program to execute.",
         discussion: """

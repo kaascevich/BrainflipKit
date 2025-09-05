@@ -8,14 +8,6 @@ import Testing
 
 @Suite("Program parsing")
 struct ParsingTests {
-  let hTest = """
-    This program tests for several obscure interpreter problems;
-    it should output an H
-    
-    []++++++++++[>>+>+>++++++[<<+<+++>>>-]<<<<-]
-    "A*$";?@![#>>+<<]>[>>]<<<<[>++<[-]]>.>.
-    """
-
   @Test("Basic parsing")
   func basicParsing() throws {
     expectNoDifference(
@@ -71,7 +63,7 @@ struct ParsingTests {
   @Test("'Obscure Problem Tester'")
   func obscureProblemTester() throws {
     expectNoDifference(
-      try Program(hTest),
+      try getProgram(named: "obscure"),
       [
         .add(10),
         .loop([

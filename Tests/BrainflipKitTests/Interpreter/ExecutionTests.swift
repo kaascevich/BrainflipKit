@@ -52,9 +52,7 @@ extension InterpreterTests {
 
     @Test("'Hello World!' program")
     func helloWorldProgram() throws {
-      let source = try #require(getProgram(named: "helloworld"))
-      let program = try Program(source)
-
+      let program = try getProgram(named: "helloworld")
       let output = try interpreter.run(program).output
 
       #expect(output == "Hello World!")
@@ -62,9 +60,7 @@ extension InterpreterTests {
 
     @Test("Comprehensive test", .timeLimit(.minutes(1)))
     func comprehensiveTest() throws {
-      let source = try #require(getProgram(named: "comprehensive"))
-      let program = try Program(source)
-
+      let program = try getProgram(named: "comprehensive")
       let output = try interpreter.run(program).output
 
       #expect(output == "Hello, world!\n")
@@ -72,13 +68,19 @@ extension InterpreterTests {
 
     @Test("Factorization test", .timeLimit(.minutes(1)))
     func factorizationTest() throws {
-      let source = try #require(getProgram(named: "factor"))
-      let program = try Program(source)
+      let program = try getProgram(named: "factor")
       let interpreter = Interpreter(input: "2346\n")
-
       let output = try interpreter.run(program).output
 
       #expect(output == "2346: 2 3 17 23\n")
+    }
+
+    @Test("Obscure problem tester", .timeLimit(.minutes(1)))
+    func obscureProblemTester() throws {
+      let program = try getProgram(named: "obscure")
+      let output = try interpreter.run(program).output
+
+      #expect(output == "H\n")
     }
   }
 }

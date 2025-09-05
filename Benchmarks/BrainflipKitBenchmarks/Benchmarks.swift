@@ -9,12 +9,11 @@ let benchmarks = { @Sendable in
   let programs = [
     "comprehensive": "",
     "factor": "2346\n",
-//    "hanoi": "",
     "numwarp": "()-./0123456789abcdef",
     "sierpinski": "",
   ]
 
-  Benchmark.defaultConfiguration.maxDuration = .seconds(5)
+  Benchmark.defaultConfiguration.maxDuration = .seconds(3)
 
   for (name, input) in programs {
     let url = Bundle.module.url(forResource: name, withExtension: "b")!
