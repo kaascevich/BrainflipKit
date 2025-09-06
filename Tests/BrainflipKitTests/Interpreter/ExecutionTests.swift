@@ -1,6 +1,7 @@
 // SPDX-FileCopyrightText: 2024 Kaleb A. Ascevich
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
+import CustomDump
 import Testing
 
 @testable import BrainflipKit
@@ -8,7 +9,7 @@ import Testing
 extension InterpreterTests {
   @Suite("Program execution")
   struct ExecutionTests {
-    let interpreter = Interpreter()
+    var interpreter = Interpreter()
 
     @Test("Basic program")
     func basicProgram() throws {
@@ -22,28 +23,31 @@ extension InterpreterTests {
 
     @Test("Simple loops")
     func simpleLoops() throws {
-      // sets cell 2 to 9
+      // sets cell 2 to 9, clears cell 1 in the process
       let program = try Program("+++[>+++<-]")
       let state = try interpreter.run(program)
 
+      #expect(state.tape[0] == 0)
       #expect(state.tape[1] == 9)
     }
 
     @Test("Nested loops")
     func nestedLoops() throws {
-      // sets cell 3 to 27
+      // sets cell 3 to 27, clears cells 1 and 2 in the process
       let program = try Program("+++[>+++[>+++<-]<-]")
       let state = try interpreter.run(program)
 
+      #expect(state.tape[0] == 0)
+      #expect(state.tape[1] == 0)
       #expect(state.tape[2] == 27)
     }
 
     @Test("Running with input")
-    func runningWithInput() throws {
+    mutating func runningWithInput() throws {
       // outputs the first input character twice, then the
       // third character once
       let program = try Program(",..,,.")
-      let interpreter = Interpreter(input: "hello")
+      interpreter = Interpreter(input: "hello")
 
       let output = try interpreter.run(program).output
       
@@ -67,9 +71,9 @@ extension InterpreterTests {
     }
 
     @Test("Factorization test", .timeLimit(.minutes(1)))
-    func factorizationTest() throws {
+    mutating func factorizationTest() throws {
       let program = try getProgram(named: "factor")
-      let interpreter = Interpreter(input: "2346\n")
+      interpreter = Interpreter(input: "2346\n")
       let output = try interpreter.run(program).output
 
       #expect(output == "2346: 2 3 17 23\n")

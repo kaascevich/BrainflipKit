@@ -48,16 +48,19 @@ struct OptimizerTests {
     expectNoDifference(try Program("[-]+++"), [.setTo(3)])
     expectNoDifference(try Program("+[-]++"), [.setTo(2)])
     expectNoDifference(try Program("+[-]+++[-]----"), [.setTo(-4)])
+
+    expectNoDifference(
+      try Program("+++[>+++>[-]<<-]"),
+      [
+        .add(3),
+        .multiply([1: 3, 2: 0]),
+      ]
+    )
   }
 
   @Test("Dead loops optimization")
   func deadLoopsOptimization() throws {
     expectNoDifference(try Program("[-][][->+<][>]"), [])
-  }
-
-  @Test("Useless code optimization")
-  func uselessCodeOptimization() throws {
-    expectNoDifference(try Program("+++.[>+<-]+>-<"), [.add(3), .output])
   }
 
   @Test("Life")

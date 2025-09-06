@@ -33,6 +33,11 @@ import CasePaths
   /// `offset` cells away from the current cell. Sets the current cell to
   /// `final` once completed.
   case multiply([CellOffset: CellValue], final: CellValue = 0)
+
+  /// Sets the current cell to `value`.
+  public static func setTo(_ value: CellValue) -> Self {
+    .multiply([:], final: value)
+  }
 }
 
 extension Instruction {
@@ -42,8 +47,33 @@ extension Instruction {
   ]
 }
 
-extension Instruction {
-  public static func setTo(_ value: CellValue) -> Self {
-    .multiply([:], final: value)
+// MARK: Debugging
+
+extension Instruction: CustomReflectable {
+  public var customMirror: Mirror {
+    let children: KeyValuePairs<String, Any> = switch self {
+    case let .add(value):
+      ["add": value]
+
+    case let .move(offset):
+      ["move": offset]
+
+    case .output, .input:
+      [:]
+
+    case let .loop(instructions):
+      ["loop": instructions]
+
+    case let .multiply([:], final):
+      ["setTo": final]
+
+    case let .multiply(multiplications, final: 0):
+      ["multiply": multiplications]
+
+    case let .multiply(multiplications, final):
+      ["multiply": (multiplications, final: final)]
+    }
+
+    return Mirror(self, children: children, displayStyle: .enum)
   }
 }

@@ -54,8 +54,8 @@ extension Interpreter {
 
     // MARK: Non-core
 
-    case let .multiply(loop, final):
-      handleMultiplyInstruction(loop, final: final)
+    case let .multiply(multiplications, final):
+      handleMultiplyInstruction(multiplications, final: final)
     }
   }
 }

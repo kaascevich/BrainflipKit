@@ -64,10 +64,13 @@ extension [Instruction] {
       for instruction in instructions {
         switch instruction {
         case let .add(value):
-          multiplications[currentOffset, default: 0] += value
+          multiplications[currentOffset, default: 0] &+= value
 
         case let .move(offset):
           currentOffset += offset
+
+        case let .multiply([:], final: value):
+          multiplications[currentOffset] = value
 
         case .loop, .input, .output, .multiply:
           continue top
@@ -100,9 +103,8 @@ extension [Instruction] {
   /// also be a loop, that loop will never be executed. So we remove those loops
   /// here.
   private mutating func removeDeadLoops() {
-    for case let ((_, first), (secondIndex, second))
-      in indexed().adjacentPairs().reversed()
-    where first.isLoopLike && second.isLoopLike {
+    for case let ((_, .loop), (secondIndex, .loop))
+      in indexed().adjacentPairs().reversed() {
       // there's a loop immediately after another loop, so the second loop will
       // never be executed (because the current cell is always 0 immediately
       // after a loop)
@@ -154,16 +156,6 @@ extension Program {
 // MARK: - Utilities
 
 extension Instruction {
-  fileprivate func isOrContains(_ element: Instruction) -> Bool {
-    return if self == element {
-      true
-    } else if case let .loop(instructions) = self {
-      instructions.contains { $0.isOrContains(element) }
-    } else {
-      false
-    }
-  }
-
   fileprivate var isLoopLike: Bool {
     switch self {
     case .loop, .multiply(_, final: 0): true
