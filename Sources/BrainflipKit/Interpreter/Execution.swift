@@ -11,20 +11,10 @@ extension Interpreter {
   /// - Throws: ``InterpreterError`` if an issue was encountered during
   ///   execution.
   public consuming func run(_ program: Program) throws -> State {
-    try execute(program.instructions)
-    return state
-  }
-
-  /// Executes the provided instructions.
-  ///
-  /// - Parameter instructions: The instructions to execute.
-  ///
-  /// - Throws: ``InterpreterError`` if an issue was encountered during
-  ///   execution.
-  mutating func execute(_ instructions: [Instruction]) throws {
-    for instruction in instructions {
+    for instruction in program.instructions {
       try handleInstruction(instruction)
     }
+    return state
   }
 
   /// Executes an individual ``Instruction``.

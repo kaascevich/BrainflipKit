@@ -7,6 +7,7 @@ extension Interpreter {
   /// - Throws: ``InterpreterError/endOfInput`` if the input iterator is empty
   ///   and ``InterpreterOptions/endOfInputBehavior`` is set to
   ///   ``InterpreterOptions/EndOfInputBehavior/throwError``.
+  @inline(__always)
   mutating func handleInputInstruction() throws {
     // make sure we actually have some input to work with
     guard let nextInputScalar = state.inputIterator.next() else {

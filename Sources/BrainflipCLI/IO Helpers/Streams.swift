@@ -3,11 +3,11 @@
 
 import Foundation
 
-struct StandardOutputStream: TextOutputStream {
-  /// Appends the given string to the standard output stream.
+extension FileHandle: @retroactive TextOutputStream {
+  /// Appends the given string to the file handle.
   ///
-  /// - Parameter string: The string to print.
-  func write(_ string: String) {
-    try! FileHandle.standardOutput.write(contentsOf: string.data(using: .utf8)!)
+  /// - Parameter string: The string to write.
+  public func write(_ string: String) {
+    try! write(contentsOf: string.data(using: .utf8)!)
   }
 }

@@ -15,6 +15,7 @@ enum TerminalRawMode {
       _ = tcgetattr(standardInput, &currentState)
       return currentState
     }
+
     set {
       withUnsafePointer(to: newValue) {
         _ = tcsetattr(standardInput, TCSAFLUSH, $0)

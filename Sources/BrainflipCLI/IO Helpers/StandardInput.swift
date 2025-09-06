@@ -5,18 +5,18 @@ import Foundation
 
 /// A sequence that reads characters from standard input.
 ///
-/// This sequence enables raw mode for the terminal, which disables
-/// line buffering. This allows for reading characters as they are
-/// typed, rather than waiting for a newline.
+/// This sequence enables raw mode for the terminal, which disables line
+/// buffering. This allows for reading characters as they are typed, rather than
+/// waiting for a newline.
 struct StandardInput: Sequence, IteratorProtocol {
-  /// Whether to print a bell character to standard error when
-  /// input is requested.
+  /// Whether to print a bell character to standard error when input is
+  /// requested.
   let printBell: Bool
 
   /// Creates a new instance of this sequence.
   ///
-  /// - Parameter printBell: Whether to print a bell character
-  ///   to standard error when input is requested.
+  /// - Parameter printBell: Whether to print a bell character to standard error
+  /// when input is requested.
   init(printBell: Bool) {
     self.printBell = printBell
   }
@@ -33,20 +33,14 @@ struct StandardInput: Sequence, IteratorProtocol {
       try? FileHandle.standardError.write(contentsOf: Data([0x07]))
     }
 
-    var nextCharacter: UInt8 = 0
-    let readResult = read(
-      FileHandle.standardInput.fileDescriptor,
-      &nextCharacter,
-      1
-    )
-
-    // make sure the input request succeeded, and that the character
-    // isn't an EOF indicator (0x04)
-    guard readResult == 1, nextCharacter != 0x04 else {
+    guard
+      let character = try? FileHandle.standardInput.read(upToCount: 1)?.first,
+      character != 0x04 // EOF indicator
+    else {
       endOfInput = true
       return nil
     }
 
-    return Unicode.Scalar(nextCharacter)
+    return Unicode.Scalar(character)
   }
 }

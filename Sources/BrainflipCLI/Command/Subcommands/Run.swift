@@ -3,6 +3,7 @@
 
 import ArgumentParser
 import BrainflipKit
+import Foundation
 
 extension Brainflip {
   struct Run: ParsableCommand {
@@ -46,7 +47,7 @@ extension Brainflip {
       TerminalRawMode.enable(echoing: inputOptions.inputEchoing)
       defer { TerminalRawMode.disable() }
 
-      let inputSequence: any Sequence<Unicode.Scalar> =
+      let inputSequence: any Sequence<_> =
         if let input = inputOptions.input {
           input.unicodeScalars
         } else {
@@ -55,7 +56,7 @@ extension Brainflip {
 
       let interpreter = Interpreter(
         input: AnySequence(inputSequence),
-        output: StandardOutputStream(),
+        output: FileHandle.standardOutput,
         options: makeInterpreterOptions()
       )
 

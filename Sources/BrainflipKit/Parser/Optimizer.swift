@@ -7,22 +7,6 @@ import CasePaths
 extension [Instruction] {
   // MARK: - Optimizations
 
-  /// Optimizes clear loops.
-  private mutating func optimizeClearLoops() {
-    // MARK: add(_) multiply([:], final) -> multiply([:], final)
-    for case let (
-      (index, first),
-      (_, .multiply([:], final: _))
-    ) in indexed().adjacentPairs().reversed() {
-      switch first {
-      case .add, .multiply([:], final: _):
-        remove(at: index)
-
-      default: break
-      }
-    }
-  }
-
   /// Removes adjacent instructions of the same type.
   private mutating func removeAdjacentInstructions() {
     let chunks = chunked {
@@ -69,9 +53,6 @@ extension [Instruction] {
         case let .move(offset):
           currentOffset += offset
 
-        case let .multiply([:], final: value):
-          multiplications[currentOffset] = value
-
         case .loop, .input, .output, .multiply:
           continue top
         }
@@ -92,6 +73,19 @@ extension [Instruction] {
     ) in indexed().adjacentPairs().reversed() {
       remove(at: secondIndex)
       self[firstIndex] = .multiply(multiplications, final: final + value)
+    }
+
+    // MARK: add(_) multiply([:], final) -> multiply([:], final)
+    for case let (
+      (index, first),
+      (_, .multiply([:], final: _))
+    ) in indexed().adjacentPairs().reversed() {
+      switch first {
+      case .add, .multiply([:], final: _):
+        remove(at: index)
+
+      default: break
+      }
     }
   }
 
@@ -129,7 +123,6 @@ extension [Instruction] {
     }
 
     optimizeMultiplyInstructions()
-    optimizeClearLoops()
   }
 }
 

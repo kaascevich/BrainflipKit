@@ -40,13 +40,6 @@ import CasePaths
   }
 }
 
-extension Instruction {
-  /// All characters that represent Brainflip instructions.
-  public static let validInstructions: [Character] = [
-    "+", "-", ">", "<", "[", "]", ",", ".",
-  ]
-}
-
 // MARK: Debugging
 
 extension Instruction: CustomReflectable {
