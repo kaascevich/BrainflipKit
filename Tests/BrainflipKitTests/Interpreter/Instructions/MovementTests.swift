@@ -11,7 +11,7 @@ extension InterpreterTests.InstructionTests {
     var interpreter = Interpreter()
 
     @Test("Move instruction", arguments: -5...5)
-    mutating func moveInstruction(offset: CellIndex) throws {
+    mutating func moveInstruction(offset: CellOffset) throws {
       for i in 1...10 {
         try interpreter.handleInstruction(.move(offset))
         

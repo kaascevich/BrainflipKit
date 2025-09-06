@@ -23,6 +23,4 @@ _marginally_ unique.
   - Condensing repeated instructions
   - Merging `+`/`-` and `<`/`>` instructions (and removing pairs that cancel
     each other out)
-  - Replacing `[-]` with an instruction that directly clears the cell
-  - Replacing copy loops and multiplication loops with a dedicated instruction
-  - Replacing scan loops (`[>]`, `[<<<]`, etc.) with a dedicated instruction
+  - Replacing multiplication loops with a dedicated instruction

@@ -4,44 +4,15 @@
 extension Interpreter {
   /// Executes an ``Instruction/multiply(_:)`` instruction.
   ///
-  /// - Parameters:
-  ///   - factor: The factor to multiply the current cell by.
-  ///   - offset: The offset from the current cell to store the result.
-  ///
-  /// - Throws: ``InterpreterError/cellOverflow`` if an overflow occurs and
-  ///   ``InterpreterOptions/allowCellWraparound`` is `false`.
+  /// - Parameter multiplications: The multiplications to perform.
   mutating func handleMultiplyInstruction(
-    factor: CellValue,
-    offset: CellIndex
-  ) throws {
-    let offsettedPointer = state.cellPointer + offset
-
-    // MARK: Multiplying
-
-    let (multiplyResult, multiplyOverflow) = state.currentCellValue
-      .multipliedReportingOverflow(by: factor)
-
-    if !options.allowCellWraparound && multiplyOverflow {
-      throw InterpreterError.cellOverflow(position: state.cellPointer)
+    _ multiplications: [CellOffset: CellValue],
+    final: CellValue
+  ) {
+    for (offset, increment) in multiplications {
+      state.tape[state.cellPointer + offset, default: 0] &+=
+        state.currentCellValue &* increment
     }
-
-    // MARK: Adding
-
-    let (additionResult, additionOverflow) = state.tape[
-      offsettedPointer,
-      default: 0
-    ].addingReportingOverflow(multiplyResult)
-
-    if !options.allowCellWraparound && additionOverflow {
-      throw InterpreterError.cellOverflow(position: offsettedPointer)
-    }
-
-    // MARK: Setting
-
-    state.tape[offsettedPointer] = additionResult
-
-    // as a side effect of the standard multiply loop, the current cell is set
-    // to 0, so we need to replicate that behavior here
-    state.currentCellValue = 0
+    state.currentCellValue = final
   }
 }

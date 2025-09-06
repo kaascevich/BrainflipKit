@@ -43,38 +43,12 @@ extension Program {
   /// Instructions that do not have any effect (such as `add` or `move`
   /// instructions with a value of `0`) are removed.
   ///
-  /// ### Clear Loops
-  /// The `[-]` construct is replaced with a `setTo(0)` instruction. If an `add`
-  /// instruction follows a `setTo(0)` instruction, the value of the `add`
-  /// instruction is used in the `setTo` instruction instead of 0.
-  ///
-  /// ### Scan Loops
-  /// A `loop` instruction containing only `move` instructions  is replaced with
-  /// a `scan` instruction.
-  ///
   /// ### Dead Code
   /// Loops that occur immediately after other loops are removed.
   ///
   /// This can be done because, immediately after a loop finishes, the current
   /// cell's value is always 0 (because that's the end condition for a loop);
   /// therefore, an immediately following loop will never be entered.
-  ///
-  /// ### Multiply Loops
-  ///
-  /// This replaces constructs of the following form with equivalent
-  /// `multiply(factor, offset)` instructions.
-  ///
-  /// ```
-  /// loop {
-  ///   add(-1)
-  ///   move(offset)
-  ///   add(factor)
-  ///   move(-offset)
-  /// }
-  /// ```
-  ///
-  /// For example, `[-<<<++>>>]` would be reduced to
-  /// `multiply(factor: 2, offset: -3)`.
   ///
   /// - Parameters:
   ///   - source: The original source code for a Brainflip program.

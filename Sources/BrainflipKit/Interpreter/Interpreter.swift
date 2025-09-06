@@ -49,15 +49,10 @@
 ///
 /// These instructions are used internally to optimize programs.
 ///
-/// - term ``Instruction/setTo(_:)``:
-///     Sets the current cell to a specific value.
-///
-/// - term ``Instruction/multiply(factor:offset:)``:
-///     Multiplies the current cell by `factor`, stores the result `offset`
-///     cells away from the current cell, then sets the current cell to 0.
-///
-/// - term ``Instruction/scan(_:)``:
-///     Moves the pointer to the next (or previous) zero cell.
+/// - term ``Instruction/multiply(_:final:)``:
+///     For each offset, adds the value times the current cell value to the cell
+///     `offset` cells away from the current cell. Sets the current cell to
+///     `final` once completed.
 ///
 /// All characters other than the ones listed above are treated as comments and
 /// ignored.

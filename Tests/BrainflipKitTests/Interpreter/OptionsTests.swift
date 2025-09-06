@@ -8,23 +8,6 @@ import Testing
 extension InterpreterTests {
   @Suite("Interpreter options")
   struct OptionsTests {
-    @Test("allowCellWraparound option")
-    func allowWraparoundOption() {
-      var interpreter = Interpreter(
-        options: .init(allowCellWraparound: false)
-      )
-
-      interpreter.state.currentCellValue = .min
-      #expect(throws: InterpreterError.cellUnderflow(position: 0)) {
-        try interpreter.handleInstruction(.add(-1))
-      }
-
-      interpreter.state.currentCellValue = .max
-      #expect(throws: InterpreterError.cellOverflow(position: 0)) {
-        try interpreter.handleInstruction(.add(1))
-      }
-    }
-
     @Suite("End of input behavior options")
     struct EndOfInputBehaviorTests {
       @Test("Do nothing on end of input")

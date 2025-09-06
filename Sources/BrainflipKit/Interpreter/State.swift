@@ -42,13 +42,13 @@ extension Interpreter {
     ///
     /// # See Also
     /// - ``Interpreter/State/currentCellValue``
-    public internal(set) var tape: [CellIndex: CellValue] = [:]
+    public internal(set) var tape: [CellOffset: CellValue] = [:]
 
     /// The index of the cell currently being used by the program.
     ///
     /// # See Also
     /// - ``Interpreter/State/currentCellValue``
-    public internal(set) var cellPointer: CellIndex = 0
+    public internal(set) var cellPointer: CellOffset = 0
 
     /// An iterator that provides input to a program.
     ///
@@ -90,9 +90,10 @@ extension Interpreter {
     /// # See Also
     /// - ``Interpreter/State/tape``
     /// - ``Interpreter/State/cellPointer``
+    @inline(__always)
     public internal(set) var currentCellValue: CellValue {
-      get { tape[cellPointer, default: 0] }
-      set { tape[cellPointer] = newValue }
+      @inlinable get { tape[cellPointer, default: 0] }
+      @usableFromInline set { tape[cellPointer] = newValue }
     }
   }
 }

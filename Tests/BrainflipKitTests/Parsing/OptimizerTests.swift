@@ -8,14 +8,6 @@ import Testing
 
 @Suite("Program optimization")
 struct OptimizerTests {
-  @Test("Clear-loop optimization")
-  func clearLoopOptimization() throws {
-    expectNoDifference(try Program(".[-]"), [.output, .setTo(0)])
-    expectNoDifference(try Program("[-]+++"), [.setTo(3)])
-    expectNoDifference(try Program("+[-]++"), [.setTo(2)])
-    expectNoDifference(try Program("+[-]+++[+]----"), [.setTo(-4)])
-  }
-
   @Test("Adjacent instruction optimization")
   func adjacentInstructionOptimization() throws {
     expectNoDifference(
@@ -38,27 +30,34 @@ struct OptimizerTests {
       try Program("+[>>>]+[<<]"),
       [
         .add(1),
-        .scan(3),
+        .loop([.move(3)]),
         .add(1),
-        .scan(-2),
+        .loop([.move(-2)]),
       ]
     )
   }
 
-  @Test("Multiply-loop optimization")
-  func multiplyLoopOptimization() throws {
+  @Test("Multiply instruction optimization")
+  func multiplyInstructionOptimization() throws {
     expectNoDifference(
       try Program("+[- >> ++++ <<]"),
-      [
-        .add(1),
-        .multiply(factor: 4, offset: 2),
-      ]
+      [.add(1), .multiply([2: 4])]
     )
+
+    expectNoDifference(try Program(".[-]."), [.output, .setTo(0), .output])
+    expectNoDifference(try Program("[-]+++"), [.setTo(3)])
+    expectNoDifference(try Program("+[-]++"), [.setTo(2)])
+    expectNoDifference(try Program("+[-]+++[-]----"), [.setTo(-4)])
   }
 
   @Test("Dead loops optimization")
   func deadLoopsOptimization() throws {
     expectNoDifference(try Program("[-][][->+<][>]"), [])
+  }
+
+  @Test("Useless code optimization")
+  func uselessCodeOptimization() throws {
+    expectNoDifference(try Program("+++.[>+<-]+>-<"), [.add(3), .output])
   }
 
   @Test("Life")
@@ -71,36 +70,25 @@ struct OptimizerTests {
         .move(1), .add(5),
         .move(1), .add(10),
         .loop([
-          .multiply(factor: 1, offset: 3),
+          .multiply([3: 1]),
           .move(1), .add(5),
           .move(1), .add(1),
           .move(2), .add(1),
-          .loop([
-            .move(-2), .add(1),
-            .move(5), .add(1),
-            .move(-3), .add(-1),
-          ]),
+          .multiply([-2: 1, 3: 1]),
           .move(-1), .add(-1),
         ]),
         .move(4),
         .loop([
-          .loop([
-            .move(3), .add(1),
-            .move(1), .add(1),
-            .move(-4), .add(-1),
-          ]),
-          .add(3),
+          .multiply([3: 1, 4: 1], final: 3),
           .move(2), .add(1),
-          .loop([
-            .move(-1), .add(1),
-            .move(3), .add(1),
-            .move(1), .add(1),
-            .move(-3), .add(-1),
-          ]),
+          .multiply([-1: 1, 2: 1, 3: 1]),
           .move(2),
           .loop([
             .move(1),
-            .loop([.multiply(factor: 1, offset: 3), .move(-1)]),
+            .loop([
+              .multiply([3: 1]),
+              .move(-1),
+            ]),
             .move(-2), .add(2),
             .move(1), .add(1),
             .move(6), .add(-1),
@@ -114,7 +102,7 @@ struct OptimizerTests {
         .loop([
           .setTo(0),
           .move(-1), .add(1),
-          .move(-1), .multiply(factor: 17, offset: 1),
+          .move(-1), .multiply([1: 17]),
           .move(-1), .add(1),
         ]),
         .move(2),
@@ -132,7 +120,7 @@ struct OptimizerTests {
             .move(2),
             .input,
             .add(-10),
-            .scan(1),
+            .loop([.move(1)]),
             .move(-1),
           ]),
           .move(-2),
@@ -140,15 +128,10 @@ struct OptimizerTests {
             .move(-3),
             .loop([
               .move(1), .add(-2),
-              .loop([
-                .move(-1), .add(-1),
-                .move(2), .add(1),
-                .move(1), .add(-1),
-                .move(-2), .add(-1),
-              ]),
+              .multiply([-1: -1, 1: 1, 2: -1]),
               .move(-1),
               .loop([
-                .scan(3), .add(1),
+                .loop([.move(3)]), .add(1),
                 .move(1), .add(-1),
                 .loop([
                   .add(1),
@@ -156,16 +139,16 @@ struct OptimizerTests {
                   .move(1), .add(-1),
                 ]),
                 .add(1),
-                .scan(-3),
+                .loop([.move(-3)]),
                 .move(-1), .add(-1),
               ]),
               .move(1), .add(2),
-              .move(1), .multiply(factor: 1, offset: -1),
+              .move(1), .multiply([-1: 1]),
               .move(1),
               .loop([
-                .scan(3),
+                .loop([.move(3)]),
                 .add(1),
-                .scan(-3),
+                .loop([.move(-3)]),
                 .move(3), .add(-1),
               ]),
               .add(1),
@@ -177,7 +160,7 @@ struct OptimizerTests {
               .loop([.add(-6), .move(-1)]),
               .move(1),
               .add(3),
-              .scan(-3),
+              .loop([.move(-3)]),
               .move(1),
             ]),
             .move(-1),
@@ -193,7 +176,7 @@ struct OptimizerTests {
             .add(1),
             .move(2), .add(1),
             .move(3), .add(1),
-            .move(1), .scan(-3),
+            .move(1), .loop([.move(-3)]),
             .move(1), .add(-1),
             .move(1), .add(1),
             .move(1),
@@ -204,16 +187,16 @@ struct OptimizerTests {
                 .move(1), .add(1),
                 .move(1), .add(3),
                 .move(2), .add(2),
-                .scan(3), .add(3),
+                .loop([.move(3)]), .add(3),
                 .move(-3), .add(2),
                 .move(-3), .add(2),
-                .scan(3),
+                .loop([.move(3)]),
                 .move(3),
               ]),
               .move(-3),
               .loop([
                 .move(1),
-                .scan(3),
+                .loop([.move(3)]),
                 .add(1),
                 .move(3),
               ]),
@@ -255,14 +238,14 @@ struct OptimizerTests {
                 .add(-1),
                 .move(-1), .add(-1),
                 .move(-2),
-                .scan(-3),
+                .loop([.move(-3)]),
                 .move(1),
                 .loop([
                   .move(2),
-                  .scan(3),
+                  .loop([.move(3)]),
                   .move(-2), .add(1),
                   .move(-1),
-                  .scan(-3),
+                  .loop([.move(-3)]),
                   .move(1), .add(-1),
                 ]),
               ]),
@@ -271,18 +254,18 @@ struct OptimizerTests {
                 .move(-1),
                 .loop([
                   .move(-1),
-                  .scan(-3),
+                  .loop([.move(-3)]),
                   .move(1), .add(1),
                   .move(2),
-                  .scan(3),
+                  .loop([.move(3)]),
                   .move(-2), .add(-1),
                 ]),
                 .move(-1),
-                .scan(-3),
+                .loop([.move(-3)]),
               ]),
               .move(3), .add(-1),
               .move(3),
-              .scan(3),
+              .loop([.move(3)]),
               .add(1),
               .move(1),
             ]),
@@ -295,23 +278,23 @@ struct OptimizerTests {
             ]),
             .add(-1),
             .loop([
-              .scan(3),
+              .loop([.move(3)]),
               .move(-1),
               .loop([
                 .move(-2),
-                .scan(-3),
+                .loop([.move(-3)]),
                 .move(5), .add(1),
                 .move(1),
-                .scan(3),
+                .loop([.move(3)]),
                 .move(-1), .add(-1),
               ]),
               .move(3),
               .loop([
                 .move(1),
-                .scan(3),
+                .loop([.move(3)]),
                 .move(-4), .add(1),
                 .move(1),
-                .scan(-3),
+                .loop([.move(-3)]),
                 .move(2), .add(-1),
               ]),
               .move(1),
@@ -327,7 +310,8 @@ struct OptimizerTests {
                   .loop([
                     .move(-1), .add(-1),
                     .move(2), .add(3),
-                    .move(-1), .setTo(0),
+                    .move(-1),
+                    .setTo(0),
                   ]),
                 ]),
               ]),

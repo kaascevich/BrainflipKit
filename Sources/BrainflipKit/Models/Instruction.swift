@@ -12,7 +12,7 @@ import CasePaths
   case add(CellValue)
 
   /// Increments (or decrements) the cell pointer by a value.
-  case move(CellIndex)
+  case move(CellOffset)
 
   /// Loops over the contained instructions.
   case loop([Instruction])
@@ -29,16 +29,10 @@ import CasePaths
 
   // MARK: Non-Core
 
-  /// Sets the current cell to a specific value.
-  case setTo(CellValue)
-
-  /// Multiplies the current cell by `value`, then adds the result to the cell
-  /// `offset` cells away from the current one.
-  case multiply(factor: CellValue, offset: CellIndex)
-
-  /// Repeatedly moves the cell pointer by the specified amount until it lands
-  /// on a zero cell.
-  case scan(CellIndex)
+  /// For each offset, adds the value times the current cell value to the cell
+  /// `offset` cells away from the current cell. Sets the current cell to
+  /// `final` once completed.
+  case multiply([CellOffset: CellValue], final: CellValue = 0)
 }
 
 extension Instruction {
@@ -46,4 +40,10 @@ extension Instruction {
   public static let validInstructions: [Character] = [
     "+", "-", ">", "<", "[", "]", ",", ".",
   ]
+}
+
+extension Instruction {
+  public static func setTo(_ value: CellValue) -> Self {
+    .multiply([:], final: value)
+  }
 }

@@ -3,9 +3,6 @@
 
 /// Configurable options for an ``Interpreter`` instance.
 public struct InterpreterOptions: Sendable {
-  /// Whether or not to allow cell overflow and underflow. Defaults to `true`.
-  public let allowCellWraparound: Bool
-
   /// The action to take when an input instruction is executed with an empty
   /// input iterator. Defaults to doing nothing (`nil`).
   public let endOfInputBehavior: EndOfInputBehavior?
@@ -27,16 +24,9 @@ public struct InterpreterOptions: Sendable {
   /// with.
   ///
   /// - Parameters:
-  ///   - allowCellWraparound: Whether or not to allow cell overflow and
-  ///     underflow.
   ///   - endOfInputBehavior: The action to take when an input instruction is
   ///     executed with an empty input iterator.
-  public init(
-    allowCellWraparound: Bool = true,
-    endOfInputBehavior: EndOfInputBehavior? = nil
-  ) {
-    self.allowCellWraparound = allowCellWraparound
+  public init(endOfInputBehavior: EndOfInputBehavior? = nil) {
     self.endOfInputBehavior = endOfInputBehavior
   }
 }
-

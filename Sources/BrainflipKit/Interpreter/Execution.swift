@@ -38,7 +38,7 @@ extension Interpreter {
     // MARK: Core
 
     case let .add(count):
-      try handleAddInstruction(count)
+      handleAddInstruction(count)
 
     case let .move(count):
       handleMoveInstruction(count)
@@ -54,14 +54,8 @@ extension Interpreter {
 
     // MARK: Non-core
 
-    case let .setTo(value):
-      handleSetToInstruction(value)
-
-    case let .multiply(factor, offset):
-      try handleMultiplyInstruction(factor: factor, offset: offset)
-
-    case let .scan(increment):
-      handleScanInstruction(increment)
+    case let .multiply(loop, final):
+      handleMultiplyInstruction(loop, final: final)
     }
   }
 }

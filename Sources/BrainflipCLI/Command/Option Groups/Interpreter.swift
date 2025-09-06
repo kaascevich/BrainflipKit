@@ -31,15 +31,6 @@ extension Brainflip {
 
     // MARK: - Options and Flags
 
-    @Flag(
-      name: .customLong("wrap"),
-      inversion: .prefixedNo,
-      help: """
-        Whether to allow cell values to wrap around when they overflow or \
-        underflow.
-        """
-    ) var wraparound = true
-
     @Option(
       name: [.short, .customLong("end-of-input")],
       help: .init(

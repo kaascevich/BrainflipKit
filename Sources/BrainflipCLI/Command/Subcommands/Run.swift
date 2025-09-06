@@ -37,10 +37,7 @@ extension Brainflip {
         case nil: nil
         }
 
-      return InterpreterOptions(
-        allowCellWraparound: interpreterOptions.wraparound,
-        endOfInputBehavior: endOfInputBehavior
-      )
+      return InterpreterOptions(endOfInputBehavior: endOfInputBehavior)
     }
 
     func run() throws {

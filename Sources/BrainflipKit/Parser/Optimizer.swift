@@ -7,37 +7,15 @@ import CasePaths
 extension [Instruction] {
   // MARK: - Optimizations
 
-  /// Condenses clear loops.
-  ///
-  /// This optimization condenses clear loops into a single `setTo(0)`
-  /// instruction. If there's an `add` instruction following the clear loop, the
-  /// value of that instruction is used in the `setTo` instruction instead of 0,
-  /// and the `add` instruction is removed.
+  /// Optimizes clear loops.
   private mutating func optimizeClearLoops() {
-    // MARK: [-]/[+] -> setTo(0)
-    for case let (index, .loop(instructions)) in indexed()
-    where instructions == [.add(1)] || instructions == [.add(-1)] {
-      self[index] = .setTo(0)
-    }
-
-    // MARK: setTo(lhs) add(rhs) -> setTo(lhs + rhs)
-    // check if the first instruction is a clear loop
-    // and the second is an `add` instruction
-    for case let (
-      (firstIndex, .setTo(lhs)),
-      (secondIndex, .add(rhs))
-    ) in indexed().adjacentPairs().reversed() {
-      remove(at: secondIndex)
-      self[firstIndex] = .setTo(lhs + rhs)
-    }
-
-    // MARK: add(_) setTo(rhs) -> setTo(rhs)
+    // MARK: add(_) multiply([:], final) -> multiply([:], final)
     for case let (
       (index, first),
-      (_, .setTo)
+      (_, .multiply([:], final: _))
     ) in indexed().adjacentPairs().reversed() {
       switch first {
-      case .add, .setTo:
+      case .add, .multiply([:], final: _):
         remove(at: index)
 
       default: break
@@ -58,11 +36,11 @@ extension [Instruction] {
       // we only need to check the first value, since all others should
       // match it
       let casePath: _? =
-      switch chunk.first {
-      case .add: \Instruction.Cases.add
-      case .move: \Instruction.Cases.move
-      default: nil
-      }
+        switch chunk.first {
+        case .add: \Instruction.Cases.add
+        case .move: \Instruction.Cases.move
+        default: nil
+        }
 
       // make sure we're actually dealing with one of the cases we're
       // interested in optimizing
@@ -77,34 +55,40 @@ extension [Instruction] {
     }
   }
 
-  /// Optimizes scan loops.
-  private mutating func optimizeScanLoops() {
-    for case let (index, .loop(instructions)) in indexed()
-    where instructions.count == 1 {
-      if case let .move(increment) = instructions[0] {
-        self[index] = .scan(increment)
-      }
-    }
-  }
+  /// Optimizes multiply instructions.
+  private mutating func optimizeMultiplyInstructions() {
+    top: for case let (index, .loop(instructions)) in indexed() {
+      var currentOffset: CellOffset = 0
+      var multiplications: [CellOffset: CellValue] = [:]
 
-  /// Optimizes multiplication loops.
-  private mutating func optimizeMultiplyLoops() {
-    for case let (index, .loop(instructions)) in indexed()
-    where instructions.count == 4 {
-      // check if the loop's instructions match what we're looking for
-      if case .add(-1) = instructions[0],
-         case let .move(offset) = instructions[1],
-         case let .add(factor) = instructions[2],
-         case .move(-offset) = instructions[3]
-      {
-        self[index] = .multiply(factor: factor, offset: offset)
-      } else if case let .move(offset) = instructions[0],
-                case let .add(factor) = instructions[1],
-                case .move(-offset) = instructions[2],
-                case .add(-1) = instructions[3]
-      {
-        self[index] = .multiply(factor: factor, offset: offset)
+      for instruction in instructions {
+        switch instruction {
+        case let .add(value):
+          multiplications[currentOffset, default: 0] += value
+
+        case let .move(offset):
+          currentOffset += offset
+
+        case .loop, .input, .output, .multiply:
+          continue top
+        }
       }
+
+      guard currentOffset == 0, multiplications[0] == -1 else {
+        continue top
+      }
+
+      multiplications[0] = nil
+      self[index] = .multiply(multiplications)
+    }
+
+    // MARK: multiply(_, final) add(value) -> multiply(_, final + value)
+    for case let (
+      (firstIndex, .multiply(multiplications, final)),
+      (secondIndex, .add(value))
+    ) in indexed().adjacentPairs().reversed() {
+      remove(at: secondIndex)
+      self[firstIndex] = .multiply(multiplications, final: final + value)
     }
   }
 
@@ -117,7 +101,7 @@ extension [Instruction] {
   /// here.
   private mutating func removeDeadLoops() {
     for case let ((_, first), (secondIndex, second))
-          in indexed().adjacentPairs().reversed()
+      in indexed().adjacentPairs().reversed()
     where first.isLoopLike && second.isLoopLike {
       // there's a loop immediately after another loop, so the second loop will
       // never be executed (because the current cell is always 0 immediately
@@ -142,9 +126,8 @@ extension [Instruction] {
       self[index] = .loop(instructions)
     }
 
+    optimizeMultiplyInstructions()
     optimizeClearLoops()
-    optimizeScanLoops()
-    optimizeMultiplyLoops()
   }
 }
 
@@ -156,9 +139,8 @@ extension Program {
   /// Doesn't bother removing more than 1 loop, since the others should have
   /// already been optimized away by this point.
   private mutating func removeInitialLoops() {
-    switch instructions.first {
-    case .loop, .multiply, .scan, .setTo(0): instructions.removeFirst()
-    default: break
+    if instructions.first?.isLoopLike == true {
+      instructions.removeFirst()
     }
   }
 
@@ -172,9 +154,19 @@ extension Program {
 // MARK: - Utilities
 
 extension Instruction {
+  fileprivate func isOrContains(_ element: Instruction) -> Bool {
+    return if self == element {
+      true
+    } else if case let .loop(instructions) = self {
+      instructions.contains { $0.isOrContains(element) }
+    } else {
+      false
+    }
+  }
+
   fileprivate var isLoopLike: Bool {
     switch self {
-    case .loop, .multiply, .scan, .setTo(0): true
+    case .loop, .multiply(_, final: 0): true
     default: false
     }
   }
