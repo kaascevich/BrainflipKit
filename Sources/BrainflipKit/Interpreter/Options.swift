@@ -15,9 +15,6 @@ public struct InterpreterOptions: Sendable {
     /// If the provided value will not fit in a cell, the cell is instead set
     /// to the maximum value that will fit.
     case setTo(CellValue)
-
-    /// Throws an error.
-    case throwError
   }
 
   /// Creates an `InterpreterOptions` instance to configure an ``Interpreter``

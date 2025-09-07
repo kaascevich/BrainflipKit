@@ -11,14 +11,12 @@ instead of dwelling on the basics, I'll go over what makes this interpreter
 _marginally_ unique.
 
 - Full Unicode support. That's just what happens when you're using Swift.
-- The cells are 32-bit instead of 8-bit, due to the aforementioned Unicode
+- The cells are 64-bit instead of 8-bit, due to the aforementioned Unicode
   support. Most well-written brainf\*\*k programs shouldn't be heavily
   affected by this.
 - The tape is infinite in both directions.
 - The end-of-input behavior is customizable -- you can ignore EOI, set the
-  cell to 0, set the cell to its maximum, or throw an error. (Why you'd throw
-  an error on EOI, I don't know, but the option is there for the taking.)
-- Cell wrapping can be disabled (by throwing an error).
+  cell to 0, or set the cell to its maximum.
 - Some relatively basic optimizations are performed, including:
   - Condensing repeated instructions
   - Merging `+`/`-` and `<`/`>` instructions (and removing pairs that cancel

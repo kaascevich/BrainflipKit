@@ -27,34 +27,36 @@ extension InterpreterTests {
 
   @Suite("Tape")
   struct TapeTests {
-    /// Verifies that the tape is at least 30,000 cells long.
-    @Test("Tape length")
-    func tapeLength() {
-      var interpreter = Interpreter()
+    #if swift(>=6.2)
+      /// Verifies that the tape is at least 30,000 cells long.
+      @Test("Tape length")
+      func tapeLength() {
+        var interpreter = Interpreter()
 
-      #expect(
-        throws: Never.self,
-        """
-        tape length should be at least 30_000 cells long
-        """
-      ) {
-        try interpreter.handleInstruction(.move(29_999))
+        #expect(
+          processExitsWith: .success,
+          """
+          tape length should be at least 30_000 cells long
+          """
+        ) {
+          interpreter.handleInstruction(.move(29_999))
+        }
       }
-    }
 
-    @Test("Negative cell pointers")
-    func negativeCellPointers() throws {
-      var interpreter = Interpreter()
-      try #require(interpreter.state.cellPointer == 0)
+      @Test("Negative cell pointers")
+      func negativeCellPointers() throws {
+        var interpreter = Interpreter()
+        try #require(interpreter.state.cellPointer == 0)
 
-      #expect(
-        throws: Never.self,
-        """
-        tape should allow negative cell pointers
-        """
-      ) {
-        try interpreter.handleInstruction(.move(-5))
+        #expect(
+          processExitsWith: .success,
+          """
+          tape should allow negative cell pointers
+          """
+        ) {
+          interpreter.handleInstruction(.move(-5))
+        }
       }
-    }
+    #endif
   }
 }

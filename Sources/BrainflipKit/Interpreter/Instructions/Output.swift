@@ -7,10 +7,7 @@ extension Interpreter {
   mutating func handleOutputInstruction() {
     // if this cell's value doesn't correspond to a valid Unicode character, do
     // nothing
-    guard
-      let codePoint = UInt32(exactly: state.currentCellValue),
-      let scalar = Unicode.Scalar(codePoint)
-    else {
+    guard let scalar = Unicode.Scalar(state.currentCellValue) else {
       return
     }
 

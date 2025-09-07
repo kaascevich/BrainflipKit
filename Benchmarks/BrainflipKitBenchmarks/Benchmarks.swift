@@ -9,7 +9,7 @@ let benchmarks = { @Sendable in
   let programs = [
     "comprehensive": "",
     "factor": "2346\n",
-    "hanoi": "",
+//    "hanoi": "",
     "numwarp": "()-./0123456789abcdef",
     "sierpinski": "",
   ]

@@ -34,7 +34,6 @@ extension Brainflip {
         switch interpreterOptions.endOfInputBehavior {
         case .zero: .setTo(0)
         case .max: .setTo(.max)
-        case .error: .throwError
         case nil: nil
         }
 
@@ -62,7 +61,7 @@ extension Brainflip {
 
       // StandardOutputStream prints the output for us, so we don't need to do
       // it ourselves.
-      _ = try interpreter.run(parsedProgram)
+      _ = interpreter.run(parsedProgram)
     }
   }
 }

@@ -5,14 +5,11 @@ extension Interpreter {
   /// Executes a ``Instruction/loop(_:)``.
   ///
   /// - Parameter instructions: The instructions to loop over.
-  ///
-  /// - Throws: An ``InterpreterError`` if an error occurs while executing the
-  ///   instructions.
   @inline(__always)
-  mutating func handleLoop(_ instructions: [Instruction]) throws {
+  mutating func handleLoop(_ instructions: [Instruction]) {
     while state.currentCellValue != 0 {
       for instruction in instructions {
-        try handleInstruction(instruction)
+        handleInstruction(instruction)
       }
     }
   }

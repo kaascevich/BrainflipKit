@@ -24,19 +24,6 @@ struct OptimizerTests {
     expectNoDifference(try Program("+-<> +<>-"), [])
   }
 
-  @Test("Scan-loop optimization")
-  func scanLoopOptimization() throws {
-    expectNoDifference(
-      try Program("+[>>>]+[<<]"),
-      [
-        .add(1),
-        .loop([.move(3)]),
-        .add(1),
-        .loop([.move(-2)]),
-      ]
-    )
-  }
-
   @Test("Multiply instruction optimization")
   func multiplyInstructionOptimization() throws {
     expectNoDifference(

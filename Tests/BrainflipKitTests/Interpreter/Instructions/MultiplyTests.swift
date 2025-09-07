@@ -11,10 +11,10 @@ extension InterpreterTests.InstructionTests {
     var interpreter = Interpreter()
 
     @Test("Multiply instruction")
-    mutating func multiplyInstruction() throws {
+    mutating func multiplyInstruction() {
       interpreter.state.currentCellValue = 5
       interpreter.state.tape[-2] = 4
-      try interpreter.handleInstruction(.multiply([1: 2, -2: 7], final: 3))
+      interpreter.handleInstruction(.multiply([1: 2, -2: 7], final: 3))
 
       #expect(
         interpreter.state.tape[-2] == 39 && interpreter.state.tape[1] == 10,

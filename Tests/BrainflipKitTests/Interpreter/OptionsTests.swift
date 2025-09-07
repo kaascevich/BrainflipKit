@@ -11,36 +11,25 @@ extension InterpreterTests {
     @Suite("End of input behavior options")
     struct EndOfInputBehaviorTests {
       @Test("Do nothing on end of input")
-      func doNothingOption() throws {
+      func doNothingOption() {
         var interpreter = Interpreter(
           options: .init(endOfInputBehavior: nil)
         )
 
         interpreter.state.currentCellValue = 42
-        try interpreter.handleInstruction(.input)
+        interpreter.handleInstruction(.input)
         #expect(interpreter.state.currentCellValue == 42)
       }
 
       @Test("Set the current cell to a value on end of input")
-      func setToValueOption() throws {
+      func setToValueOption() {
         var interpreter = Interpreter(
           options: .init(endOfInputBehavior: .setTo(0))
         )
 
         interpreter.state.currentCellValue = 42
-        try interpreter.handleInstruction(.input)
+        interpreter.handleInstruction(.input)
         #expect(interpreter.state.currentCellValue == 0)
-      }
-
-      @Test("Throw an error on end of input")
-      func throwErrorOption() {
-        var interpreter = Interpreter(
-          options: .init(endOfInputBehavior: .throwError)
-        )
-
-        #expect(throws: InterpreterError.endOfInput) {
-          try interpreter.handleInstruction(.input)
-        }
       }
     }
   }

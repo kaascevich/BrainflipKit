@@ -65,7 +65,7 @@
 /// .>---.+++++++..+++.>>.<-.<.+++.------.--------.>>+.
 /// """
 /// let interpreter = Interpreter()
-/// let output = try interpreter.run(program).output
+/// let output = interpreter.run(program).output
 /// print(output) // Hello World!
 /// ```
 ///

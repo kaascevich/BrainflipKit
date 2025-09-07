@@ -11,9 +11,9 @@ extension InterpreterTests.InstructionTests {
     var interpreter = Interpreter()
 
     @Test("Add instruction", arguments: -5...5)
-    mutating func addInstruction(offset: CellValue) throws {
+    mutating func addInstruction(offset: CellValue) {
       for i in 1...10 {
-        try interpreter.handleInstruction(.add(offset))
+        interpreter.handleInstruction(.add(offset))
         
         #expect(
           interpreter.state.currentCellValue == i * offset,
@@ -25,9 +25,9 @@ extension InterpreterTests.InstructionTests {
     }
 
     @Test("Add instruction - wraparound")
-    mutating func addInstructionWraparound() throws {
+    mutating func addInstructionWraparound() {
       interpreter.state.currentCellValue = .max
-      try interpreter.handleInstruction(.add(1))
+      interpreter.handleInstruction(.add(1))
       
       #expect(
         interpreter.state.currentCellValue == .min,
@@ -38,9 +38,9 @@ extension InterpreterTests.InstructionTests {
     }
 
     @Test("Add instruction - negative wraparound")
-    mutating func addInstructionNegativeWraparound() throws {
+    mutating func addInstructionNegativeWraparound() {
       interpreter.state.currentCellValue = .min
-      try interpreter.handleInstruction(.add(-1))
+      interpreter.handleInstruction(.add(-1))
 
       #expect(
         interpreter.state.currentCellValue == .max,

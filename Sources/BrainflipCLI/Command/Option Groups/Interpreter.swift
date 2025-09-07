@@ -17,14 +17,10 @@ extension Brainflip {
       /// Sets the current cell to its maximum value.
       case max
 
-      /// Throws an error.
-      case error
-
       var defaultValueDescription: String {
         switch self {
         case .zero: "Sets the current cell to 0."
         case .max: "Sets the current cell to its maximum value."
-        case .error: "Throws an error."
         }
       }
     }
