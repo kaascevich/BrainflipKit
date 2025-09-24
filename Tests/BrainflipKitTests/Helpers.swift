@@ -12,7 +12,7 @@ func getProgram(named name: String) throws -> Program {
 }
 
 extension Program: ExpressibleByArrayLiteral {
-  public init(arrayLiteral instructions: Instruction...) {
+  init(arrayLiteral instructions: Instruction...) {
     self.init(instructions)
   }
 }

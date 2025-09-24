@@ -6,10 +6,8 @@ import Testing
 
 @testable import BrainflipKit
 
-@Suite("Program optimization")
-struct OptimizerTests {
-  @Test("Adjacent instruction optimization")
-  func adjacentInstructionOptimization() throws {
+@Suite struct `Program optimization` {
+  @Test func `Adjacent instruction optimization`() throws {
     expectNoDifference(
       try Program(">>><<+---"),
       [
@@ -19,13 +17,11 @@ struct OptimizerTests {
     )
   }
 
-  @Test("Useless instruction optimization")
-  func uselessInstructionOptimization() throws {
+  @Test func `Useless instruction optimization`() throws {
     expectNoDifference(try Program("+-<> +<>-"), [])
   }
 
-  @Test("Multiply instruction optimization")
-  func multiplyInstructionOptimization() throws {
+  @Test func `Multiply instruction optimization`() throws {
     expectNoDifference(
       try Program("+[- >> ++++ <<]"),
       [.add(1), .multiply([2: 4])]
@@ -45,13 +41,11 @@ struct OptimizerTests {
     )
   }
 
-  @Test("Dead loops optimization")
-  func deadLoopsOptimization() throws {
+  @Test func `Dead loops optimization`() throws {
     expectNoDifference(try Program("[-][][->+<][>]"), [])
   }
 
-  @Test("Life")
-  func life() throws {
+  @Test func `Life`() throws {
     expectNoDifference(
       try getProgram(named: "life"),
       [

@@ -12,13 +12,13 @@ enum TerminalRawMode {
   private static var terminalState: termios {
     get {
       var currentState = termios()
-      _ = tcgetattr(standardInput, &currentState)
+      _ = unsafe tcgetattr(standardInput, &currentState)
       return currentState
     }
 
     set {
-      withUnsafePointer(to: newValue) {
-        _ = tcsetattr(standardInput, TCSAFLUSH, $0)
+      unsafe withUnsafePointer(to: newValue) {
+        _ = unsafe tcsetattr(standardInput, TCSAFLUSH, $0)
       }
     }
   }

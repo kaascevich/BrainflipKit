@@ -6,48 +6,35 @@ import Testing
 @testable import BrainflipKit
 
 extension InterpreterTests.InstructionTests {
-  @Suite("Add instruction")
-  struct AddTests {
+  @Suite("Add instruction") struct AddTests {
     var interpreter = Interpreter()
 
-    @Test("Add instruction", arguments: -5...5)
-    mutating func addInstruction(offset: CellValue) {
+    /// An add instruction adds the given value to the current cell.
+    @Test(arguments: -5...5)
+    mutating func `Add instruction`(offset: CellValue) {
       for i in 1...10 {
         interpreter.handleInstruction(.add(offset))
         
-        #expect(
-          interpreter.state.currentCellValue == i * offset,
-          """
-          add instruction adds the given value to the current cell
-          """
-        )
+        #expect(interpreter.state.currentCellValue == i * offset)
       }
     }
 
-    @Test("Add instruction - wraparound")
-    mutating func addInstructionWraparound() {
+    /// An add instruction with a positive value wraps around to a negative
+    /// value if an overflow occurs.
+    @Test mutating func `Add instruction - wraparound`() {
       interpreter.state.currentCellValue = .max
       interpreter.handleInstruction(.add(1))
       
-      #expect(
-        interpreter.state.currentCellValue == .min,
-        """
-        add instruction with positive value should wrap around
-        """
-      )
+      #expect(interpreter.state.currentCellValue == .min)
     }
 
-    @Test("Add instruction - negative wraparound")
-    mutating func addInstructionNegativeWraparound() {
+    /// An add instruction with a negative value wraps around to a positive
+    /// value if an overflow occurs.
+    @Test mutating func `Add instruction - negative wraparound`() {
       interpreter.state.currentCellValue = .min
       interpreter.handleInstruction(.add(-1))
 
-      #expect(
-        interpreter.state.currentCellValue == .max,
-        """
-        add instruction with negative value should wrap around
-        """
-      )
+      #expect(interpreter.state.currentCellValue == .max)
     }
   }
 }

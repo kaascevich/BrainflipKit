@@ -16,7 +16,7 @@ extension [Instruction] {
       }
     }
 
-    self = chunks.flatMap { chunk in
+    self = chunks.flatMap { (chunk: ArraySlice<Instruction>) in
       // we only need to check the first value, since all others should
       // match it
       let casePath: _? =

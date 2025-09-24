@@ -97,3 +97,6 @@ extension Interpreter {
     }
   }
 }
+
+extension Interpreter.State: Sendable
+where Input.Iterator: Sendable, Output: Sendable {}

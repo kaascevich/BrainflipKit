@@ -1,40 +1,43 @@
-# This file is part of BrainflipKit.
-# Copyright © 2024-2025 Kaleb A. Ascevich
-#
-# BrainflipKit is free software: you can redistribute it and/or modify it under
-# the terms of the GNU Affero General Public License (GNU AGPL) as published by
-# the Free Software Foundation, either version 3 of the License, or (at your
-# option) any later version.
-#
-# BrainflipKit is distributed in the hope that it will be useful, but WITHOUT
-# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
-# FOR A PARTICULAR PURPOSE. See the GNU AGPL for more details.
-#
-# You should have received a copy of the GNU AGPL along with BrainflipKit. If
-# not, see <https://www.gnu.org/licenses/>.
+# SPDX-FileCopyrightText: 2025 Kaleb A. Ascevich
+# SPDX-License-Identifier: AGPL-3.0-or-later
 
 excluded:
   - .build
   - .swiftpm
 
 disabled_rules:
-  - comma # more annoying than helpful when aligning code
-  - identifier_name # doesn't play well with custom operators
+  - attribute_name_spacing
+  - closing_brace
+  - closure_parameter_position
+  - colon
+  - comma
+  - comment_spacing
+  - file_length
+  - function_name_whitespace
+  - identifier_name
   - line_length
-  - todo # annoying
-  - vertical_parameter_alignment_on_call # doesn't play well with trailing closures
+  - no_space_in_method_call
+  - opening_brace
+  - return_arrow_whitespace
+  - statement_position
+  - switch_case_alignment
+  - trailing_comma
+  - trailing_newline
+  - trailing_semicolon
+  - trailing_whitespace
+  - todo
+  - vertical_parameter_alignment
+  - vertical_parameter_alignment_on_call
+  - vertical_whitespace
 
 opt_in_rules:
   - array_init
-  - closure_end_indentation
-  - closure_spacing
-  - collection_alignment
   - comma_inheritance
   - contains_over_filter_count
   - contains_over_filter_is_empty
   - contains_over_first_not_nil
   - contains_over_range_nil_comparison
-  - convenience_type
+#  - convenience_type
   - direct_return
   - discouraged_assert
   - discouraged_none_name
@@ -45,7 +48,7 @@ opt_in_rules:
   - empty_string
   - enum_case_associated_values_count
   - explicit_init
-  - extension_access_modifier
+#  - extension_access_modifier
   - fatal_error_message
   - file_header
   - file_name_no_space
@@ -54,28 +57,18 @@ opt_in_rules:
   - identical_operands
   - implicit_return
   - implicitly_unwrapped_optional
-  - indentation_width
-  - inert_defer
   - joined_default_parameter
   - last_where
   - legacy_multiple
-  - literal_expression_end_indentation
   - local_doc_comment
   - lower_acl_than_parent
   - missing_docs
   - modifier_order
-  - multiline_arguments_brackets
-  - multiline_function_chains
-  - multiline_literal_brackets
-  - multiline_parameters
-  - multiline_parameters_brackets
   - non_overridable_class_declaration
   - nslocalizedstring_key
-  - operator_usage_whitespace
   - optional_enum_case_matching
   - override_in_extension
-  - pattern_matching_keywords
-  - period_spacing
+#  - pattern_matching_keywords
   - prefer_key_path
   - prefer_self_in_static_references
   - prefer_self_type_over_type_of_self
@@ -96,14 +89,8 @@ opt_in_rules:
   - unneeded_parentheses_in_closure_argument
   - unowned_variable_capture
   - untyped_error_in_catch
-  - unused_capture_list
   - unused_parameter
-  - vertical_parameter_alignment_on_call
-  - vertical_whitespace_between_cases
-  - vertical_whitespace_closing_braces
-  - vertical_whitespace_opening_braces
   - weak_delegate
-  - yoda_condition
 
 analyzer_rules:
   - capture_variable
@@ -111,47 +98,15 @@ analyzer_rules:
   - unused_declaration
   - unused_import
 
-trailing_comma:
-  mandatory_comma: true
-
-# Trailing whitespace on empty lines lets my tab key live
-# just a little bit longer.
-trailing_whitespace:
-  ignores_empty_lines: true
-
 # There are times when one actually needs to use these for
 # their intended purposes.
 force_cast: warning
 force_try: warning
 
-# Whitespace to the right of colons is used constantly for
-# alignment.
-colon:
-  flexible_right_spacing: true
-
 nesting:
   type_level: 2
 
-indentation_width:
-  indentation_width: 2
-
-opening_brace:
-  ignore_multiline_statement_conditions: true
-  ignore_multiline_function_signatures: true
-
 file_header:
   required_pattern: |
-                    \/\/ This file is part of (\w+)\.
-                    \/\/ Copyright © \d{4}-\d{4} .+
-                    \/\/
-                    \/\/ \1 is free software: you can redistribute it and\/or modify it under
-                    \/\/ the terms of the GNU Affero General Public License \(GNU AGPL\) as published by
-                    \/\/ the Free Software Foundation, either version 3 of the License, or \(at your
-                    \/\/ option\) any later version\.
-                    \/\/
-                    \/\/ \1 is distributed in the hope that it will be useful, but WITHOUT
-                    \/\/ ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
-                    \/\/ FOR A PARTICULAR PURPOSE\. See the GNU AGPL for more details\.
-                    \/\/
-                    \/\/ You should have received a copy of the GNU AGPL along with \1\. If
-                    \/\/ not, see <https://www.gnu.org/licenses/>\.
+                    \/\/ SPDX-FileCopyrightText: \d{4} .+
+                    \/\/ SPDX-License-Identifier: AGPL-3.0-or-later

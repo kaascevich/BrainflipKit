@@ -127,3 +127,6 @@ public struct Interpreter<
     )
   }
 }
+
+extension Interpreter: Sendable
+where Input.Iterator: Sendable, Output: Sendable {}

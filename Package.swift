@@ -1,10 +1,34 @@
-// swift-tools-version: 6.1
+// swift-tools-version: 6.2
 
 // SPDX-FileCopyrightText: 2024 Kaleb A. Ascevich
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
 import PackageDescription
 
+let experimentalFeatures: [SwiftSetting] = [
+  "AccessLevelOnImport",
+  "AllowUnsafeAttribute",
+  "FixedArrays",
+  "LifetimeDependence",
+  "Lifetimes",
+  "Span",
+  "SuppressedAssociatedTypes",
+  "ValueGenerics",
+].map { .enableExperimentalFeature($0) }
+
+let upcomingFeatures: [SwiftSetting] = [
+  "ExistentialAny",
+  "InternalImportsByDefault",
+  "MemberImportVisibility",
+  "StrictConcurrency",
+].map { .enableUpcomingFeature($0) }
+
+let settings = experimentalFeatures + upcomingFeatures + [
+  .swiftLanguageMode(.v6),
+  .strictMemorySafety(),
+]
+
+/// The package manifest.
 let package = Package(
   name: "BrainflipKit",
   platforms: [.macOS(.v15)],
@@ -31,7 +55,7 @@ let package = Package(
     ),
     .package(
       url: "https://github.com/ordo-one/package-benchmark.git",
-      from: "1.0.0"
+      from: "1.29.4"
     ),
   ],
   targets: [
@@ -72,3 +96,7 @@ let package = Package(
     ),
   ]
 )
+
+for target in package.targets {
+  target.swiftSettings = (target.swiftSettings ?? []) + settings
+}

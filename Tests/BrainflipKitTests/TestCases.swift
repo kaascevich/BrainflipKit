@@ -6,3 +6,4 @@ import Testing
 @Suite("Interpreter") struct InterpreterTests {
   @Suite("Instructions") struct InstructionTests {}
 }
+

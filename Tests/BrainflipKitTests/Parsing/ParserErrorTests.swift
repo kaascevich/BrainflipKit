@@ -5,20 +5,12 @@ import Testing
 
 @testable import BrainflipKit
 
-extension ParsingTests {
-  @Suite("Parsing errors")
-  struct ParserErrorTests {
-    @Test(
-      "Unpaired loops",
-      arguments: ["[", "]", "][", "]][", "][[", "[][", "][]", "[[]", "[]]"]
-    )
-    func unpairedLoops(_ program: String) {
-      #expect(
-        throws: (any Error).self,
-        """
-        unpaired loops should fail to parse
-        """
-      ) {
+extension `Program parsing` {
+  @Suite struct `Parsing errors` {
+    /// Unpaired loops fail to parse.
+    @Test(arguments: ["[", "]", "][", "]][", "][[", "[][", "][]", "[[]", "[]]"])
+    func `Unpaired loops`(_ program: String) {
+      #expect(throws: (any Error).self) {
         try Program(program)
       }
     }

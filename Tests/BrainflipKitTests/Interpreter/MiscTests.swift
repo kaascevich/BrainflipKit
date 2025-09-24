@@ -7,56 +7,36 @@ import Testing
 @testable import BrainflipKit
 
 extension InterpreterTests {
-  /// Tests that the cell type used by the interpreter can store at least every
-  /// valid `UInt32`.
-  @Test("Cell sizes")
-  func cellSizes() {
+  /// The cell type used by the interpreter can store at least every valid
+  /// `UInt32`.
+  @Test func `Cell sizes`() {
     #expect(
       CellValue.min <= UInt32.min,
-      """
-      minimum cell value should be at least \(UInt32.min)
-      """
+      "minimum cell value is at most \(UInt32.min)"
     )
     #expect(
       CellValue.max >= UInt32.max,
-      """
-      maximum cell value should be at least \(UInt32.max)
-      """
+      "maximum cell value is at least \(UInt32.max)"
     )
   }
 
-  @Suite("Tape")
-  struct TapeTests {
-    #if swift(>=6.2)
-      /// Verifies that the tape is at least 30,000 cells long.
-      @Test("Tape length")
-      func tapeLength() {
+  @Suite struct `Tape` {
+    /// The tape is at least 30,000 cells long.
+    @Test func `Tape length`() async {
+      await #expect(processExitsWith: .success) {
         var interpreter = Interpreter()
-
-        #expect(
-          processExitsWith: .success,
-          """
-          tape length should be at least 30_000 cells long
-          """
-        ) {
-          interpreter.handleInstruction(.move(29_999))
-        }
+        interpreter.handleInstruction(.move(29_999))
       }
+    }
 
-      @Test("Negative cell pointers")
-      func negativeCellPointers() throws {
+    /// The tape allows negative cell pointers.
+    @Test func `Negative cell pointers`() async throws {
+      await #expect(processExitsWith: .success) {
         var interpreter = Interpreter()
         try #require(interpreter.state.cellPointer == 0)
 
-        #expect(
-          processExitsWith: .success,
-          """
-          tape should allow negative cell pointers
-          """
-        ) {
-          interpreter.handleInstruction(.move(-5))
-        }
+        interpreter.handleInstruction(.move(-5))
       }
-    #endif
+    }
   }
 }

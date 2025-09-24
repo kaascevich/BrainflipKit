@@ -6,21 +6,15 @@ import Testing
 @testable import BrainflipKit
 
 extension InterpreterTests.InstructionTests {
-  @Suite("Move instruction")
-  struct MovementTests {
+  @Suite("Move instruction") struct MoveTests {
     var interpreter = Interpreter()
 
-    @Test("Move instruction", arguments: -5...5)
-    mutating func moveInstruction(offset: CellOffset) {
+    /// A move instruction adjusts the cell pointer by the given offset.
+    @Test(arguments: -5...5)
+    mutating func `Move instruction`(offset: CellOffset) {
       for i in 1...10 {
         interpreter.handleInstruction(.move(offset))
-        
-        #expect(
-          interpreter.state.cellPointer == i * offset,
-          """
-          move instruction should move the cell pointer by the given offset
-          """
-        )
+        #expect(interpreter.state.cellPointer == i * offset)
       }
     }
   }

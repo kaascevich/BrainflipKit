@@ -6,10 +6,8 @@ import Testing
 @testable import BrainflipKit
 
 extension InterpreterTests {
-  @Suite("Interpreter initialization")
-  struct InitializerTests {
-    @Test("Default initializer")
-    func defaultInitializer() {
+  @Suite struct `Interpreter initialization` {
+    @Test func `Default initializer`() {
       let interpreter = Interpreter()
 
       #expect(interpreter.state.tape.isEmpty)
@@ -18,8 +16,7 @@ extension InterpreterTests {
       #expect(interpreter.state.output.isEmpty == true)
     }
 
-    @Test("Unicode input")
-    func unicodeInput() throws {
+    @Test func `Unicode input`() throws {
       let program = try Program(",[.,]")
       let interpreter = Interpreter(
         input: "→",

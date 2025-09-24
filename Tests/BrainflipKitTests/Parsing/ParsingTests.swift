@@ -6,10 +6,8 @@ import Testing
 
 @testable import BrainflipKit
 
-@Suite("Program parsing")
-struct ParsingTests {
-  @Test("Basic parsing")
-  func basicParsing() throws {
+@Suite struct `Program parsing` {
+  @Test func `Basic parsing`() throws {
     expectNoDifference(
       try Program(",[>+<-.]"),
       [
@@ -25,8 +23,7 @@ struct ParsingTests {
     )
   }
 
-  @Test("Parsing instructions and comments")
-  func instructionsAndComments() throws {
+  @Test func `Parsing instructions and comments`() throws {
     expectNoDifference(
       try Program(",++ a comment ++."),
       [
@@ -39,8 +36,7 @@ struct ParsingTests {
     expectNoDifference(try Program("the whole thing is just a comment"), [])
   }
 
-  @Test("Parsing nested loops")
-  func nestedLoops() throws {
+  @Test func `Parsing nested loops`() throws {
     expectNoDifference(
       try Program(">+[>-[-<]>>]>"),
       [
@@ -60,8 +56,7 @@ struct ParsingTests {
     )
   }
 
-  @Test("'Obscure Problem Tester'")
-  func obscureProblemTester() throws {
+  @Test func `'Obscure Problem Tester'`() throws {
     expectNoDifference(
       try getProgram(named: "obscure"),
       [

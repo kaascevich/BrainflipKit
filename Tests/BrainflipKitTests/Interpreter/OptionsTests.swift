@@ -6,12 +6,9 @@ import Testing
 @testable import BrainflipKit
 
 extension InterpreterTests {
-  @Suite("Interpreter options")
-  struct OptionsTests {
-    @Suite("End of input behavior options")
-    struct EndOfInputBehaviorTests {
-      @Test("Do nothing on end of input")
-      func doNothingOption() {
+  @Suite struct `Interpreter options` {
+    @Suite struct `End of input behavior options` {
+      @Test func `Do nothing on end of input`() {
         var interpreter = Interpreter(
           options: .init(endOfInputBehavior: nil)
         )
@@ -21,8 +18,7 @@ extension InterpreterTests {
         #expect(interpreter.state.currentCellValue == 42)
       }
 
-      @Test("Set the current cell to a value on end of input")
-      func setToValueOption() {
+      @Test func `Set the current cell to a value on end of input`() {
         var interpreter = Interpreter(
           options: .init(endOfInputBehavior: .setTo(0))
         )

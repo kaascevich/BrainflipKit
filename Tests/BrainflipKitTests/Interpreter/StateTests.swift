@@ -6,12 +6,10 @@ import Testing
 @testable import BrainflipKit
 
 extension InterpreterTests {
-  @Suite("State")
-  struct StateTests {
+  @Suite struct `State` {
     var interpreter = Interpreter()
 
-    @Test("Current cell value")
-    mutating func currentCellValue() {
+    @Test mutating func `Current cell value`() {
       interpreter.state.tape = [0: 237, 1: 29, 2: 74]
 
       #expect(interpreter.state.currentCellValue == 237)

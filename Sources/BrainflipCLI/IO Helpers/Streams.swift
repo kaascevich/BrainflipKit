@@ -7,7 +7,7 @@ extension FileHandle: @retroactive TextOutputStream {
   /// Appends the given string to the file handle.
   ///
   /// - Parameter string: The string to write.
-  public func write(_ string: String) {
+  func write(_ string: String) {
     try! write(contentsOf: string.data(using: .utf8)!)
   }
 }
