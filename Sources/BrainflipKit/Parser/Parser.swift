@@ -7,14 +7,14 @@ private import Parsing
 private struct InstructionParser: Parser {
   var body: some Parser<Substring, Instruction> {
     OneOf {
-      Many(1..., into: 0, +=) {
+      Many(1..., into: 0, &+=) {
         OneOf {
           "+".map { +1 }
           "-".map { -1 }
         }
       }.map(Instruction.add)
 
-      Many(1..., into: 0, +=) {
+      Many(1..., into: 0, &+=) {
         OneOf {
           ">".map { +1 }
           "<".map { -1 }

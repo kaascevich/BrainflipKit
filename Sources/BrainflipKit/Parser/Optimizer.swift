@@ -34,7 +34,7 @@ extension [Instruction] {
 
       // condense all the values into a single instruction
       let values = chunk.map(\.[case: casePath]!)
-      let sum = values.reduce(0, +)
+      let sum = values.reduce(0, &+)
       return if sum == 0 { [] } else { [casePath(sum)] }
     }
   }
@@ -51,7 +51,7 @@ extension [Instruction] {
           multiplications[currentOffset, default: 0] &+= value
 
         case let .move(offset):
-          currentOffset += offset
+          currentOffset &+= offset
 
         case .loop, .input, .output, .multiply:
           continue top
@@ -72,7 +72,7 @@ extension [Instruction] {
       (secondIndex, .add(value))
     ) in indexed().adjacentPairs().reversed() {
       remove(at: secondIndex)
-      self[firstIndex] = .multiply(multiplications, final: final + value)
+      self[firstIndex] = .multiply(multiplications, final: final &+ value)
     }
 
     // MARK: add(_) multiply([:], final) -> multiply([:], final)

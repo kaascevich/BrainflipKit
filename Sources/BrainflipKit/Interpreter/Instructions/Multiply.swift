@@ -11,7 +11,7 @@ extension Interpreter {
     final: CellValue
   ) {
     for (offset, increment) in multiplications {
-      state.tape[state.cellPointer + offset, default: 0] &+=
+      state.tape[state.cellPointer &+ offset, default: 0] &+=
         state.currentCellValue &* increment
     }
     state.currentCellValue = final
