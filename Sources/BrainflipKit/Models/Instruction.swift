@@ -1,14 +1,11 @@
 // SPDX-FileCopyrightText: 2024 Kaleb A. Ascevich
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
-public import CasePaths
-
 /// An individual instruction, performing a specific action when executed by an
 /// ``Interpreter``.
-@CasePathable public enum Instruction: Equatable, Hashable, Codable, Sendable {
-  /// Increments (or decrements) the current cell by a value.
-  ///
-  /// The default behavior on overflow is to wrap around.
+public enum Instruction: Equatable, Hashable, Codable, Sendable {
+  /// Increments (or decrements) the current cell by a value, wrapping around
+  /// on overflow.
   case add(CellValue)
 
   /// Increments (or decrements) the cell pointer by a value.

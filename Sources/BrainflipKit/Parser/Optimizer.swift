@@ -2,40 +2,42 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
 import Algorithms
-import CasePaths
 
 extension [Instruction] {
   // MARK: - Optimizations
 
   /// Removes adjacent instructions of the same type.
   private mutating func removeAdjacentInstructions() {
-    let chunks = chunked {
-      switch ($0, $1) {
-      case (.add, .add), (.move, .move): true
-      default: false
-      }
-    }
-
-    self = chunks.flatMap { (chunk: ArraySlice<Instruction>) in
-      // we only need to check the first value, since all others should
-      // match it
-      let casePath: _? =
-        switch chunk.first {
-        case .add: \Instruction.Cases.add
-        case .move: \Instruction.Cases.move
-        default: nil
+    var index = startIndex
+    while index < endIndex {
+      switch self[index] {
+      case .add:
+        var sum: CellValue = 0
+        while index < endIndex, case .add(let value) = self[index] {
+          sum &+= value
+          remove(at: index)
         }
 
-      // make sure we're actually dealing with one of the cases we're
-      // interested in optimizing
-      guard let casePath else {
-        return chunk
+        if sum != 0 {
+          insert(.add(sum), at: index)
+        }
+
+      case .move:
+        var sum: CellOffset = 0
+        while index < endIndex, case .move(let offset) = self[index] {
+          sum &+= offset
+          remove(at: index)
+        }
+
+        if sum != 0 {
+          insert(.move(sum), at: index)
+        }
+
+      default:
+        break
       }
 
-      // condense all the values into a single instruction
-      let values = chunk.map(\.[case: casePath]!)
-      let sum = values.reduce(0, &+)
-      return if sum == 0 { [] } else { [casePath(sum)] }
+      index += 1
     }
   }
 

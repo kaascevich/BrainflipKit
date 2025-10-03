@@ -18,7 +18,7 @@ import Testing
   }
 
   @Test func `Useless instruction optimization`() throws {
-    expectNoDifference(try Program("+-<> +<>-"), [])
+    expectNoDifference(try Program("+-<> +-+- ><>< +<>-"), [])
   }
 
   @Test func `Multiply instruction optimization`() throws {
