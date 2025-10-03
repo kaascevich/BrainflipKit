@@ -19,21 +19,30 @@ let benchmarks = { @Sendable in
     let url = Bundle.module.url(forResource: name, withExtension: "b")!
     let program = try! String(contentsOf: url, encoding: .utf8)
 
-    Benchmark("Parsing - \(name)") { benchmark in
-      _ = try Program(program)
+    Benchmark(
+      "Parsing",
+      configuration: .init(tags: ["program": name])
+    ) { benchmark in
+      blackHole(try Program(program))
     }
 
-    Benchmark("Execution - \(name)") { benchmark, program in
+    Benchmark(
+      "Execution",
+      configuration: .init(tags: ["program": name])
+    ) { benchmark, program in
       let interpreter = Interpreter(input: input)
-      _ = interpreter.run(program)
+      blackHole(interpreter.run(program))
     } setup: {
       try Program(program)
     }
 
-    Benchmark("Combined - \(name)") { benchmark in
+    Benchmark(
+      "Combined",
+      configuration: .init(tags: ["program": name])
+    ) { benchmark in
       let program = try Program(program)
       let interpreter = Interpreter(input: input)
-      _ = interpreter.run(program)
+      blackHole(interpreter.run(program))
     }
   }
 }
