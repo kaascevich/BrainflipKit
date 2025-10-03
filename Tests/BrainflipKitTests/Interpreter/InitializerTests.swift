@@ -23,7 +23,7 @@ extension InterpreterTests {
         options: .init(endOfInputBehavior: .setTo(0))
       )
       let output = interpreter.run(program).output
-      
+
       #expect(output == "→")
     }
   }

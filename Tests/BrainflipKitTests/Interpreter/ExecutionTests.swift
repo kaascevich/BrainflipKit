@@ -45,7 +45,7 @@ extension InterpreterTests {
       interpreter = Interpreter(input: "hello")
 
       let output = interpreter.run(program).output
-      
+
       #expect(output == "hhl")
     }
 

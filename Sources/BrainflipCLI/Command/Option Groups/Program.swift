@@ -34,7 +34,7 @@ extension Brainflip {
           """
       )
     ) var program: String?
-    
+
     // MARK: - Implementation
 
     /// The source code for a Brainflip program, obtained from command-line
@@ -47,11 +47,11 @@ extension Brainflip {
     private var programSource: String {
       get throws {
         switch (path, program) {
-        case let (path?, nil):
+        case (let path?, nil):
           // if they provided a program path, read from that file
           try String(contentsOfFile: path, encoding: .utf8)
 
-        case let (nil, program?):
+        case (nil, let program?):
           // if they provided a program, just use that
           program
 

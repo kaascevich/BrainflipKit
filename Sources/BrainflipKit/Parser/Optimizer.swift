@@ -41,16 +41,16 @@ extension [Instruction] {
 
   /// Optimizes multiply instructions.
   private mutating func optimizeMultiplyInstructions() {
-    top: for case let (index, .loop(instructions)) in indexed() {
+    top: for case (let index, .loop(let instructions)) in indexed() {
       var currentOffset: CellOffset = 0
       var multiplications: [CellOffset: CellValue] = [:]
 
       for instruction in instructions {
         switch instruction {
-        case let .add(value):
+        case .add(let value):
           multiplications[currentOffset, default: 0] &+= value
 
-        case let .move(offset):
+        case .move(let offset):
           currentOffset &+= offset
 
         case .loop, .input, .output, .multiply:
@@ -67,17 +67,17 @@ extension [Instruction] {
     }
 
     // MARK: multiply(_, final) add(value) -> multiply(_, final + value)
-    for case let (
-      (firstIndex, .multiply(multiplications, final)),
-      (secondIndex, .add(value))
+    for case (
+      (let firstIndex, .multiply(let multiplications, let final)),
+      (let secondIndex, .add(let value))
     ) in indexed().adjacentPairs().reversed() {
       remove(at: secondIndex)
       self[firstIndex] = .multiply(multiplications, final: final &+ value)
     }
 
     // MARK: add(_) multiply([:], final) -> multiply([:], final)
-    for case let (
-      (index, first),
+    for case (
+      (let index, let first),
       (_, .multiply([:], final: _))
     ) in indexed().adjacentPairs().reversed() {
       switch first {
@@ -97,8 +97,9 @@ extension [Instruction] {
   /// also be a loop, that loop will never be executed. So we remove those loops
   /// here.
   private mutating func removeDeadLoops() {
-    for case let ((_, .loop), (secondIndex, .loop))
-      in indexed().adjacentPairs().reversed() {
+    for case ((_, .loop), (let secondIndex, .loop))
+      in indexed().adjacentPairs().reversed()
+    {
       // there's a loop immediately after another loop, so the second loop will
       // never be executed (because the current cell is always 0 immediately
       // after a loop)

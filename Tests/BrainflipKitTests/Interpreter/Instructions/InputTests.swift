@@ -28,7 +28,7 @@ extension InterpreterTests.InstructionTests {
       )
 
       interpreter.handleInstruction(.input)
-      
+
       #expect(
         interpreter.state.currentCellValue == 0x61,  // ASCII code for "a"
         """

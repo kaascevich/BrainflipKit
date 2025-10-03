@@ -21,13 +21,13 @@ extension Interpreter {
     switch instruction {
     // MARK: Core
 
-    case let .add(count):
+    case .add(let count):
       handleAddInstruction(count)
 
-    case let .move(count):
+    case .move(let count):
       handleMoveInstruction(count)
 
-    case let .loop(instructions):
+    case .loop(let instructions):
       handleLoop(instructions)
 
     case .output:
@@ -38,7 +38,7 @@ extension Interpreter {
 
     // MARK: Non-core
 
-    case let .multiply(multiplications, final):
+    case .multiply(let multiplications, let final):
       handleMultiplyInstruction(multiplications, final: final)
     }
   }

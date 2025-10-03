@@ -8,7 +8,7 @@ extension Interpreter {
     // make sure we actually have some input to work with
     guard let nextInputScalar = state.inputIterator.next() else {
       switch options.endOfInputBehavior {
-      case let .setTo(value):
+      case .setTo(let value):
         state.currentCellValue = value
         return
 

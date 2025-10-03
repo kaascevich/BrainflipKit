@@ -14,7 +14,7 @@ extension InterpreterTests.InstructionTests {
     mutating func `Add instruction`(offset: CellValue) {
       for i in 1...10 {
         interpreter.handleInstruction(.add(offset))
-        
+
         #expect(interpreter.state.currentCellValue == i * offset)
       }
     }
@@ -24,7 +24,7 @@ extension InterpreterTests.InstructionTests {
     @Test mutating func `Add instruction - wraparound`() {
       interpreter.state.currentCellValue = .max
       interpreter.handleInstruction(.add(1))
-      
+
       #expect(interpreter.state.currentCellValue == .min)
     }
 
