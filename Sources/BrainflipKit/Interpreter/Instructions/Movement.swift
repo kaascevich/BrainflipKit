@@ -5,7 +5,7 @@ extension Interpreter {
   /// Executes a ``Instruction/move(_:)`` instruction.
   ///
   /// - Parameter count: The number of cells to move.
-  @inline(__always)
+  @inlinable @inline(__always)
   mutating func handleMoveInstruction(_ count: CellValue) {
     state.cellPointer &+= count
   }

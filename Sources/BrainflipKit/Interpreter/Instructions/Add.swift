@@ -5,7 +5,7 @@ extension Interpreter {
   /// Executes an ``Instruction/add(_:)`` instruction.
   ///
   /// - Parameter value: The value to add to the current cell value.
-  @inline(__always)
+  @inlinable @inline(__always)
   mutating func handleAddInstruction(_ value: CellValue) {
     state.currentCellValue &+= value
   }

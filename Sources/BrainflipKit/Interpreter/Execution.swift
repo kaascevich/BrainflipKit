@@ -17,6 +17,7 @@ extension Interpreter {
   /// Executes an individual ``Instruction``.
   ///
   /// - Parameter instruction: The instruction to execute.
+  @usableFromInline
   mutating func handleInstruction(_ instruction: Instruction) {
     switch instruction {
     // MARK: Core

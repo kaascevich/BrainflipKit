@@ -5,7 +5,7 @@ extension Interpreter {
   /// Executes an ``Instruction/multiply(_:)`` instruction.
   ///
   /// - Parameter multiplications: The multiplications to perform.
-  @inline(__always)
+  @inlinable @inline(__always)
   mutating func handleMultiplyInstruction(
     _ multiplications: [CellOffset: CellValue],
     final: CellValue

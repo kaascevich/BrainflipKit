@@ -90,7 +90,7 @@ public struct Interpreter<
   public let options: InterpreterOptions
 
   /// This interpreter's internal state.
-  var state: State
+  @usableFromInline var state: State
 
   // MARK: - Initializers
 

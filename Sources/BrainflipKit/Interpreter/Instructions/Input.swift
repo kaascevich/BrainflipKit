@@ -3,7 +3,7 @@
 
 extension Interpreter {
   /// Executes an ``Instruction/input`` instruction.
-  @inline(__always)
+  @inlinable @inline(__always)
   mutating func handleInputInstruction() {
     // make sure we actually have some input to work with
     guard let nextInputScalar = state.inputIterator.next() else {

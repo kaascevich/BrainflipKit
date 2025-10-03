@@ -5,7 +5,7 @@
 public struct InterpreterOptions: Sendable {
   /// The action to take when an input instruction is executed with an empty
   /// input iterator. Defaults to doing nothing (`nil`).
-  public let endOfInputBehavior: EndOfInputBehavior?
+  public var endOfInputBehavior: EndOfInputBehavior?
 
   /// Actions to take when an input instruction is executed with an empty
   /// input iterator.
