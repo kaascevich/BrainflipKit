@@ -17,6 +17,7 @@ public struct Program: Equatable, Hashable, Codable, Sendable {
 // MARK: Debugging
 
 extension Program: CustomReflectable {
+  /// The custom mirror for this instance.
   public var customMirror: Mirror {
     Mirror(reflecting: instructions)
   }

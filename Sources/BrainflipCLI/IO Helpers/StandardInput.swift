@@ -21,7 +21,7 @@ struct StandardInput {
     self.printBell = printBell
   }
 
-  /// Whether the end of input has been reached.
+  /// Whether end of input has been reached.
   private var endOfInput = false
 }
 

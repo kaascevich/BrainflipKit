@@ -23,7 +23,7 @@ public import CasePaths
   case output
 
   /// Takes the next character out of the input iterator and sets the current
-  /// cell to that character'sUnicode value. If the cell cannot fit the new
+  /// cell to that character's Unicode value. If the cell cannot fit the new
   /// value, it remains unchanged.
   case input
 
@@ -43,6 +43,7 @@ public import CasePaths
 // MARK: Debugging
 
 extension Instruction: CustomReflectable {
+  /// The custom mirror for this instance.
   public var customMirror: Mirror {
     let children: KeyValuePairs<String, Any> =
       switch self {
