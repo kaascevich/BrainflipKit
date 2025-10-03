@@ -23,10 +23,11 @@ let upcomingFeatures: [SwiftSetting] = [
   "StrictConcurrency",
 ].map { .enableUpcomingFeature($0) }
 
-let settings = experimentalFeatures + upcomingFeatures + [
-  .swiftLanguageMode(.v6),
-  .strictMemorySafety(),
-]
+let settings =
+  experimentalFeatures + upcomingFeatures + [
+    .swiftLanguageMode(.v6),
+    .strictMemorySafety(),
+  ]
 
 /// The package manifest.
 let package = Package(

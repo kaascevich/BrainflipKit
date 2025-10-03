@@ -44,28 +44,29 @@ public import CasePaths
 
 extension Instruction: CustomReflectable {
   public var customMirror: Mirror {
-    let children: KeyValuePairs<String, Any> = switch self {
-    case let .add(value):
-      ["add": value]
+    let children: KeyValuePairs<String, Any> =
+      switch self {
+      case .add(let value):
+        ["add": value]
 
-    case let .move(offset):
-      ["move": offset]
+      case .move(let offset):
+        ["move": offset]
 
-    case .output, .input:
-      [:]
+      case .output, .input:
+        [:]
 
-    case let .loop(instructions):
-      ["loop": instructions]
+      case .loop(let instructions):
+        ["loop": instructions]
 
-    case let .multiply([:], final):
-      ["setTo": final]
+      case .multiply([:], let final):
+        ["setTo": final]
 
-    case let .multiply(multiplications, final: 0):
-      ["multiply": multiplications]
+      case .multiply(let multiplications, final: 0):
+        ["multiply": multiplications]
 
-    case let .multiply(multiplications, final):
-      ["multiply": (multiplications, final: final)]
-    }
+      case .multiply(let multiplications, let final):
+        ["multiply": (multiplications, final: final)]
+      }
 
     return Mirror(self, children: children, displayStyle: .enum)
   }

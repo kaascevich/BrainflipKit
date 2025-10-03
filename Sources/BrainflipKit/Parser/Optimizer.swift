@@ -53,7 +53,7 @@ extension [Instruction] {
         case .move(let offset):
           currentOffset &+= offset
 
-        case .loop, .input, .output, .multiply:
+        default:
           continue top
         }
       }
@@ -84,7 +84,8 @@ extension [Instruction] {
       case .add, .multiply([:], final: _):
         remove(at: index)
 
-      default: break
+      default:
+        break
       }
     }
   }

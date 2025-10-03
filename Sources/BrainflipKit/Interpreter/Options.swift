@@ -9,7 +9,7 @@ public struct InterpreterOptions: Sendable {
 
   /// Actions to take when an input instruction is executed with an empty
   /// input iterator.
-  public enum EndOfInputBehavior: Sendable, BitwiseCopyable {
+  public enum EndOfInputBehavior: Sendable {
     /// Sets the current cell to a value.
     ///
     /// If the provided value will not fit in a cell, the cell is instead set

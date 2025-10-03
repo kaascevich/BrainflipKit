@@ -12,7 +12,7 @@ extension Interpreter {
     ///   - inputIterator: An iterator over the input that will be provided to
     ///     the program.
     ///   - output: The stream to write outputted characters to.
-    internal init(input: Input, output: Output) {
+    init(input: Input, output: Output) {
       self.inputIterator = input.makeIterator()
       self.output = output
     }

@@ -8,7 +8,7 @@ import Foundation
 /// This sequence enables raw mode for the terminal, which disables line
 /// buffering. This allows for reading characters as they are typed, rather than
 /// waiting for a newline.
-struct StandardInput: Sequence, IteratorProtocol {
+struct StandardInput {
   /// Whether to print a bell character to standard error when input is
   /// requested.
   let printBell: Bool
@@ -23,7 +23,9 @@ struct StandardInput: Sequence, IteratorProtocol {
 
   /// Whether the end of input has been reached.
   private var endOfInput = false
+}
 
+extension StandardInput: Sequence, IteratorProtocol {
   mutating func next() -> Unicode.Scalar? {
     guard !endOfInput else { return nil }
 
@@ -35,7 +37,7 @@ struct StandardInput: Sequence, IteratorProtocol {
 
     guard
       let character = try? FileHandle.standardInput.read(upToCount: 1)?.first,
-      character != 0x04 // EOF indicator
+      character != 0x04  // EOF indicator
     else {
       endOfInput = true
       return nil
