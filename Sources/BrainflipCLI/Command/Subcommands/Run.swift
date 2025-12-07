@@ -30,11 +30,11 @@ extension Brainflip {
     ///
     /// - Returns: An ``InterpreterOptions`` struct.
     private func makeInterpreterOptions() -> InterpreterOptions {
-      let endOfInputBehavior: InterpreterOptions.EndOfInputBehavior? =
+      let endOfInputBehavior: InterpreterOptions.EndOfInputBehavior =
         switch interpreterOptions.endOfInputBehavior {
         case .zero: .setTo(0)
         case .max: .setTo(.max)
-        case nil: nil
+        case nil: .doNothing
         }
 
       return InterpreterOptions(endOfInputBehavior: endOfInputBehavior)
@@ -43,25 +43,24 @@ extension Brainflip {
     func run() throws {
       let parsedProgram = try programOptions.parseProgram()
 
-      TerminalRawMode.enable(echoing: inputOptions.inputEchoing)
-      defer { TerminalRawMode.disable() }
+      TerminalRawMode.withRawModeEnabled(echoing: inputOptions.inputEchoing) {
+        let inputSequence: any Sequence<_> =
+          if let input = inputOptions.input {
+            input.unicodeScalars
+          } else {
+            StandardInput(printBell: inputOptions.bellOnInputRequest)
+          }
 
-      let inputSequence: any Sequence<_> =
-        if let input = inputOptions.input {
-          input.unicodeScalars
-        } else {
-          StandardInput(printBell: inputOptions.bellOnInputRequest)
-        }
+        let interpreter = Interpreter(
+          input: AnySequence(inputSequence),
+          output: FileHandle.standardOutput,
+          options: makeInterpreterOptions()
+        )
 
-      let interpreter = Interpreter(
-        input: AnySequence(inputSequence),
-        output: FileHandle.standardOutput,
-        options: makeInterpreterOptions()
-      )
-
-      // StandardOutputStream prints the output for us, so we don't need to do
-      // it ourselves.
-      _ = interpreter.run(parsedProgram)
+        // StandardOutput prints the output for us, so we don't need to do it
+        // ourselves
+        _ = interpreter.run(parsedProgram)
+      }
     }
   }
 }

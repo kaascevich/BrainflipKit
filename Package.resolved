@@ -1,5 +1,5 @@
 {
-  "originHash" : "3a3d3c9b07892970bd2ae95f82303025ed72b0cde4c26778f8ae86db530d8932",
+  "originHash" : "d11e230fb093542ddaf31d84cd3f83cf38a833c7b72951c41f065a2d0bb6251d",
   "pins" : [
     {
       "identity" : "hdrhistogram-swift",
@@ -107,6 +107,15 @@
       "state" : {
         "revision" : "890830fff1a577dc83134890c7984020c5f6b43b",
         "version" : "1.6.2"
+      }
+    },
+    {
+      "identity" : "swiftlintplugins",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/SimplyDanny/SwiftLintPlugins",
+      "state" : {
+        "revision" : "6166499ede0efe43c3809f101d2c3cd409e2b77a",
+        "version" : "0.61.0"
       }
     },
     {

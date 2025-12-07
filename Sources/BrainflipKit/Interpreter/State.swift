@@ -4,30 +4,17 @@
 extension Interpreter {
   /// Represents an interpreter's internal state.
   public struct State {
-    // MARK: - Initializers
-
-    /// Creates a `State` instance.
-    ///
-    /// - Parameters:
-    ///   - inputIterator: An iterator over the input that will be provided to
-    ///     the program.
-    ///   - output: The stream to write outputted characters to.
-    init(input: Input, output: Output) {
-      self.inputIterator = input.makeIterator()
-      self.output = output
-    }
-
     // MARK: - Properties
 
     /// The array of cells that all Brainflip programs manipulate.
     ///
     /// # Implementation Notes
     ///
-    /// Most brainf\*\*k interpreters have a fixed-size tape, but Brainflip's
-    /// tape is dynamically sized (i.e. infinite). While it _would_ be possible
-    /// to implement this using a standard Swift `Array`, it's not very
-    /// ergonomic, requiring a whole lot of computed property shenanigans to
-    /// abstract away the rather `fatalError`-y subscript.
+    /// Most brainfuck interpreters have a fixed-size tape, but Brainflip's tape
+    /// is dynamically sized (i.e. infinite). While it _would_ be possible to
+    /// implement this using a standard Swift `Array`, it's not very ergonomic,
+    /// requiring a whole lot of computed property shenanigans to abstract away
+    /// the rather `fatalError`-y subscript.
     ///
     /// It's a lot easier to use a `Dictionary` instead, with the key
     /// representing the cell's index (and the value, of course, representing
@@ -56,7 +43,8 @@ extension Interpreter {
     /// this iterator's next Unicode scalar is stored in ``currentCellValue``.
     ///
     /// If an `input` instruction is executed, and this iterator returns `nil`,
-    /// `currentCellValue` will be set to 0 instead.
+    /// ``InterpreterOptions/EndOfInputBehavior`` will kick in and set the
+    /// current cell accordingly.
     ///
     /// # See Also
     /// - ``Instruction/input``
@@ -85,7 +73,14 @@ extension Interpreter {
     /// simply _create_ the key before assigning to it.
     ///
     /// All of this means that the getter and setter for `currentCellValue` are
-    /// simple one-liners.
+    /// simple one-liners:
+    ///
+    /// ```swift
+    /// public var currentCellValue: CellValue {
+    ///   get { tape[cellPointer, default: 0] }
+    ///   set { tape[cellPointer] = newValue }
+    /// }
+    /// ```
     ///
     /// # See Also
     /// - ``Interpreter/State/tape``
@@ -94,6 +89,19 @@ extension Interpreter {
     public var currentCellValue: CellValue {
       @inlinable get { tape[cellPointer, default: 0] }
       @inlinable set { tape[cellPointer] = newValue }
+    }
+
+    // MARK: - Initializers
+
+    /// Creates a `State` instance.
+    ///
+    /// - Parameters:
+    ///   - inputIterator: An iterator over the input that will be provided to
+    ///     the program.
+    ///   - output: The stream to write outputted characters to.
+    init(input: Input, output: Output) {
+      self.inputIterator = input.makeIterator()
+      self.output = output
     }
   }
 }

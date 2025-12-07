@@ -12,14 +12,16 @@ private struct InstructionParser: Parser {
           "+".map { +1 }
           "-".map { -1 }
         }
-      }.map(Instruction.add)
+      }
+      .map(Instruction.add)
 
       Many(1..., into: 0, &+=) {
         OneOf {
           ">".map { +1 }
           "<".map { -1 }
         }
-      }.map(Instruction.move)
+      }
+      .map(Instruction.move)
 
       ",".map { Instruction.input }
       ".".map { Instruction.output }

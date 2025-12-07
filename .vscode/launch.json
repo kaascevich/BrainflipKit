@@ -17,6 +17,24 @@
       "name": "Release brainflip",
       "program": "${workspaceFolder:brainflipkit}/.build/release/brainflip",
       "preLaunchTask": "swift: Build Release brainflip"
+    },
+    {
+      "type": "lldb",
+      "request": "launch",
+      "args": [],
+      "cwd": "${workspaceFolder:brainflipkit}",
+      "name": "Debug BrainflipKitBenchmarks",
+      "program": "${workspaceFolder:brainflipkit}/.build/debug/BrainflipKitBenchmarks",
+      "preLaunchTask": "swift: Build Debug BrainflipKitBenchmarks"
+    },
+    {
+      "type": "lldb",
+      "request": "launch",
+      "args": [],
+      "cwd": "${workspaceFolder:brainflipkit}",
+      "name": "Release BrainflipKitBenchmarks",
+      "program": "${workspaceFolder:brainflipkit}/.build/release/BrainflipKitBenchmarks",
+      "preLaunchTask": "swift: Build Release BrainflipKitBenchmarks"
     }
   ]
 }

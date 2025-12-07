@@ -13,24 +13,24 @@ struct StandardInput {
   /// requested.
   let printBell: Bool
 
+  /// Whether end of input has been reached.
+  private var endOfInput = false
+
   /// Creates a new instance of this sequence.
   ///
   /// - Parameter printBell: Whether to print a bell character to standard error
-  /// when input is requested.
+  ///   when input is requested.
   init(printBell: Bool) {
     self.printBell = printBell
   }
-
-  /// Whether end of input has been reached.
-  private var endOfInput = false
 }
 
 extension StandardInput: Sequence, IteratorProtocol {
   mutating func next() -> Unicode.Scalar? {
     guard !endOfInput else { return nil }
 
-    // before any raw mode shenanigans, print a bell character to
-    // standard error so the user knows that we want input
+    // print a bell character to standard error so the
+    // user knows that we want input
     if printBell {
       try? FileHandle.standardError.write(contentsOf: Data([0x07]))
     }

@@ -12,7 +12,7 @@ public enum Instruction: Equatable, Hashable, Codable, Sendable {
   case move(CellOffset)
 
   /// Loops over the contained instructions.
-  case loop([Instruction])
+  case loop([Self])
 
   /// Finds the character whose Unicode value equals the current cell and writes
   /// it to the output stream. If there is no corresponding Unicode character,

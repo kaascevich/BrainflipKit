@@ -23,13 +23,19 @@ enum TerminalRawMode {
     }
   }
 
-  /// The original state of the terminal.
-  private static let originalTerminalState = terminalState
-
-  /// Enables raw mode.
+  /// Enables raw mode for the duration of a closure.
   ///
-  /// - Parameter enableEcho: Whether to echo characters as they are typed.
-  static func enable(echoing enableEcho: Bool) {
+  /// - Parameters:
+  ///   - enableEcho: Whether to echo characters as they are typed.
+  ///   - body: The closure to execute.
+  ///
+  /// - Returns: The closure's return value.
+  static func withRawModeEnabled<T, E: Error>(
+    echoing enableEcho: Bool,
+    do body: () throws(E) -> T
+  ) throws(E) -> T {
+    let originalTerminalState = terminalState
+
     // disable line buffering
     terminalState.c_lflag &= ~UInt(ICANON)
 
@@ -37,10 +43,12 @@ enum TerminalRawMode {
       // disable echoing
       terminalState.c_lflag &= ~UInt(ECHO)
     }
-  }
 
-  /// Disables raw mode.
-  static func disable() {
-    terminalState = originalTerminalState
+    defer {
+      // restore the original terminal settings
+      terminalState = originalTerminalState
+    }
+
+    return try body()
   }
 }

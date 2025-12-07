@@ -7,6 +7,7 @@ import Testing
 @testable import BrainflipKit
 
 @Suite struct `Program optimization` {
+  // swiftlint:disable:previous type_body_length
   @Test func `Adjacent instruction optimization`() throws {
     expectNoDifference(
       try Program(">>><<+---"),
@@ -46,6 +47,7 @@ import Testing
   }
 
   @Test func `Life`() throws {
+    // swiftlint:disable:previous function_body_length
     expectNoDifference(
       try getProgram(named: "life"),
       [

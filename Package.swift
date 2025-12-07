@@ -58,6 +58,11 @@ let package = Package(
       url: "https://github.com/ordo-one/package-benchmark.git",
       from: "1.29.4"
     ),
+
+    .package(
+      url: "https://github.com/SimplyDanny/SwiftLintPlugins",
+      from: "0.61.0"
+    ),
   ],
   targets: [
     .executableTarget(
@@ -100,4 +105,7 @@ let package = Package(
 
 for target in package.targets {
   target.swiftSettings = (target.swiftSettings ?? []) + settings
+  target.plugins = (target.plugins ?? []) + [
+    .plugin(name: "SwiftLintBuildToolPlugin", package: "SwiftLintPlugins")
+  ]
 }

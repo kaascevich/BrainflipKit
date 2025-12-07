@@ -7,7 +7,9 @@ import Foundation
 
 func getProgram(named name: String) throws -> Program {
   let url = Bundle.module.url(forResource: name, withExtension: "b")!
-  let source = try! String(contentsOf: url, encoding: .utf8)
+  guard let source = try? String(contentsOf: url, encoding: .utf8) else {
+    fatalError("failed to load program at \(url)")
+  }
   return try Program(source)
 }
 
