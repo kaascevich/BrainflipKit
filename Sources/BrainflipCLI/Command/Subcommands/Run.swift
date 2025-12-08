@@ -26,20 +26,6 @@ extension Brainflip {
 
     // MARK: - Implementation
 
-    /// Creates an ``InterpreterOptions`` struct from the command-line options.
-    ///
-    /// - Returns: An ``InterpreterOptions`` struct.
-    private func makeInterpreterOptions() -> InterpreterOptions {
-      let endOfInputBehavior: InterpreterOptions.EndOfInputBehavior =
-        switch interpreterOptions.endOfInputBehavior {
-        case .zero: .setTo(0)
-        case .max: .setTo(.max)
-        case nil: .doNothing
-        }
-
-      return InterpreterOptions(endOfInputBehavior: endOfInputBehavior)
-    }
-
     func run() throws {
       let parsedProgram = try programOptions.parseProgram()
 
@@ -54,7 +40,7 @@ extension Brainflip {
         let interpreter = Interpreter(
           input: AnySequence(inputSequence),
           output: FileHandle.standardOutput,
-          options: makeInterpreterOptions()
+          options: interpreterOptions.makeInterpreterOptions()
         )
 
         // StandardOutput prints the output for us, so we don't need to do it

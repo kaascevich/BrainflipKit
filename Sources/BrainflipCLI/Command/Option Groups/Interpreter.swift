@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
 import ArgumentParser
+import BrainflipKit
 
 extension Brainflip {
   /// Options related to the interpreter.
@@ -17,10 +18,18 @@ extension Brainflip {
       /// Sets the current cell to its maximum value.
       case max
 
+      /// Sets the current cell to its minimum value.
+      case min
+
+      /// Sets the current cell to -1.
+      case negativeOne = "-1"
+
       var defaultValueDescription: String {
         switch self {
         case .zero: "Sets the current cell to 0."
         case .max: "Sets the current cell to its maximum value."
+        case .min: "Sets the current cell to its minimum value."
+        case .negativeOne: "Sets the current cell to -1."
         }
       }
     }
@@ -41,5 +50,23 @@ extension Brainflip {
         valueName: "behavior"
       ),
     ) var endOfInputBehavior: EndOfInputBehavior?
+
+    // MARK: Helpers
+
+    /// Creates an ``InterpreterOptions`` struct from the command-line options.
+    ///
+    /// - Returns: An ``InterpreterOptions`` struct.
+    func makeInterpreterOptions() -> InterpreterOptions {
+      let endOfInputBehavior: InterpreterOptions.EndOfInputBehavior =
+      switch endOfInputBehavior {
+      case .zero: .setTo(0)
+      case .max: .setTo(.max)
+      case .min: .setTo(.min)
+      case .negativeOne: .setTo(-1)
+      case nil: .doNothing
+      }
+
+      return InterpreterOptions(endOfInputBehavior: endOfInputBehavior)
+    }
   }
 }

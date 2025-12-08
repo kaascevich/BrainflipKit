@@ -4,12 +4,12 @@
 /// A list of instructions to be executed by an ``Interpreter``.
 public struct Program: Equatable, Hashable, Codable, Sendable {
   /// The instructions that make up this program.
-  var instructions: [Instruction]
+  public var instructions: [Instruction]
 
   /// Creates a program from a list of instructions.
   ///
   /// - Parameter instructions: A list of instructions.
-  init(_ instructions: [Instruction]) {
+  public init(_ instructions: [Instruction]) {
     self.instructions = instructions
   }
 }

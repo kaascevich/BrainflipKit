@@ -35,6 +35,7 @@ let package = Package(
   platforms: [.macOS(.v15)],
   products: [
     .library(name: "BrainflipKit", targets: ["BrainflipKit"]),
+    .library(name: "BrainflipTranslation", targets: ["BrainflipTranslation"]),
     .executable(name: "brainflip", targets: ["BrainflipCLI"]),
   ],
   dependencies: [
@@ -58,7 +59,10 @@ let package = Package(
       url: "https://github.com/ordo-one/package-benchmark.git",
       from: "1.29.4"
     ),
-
+    .package(
+      url: "https://github.com/swiftlang/swift-syntax",
+      from: "602.0.0"
+    ),
     .package(
       url: "https://github.com/SimplyDanny/SwiftLintPlugins",
       from: "0.61.0"
@@ -69,6 +73,7 @@ let package = Package(
       name: "BrainflipCLI",
       dependencies: [
         "BrainflipKit",
+        "BrainflipTranslation",
         .product(name: "ArgumentParser", package: "swift-argument-parser"),
         .product(name: "CustomDump", package: "swift-custom-dump"),
       ]
@@ -80,11 +85,28 @@ let package = Package(
         .product(name: "Algorithms", package: "swift-algorithms"),
       ]
     ),
+    .target(
+      name: "BrainflipTranslation",
+      dependencies: [
+        "BrainflipKit",
+        .product(name: "SwiftBasicFormat", package: "swift-syntax"),
+        .product(name: "SwiftSyntax", package: "swift-syntax"),
+        .product(name: "SwiftSyntaxBuilder", package: "swift-syntax"),
+      ]
+    ),
 
     .testTarget(
       name: "BrainflipKitTests",
       dependencies: [
         "BrainflipKit",
+        .product(name: "CustomDump", package: "swift-custom-dump"),
+      ],
+      resources: [.process("Resources/")]
+    ),
+    .testTarget(
+      name: "BrainflipTranslationTests",
+      dependencies: [
+        "BrainflipTranslation",
         .product(name: "CustomDump", package: "swift-custom-dump"),
       ],
       resources: [.process("Resources/")]

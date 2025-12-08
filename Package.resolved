@@ -1,5 +1,5 @@
 {
-  "originHash" : "d11e230fb093542ddaf31d84cd3f83cf38a833c7b72951c41f065a2d0bb6251d",
+  "originHash" : "68fb05c63b2d472374dba416415db473274662e8218477e112fbf1bb4c95a310",
   "pins" : [
     {
       "identity" : "hdrhistogram-swift",
@@ -60,8 +60,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/pointfreeco/swift-case-paths",
       "state" : {
-        "revision" : "9810c8d6c2914de251e072312f01d3bf80071852",
-        "version" : "1.7.1"
+        "revision" : "6989976265be3f8d2b5802c722f9ba168e227c71",
+        "version" : "1.7.2"
       }
     },
     {
@@ -96,8 +96,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/swiftlang/swift-syntax",
       "state" : {
-        "revision" : "0687f71944021d616d34d922343dcef086855920",
-        "version" : "600.0.1"
+        "revision" : "4799286537280063c85a32f09884cfbca301b1a1",
+        "version" : "602.0.0"
       }
     },
     {

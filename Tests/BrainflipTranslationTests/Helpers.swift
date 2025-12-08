@@ -10,9 +10,3 @@ func getProgram(named name: String) throws -> Program {
   let source = try String(contentsOf: url, encoding: .utf8)
   return try Program(source)
 }
-
-extension Program: ExpressibleByArrayLiteral {
-  init(arrayLiteral instructions: Instruction...) {
-    self.init(instructions)
-  }
-}

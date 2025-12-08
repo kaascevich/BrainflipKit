@@ -12,7 +12,7 @@ extension Interpreter {
         state.currentCellValue = value
         return
 
-      case nil:
+      case .doNothing:
         return
       }
     }

@@ -4,7 +4,7 @@
 import ArgumentParser
 
 /// The main command for the Brainflip CLI.
-@main struct Brainflip: ParsableCommand {
+@main struct Brainflip: AsyncParsableCommand {
   // MARK: - Command Configuration
 
   static let configuration = CommandConfiguration(
@@ -16,7 +16,7 @@ import ArgumentParser
       support, an infinite tape in both directions, simple runtime \
       optimizations, and several configuration options.
       """,
-    subcommands: [Run.self, Parse.self],
+    subcommands: [Run.self, Parse.self, Translate.self],
     defaultSubcommand: Run.self
   )
 }

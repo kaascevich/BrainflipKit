@@ -10,7 +10,7 @@ extension InterpreterTests {
     @Suite struct `End of input behavior options` {
       @Test func `Do nothing on end of input`() {
         var interpreter = Interpreter(
-          options: .init(endOfInputBehavior: nil)
+          options: .init(endOfInputBehavior: .doNothing)
         )
 
         interpreter.state.currentCellValue = 42

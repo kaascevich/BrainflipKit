@@ -46,7 +46,7 @@ import Testing
     expectNoDifference(try Program("[-][][->+<][>]"), [])
   }
 
-  @Test func `Life`() throws {
+  @Test func `Game of Life`() throws {
     // swiftlint:disable:previous function_body_length
     expectNoDifference(
       try getProgram(named: "life"),
