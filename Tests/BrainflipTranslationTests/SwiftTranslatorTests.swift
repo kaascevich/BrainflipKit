@@ -55,11 +55,11 @@ import Testing
 
   @Test func `Simple translation with strict compatibility`() throws {
     let program = try getProgram(named: "simple")
-    let translator = SwiftTranslator(options: .init())
-    let translated = translator.translate(
-      program: program,
+    let translator = SwiftTranslator(
+      options: .init(),
       strictCompatibility: true
     )
+    let translated = translator.translate(program: program)
     expectNoDifference(
       translated,
       """

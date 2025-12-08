@@ -51,14 +51,10 @@ extension Brainflip {
       let parsedProgram = try programOptions.parseProgram()
 
       let translator = language.translatorType.init(
-        options: interpreterOptions.makeInterpreterOptions()
+        options: interpreterOptions.makeInterpreterOptions(),
+        strictCompatibility: strictCompatibility
       )
-      print(
-        try await translator.translate(
-          program: parsedProgram,
-          strictCompatibility: strictCompatibility
-        )
-      )
+      print(try await translator.translate(program: parsedProgram))
     }
   }
 }

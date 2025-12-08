@@ -16,11 +16,11 @@ import Testing
       translated,
       """
       #include <stdio.h>
-      
+
       // give the program a small buffer, in case it goes off the start of the tape
       int array[31000];
       int pointer = 1000;
-      
+
       void input(void) {
           int character = getchar();
           if (character >= 0) {
@@ -29,7 +29,7 @@ import Testing
               
           }
       }
-      
+
       int main(void) {
           input();
           while (array[pointer] != 0) {
@@ -47,20 +47,20 @@ import Testing
 
   @Test func `Simple translation with strict compatibility`() throws {
     let program = try getProgram(named: "simple")
-    let translator = CTranslator(options: .init())
-    let translated = translator.translate(
-      program: program,
+    let translator = CTranslator(
+      options: .init(),
       strictCompatibility: true
     )
+    let translated = translator.translate(program: program)
     expectNoDifference(
       translated,
       """
       #include <stdio.h>
-      
+
       // give the program a small buffer, in case it goes off the start of the tape
       unsigned char array[31000];
       int pointer = 1000;
-      
+
       void input(void) {
           int character = getchar();
           if (character >= 0) {
@@ -69,7 +69,7 @@ import Testing
               
           }
       }
-      
+
       int main(void) {
           input();
           while (array[pointer] != 0) {

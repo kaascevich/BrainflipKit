@@ -10,14 +10,13 @@ import SwiftSyntaxBuilder
 
 public struct SwiftTranslator: Translator {
   var options: InterpreterOptions
-  public init(options: InterpreterOptions) {
+  var strictCompatibility: Bool
+  public init(options: InterpreterOptions, strictCompatibility: Bool = false) {
     self.options = options
+    self.strictCompatibility = strictCompatibility
   }
 
-  public func translate(
-    program: Program,
-    strictCompatibility: Bool = false
-  ) -> String {
+  public func translate(program: Program) -> String {
     let cellType: TypeSyntax = if strictCompatibility { "UInt8" } else { "Int" }
 
     return SourceFileSyntax(shebang: "#!/usr/bin/env swift") {
@@ -40,15 +39,13 @@ public struct SwiftTranslator: Translator {
       var pointer: Int = 1_000
       """
 
-      ioFunctions(strictCompatibility: strictCompatibility)
+      ioFunctions()
 
       translateInstructions(program.instructions)
     }.formatted().description
   }
 
-  private func ioFunctions(
-    strictCompatibility: Bool
-  ) -> CodeBlockItemListSyntax {
+  private func ioFunctions() -> CodeBlockItemListSyntax {
     .init {
       try! FunctionDeclSyntax("func output()") {
         if strictCompatibility {
