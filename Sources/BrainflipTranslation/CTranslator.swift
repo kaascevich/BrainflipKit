@@ -29,6 +29,7 @@ public struct CTranslator: Translator {
 
     return """
       #include <stdio.h>
+      #include <termios.h>
 
       // give the program a small buffer, in case it goes off the start of the tape
       \(cellType) array[31000];
@@ -36,7 +37,7 @@ public struct CTranslator: Translator {
 
       void input(void) {
           int character = getchar();
-          if (character >= 0) {
+          if (character != EOF) {
               array[pointer] = (\(cellType))character;
           } else {
               \(handleEndOfInput)
@@ -44,6 +45,12 @@ public struct CTranslator: Translator {
       }
 
       int main(void) {
+          // MARK: Raw Mode
+          struct termios currentState;
+          tcgetattr(0, &currentState);
+          currentState.c_lflag &= ~ICANON;
+          tcsetattr(0, TCSAFLUSH, &currentState);
+      
       \(translateInstructions(program.instructions, indent: "    "))
           return 0;
       }
@@ -54,22 +61,14 @@ public struct CTranslator: Translator {
     value: CellValue,
     indent: String
   ) -> String {
-    if value < 0 {
-      indent + "array[pointer] -= \(-value);"
-    } else {
-      indent + "array[pointer] += \(value);"
-    }
+    indent + "array[pointer] += \(value);"
   }
 
   private func translateMoveInstruction(
     offset: CellValue,
     indent: String
   ) -> String {
-    if offset < 0 {
-      indent + "pointer -= \(-offset);"
-    } else {
-      indent + "pointer += \(offset);"
-    }
+    indent + "pointer += \(offset);"
   }
 
   private func translateMultiplyInstruction(
@@ -79,14 +78,7 @@ public struct CTranslator: Translator {
   ) -> String {
     let lines =
       multiplications.map { offset, value in
-        let pointerOffsetExpr =
-          if offset < 0 {
-            "pointer - \(-offset)"
-          } else {
-            "pointer + \(offset)"
-          }
-
-        return "array[\(pointerOffsetExpr)] += array[pointer] * \(value);"
+        "array[pointer + \(offset)] += array[pointer] * \(value);"
       } + ["array[pointer] = \(final);"]
 
     return lines.map { indent + $0 }.joined(separator: "\n")

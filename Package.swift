@@ -5,17 +5,6 @@
 
 import PackageDescription
 
-let experimentalFeatures: [SwiftSetting] = [
-  "AccessLevelOnImport",
-  "AllowUnsafeAttribute",
-  "FixedArrays",
-  "LifetimeDependence",
-  "Lifetimes",
-  "Span",
-  "SuppressedAssociatedTypes",
-  "ValueGenerics",
-].map { .enableExperimentalFeature($0) }
-
 let upcomingFeatures: [SwiftSetting] = [
   "ExistentialAny",
   "InternalImportsByDefault",
@@ -24,7 +13,7 @@ let upcomingFeatures: [SwiftSetting] = [
 ].map { .enableUpcomingFeature($0) }
 
 let settings =
-  experimentalFeatures + upcomingFeatures + [
+  upcomingFeatures + [
     .swiftLanguageMode(.v6),
     .strictMemorySafety(),
   ]

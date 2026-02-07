@@ -6,8 +6,6 @@ import SwiftBasicFormat
 import SwiftSyntax
 import SwiftSyntaxBuilder
 
-// swiftlint:disable force_try
-
 public struct SwiftTranslator: Translator {
   var options: InterpreterOptions
   var strictCompatibility: Bool
@@ -16,11 +14,11 @@ public struct SwiftTranslator: Translator {
     self.strictCompatibility = strictCompatibility
   }
 
-  public func translate(program: Program) -> String {
+  public func translate(program: Program) throws -> String {
     let cellType: TypeSyntax = if strictCompatibility { "UInt8" } else { "Int" }
 
-    return SourceFileSyntax(shebang: "#!/usr/bin/env swift") {
-      try! ImportDeclSyntax("import Foundation")
+    return try SourceFileSyntax(shebang: "#!/usr/bin/env swift") {
+      try ImportDeclSyntax("import Foundation")
 
       """
       // MARK: Raw Mode
@@ -39,17 +37,17 @@ public struct SwiftTranslator: Translator {
       var pointer: Int = 1_000
       """
 
-      ioFunctions()
+      try ioFunctions()
 
-      translateInstructions(program.instructions)
+      try translateInstructions(program.instructions)
     }.formatted().description
   }
 
-  private func ioFunctions() -> CodeBlockItemListSyntax {
-    .init {
-      try! FunctionDeclSyntax("func output()") {
+  private func ioFunctions() throws -> CodeBlockItemListSyntax {
+    try .init {
+      try FunctionDeclSyntax("func output()") {
         if strictCompatibility {
-          // we don't need to unwrap the scalar since `array[pointer` is
+          // we don't need to unwrap the scalar since `array[pointer]` is
           // a `UInt8`
           """
           try! FileHandle.standardOutput.write(
@@ -58,7 +56,7 @@ public struct SwiftTranslator: Translator {
           )
           """
         } else {
-          try! IfExprSyntax("if let scalar = Unicode.Scalar(array[pointer])") {
+          try IfExprSyntax("if let scalar = Unicode.Scalar(array[pointer])") {
             """
             try! FileHandle.standardOutput.write(
                 contentsOf: String(scalar).data(using: .utf8)!
@@ -68,8 +66,8 @@ public struct SwiftTranslator: Translator {
         }
       }
 
-      try! FunctionDeclSyntax("func input()") {
-        try! IfExprSyntax(
+      try FunctionDeclSyntax("func input()") {
+        try IfExprSyntax(
           "if let character = try? FileHandle.standardInput.read(upToCount: 1)?.first"
         ) {
           "array[pointer] = numericCast(Unicode.Scalar(character).value)"
@@ -89,11 +87,7 @@ public struct SwiftTranslator: Translator {
     value: CellValue
   ) -> CodeBlockItemListSyntax {
     .init {
-      if value < 0 {
-        "array[pointer] &-= \(literal: -value)"
-      } else {
-        "array[pointer] &+= \(literal: value)"
-      }
+      "array[pointer] &+= \(literal: value)"
     }
   }
 
@@ -101,11 +95,7 @@ public struct SwiftTranslator: Translator {
     offset: CellValue
   ) -> CodeBlockItemListSyntax {
     .init {
-      if offset < 0 {
-        "pointer &-= \(literal: -offset)"
-      } else {
-        "pointer &+= \(literal: offset)"
-      }
+      "pointer &+= \(literal: offset)"
     }
   }
 
@@ -115,18 +105,8 @@ public struct SwiftTranslator: Translator {
   ) -> CodeBlockItemListSyntax {
     .init {
       for (offset, value) in multiplications.sorted(by: <) {
-        let pointerOffsetExpr: ExprSyntax =
-          if offset < 0 {
-            "pointer &- \(literal: -offset)"
-          } else {
-            "pointer &+ \(literal: offset)"
-          }
-
-        if value < 0 {
-          "array[\(pointerOffsetExpr)] &-= array[pointer] &* \(literal: -value)"
-        } else {
-          "array[\(pointerOffsetExpr)] &+= array[pointer] &* \(literal: value)"
-        }
+        let pointerOffsetExpr: ExprSyntax = "pointer &+ \(literal: offset)"
+        "array[\(pointerOffsetExpr)] &+= array[pointer] &* \(literal: value)"
       }
       "array[pointer] = \(literal: final)"
     }
@@ -146,18 +126,18 @@ public struct SwiftTranslator: Translator {
 
   private func translateLoopInstruction(
     instructions: [Instruction]
-  ) -> CodeBlockItemListSyntax {
-    .init {
-      try! WhileStmtSyntax("while array[pointer] != 0") {
-        translateInstructions(instructions)
+  ) throws -> CodeBlockItemListSyntax {
+    try .init {
+      try WhileStmtSyntax("while array[pointer] != 0") {
+        try translateInstructions(instructions)
       }
     }
   }
 
   private func translateInstructions(
     _ instructions: [Instruction]
-  ) -> CodeBlockItemListSyntax {
-    .init {
+  ) throws -> CodeBlockItemListSyntax {
+    try .init {
       for instruction in instructions {
         switch instruction {
         case .add(let value):
@@ -165,7 +145,7 @@ public struct SwiftTranslator: Translator {
         case .move(let offset):
           translateMoveInstruction(offset: offset)
         case .loop(let instructions):
-          translateLoopInstruction(instructions: instructions)
+          try translateLoopInstruction(instructions: instructions)
         case .output:
           translateOutputInstruction()
         case .input:
@@ -177,5 +157,3 @@ public struct SwiftTranslator: Translator {
     }
   }
 }
-
-// swiftlint:enable force_try
