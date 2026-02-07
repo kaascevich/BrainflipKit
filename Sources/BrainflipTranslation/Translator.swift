@@ -4,7 +4,7 @@
 public import BrainflipKit
 
 public protocol Translator {
-  init(options: InterpreterOptions, strictCompatibility: Bool)
+    init(options: InterpreterOptions, strictCompatibility: Bool)
 
-  func translate(program: Program) async throws -> String
-}	
+    func translate(program: Program) async throws -> String
+}

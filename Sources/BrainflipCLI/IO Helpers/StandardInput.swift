@@ -9,40 +9,40 @@ import Foundation
 /// buffering. This allows for reading characters as they are typed, rather than
 /// waiting for a newline.
 struct StandardInput {
-  /// Whether to print a bell character to standard error when input is
-  /// requested.
-  let printBell: Bool
+    /// Whether to print a bell character to standard error when input is
+    /// requested.
+    let printBell: Bool
 
-  /// Whether end of input has been reached.
-  private var endOfInput = false
+    /// Whether end of input has been reached.
+    private var endOfInput = false
 
-  /// Creates a new instance of this sequence.
-  ///
-  /// - Parameter printBell: Whether to print a bell character to standard error
-  ///   when input is requested.
-  init(printBell: Bool) {
-    self.printBell = printBell
-  }
+    /// Creates a new instance of this sequence.
+    ///
+    /// - Parameter printBell: Whether to print a bell character to standard error
+    ///   when input is requested.
+    init(printBell: Bool) {
+        self.printBell = printBell
+    }
 }
 
 extension StandardInput: Sequence, IteratorProtocol {
-  mutating func next() -> Unicode.Scalar? {
-    guard !endOfInput else { return nil }
+    mutating func next() -> Unicode.Scalar? {
+        guard !endOfInput else { return nil }
 
-    // print a bell character to standard error so the
-    // user knows that we want input
-    if printBell {
-      try? FileHandle.standardError.write(contentsOf: Data([0x07]))
+        // print a bell character to standard error so the
+        // user knows that we want input
+        if printBell {
+            try? FileHandle.standardError.write(contentsOf: Data([0x07]))
+        }
+
+        guard
+            let character = try? FileHandle.standardInput.read(upToCount: 1)?.first,
+            character != 0x04  // EOF indicator
+        else {
+            endOfInput = true
+            return nil
+        }
+
+        return Unicode.Scalar(character)
     }
-
-    guard
-      let character = try? FileHandle.standardInput.read(upToCount: 1)?.first,
-      character != 0x04  // EOF indicator
-    else {
-      endOfInput = true
-      return nil
-    }
-
-    return Unicode.Scalar(character)
-  }
 }

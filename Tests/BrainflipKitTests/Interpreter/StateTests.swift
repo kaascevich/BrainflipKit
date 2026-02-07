@@ -6,19 +6,19 @@ import Testing
 @testable import BrainflipKit
 
 extension InterpreterTests {
-  @Suite struct `State` {
-    var interpreter = Interpreter()
+    @Suite struct `State` {
+        var interpreter = Interpreter()
 
-    @Test mutating func `Current cell value`() {
-      interpreter.state.tape = [0: 237, 1: 29, 2: 74]
+        @Test mutating func `Current cell value`() {
+            interpreter.state.tape = [0: 237, 1: 29, 2: 74]
 
-      #expect(interpreter.state.currentCellValue == 237)
+            #expect(interpreter.state.currentCellValue == 237)
 
-      interpreter.state.cellPointer = 1
-      #expect(interpreter.state.currentCellValue == 29)
+            interpreter.state.cellPointer = 1
+            #expect(interpreter.state.currentCellValue == 29)
 
-      interpreter.state.cellPointer = 2
-      #expect(interpreter.state.currentCellValue == 74)
+            interpreter.state.cellPointer = 2
+            #expect(interpreter.state.currentCellValue == 74)
+        }
     }
-  }
 }

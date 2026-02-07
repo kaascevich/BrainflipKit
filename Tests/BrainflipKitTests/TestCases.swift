@@ -4,5 +4,5 @@
 import Testing
 
 @Suite("Interpreter") struct InterpreterTests {
-  @Suite("Instructions") struct InstructionTests {}
+    @Suite("Instructions") struct InstructionTests {}
 }

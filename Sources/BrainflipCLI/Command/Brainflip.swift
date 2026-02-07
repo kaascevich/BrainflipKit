@@ -5,18 +5,18 @@ import ArgumentParser
 
 /// The main command for the Brainflip CLI.
 @main struct Brainflip: AsyncParsableCommand {
-  // MARK: - Command Configuration
+    // MARK: - Command Configuration
 
-  static let configuration = CommandConfiguration(
-    abstract: "Run brainfuck programs with a configurable interpreter.",
-    discussion: """
-      Brainflip is an optimizing Swift interpreter for the brainfuck \
-      programming language -- an incredibly simple language that only has 8 \
-      instructions. This interpreter features 32-bit cells, full Unicode \
-      support, an infinite tape in both directions, simple runtime \
-      optimizations, and several configuration options.
-      """,
-    subcommands: [Run.self, Parse.self, Translate.self],
-    defaultSubcommand: Run.self
-  )
+    static let configuration = CommandConfiguration(
+        abstract: "Run brainfuck programs with a configurable interpreter.",
+        discussion: """
+            Brainflip is an optimizing Swift interpreter for the brainfuck \
+            programming language -- an incredibly simple language that only has 8 \
+            instructions. This interpreter features 32-bit cells, full Unicode \
+            support, an infinite tape in both directions, simple runtime \
+            optimizations, and several configuration options.
+            """,
+        subcommands: [Run.self, Parse.self, Translate.self],
+        defaultSubcommand: Run.self
+    )
 }

@@ -81,51 +81,51 @@
 /// ## Options
 /// - ``InterpreterOptions``
 public struct Interpreter<
-  Input: Sequence<Unicode.Scalar>,
-  Output: TextOutputStream
+    Input: Sequence<Unicode.Scalar>,
+    Output: TextOutputStream
 > {
-  // MARK: - Properties
+    // MARK: - Properties
 
-  /// The configurable options for this interpreter.
-  public let options: InterpreterOptions
+    /// The configurable options for this interpreter.
+    public let options: InterpreterOptions
 
-  /// This interpreter's internal state.
-  @usableFromInline var state: State
+    /// This interpreter's internal state.
+    @usableFromInline var state: State
 
-  // MARK: - Initializers
+    // MARK: - Initializers
 
-  /// Creates an `Interpreter` instance.
-  ///
-  /// - Parameters:
-  ///   - input: The input to pass to the program.
-  ///   - output: The stream to write outputted characters to.
-  ///   - options: Configurable options to be used for this instance.
-  public init(
-    input: Input,
-    output: Output = "",
-    options: InterpreterOptions = .init()
-  ) {
-    self.options = options
-    self.state = State(input: input, output: output)
-  }
+    /// Creates an `Interpreter` instance.
+    ///
+    /// - Parameters:
+    ///   - input: The input to pass to the program.
+    ///   - output: The stream to write outputted characters to.
+    ///   - options: Configurable options to be used for this instance.
+    public init(
+        input: Input,
+        output: Output = "",
+        options: InterpreterOptions = .init()
+    ) {
+        self.options = options
+        self.state = State(input: input, output: output)
+    }
 
-  /// Creates an `Interpreter` instance.
-  ///
-  /// - Parameters:
-  ///   - input: The input to pass to the program.
-  ///   - output: The stream to write outputted characters to.
-  ///   - options: Configurable options to be used for this instance.
-  public init(
-    input: String = "",
-    output: Output = "",
-    options: InterpreterOptions = .init()
-  ) where Input == String.UnicodeScalarView {
-    self.init(
-      input: input.unicodeScalars,
-      output: output,
-      options: options
-    )
-  }
+    /// Creates an `Interpreter` instance.
+    ///
+    /// - Parameters:
+    ///   - input: The input to pass to the program.
+    ///   - output: The stream to write outputted characters to.
+    ///   - options: Configurable options to be used for this instance.
+    public init(
+        input: String = "",
+        output: Output = "",
+        options: InterpreterOptions = .init()
+    ) where Input == String.UnicodeScalarView {
+        self.init(
+            input: input.unicodeScalars,
+            output: output,
+            options: options
+        )
+    }
 }
 
 extension Interpreter: Sendable

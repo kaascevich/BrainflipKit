@@ -3,22 +3,22 @@
 
 /// A list of instructions to be executed by an ``Interpreter``.
 public struct Program: Equatable, Hashable, Codable, Sendable {
-  /// The instructions that make up this program.
-  public var instructions: [Instruction]
+    /// The instructions that make up this program.
+    public var instructions: [Instruction]
 
-  /// Creates a program from a list of instructions.
-  ///
-  /// - Parameter instructions: A list of instructions.
-  public init(_ instructions: [Instruction]) {
-    self.instructions = instructions
-  }
+    /// Creates a program from a list of instructions.
+    ///
+    /// - Parameter instructions: A list of instructions.
+    public init(_ instructions: [Instruction]) {
+        self.instructions = instructions
+    }
 }
 
 // MARK: Debugging
 
 extension Program: CustomReflectable {
-  /// The custom mirror for this instance.
-  public var customMirror: Mirror {
-    Mirror(reflecting: instructions)
-  }
+    /// The custom mirror for this instance.
+    public var customMirror: Mirror {
+        Mirror(reflecting: instructions)
+    }
 }

@@ -2,108 +2,108 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
 extension Interpreter {
-  /// Represents an interpreter's internal state.
-  public struct State {
-    // MARK: - Properties
+    /// Represents an interpreter's internal state.
+    public struct State {
+        // MARK: - Properties
 
-    /// The array of cells that all Brainflip programs manipulate.
-    ///
-    /// # Implementation Notes
-    ///
-    /// Most brainfuck interpreters have a fixed-size tape, but Brainflip's tape
-    /// is dynamically sized (i.e. infinite). While it _would_ be possible to
-    /// implement this using a standard Swift `Array`, it's not very ergonomic,
-    /// requiring a whole lot of computed property shenanigans to abstract away
-    /// the rather `fatalError`-y subscript.
-    ///
-    /// It's a lot easier to use a `Dictionary` instead, with the key
-    /// representing the cell's index (and the value, of course, representing
-    /// the value). This also provides the benefits of being able to use
-    /// negative indices -- allowing for an infinite tape in _both_ directions,
-    /// which _also_ eliminates the need to handle out-of-bounds errors -- and
-    /// of using a whole lot less memory than a standard 30,000-cell `Array` in
-    /// the vast majority of use cases.
-    ///
-    /// More details on how this works can be found in the documentation for
-    /// ``currentCellValue``.
-    ///
-    /// # See Also
-    /// - ``Interpreter/State/currentCellValue``
-    public var tape: [CellOffset: CellValue] = [:]
+        /// The array of cells that all Brainflip programs manipulate.
+        ///
+        /// # Implementation Notes
+        ///
+        /// Most brainfuck interpreters have a fixed-size tape, but Brainflip's tape
+        /// is dynamically sized (i.e. infinite). While it _would_ be possible to
+        /// implement this using a standard Swift `Array`, it's not very ergonomic,
+        /// requiring a whole lot of computed property shenanigans to abstract away
+        /// the rather `fatalError`-y subscript.
+        ///
+        /// It's a lot easier to use a `Dictionary` instead, with the key
+        /// representing the cell's index (and the value, of course, representing
+        /// the value). This also provides the benefits of being able to use
+        /// negative indices -- allowing for an infinite tape in _both_ directions,
+        /// which _also_ eliminates the need to handle out-of-bounds errors -- and
+        /// of using a whole lot less memory than a standard 30,000-cell `Array` in
+        /// the vast majority of use cases.
+        ///
+        /// More details on how this works can be found in the documentation for
+        /// ``currentCellValue``.
+        ///
+        /// # See Also
+        /// - ``Interpreter/State/currentCellValue``
+        public var tape: [CellOffset: CellValue] = [:]
 
-    /// The index of the cell currently being used by the program.
-    ///
-    /// # See Also
-    /// - ``Interpreter/State/currentCellValue``
-    public var cellPointer: CellOffset = 0
+        /// The index of the cell currently being used by the program.
+        ///
+        /// # See Also
+        /// - ``Interpreter/State/currentCellValue``
+        public var cellPointer: CellOffset = 0
 
-    /// An iterator that provides input to a program.
-    ///
-    /// Each time an ``Instruction/input`` instruction is executed, the value of
-    /// this iterator's next Unicode scalar is stored in ``currentCellValue``.
-    ///
-    /// If an `input` instruction is executed, and this iterator returns `nil`,
-    /// ``InterpreterOptions/EndOfInputBehavior`` will kick in and set the
-    /// current cell accordingly.
-    ///
-    /// # See Also
-    /// - ``Instruction/input``
-    public var inputIterator: Input.Iterator
+        /// An iterator that provides input to a program.
+        ///
+        /// Each time an ``Instruction/input`` instruction is executed, the value of
+        /// this iterator's next Unicode scalar is stored in ``currentCellValue``.
+        ///
+        /// If an `input` instruction is executed, and this iterator returns `nil`,
+        /// ``InterpreterOptions/EndOfInputBehavior`` will kick in and set the
+        /// current cell accordingly.
+        ///
+        /// # See Also
+        /// - ``Instruction/input``
+        public var inputIterator: Input.Iterator
 
-    /// The output stream.
-    ///
-    /// Each time an ``Instruction/output`` instruction is executed, the Unicode
-    /// scalar corresponding to ``currentCellValue`` is written to this stream.
-    ///
-    /// # See Also
-    /// - ``Instruction/output``
-    public var output: Output
+        /// The output stream.
+        ///
+        /// Each time an ``Instruction/output`` instruction is executed, the Unicode
+        /// scalar corresponding to ``currentCellValue`` is written to this stream.
+        ///
+        /// # See Also
+        /// - ``Instruction/output``
+        public var output: Output
 
-    // MARK: - Computed State
+        // MARK: - Computed State
 
-    /// The value of the current cell.
-    ///
-    /// # Implementation Notes
-    ///
-    /// As explained in the documentation for ``tape``, using a `Dictionary` is
-    /// much more ergonomic than using an `Array`. This is primarily because
-    /// `Dictionary` provides a subscript that returns a default value if the
-    /// key is not present -- in stark contrast to `Array`, which traps if the
-    /// index is out of bounds. In addition, assigning to a nonexistent key will
-    /// simply _create_ the key before assigning to it.
-    ///
-    /// All of this means that the getter and setter for `currentCellValue` are
-    /// simple one-liners:
-    ///
-    /// ```swift
-    /// public var currentCellValue: CellValue {
-    ///   get { tape[cellPointer, default: 0] }
-    ///   set { tape[cellPointer] = newValue }
-    /// }
-    /// ```
-    ///
-    /// # See Also
-    /// - ``Interpreter/State/tape``
-    /// - ``Interpreter/State/cellPointer``
-    @inlinable @inline(__always)
-    public var currentCellValue: CellValue {
-      @inlinable get { tape[cellPointer, default: 0] }
-      @inlinable set { tape[cellPointer] = newValue }
+        /// The value of the current cell.
+        ///
+        /// # Implementation Notes
+        ///
+        /// As explained in the documentation for ``tape``, using a `Dictionary` is
+        /// much more ergonomic than using an `Array`. This is primarily because
+        /// `Dictionary` provides a subscript that returns a default value if the
+        /// key is not present -- in stark contrast to `Array`, which traps if the
+        /// index is out of bounds. In addition, assigning to a nonexistent key will
+        /// simply _create_ the key before assigning to it.
+        ///
+        /// All of this means that the getter and setter for `currentCellValue` are
+        /// simple one-liners:
+        ///
+        /// ```swift
+        /// public var currentCellValue: CellValue {
+        ///   get { tape[cellPointer, default: 0] }
+        ///   set { tape[cellPointer] = newValue }
+        /// }
+        /// ```
+        ///
+        /// # See Also
+        /// - ``Interpreter/State/tape``
+        /// - ``Interpreter/State/cellPointer``
+        @inlinable
+        public var currentCellValue: CellValue {
+            @inlinable get { tape[cellPointer, default: 0] }
+            @inlinable set { tape[cellPointer] = newValue }
+        }
+
+        // MARK: - Initializers
+
+        /// Creates a `State` instance.
+        ///
+        /// - Parameters:
+        ///   - inputIterator: An iterator over the input that will be provided to
+        ///     the program.
+        ///   - output: The stream to write outputted characters to.
+        init(input: Input, output: Output) {
+            self.inputIterator = input.makeIterator()
+            self.output = output
+        }
     }
-
-    // MARK: - Initializers
-
-    /// Creates a `State` instance.
-    ///
-    /// - Parameters:
-    ///   - inputIterator: An iterator over the input that will be provided to
-    ///     the program.
-    ///   - output: The stream to write outputted characters to.
-    init(input: Input, output: Output) {
-      self.inputIterator = input.makeIterator()
-      self.output = output
-    }
-  }
 }
 
 extension Interpreter.State: Sendable
