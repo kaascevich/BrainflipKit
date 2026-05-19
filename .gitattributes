@@ -1,2 +1,2 @@
 *.b -linguist-detectable
-Benchmarks/.build/ linguist-generated
+Benchmarks/.build/** linguist-generated
