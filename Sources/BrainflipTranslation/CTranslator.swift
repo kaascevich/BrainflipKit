@@ -30,7 +30,7 @@ public struct CTranslator: Translator {
             #include <termios.h>
 
             // give the program a small buffer, in case it goes off the start of the tape
-            \(cellType) array[31000];
+            \(cellType) array[31000] = {0};
             int pointer = 1000;
 
             void input(void) {
